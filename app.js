@@ -6,10 +6,16 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 /*routes*/
-var routes = require('./routes/index');
-var api = require('./routes/_bak/api');
-var agents = require('./routes/_bak/agents');
-var players = require('./routes/_bak/players');
+var routes = require('./routes/index'); // all about login
+var dashboard = require('./routes/dashboard');
+var employee = require('./routes/employee');
+var education = require('./routes/education');
+var assignment = require('./routes/assignment');
+var course = require('./routes/course');
+var achievement = require('./routes/achievement');
+
+//var api = require('./routes/_bak/api');
+
 
 /*routes*/
 var app = express();
@@ -28,6 +34,8 @@ hbs.registerPartials(__dirname + '/views/modal');
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
+
+global.PROJ_TITLE = "Orangenamu, Backoffice ";
 app.use(cookieSession({
   keys: ['FC_Admin']
 }));
@@ -44,10 +52,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 
 app.use('/', routes);
-app.use('/agents', agents);
-app.use('/players', players);
+app.use('/dashboard', dashboard);
+app.use('/employee', employee);
+app.use('/education', education);
+app.use('/assignment', assignment);
+app.use('/course', course);
+app.use('/achievement', achievement);
 
-app.use('/api/v1', api);
+
+//app.use('/api/v1', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

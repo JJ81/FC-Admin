@@ -1,44 +1,46 @@
-<!-- Left side column. contains the logo and sidebar -->
 <aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-        <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
-            <li {{#if (isEquals current_path 'Home')}}class="active"{{/if}}>
-                <a href="/home">
+            <li {{#if (isEquals current_path 'Dashboard')}}class="active"{{/if}}>
+                <a href="/dashboard">
                     <i class="fa fa-home"></i>
-                    <span>Home</span>
+                    <span>대시보드</span>
                 </a>
             </li>
-            <li {{#if (isEquals current_path 'Game Report')}}class="active"{{/if}}>
-                <a href="/report/game">
+            <li {{#if (isEquals current_path 'Employee')}}class="active"{{/if}}>
+                <a href="/employee">
                     <i class="fa fa-gamepad"></i>
-                    <span>Game Report</span>
+                    <span>직원관리</span>
                 </a>
             </li>
-            <li {{#if (isEquals current_path 'Financial Report')}}class="active"{{/if}}>
-                <a href="/report/financial">
+
+            <li {{#if (isEquals current_path 'Education')}}class="active"{{/if}}>
+                <a href="/education">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <span>교육과정관리</span>
+                </a>
+            </li>
+
+            <li {{#if (isEquals current_path 'Assignment')}}class="active"{{/if}}>
+                <a href="/assignment">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <span>교육배정관리</span>
+                </a>
+            </li>
+
+            <li {{#if (isEquals current_path 'Course')}}class="active"{{/if}}>
+                <a href="/course">
                     <i class="fa fa-money" aria-hidden="true"></i>
-                    <span>Financial Report</span>
+                    <span>강의관리</span>
                 </a>
             </li>
 
-          {{#unless (isEquals loggedIn.layer 3)}}
-              <li {{#if (isEquals current_path 'Agents')}}class="active"{{/if}}>
-                  <a href="/agents">
-                      <i class="fa fa-user" aria-hidden="true"></i>
-                      <span>Agents</span>
-                  </a>
-              </li>
-          {{/unless}}
-
-            <li {{#if (isEquals current_path 'Players')}}class="active"{{/if}}>
-                <a href="/players">
+            <li {{#if (isEquals current_path 'Achievement')}}class="active"{{/if}}>
+                <a href="/achievement">
                     <i class="fa fa-users" aria-hidden="true"></i>
-                    <span>Players</span>
+                    <span>진척도관리</span>
                 </a>
             </li>
         </ul>
     </section>
-    <!-- /.sidebar -->
 </aside>

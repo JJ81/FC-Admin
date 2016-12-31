@@ -3,9 +3,6 @@ var router = express.Router();
 var mysql_dbc = require('../commons/db_conn')();
 var connection = mysql_dbc.init();
 mysql_dbc.test_open(connection);
-
-
-var PROJ_TITLE = "Hold'em Club AMS, ";
 require('../commons/helpers');
 
 var passport = require('passport');
@@ -58,14 +55,18 @@ passport.use(new LocalStrategy({
   }
 ));
 
+router.get('/', isAuthenticated, function (req, res) {
+  res.redirect('/dashboard');
+});
+
 router.get('/login', function (req, res) {
   if (req.user == null) {
     res.render('login', {
-      current_path: 'login',
-      title: PROJ_TITLE + 'login'
+      current_path: 'Login',
+      title: PROJ_TITLE + 'Login'
     });
   } else {
-    res.redirect('/home');
+    res.redirect('/dashboard');
   }
 });
 
@@ -74,25 +75,12 @@ router.post('/login',
     failureRedirect: '/login',
     failureFlash: true
   }), function (req, res) {
-    res.redirect('/home');
+    res.redirect('/dashboard');
   });
 
 router.get('/logout', isAuthenticated, function (req, res) {
   req.logout();
   res.redirect('/');
 });
-
-router.get('/', isAuthenticated, function (req, res) {
-  res.redirect('/home');
-});
-
-router.get('/home', function (req, res) {
-  res.render('home', {
-    current_path: 'Home',
-    title: PROJ_TITLE + ' Home',
-    loggedIn: req.user
-  });
-});
-
 
 module.exports = router;

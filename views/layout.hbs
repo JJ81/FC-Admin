@@ -15,8 +15,8 @@
     <title>{{title}}</title>
 </head>
 
-<body class="hold-transition skin-red sidebar-mini {{#if (isEquals current_path 'login')}}login-page{{/if}}">
-    {{#if (isEquals current_path 'login')}}
+<body class="hold-transition skin-red sidebar-mini {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
+    {{#if (isEquals current_path 'Login')}}
     {{{body}}}
     {{else}}
     <div class="wrapper">
@@ -31,6 +31,7 @@
     {{/if}}
     <script src="/vendor/plugins/requirejs/require.2.3.2.js"></script>
     <script src="/javascripts/app.js"></script>
-    {{#if (isEquals current_path 'login')}}<script src="javascripts/login.js"></script>{{/if}}
+    {{#if (isEquals current_path 'Login')}}<script src="javascripts/login.js"></script>{{/if}}
+    {{#if (isEquals current_path 'Dashboard')}}<script src="javascripts/dashboard.js"></script>{{/if}}
 </body>
 </html>

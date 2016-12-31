@@ -2,9 +2,9 @@
     <!-- Logo -->
     <a href="#" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>A</b>MS</span>
+        <span class="logo-mini"><b>OR</b>S</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>Agent</b> Management</span>
+        <span class="logo-lg"><b>Orangenamu</b> System</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -15,20 +15,10 @@
         <input type="hidden" id="agent-code" value="{{loggedIn.agent}}"/>
         <div class="navbar-custom-menu" id="navbar-custom-menu">
             <ul class="nav navbar-nav">
-                <li>
-                    <a href="#balance" class="get-current-balance">
-                        <strong class="agent_balance" id="agent-current-balance">{{currency loggedIn.balance}}
-                            <i class="fa fa-refresh" aria-hidden="true"></i>
-                            {{#if (checkMinus loggined.balance)}}
-                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-                            {{/if}}
-                        </strong>
-                    </a>
-                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;
-                        {{loggedIn.agent}}
+                        {{loggedIn.name}}
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="#">Change password</a></li>
