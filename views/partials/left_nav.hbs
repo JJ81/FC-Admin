@@ -5,12 +5,22 @@
                 <a href="/dashboard">
                     <i class="fa fa-home"></i>
                     <span>대시보드</span>
+                    {{#if (isEquals current_path 'Dashboard')}}
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right text-green"></i>
+                    </span>
+                    {{/if}}
                 </a>
             </li>
             <li {{#if (isEquals current_path 'Employee')}}class="active"{{/if}}>
                 <a href="/employee">
                     <i class="fa fa-gamepad"></i>
                     <span>직원관리</span>
+                    {{#if (isEquals current_path 'Employee')}}
+                        <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right text-green"></i>
+                    </span>
+                    {{/if}}
                 </a>
             </li>
 
@@ -18,6 +28,11 @@
                 <a href="/education">
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <span>교육과정관리</span>
+                    {{#if (isEquals current_path 'Education')}}
+                        <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right text-green"></i>
+                    </span>
+                    {{/if}}
                 </a>
             </li>
 
@@ -25,6 +40,11 @@
                 <a href="/assignment">
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <span>교육배정관리</span>
+                    {{#if (isEquals current_path 'Assignment')}}
+                        <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right text-green"></i>
+                    </span>
+                    {{/if}}
                 </a>
             </li>
 
@@ -32,6 +52,11 @@
                 <a href="/course">
                     <i class="fa fa-money" aria-hidden="true"></i>
                     <span>강의관리</span>
+                    {{#if (isEquals current_path 'Course')}}
+                        <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right text-green"></i>
+                    </span>
+                    {{/if}}
                 </a>
             </li>
 
@@ -39,6 +64,11 @@
                 <a href="/achievement">
                     <i class="fa fa-users" aria-hidden="true"></i>
                     <span>진척도관리</span>
+                    {{#if (isEquals current_path 'Achievement')}}
+                        <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right text-green"></i>
+                    </span>
+                    {{/if}}
                 </a>
             </li>
         </ul>
