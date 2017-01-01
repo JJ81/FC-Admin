@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/vendor/dist/css/skins/_all-skins.min.css" />
     <link rel="stylesheet" href="/vendor/plugins/datepicker/datepicker3.css" />
     <link rel="stylesheet" href="/vendor/plugins/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="/vendor/plugins/select2/select2.min.css" />
     <link rel="stylesheet" href="/vendor/plugins/datatables/dataTables.bootstrap.css" />
     <link rel='stylesheet' href='/stylesheets/styles.css' />
     <title>{{title}}</title>
@@ -33,5 +34,6 @@
     <script src="/javascripts/app.js"></script>
     {{#if (isEquals current_path 'Login')}}<script src="javascripts/login.js"></script>{{/if}}
     {{#if (isEquals current_path 'Dashboard')}}<script src="javascripts/dashboard.js"></script>{{/if}}
+    {{#if (isEquals current_path 'Employee')}}<script src="javascripts/employee.js"></script>{{/if}}
 </body>
 </html>
