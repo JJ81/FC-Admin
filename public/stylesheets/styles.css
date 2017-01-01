@@ -12,9 +12,88 @@
 .conainer-course-list {
   height: 330px;
   border: 1px solid #eee;
-  overflow: auto; }
+  overflow: auto;
+  padding: 0 10px; }
+
+.progress-course-detail {
+  margin-bottom: 15px; }
+  .progress-course-detail .progress {
+    margin-bottom: 5px; }
 
 .center {
   text-align: center; }
+
+.rating {
+  direction: rtl;
+  font-size: 17px;
+  unicode-bidi: bidi-override;
+  position: relative; }
+  .rating span.star {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal; }
+    .rating span.star:hover {
+      cursor: pointer; }
+    .rating span.star:before {
+      color: #00A66E;
+      content: "\f006"; }
+    .rating span.star:hover:before, .rating span.star:hover ~ span.star:before {
+      color: #00A66E;
+      content: "\f005"; }
+    .rating span.star:hover:after {
+      direction: ltr;
+      content: attr(title);
+      position: absolute;
+      left: 0;
+      bottom: -22px;
+      white-space: nowrap;
+      font: normal 14px/normal Arial, Helvetica, sans-serif; }
+
+.ratings {
+  width: 85px;
+  height: 17px;
+  display: inline-block;
+  position: relative; }
+  .ratings:before, .ratings:after {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 17px;
+    position: absolute;
+    top: 0;
+    left: 0; }
+  .ratings:before {
+    color: #00A66E;
+    content: "\f006\f006\f006\f006\f006"; }
+  .ratings:after {
+    color: #00A66E;
+    content: "\f005\f005\f005\f005\f005";
+    overflow: hidden; }
+
+.ratings.one:after {
+  content: "\f005"; }
+
+.ratings.onehalf:after {
+  content: "\f005\f089"; }
+
+.ratings.two:after {
+  content: "\f005\f005"; }
+
+.ratings.twohalf:after {
+  content: "\f005\f005\f089"; }
+
+.ratings.three:after {
+  content: "\f005\f005\f005"; }
+
+.ratings.threehalf:after {
+  content: "\f005\f005\f005\f089"; }
+
+.ratings.four:after {
+  content: "\f005\f005\f005\f005"; }
+
+.ratings.fourhalf:after {
+  content: "\f005\f005\f005\f005\f089"; }
 
 /*# sourceMappingURL=styles.css.map */

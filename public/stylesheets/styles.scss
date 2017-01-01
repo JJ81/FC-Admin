@@ -26,8 +26,92 @@
   height: 330px;
   border: 1px solid #eee;
   overflow: auto;
+  padding: 0 10px;
 }
 
+.progress-course-detail{
+  margin-bottom: 15px;
+  .progress{
+    margin-bottom: 5px;
+  }
+}
 .center{
   text-align: center;
 }
+
+// 여기서부터 별평가
+$filled-star-color: #00A66E;
+$empty-star-color: #00A66E;
+$star-size: 17px;
+
+.rating {
+  direction: rtl;
+  font-size: $star-size;
+  unicode-bidi: bidi-override;
+  position: relative;
+  span.star {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    &:hover {
+      cursor: pointer;
+    }
+    &:before {
+      color: $empty-star-color;
+      content: "\f006";
+    }
+    &:hover:before,
+    &:hover ~ span.star:before {
+      color: $filled-star-color;
+      content: "\f005";
+    }
+    &:hover:after {
+      direction: ltr;
+      content: attr(title);
+      position: absolute;
+      left: 0;
+      bottom: -22px;
+      white-space: nowrap;
+      font: normal 14px/normal Arial, Helvetica, sans-serif;
+    }
+  }
+}
+.ratings {
+  width: 5*$star-size;
+  height: $star-size;
+  display: inline-block;
+  position: relative;
+  &:before,
+  &:after{
+    display: inline-block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    font-size: $star-size;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  &:before {
+    color: $empty-star-color;
+    content: "\f006\f006\f006\f006\f006";
+  }
+  &:after {
+    color: $filled-star-color;
+    content: "\f005\f005\f005\f005\f005";
+    overflow: hidden;
+  }
+}
+
+.ratings.one:after{content: "\f005";}
+.ratings.onehalf:after{content: "\f005\f089";}
+.ratings.two:after{content: "\f005\f005";}
+.ratings.twohalf:after{content: "\f005\f005\f089";}
+.ratings.three:after{content: "\f005\f005\f005";}
+.ratings.threehalf:after{content: "\f005\f005\f005\f089";}
+.ratings.four:after{content: "\f005\f005\f005\f005";}
+.ratings.fourhalf:after{content: "\f005\f005\f005\f005\f089";}
+
+// 여기서부터 별평가 끝
+
