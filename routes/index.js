@@ -62,13 +62,17 @@ router.get('/', isAuthenticated, function (req, res) {
 router.get('/login', function (req, res) {
   // todo get Hostname
   var _hostname = req.headers.host;
+  var _logo = null;
+  if(_hostname.indexOf('clipplr') != -1){
+    _logo = 'Clipplr';
+  }
   // console.info('!!! ' + _hostname);
 
   if (req.user == null) {
     res.render('login', {
       current_path: 'Login',
-      title: _hostname + ', Login',
-      logo : _hostname
+      title: _logo + ', Login',
+      logo : _logo
     });
   } else {
     res.redirect('/dashboard');
