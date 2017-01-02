@@ -92,6 +92,7 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {{#for 0 10 1}}
                     <tr>
                         <td class="center">성동점</td>
                         <td class="center">점주</td>
@@ -106,12 +107,13 @@
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">정보변경</a></li>
+                                    <li><a href="#">정보수정</a></li>
                                     <li><a href="#">비밀번호변경</a></li>
                                 </ul>
                             </div>
                         </td>
                     </tr>
+                    {{/for}}
                     </tbody>
                     <tfoot>
                     <tr>
