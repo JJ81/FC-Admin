@@ -1,14 +1,40 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        <!-- todo if문을 통해서 한글로 출력이 될 수 있도록 할 것 -->
-        {{current_path}}
+        {{#if (isEquals current_path 'Dashboard') }}
+            대시보드
+        {{else if (isEquals current_path 'Employee') }}
+            직원관리
+        {{else if (isEquals current_path 'Education') }}
+            교육과정 등록관리
+        {{else if (isEquals current_path 'Assignment') }}
+            교육과정 배정관리
+        {{else if (isEquals current_path 'Assignment_history') }}
+            교육과정 배정이력
+        {{else if (isEquals current_path 'Course') }}
+            강의관리
+        {{else if (isEquals current_path 'Achievement') }}
+            진척도관리
+        {{/if}}
     </h1>
     <ol class="breadcrumb">
-        <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="/dashboard"><i class="fa fa-home"></i> Home</a></li>
         <li class="active">
-            <!-- todo if문을 사용하여 모드 한글화 작업을 할 것. -->
-            {{current_path}}
+            {{#if (isEquals current_path 'Dashboard') }}
+                대시보드
+            {{else if (isEquals current_path 'Employee') }}
+                직원관리
+            {{else if (isEquals current_path 'Education') }}
+                교육과정 등록관리
+            {{else if (isEquals current_path 'Assignment') }}
+                교육과정 배정관리
+            {{else if (isEquals current_path 'Assignment_history') }}
+                교육과정 배정이력
+            {{else if (isEquals current_path 'Course') }}
+                강의관리
+            {{else if (isEquals current_path 'Achievement') }}
+                진척도관리
+            {{/if}}
         </li>
     </ol>
 </section>

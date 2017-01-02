@@ -3,7 +3,7 @@
         <ul class="sidebar-menu">
             <li {{#if (isEquals current_path 'Dashboard')}}class="active"{{/if}}>
                 <a href="/dashboard">
-                    <i class="fa fa-home"></i>
+                    <i class="fa fa-dashboard"></i>
                     <span>대시보드</span>
                     {{#if (isEquals current_path 'Dashboard')}}
                     <span class="pull-right-container">
@@ -14,7 +14,7 @@
             </li>
             <li {{#if (isEquals current_path 'Employee')}}class="active"{{/if}}>
                 <a href="/employee">
-                    <i class="fa fa-gamepad"></i>
+                    <i class="fa fa-users"></i>
                     <span>직원관리</span>
                     {{#if (isEquals current_path 'Employee')}}
                         <span class="pull-right-container">
@@ -26,7 +26,7 @@
 
             <li {{#if (isEquals current_path 'Education')}}class="active"{{/if}}>
                 <a href="/education">
-                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <i class="fa fa-database" aria-hidden="true"></i>
                     <span>교육과정 등록관리</span>
                     {{#if (isEquals current_path 'Education')}}
                         <span class="pull-right-container">
@@ -38,7 +38,7 @@
 
             <li {{#if (isEquals current_path 'Assignment')}}class="active"{{/if}}>
                 <a href="/assignment">
-                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <i class="fa fa-suitcase" aria-hidden="true"></i>
                     <span>교육과정 배정관리</span>
                     {{#if (isEquals current_path 'Assignment')}}
                         <span class="pull-right-container">
@@ -50,7 +50,7 @@
 
             <li {{#if (isEquals current_path 'Assignment_history')}}class="active"{{/if}}>
                 <a href="/assignment_history">
-                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
                     <span>교육과정 배정이력</span>
                     {{#if (isEquals current_path 'Assignment_history')}}
                         <span class="pull-right-container">
@@ -62,7 +62,7 @@
 
             <li {{#if (isEquals current_path 'Course')}}class="active"{{/if}}>
                 <a href="/course">
-                    <i class="fa fa-money" aria-hidden="true"></i>
+                    <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
                     <span>강의관리</span>
                     {{#if (isEquals current_path 'Course')}}
                         <span class="pull-right-container">
@@ -74,7 +74,7 @@
 
             <li {{#if (isEquals current_path 'Achievement')}}class="active"{{/if}}>
                 <a href="/achievement">
-                    <i class="fa fa-users" aria-hidden="true"></i>
+                    <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
                     <span>진척도관리</span>
                     {{#if (isEquals current_path 'Achievement')}}
                         <span class="pull-right-container">
