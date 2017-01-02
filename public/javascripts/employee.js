@@ -34,10 +34,10 @@ requirejs(
 		var table_employee =
 		$('#table_employee').DataTable({
 			"paging": true,
-			"lengthChange": false, // 첫번째로 불러오는 리스트 개수 설정 셀렉트 박스 설정
+			"lengthChange": false, // todo 첫 로딩시 100개씩 보여줄 수 있게 하려면 어떤 옵션이 필요한가?
 			"searching": false,
 		  "ordering": false,
-			"info": false,
+			"info": true,
 			"autoWidth": true,
 			"processing": true
 		});

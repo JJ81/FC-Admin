@@ -3,11 +3,11 @@
         <div class="box">
             <div class="box-header">
                 <div class="btn-area-employee">
-                    <button class="btn btn-default">
+                    <button class="btn btn-default" data-toggle="modal" data-target="#createBranch">
                         <i class="fa fa-cloud-upload"></i>&nbsp;
                         지점등록
                     </button>
-                    <button class="btn btn-default">
+                    <button class="btn btn-default" data-toggle="modal" data-target="#createDuty">
                         <i class="fa fa-cloud-upload"></i>&nbsp;
                         직책등록
                     </button>
@@ -19,7 +19,7 @@
                         <i class="fa fa-file-excel-o"></i>&nbsp;
                         직원 등록 양식(.xls)
                     </button>
-                    <button class="btn btn-default">
+                    <button class="btn btn-default pull-right" style="margin-left: 5px;">
                         <i class="fa fa-download"></i>&nbsp;
                         직원전체
                     </button>
@@ -72,7 +72,11 @@
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <button type="submit" class="btn btn-primary btn-employee-search btn-block">검색</button>
+                            <button type="submit" class="btn btn-primary btn-employee-search" style="margin-right: 5px;">
+                                <i class="fa fa-search"></i> &nbsp;
+                                검색
+                            </button>
+                            <a href="/employee" class="btn btn-default btn-employee-clear">초기화</a>
                         </div>
                     </div>
                 </form>
@@ -91,13 +95,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {{#for 0 10 1}}
+                    {{#each list}}
                     <tr>
-                        <td class="center">성동점</td>
-                        <td class="center">점주</td>
-                        <td class="center">박민규</td>
-                        <td class="center">010-4363-5567</td>
-                        <td class="center">nbc21@nate.com</td>
+                        <td class="center">{{branch}}</td>
+                        <td class="center">{{duty}}</td>
+                        <td class="center">{{name}}</td>
+                        <td class="center">{{phone}}</td>
+                        <td class="center">{{email}}</td>
                         <td class="center">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-warning">수정</button>
@@ -108,11 +112,12 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="#">정보수정</a></li>
                                     <li><a href="#">비밀번호변경</a></li>
+                                    <li><a href="#">삭제</a></li>
                                 </ul>
                             </div>
                         </td>
                     </tr>
-                    {{/for}}
+                    {{/each}}
                     </tbody>
                     <tfoot>
                     <tr>
@@ -135,3 +140,5 @@
 <!-- /.row -->
 
 {{> modal_create_employee}}
+{{> modal_create_branch}}
+{{> modal_create_duty}}

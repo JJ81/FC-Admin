@@ -108,7 +108,8 @@
   padding-bottom: 15px;
   margin-bottom: 15px; }
 
-.btn-employee-search {
+.btn-employee-search,
+.btn-employee-clear {
   position: relative;
   top: 24px; }
 

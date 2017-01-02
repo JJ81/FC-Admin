@@ -15,13 +15,28 @@ QUERY.LOGIN = {
 QUERY.EMPLOYEE = {
   GETBRANCH :
     "select b.id, b.name from `branch` as b " +
-    "where fc_id=? and active=true;"
+    "where b.fc_id=? and b.active=true;"
   ,GETDUTY:
     "select d.id, d.name from `duty` as d " +
     "where d.fc_id=? and d.active=true;"
   ,CreateEmployee :
     "insert into `users` (`name`, `password`, `email`, `phone`, `fc_id`, `duty_id`, `branch_id`) " +
     "values(?,?,?,?,?,?,?);"
+  ,CreateBranch :
+    "insert into `branch` (`name`, `fc_id`) values(?,?);"
+  ,CreateDuty :
+    "insert into `duty` (`name`, `fc_id`) values(?,?);"
+  ,GET_EMPLOYEE_LIST:
+    "select u.id as id, u.name as name, u.phone as phone, u.email as email, b.name as branch, d.name as duty " +
+    "from `users` as u " +
+    "left join `fc` as f " +
+    "on f.id = u.fc_id " +
+    "left join `branch` as b " +
+    "on b.id = u.branch_id " +
+    "left join `duty` as d " +
+    "on d.id = u.duty_id " +
+    "where u.fc_id=? and u.active=true " +
+    "order by u.id desc;"
 };
 
 //

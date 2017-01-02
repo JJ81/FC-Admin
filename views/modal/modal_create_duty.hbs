@@ -1,0 +1,34 @@
+<!-- Create Employee -->
+<div class="modal" id="createDuty" role="dialog">
+    <form class="modal-dialog" method="post" action="/employee/create/duty" id="frm_create_duty">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">직책등록</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>직책명</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="직책명" required autocomplete="off" />
+                </div>
+
+                <div class="form-group">
+                    <ul>
+                        {{#each duty}}
+                        <li>{{name}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+                <button type="submit" class="btn btn-primary btn-set-agent-password-submit">등록</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </form>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

@@ -16,8 +16,12 @@ var async = require('async');
 
 router.get('/', isAuthenticated, function (req, res) {
 
-
   async.series([
+    function (callback) {
+      connection.query(QUERY.EMPLOYEE.GET_EMPLOYEE_LIST, [req.user.fc_id], function (err, employee) {
+        callback(err, employee);
+      })
+    },
     function (callback) {
       connection.query(QUERY.EMPLOYEE.GETBRANCH, [req.user.fc_id], function (err, branch) {
         callback(err, branch);
@@ -39,14 +43,18 @@ router.get('/', isAuthenticated, function (req, res) {
         current_path: 'Employee',
         title: PROJ_TITLE + 'Employee',
         loggedIn: req.user,
-        branch : results[0],
-        duty : results[1]
+        list : results[0],
+        branch : results[1],
+        duty : results[2]
       });
     }
   });
-
 });
 
+
+/**
+ * 유저 생성
+ */
 router.post('/create', isAuthenticated, function (req, res) {
   var _data = {
     name : req.body.name.trim(),
@@ -83,6 +91,48 @@ router.post('/create', isAuthenticated, function (req, res) {
   }
 });
 
+
+/**
+ * 지점 생성
+ */
+router.post('/create/branch', function (req, res) {
+  var _name = req.body.name.trim();
+
+  if(_name === null || _name === ''){
+    res.redirect('/process?url=employee&msg=error');
+  }else{
+    // todo 동일한 fc에서의 지점이 중복인지 여부를 검사해야 한다
+    connection.query(QUERY.EMPLOYEE.CreateBranch,
+      [_name, req.user.fc_id], function (err, result) {
+        if(err){
+          console.error(err);
+        }else{
+          res.redirect('/employee');
+        }
+      });
+  }
+});
+
+/**
+ * 직책 생성
+ */
+router.post('/create/duty', function (req, res) {
+  var _name = req.body.name.trim();
+
+  if(_name === null || _name === ''){
+    res.redirect('/process?url=employee&msg=error');
+  }else{
+    // todo 동일한 fc에서의 직책이 중복인지 여부를 검사해야 한다
+    connection.query(QUERY.EMPLOYEE.CreateDuty,
+      [_name, req.user.fc_id], function (err, result) {
+        if(err){
+          console.error(err);
+        }else{
+          res.redirect('/employee');
+        }
+      });
+  }
+});
 
 
 module.exports = router;

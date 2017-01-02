@@ -99,6 +99,9 @@ router.get('/process', isAuthenticated, function (req, res) {
   var _msg = req.query.msg;
   var _comment = null;
 
+
+  // todo 여러가지 처리 과정을 넣어서 처리할 수 있도록 한다.
+
   if(_msg === 'error'){
     _comment = '잘못된 입력값으로 인하여 처리가 되지 않았습니다.';
   }
