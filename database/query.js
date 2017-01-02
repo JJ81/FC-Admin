@@ -1,5 +1,17 @@
 var QUERY = {};
 
+
+
+QUERY.LOGIN = {
+  login :
+    "select a.name, a.email, a.password, a.role, f.name as fc_name " +
+    "from `admin` as a " +
+    "left join `fc` as f " +
+    "on f.id = a.fc_id " +
+    "where a.email=?;"
+};
+
+
 QUERY.HOME = {
   READ: "select * from `agent_wallet_history` as awh " +
   "where `agent_id`= ? " +

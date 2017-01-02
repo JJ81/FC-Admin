@@ -1,10 +1,16 @@
 <header class="main-header">
     <!-- Logo -->
-    <a href="#" class="logo">
+    <a href="/dashboard" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>OR</b>S</span>
+        <span class="logo-mini">
+            <!-- todo 각 FC마다의 로고가 출력될 수 있도록 할 것 (50*50) -->
+            <b>{{loggedIn.fc_name}}</b>
+        </span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>Orangenamu</b> System</span>
+        <span class="logo-lg">
+            <b>{{loggedIn.fc_name}}</b>
+            <!--<b>Orangenamu</b> System-->
+        </span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">

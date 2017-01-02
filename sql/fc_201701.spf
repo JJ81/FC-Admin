@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ContentFilters</key>
+	<dict/>
+	<key>auto_connect</key>
+	<true/>
+	<key>data</key>
+	<dict>
+		<key>connection</key>
+		<dict>
+			<key>colorIndex</key>
+			<integer>2</integer>
+			<key>database</key>
+			<string>orangemanu</string>
+			<key>host</key>
+			<string>orangemanu.cchtmymwefrc.ap-northeast-2.rds.amazonaws.com</string>
+			<key>kcid</key>
+			<string>-3456586335526593411</string>
+			<key>name</key>
+			<string>orangenamu</string>
+			<key>rdbms_type</key>
+			<string>mysql</string>
+			<key>sslCACertFileLocation</key>
+			<string></string>
+			<key>sslCACertFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslCertificateFileLocation</key>
+			<string></string>
+			<key>sslCertificateFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslKeyFileLocation</key>
+			<string></string>
+			<key>sslKeyFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>type</key>
+			<string>SPTCPIPConnection</string>
+			<key>useSSL</key>
+			<integer>0</integer>
+			<key>user</key>
+			<string>orangemanu</string>
+		</dict>
+		<key>session</key>
+		<dict>
+			<key>connectionEncoding</key>
+			<string>utf8mb4</string>
+			<key>contentPageNumber</key>
+			<integer>1</integer>
+			<key>contentSelection</key>
+			<data>
+			YnBsaXN0MDDUAQIDBAUGNjdYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoK0HCBUWFxgZHSQoLDA0VSRudWxs0wkK
+			CwwQFFdOUy5rZXlzWk5TLm9iamVjdHNWJGNsYXNzow0OD4ACgAOA
+			BKMREhOABYAGgAiADFR0eXBlVHJvd3NUa2V5c18QJlNlbGVjdGlv
+			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
+			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
+			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
+			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClJpZNIeHy0uXxAPTlNN
+			dXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5TTXV0YWJs
+			ZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tleWVkQXJj
+			aGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBLAFIAWgBl
+			AGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIAwwDFAMoA
+			1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEtATIBRAFIAVEBVgFl
+			AWkBcQF2AXkBiwGOAZMAAAAAAAACAQAAAAAAAAA6AAAAAAAAAAAA
+			AAAAAAABlQ==
+			</data>
+			<key>contentSortColIsAsc</key>
+			<true/>
+			<key>contentViewport</key>
+			<string>{{0, 0}, {1230, 717}}</string>
+			<key>isToolbarVisible</key>
+			<true/>
+			<key>queries</key>
+			<string>select a.name, a.email, a.password, a.role, f.name
+from `admin` as a
+left join `fc` as f
+on f.id = a.fc_id;
+
+
+create table `log_edu_user_progress` (
+	`id` bigint not null auto_increment,
+	`user_id` bigint not null,
+	`course_list_id` bigint not null,
+	`created_dt` datetime default CURRENT_TIMESTAMP,
+	primary key (`id`)
+) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT; 
+
+alter table `log_edu_user_progress` 
+add foreign key (`user_id`)
+references `users`(`id`);
+
+alter table `log_edu_user_progress` 
+add foreign key (`course_list_id`)
+references `course_list`(`id`);
+</string>
+			<key>table</key>
+			<string>training_users</string>
+			<key>view</key>
+			<string>SP_VIEW_CUSTOMQUERY</string>
+			<key>windowVerticalDividerPosition</key>
+			<real>210</real>
+		</dict>
+	</dict>
+	<key>encrypted</key>
+	<false/>
+	<key>format</key>
+	<string>connection</string>
+	<key>queryFavorites</key>
+	<array/>
+	<key>queryHistory</key>
+	<array>
+		<string>alter table `log_edu_user_progress` 
+add foreign key (`course_list_id`)
+references `course_list`(`id`)</string>
+		<string>alter table `log_edu_user_progress` 
+add foreign key (`user_id`)
+references `users`(`id`)</string>
+		<string>create table `log_edu_user_progress` (
+	`id` bigint not null auto_increment,
+	`user_id` bigint not null,
+	`course_list_id` bigint not null,
+	`created_dt` datetime default CURRENT_TIMESTAMP,
+	primary key (`id`)
+) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT</string>
+		<string>select a.name, a.email, a.password, a.role, f.name
+from `admin` as a
+left join `fc` as f
+on f.id = a.fc_id</string>
+		<string>select a.*, f.* 
+from `admin` as a
+left join `fc` as f
+on f.id = a.fc_id</string>
+		<string>select * 
+from `admin` as a
+left join `fc` as f
+on f.id = a.fc_id</string>
+		<string>select * from `admin`</string>
+		<string>create database `orangemanu`</string>
+		<string>use `laravel`</string>
+		<string>create database `laravel`</string>
+		<string>select * from `trainings` as t
+where t.assign_dt &gt;= '2016.12.01' and t.assign_dt &lt;= '2016.12.31'
+or t.due_dt &gt;= '2016.12.01' and t.due_dt &lt;= '2016.12.31'
+order by t.assign_dt asc</string>
+		<string>select * from `trainings` as t
+where t.assign_dt &gt;= '2016.12.01' and t.assign_dt &lt;= '2016.12.31'
+or
+t.due_dt &gt;= '2016.12.01' and t.due_dt &lt;= '2016.12.31'</string>
+		<string>select * from `trainings`</string>
+		<string>select count(*) as users from `users`</string>
+		<string>select now()</string>
+		<string>call sp_dashboard_title</string>
+		<string>alter table `user` drop column `game_login`</string>
+		<string>select * from `agent_wallet_history` as awh
+where `agent_id`= 'holdemclub' and `date` &gt;= '2016.12.01 00:00:00' and `date` &lt; '2016.12.01 23:59:59'
+order by `date` desc limit 1000</string>
+		<string>select * from `agent_wallet_history` as awh
+where `agent_id`= 'holdemclub' and `date` &gt;= '2016.12.01' and `date` &lt; '2016.12.01 23:59:59'
+order by `date` desc limit 1000</string>
+		<string>select * from `agent_wallet_history` as awh
+where `agent_id`= 'holdemclub' and `date` &gt;= '2016.12.01' and `date` &lt; '2016.12.02'
+order by `date` desc limit 1000</string>
+	</array>
+	<key>rdbms_type</key>
+	<string>mysql</string>
+	<key>rdbms_version</key>
+	<string>5.6.27-log</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>

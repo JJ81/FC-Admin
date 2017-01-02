@@ -31,7 +31,7 @@ passport.use(new LocalStrategy({
     passwordField: 'password',
     passReqToCallback: true
   }, function (req, agent, password, done) {
-    connection.query(QUERY.AGENT.login, [agent], function (err, data) {
+    connection.query(QUERY.LOGIN.login, [agent], function (err, data) {
       if (err) {
         return done(null, false);
       } else {
@@ -44,7 +44,8 @@ passport.use(new LocalStrategy({
             return done(null, {
               'name' : data[0].name,
               'email' : data[0].email,
-              'role' : data[0].role
+              'role' : data[0].role,
+              'fc_name' : data[0].fc_name
             });
           }
         } else {
