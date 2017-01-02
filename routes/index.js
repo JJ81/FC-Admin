@@ -45,6 +45,7 @@ passport.use(new LocalStrategy({
               'name' : data[0].name,
               'email' : data[0].email,
               'role' : data[0].role,
+              'fc_id' : data[0].fc_id,
               'fc_name' : data[0].fc_name
             });
           }
@@ -80,7 +81,6 @@ router.get('/login', function (req, res) {
   }
 });
 
-
 router.post('/login',
   passport.authenticate('local', {
     failureRedirect: '/login',
@@ -92,6 +92,23 @@ router.post('/login',
 router.get('/logout', isAuthenticated, function (req, res) {
   req.logout();
   res.redirect('/');
+});
+
+router.get('/process', isAuthenticated, function (req, res) {
+  var _path = req.query.url;
+  var _msg = req.query.msg;
+  var _comment = null;
+
+  if(_msg === 'error'){
+    _comment = '잘못된 입력값으로 인하여 처리가 되지 않았습니다.';
+  }
+
+
+  res.render('processing', {
+    title : req.user.fc_name + ', 처리중입니다.',
+    msg : _comment,
+    path : _path
+  });
 });
 
 module.exports = router;

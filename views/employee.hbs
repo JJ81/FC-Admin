@@ -13,7 +13,7 @@
                     </button>
                     <button class="btn btn-default">
                         <i class="fa fa-cloud-upload"></i>&nbsp;
-                        직원등록
+                        직원등록(.xls)
                     </button>
                     <button class="btn btn-default">
                         <i class="fa fa-file-excel-o"></i>&nbsp;
@@ -23,6 +23,7 @@
                         <i class="fa fa-download"></i>&nbsp;
                         직원전체
                     </button>
+                    <button class="btn btn-success pull-right" data-toggle="modal" data-target="#createEmployee">직원생성</button>
                 </div>
 
                 <!-- 조건 검색 -->
@@ -31,12 +32,10 @@
                         <div class="form-group">
                             <label>지점선택</label>
                             <select class="form-control select2 select-branch" multiple="multiple" data-placeholder="지점 선택" style="width: 100%;">
-                                <option>전체</option>
-                                <option>성북점</option>
-                                <option>광진점</option>
-                                <option>동대문점</option>
-                                <option>서대문점</option>
-                                <option>서대문점</option>
+                                <option value="0">전체</option>
+                                {{#each branch}}
+                                <option value="{{id}}">{{name}}</option>
+                                {{/each}}
                             </select>
                             <input type="hidden" name="branch" />
                         </div>
@@ -45,10 +44,10 @@
                         <div class="form-group">
                             <label>직책선택</label>
                             <select class="form-control select2 select-duty" multiple="multiple" data-placeholder="지점 선택" style="width: 100%;">
-                                <option>전체</option>
-                                <option>점주</option>
-                                <option>사원</option>
-                                <option>아르바이트</option>
+                                <option value="0">전체</option>
+                                {{#each duty}}
+                                <option value="{{id}}">{{name}}</option>
+                                {{/each}}
                             </select>
                             <input type="hidden" name="duty" />
                         </div>
@@ -135,3 +134,4 @@
 </div>
 <!-- /.row -->
 
+{{> modal_create_employee}}

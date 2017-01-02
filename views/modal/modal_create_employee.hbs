@@ -1,0 +1,66 @@
+<!-- Create Employee -->
+<div class="modal" id="createEmployee" role="dialog">
+    <form class="modal-dialog" method="post" action="/employee/create" id="frm_create_employee">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">직원생성</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>이름</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="이름" required autocomplete="off" />
+                </div>
+
+                <div class="form-group">
+                    <label>지점</label>
+                    <select class="form-control" name="branch">
+                        {{#each branch}}
+                        <option value="{{id}}">{{name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>직책</label>
+                    <select class="form-control" name="duty">
+                        {{#each duty}}
+                        <option value="{{id}}">{{name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>전화번호</label>
+                    <input type="text" class="form-control" name="tel" id="tel" placeholder="전화번호" required autocomplete="off" />
+                    <small class="text-red">* -을 제외하고 입력해주세요.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>이메일</label>
+                    <input type="text" class="form-control" name="email" id="email" placeholder="이메일" required autocomplete="off" />
+                </div>
+
+                <div class="form-group">
+                    <label>비밀번호</label>
+                    <input type="password" class="form-control pass" name="pass" id="set_password" placeholder="at least 4 characters" required autocomplete="off" required />
+                    <small class="text-red">* 최소 4자리 이상 입력해주세요.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>비밀번호 확인</label>
+                    <input type="password" class="form-control re_pass" name="re_pass" placeholder="at least 4 characters" required autocomplete="off" required />
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+                <button type="submit" class="btn btn-primary btn-set-agent-password-submit">생성</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </form>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

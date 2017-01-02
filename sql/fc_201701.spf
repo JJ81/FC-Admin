@@ -45,6 +45,8 @@
 		<dict>
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
+			<key>contentFilter</key>
+			<dict/>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
@@ -72,10 +74,11 @@
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
-			<string>select a.name, a.email, a.password, a.role, f.name
+			<string>select a.name, a.email, a.password, a.role, f.name as fc_name
 from `admin` as a
 left join `fc` as f
-on f.id = a.fc_id;
+on f.id = a.fc_id
+where a.email='j.lee@intertoday.com';
 
 
 create table `log_edu_user_progress` (
@@ -93,9 +96,12 @@ references `users`(`id`);
 alter table `log_edu_user_progress` 
 add foreign key (`course_list_id`)
 references `course_list`(`id`);
+
+
+
 </string>
 			<key>table</key>
-			<string>training_users</string>
+			<string>users</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -110,6 +116,15 @@ references `course_list`(`id`);
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string>select a.name, a.email, a.password, a.role, f.name as fc_name
+from `admin` as a
+left join `fc` as f
+on f.id = a.fc_id
+where a.email='j.lee@intertoday.com'</string>
+		<string>select a.name, a.email, a.password, a.role, f.name
+from `admin` as a
+left join `fc` as f
+on f.id = a.fc_id</string>
 		<string>alter table `log_edu_user_progress` 
 add foreign key (`course_list_id`)
 references `course_list`(`id`)</string>
@@ -123,10 +138,6 @@ references `users`(`id`)</string>
 	`created_dt` datetime default CURRENT_TIMESTAMP,
 	primary key (`id`)
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT</string>
-		<string>select a.name, a.email, a.password, a.role, f.name
-from `admin` as a
-left join `fc` as f
-on f.id = a.fc_id</string>
 		<string>select a.*, f.* 
 from `admin` as a
 left join `fc` as f
@@ -157,9 +168,6 @@ where `agent_id`= 'holdemclub' and `date` &gt;= '2016.12.01 00:00:00' and `date`
 order by `date` desc limit 1000</string>
 		<string>select * from `agent_wallet_history` as awh
 where `agent_id`= 'holdemclub' and `date` &gt;= '2016.12.01' and `date` &lt; '2016.12.01 23:59:59'
-order by `date` desc limit 1000</string>
-		<string>select * from `agent_wallet_history` as awh
-where `agent_id`= 'holdemclub' and `date` &gt;= '2016.12.01' and `date` &lt; '2016.12.02'
 order by `date` desc limit 1000</string>
 	</array>
 	<key>rdbms_type</key>

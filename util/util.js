@@ -1,44 +1,22 @@
 var util ={};
 
+util.isValidEmail =  function (email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+};
+
+util.checkOnlyDigit = function (num){
+  return /^\d+$/.test(num);
+};
 
 
-util.objEmptyCheck = function(obj){
-  for(var key in obj){
-    if(obj[key].length ===0){
-      return false;
-    }
+// check password length
+util.checkPasswordSize = function (pass, minimum) {
+  if(pass.length >= minimum){
+    return true;
   }
-  return true;
-};
-
-/*Credit / Debit 계산*/
-util.creditResult = function (currentBalance, amount) {
-  return (creditSum(Number(currentBalance), Number(amount)));
-};
-
-util.debitResult = function (currentBalance, amount) {
-  return (debitSum(Number(currentBalance), Number(amount)));
-};
-
-function creditSum(currentBalance, amount) {
-
-  var newBalance = Number(currentBalance + amount);
-
-  if (newBalance < 0) {
-    return false;
-  } else {
-    return newBalance;
-  }
+  return false;
 }
 
-function debitSum(currentBalance, amount) {
 
-  var newBalance = Number(currentBalance - amount);
-
-  if (newBalance < 0) {
-    return false;
-  } else {
-    return newBalance;
-  }
-}
 module.exports = util;
