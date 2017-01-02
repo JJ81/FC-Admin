@@ -110,9 +110,26 @@
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">정보수정</a></li>
-                                    <li><a href="#">비밀번호변경</a></li>
-                                    <li><a href="#">삭제</a></li>
+                                    <li><a href="#"
+                                           class="btn-modify-userinfo"
+                                           data-user-id="{{id}}"
+                                           data-user-branch="{{branch_id}}"
+                                           data-user-duty="{{duty_id}}"
+                                           data-user-name="{{name}}"
+                                           data-user-phone="{{phone}}"
+                                           data-user-email="{{email}}"
+                                           data-toggle="modal"
+                                           data-target="#modifyEmployee">정보수정</a>
+                                    </li>
+                                    <li><a href="#"
+                                           data-user-id="{{id}}"
+                                           data-user-name="{{name}}"
+                                           data-toggle="modal"
+                                           data-target="#setEmployeePassword"
+                                           data-url="/employee/password/reset"
+                                           class="btn-modify-password">비밀번호변경</a>
+                                    </li>
+                                    <!--<li><a href="#">삭제</a></li>-->
                                 </ul>
                             </div>
                         </td>
@@ -142,3 +159,4 @@
 {{> modal_create_employee}}
 {{> modal_create_branch}}
 {{> modal_create_duty}}
+{{> modal_modify_employee}}

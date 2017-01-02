@@ -1,10 +1,15 @@
 var QUERY = {};
 
+QUERY.ADMIN = {
+  ResetPassword:
+  "update `admin` set password=? " +
+  "where `id`=? and name=?;"
 
+};
 
 QUERY.LOGIN = {
   login :
-    "select a.name, a.email, a.password, a.role, f.name as fc_name, f.id as fc_id " +
+    "select a.id as admin_id, a.name, a.email, a.password, a.role, f.name as fc_name, f.id as fc_id " +
     "from `admin` as a " +
     "left join `fc` as f " +
     "on f.id = a.fc_id " +
@@ -27,7 +32,7 @@ QUERY.EMPLOYEE = {
   ,CreateDuty :
     "insert into `duty` (`name`, `fc_id`) values(?,?);"
   ,GET_EMPLOYEE_LIST:
-    "select u.id as id, u.name as name, u.phone as phone, u.email as email, b.name as branch, d.name as duty " +
+    "select u.id as id, u.name as name, u.phone as phone, u.email as email, b.name as branch, d.name as duty, b.id as branch_id, d.id as duty_id " +
     "from `users` as u " +
     "left join `fc` as f " +
     "on f.id = u.fc_id " +
@@ -37,6 +42,13 @@ QUERY.EMPLOYEE = {
     "on d.id = u.duty_id " +
     "where u.fc_id=? and u.active=true " +
     "order by u.id desc;"
+  ,ResetPassword:
+    "update `users` set password=? " +
+    "where `id`=? and name=?;"
+  ,ModifyEmployee :
+    "update `users` " +
+    "set name=?, email=?, phone=?, branch_id=?, duty_id=? " +
+    "where id=? and fc_id=?;"
 };
 
 //

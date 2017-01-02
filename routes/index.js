@@ -42,6 +42,7 @@ passport.use(new LocalStrategy({
           } else {
             console.log('password is matched.');
             return done(null, {
+              'admin_id' : data[0].admin_id,
               'name' : data[0].name,
               'email' : data[0].email,
               'role' : data[0].role,
@@ -112,6 +113,27 @@ router.get('/process', isAuthenticated, function (req, res) {
     msg : _comment,
     path : _path
   });
+});
+
+router.post('/admin/password/reset', function (req, res) {
+  var _pass = req.body.pass.trim();
+  var _repass = req.body.re_pass.trim();
+  var _user_id = req.body.user_id.trim();
+  var _name = req.body.user_name.trim();
+
+  if(_pass !== _repass){
+    res.redirect('/process?url=employee&msg=error');
+  }else{
+    connection.query(QUERY.ADMIN.ResetPassword,
+      [bcrypt.hashSync(_pass, 10), _user_id, _name],
+      function (err, result) {
+        if(err){
+          console.error(err);
+        }else{
+          res.redirect('/dashboard');
+        }
+      });
+  }
 });
 
 module.exports = router;

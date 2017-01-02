@@ -15,6 +15,7 @@ requirejs(
 		,'jquery_ui'
 		,'adminLTE'
 		,'fastclick'
+		,'common'
 	],
 	function ($, moment, excellentCsv) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip

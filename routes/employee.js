@@ -93,6 +93,48 @@ router.post('/create', isAuthenticated, function (req, res) {
 
 
 /**
+ * 유저 수정
+ */
+router.post('/modify', isAuthenticated, function (req, res) {
+  var _data = {
+    user_id : req.body.employee_id,
+    name : req.body.name.trim(),
+    branch_id : req.body.branch.trim(), // id
+    duty_id : req.body.duty.trim(), // id
+    tel : req.body.tel.trim(),
+    email : req.body.email.trim(),
+    fc_id : req.user.fc_id // id
+  };
+
+  if(!UTIL.checkOnlyDigit(_data.tel)
+    || !UTIL.isValidEmail(_data.email)
+    || _data.branch_id === '' || _data.duty_id === ''
+  ){
+    res.redirect('/process?url=employee&msg=error');
+  }else{
+
+
+    connection.query(QUERY.EMPLOYEE.ModifyEmployee, [
+      _data.name,
+      _data.email,
+      _data.tel,
+      _data.branch_id,
+      _data.duty_id,
+      _data.fc_id,
+      _data.user_id,
+      _data.fc_id
+    ], function (err, result){
+      if(err){
+        console.error(err);
+      }else{
+        res.redirect('/employee');
+      }
+    });
+  }
+});
+
+
+/**
  * 지점 생성
  */
 router.post('/create/branch', function (req, res) {
@@ -131,6 +173,29 @@ router.post('/create/duty', function (req, res) {
           res.redirect('/employee');
         }
       });
+  }
+});
+
+router.post('/password/reset', function (req, res) {
+  var _pass = req.body.pass.trim();
+  var _repass = req.body.re_pass.trim();
+  var _user_id = req.body.user_id.trim();
+  var _name = req.body.user_name.trim();
+
+  console.info(req.originalUrl);
+
+  if(_pass !== _repass || _user_id === '' || _name === ''){
+    res.redirect('/process?url=employee&msg=error');
+  }else{
+    connection.query(QUERY.EMPLOYEE.ResetPassword,
+      [bcrypt.hashSync(_pass, 10), _user_id, _name],
+      function (err, result) {
+        if(err){
+          console.error(err);
+        }else{
+          res.redirect('/employee');
+        }
+    });
   }
 });
 

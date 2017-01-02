@@ -15,6 +15,7 @@ requirejs(
 		,'jquery_ui'
 		,'adminLTE'
 		,'fastclick'
+		,'common'
 	],
 	function ($, moment, excellentCsv) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
@@ -41,6 +42,28 @@ requirejs(
 			"autoWidth": true,
 			"processing": true
 		});
+
+
+		// 직원정보 수정 페이지
+		$('.btn-modify-userinfo').bind('click', function () {
+			var _self = $(this);
+			var _name = _self.attr('data-user-name');
+			var _branch = _self.attr('data-user-branch');
+			var _duty = _self.attr('data-user-duty');
+			var _phone = _self.attr('data-user-phone');
+			var _email = _self.attr('data-user-email');
+			var _user_id = _self.attr('data-user-id');
+
+			var _target = $('#frm_modify_employee');
+			_target.find('#name').val(_name);
+			_target.find('#tel').val(_phone);
+			_target.find('#email').val(_email);
+			_target.find('.employee_id').val(_user_id);
+			_target.find('#select_branch').val(_branch);
+			_target.find('#select_duty').val(_duty);
+		});
+
+
 
 
 		//
