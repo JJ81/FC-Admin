@@ -63,7 +63,24 @@ router.get('/login', function (req, res) {
   if (req.user == null) {
     res.render('login', {
       current_path: 'Login',
+      // 이 부분이 FC마다 변경되어야 하는 부분이다.
       title: PROJ_TITLE + 'Login'
+    });
+  } else {
+    res.redirect('/dashboard');
+  }
+});
+
+router.get('/login/:fcname', function (req, res) {
+  // console.log( req.param("fcname") );
+  var _fcname = req.param("fcname");
+  console.log(_fcname);
+
+  if (req.user == null) {
+    res.render('login', {
+      logo : _fcname,
+      current_path: 'Login',
+      title: _fcname + ', Login'
     });
   } else {
     res.redirect('/dashboard');
