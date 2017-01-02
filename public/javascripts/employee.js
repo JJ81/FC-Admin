@@ -28,17 +28,22 @@ requirejs(
 		//	return excellentCsv.csv(this, 'table_home', ',');
 		//});
 		//
+
+		console.log('searching');
+
 		//// set table func.
-		//var table_home =
-		//$('#table_home').DataTable({
-		//	"paging": true,
-		//	"lengthChange": true,
-		//	"searching": true,
-		//	"ordering": true,
-		//	"info": true,
-		//	"autoWidth": true,
-		//	"processing": true
-		//});
+		var table_employee =
+		$('#table_employee').DataTable({
+			"paging": true,
+			"lengthChange": false, // 첫번째로 불러오는 리스트 개수 설정 셀렉트 박스 설정
+			"searching": false,
+		  "ordering": false,
+			"info": false,
+			"autoWidth": true,
+			"processing": true
+		});
+
+
 		//
 		//table_home
 		//	.column( '0:visible' )

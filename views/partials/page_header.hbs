@@ -1,9 +1,15 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>{{current_path}}</h1>
+    <h1>
+        <!-- todo if문을 통해서 한글로 출력이 될 수 있도록 할 것 -->
+        {{current_path}}
+    </h1>
     <ol class="breadcrumb">
         <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-        <li class="active">{{current_path}}</li>
+        <li class="active">
+            <!-- todo if문을 사용하여 모드 한글화 작업을 할 것. -->
+            {{current_path}}
+        </li>
     </ol>
 </section>
 <!-- // page header -->

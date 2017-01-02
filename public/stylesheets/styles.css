@@ -103,4 +103,16 @@
 .select2-selection__choice__remove {
   color: rgba(255, 255, 255, 0.7) !important; }
 
+.btn-area-employee {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px; }
+
+.btn-employee-search {
+  position: relative;
+  top: 24px; }
+
+.dropdown-menu {
+  left: -84px !important; }
+
 /*# sourceMappingURL=styles.css.map */
