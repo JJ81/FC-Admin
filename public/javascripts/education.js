@@ -20,7 +20,21 @@ requirejs(
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
 
-		$(".select2").select2();
+
+		// todo 데이터가 없을 때 출력되는 영어 문구 대신 커스텀으로 html을 설정할 수 있는 옵션을 레퍼런스에서 찾아본다.
+		var table_education =
+			$('#table_education').DataTable({
+				"paging": true,
+				"lengthChange": false,
+				"searching": false,
+				"ordering": false,
+				"info": false,
+				"autoWidth": true,
+				"processing": true
+			});
+
+
+
 
 
 		//// Download csv
@@ -28,21 +42,17 @@ requirejs(
 		//	return excellentCsv.csv(this, 'table_home', ',');
 		//});
 		//
-
-
 		//// set table func.
-		var table_employee =
-		$('#table_employee').DataTable({
-			"paging": true,
-			"lengthChange": false, // 첫번째로 불러오는 리스트 개수 설정 셀렉트 박스 설정
-			"searching": false,
-		  "ordering": false,
-			"info": false,
-			"autoWidth": true,
-			"processing": true
-		});
-
-
+		//var table_home =
+		//$('#table_home').DataTable({
+		//	"paging": true,
+		//	"lengthChange": true,
+		//	"searching": true,
+		//	"ordering": true,
+		//	"info": true,
+		//	"autoWidth": true,
+		//	"processing": true
+		//});
 		//
 		//table_home
 		//	.column( '0:visible' )

@@ -39,3 +39,10 @@ hbs.registerHelper('time', function (date) {
 hbs.registerHelper('comparison', function(value , max){
   return (value < max) ? true: false;
 });
+
+hbs.registerHelper('for', function(from, to, incr, block) {
+	var accum = '';
+	for(var i = from; i < to; i += incr)
+		accum += block.fn(i);
+	return accum;
+});
