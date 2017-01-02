@@ -1,7 +1,6 @@
 var hbs = require('hbs');
-// var moment = require('moment');
 var currencyFormatter = require('currency-formatter');
-var dateFormat = require('dateFormat');
+var dateFormat = require('dateformat');
 
 hbs.registerHelper('isEquals', function (a, b) {
 	return (a === b);
