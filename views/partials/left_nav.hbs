@@ -27,7 +27,7 @@
             <li {{#if (isEquals current_path 'Education')}}class="active"{{/if}}>
                 <a href="/education">
                     <i class="fa fa-user" aria-hidden="true"></i>
-                    <span>교육과정관리</span>
+                    <span>교육과정 등록관리</span>
                     {{#if (isEquals current_path 'Education')}}
                         <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right text-green"></i>
@@ -39,8 +39,20 @@
             <li {{#if (isEquals current_path 'Assignment')}}class="active"{{/if}}>
                 <a href="/assignment">
                     <i class="fa fa-user" aria-hidden="true"></i>
-                    <span>교육배정관리</span>
+                    <span>교육과정 배정관리</span>
                     {{#if (isEquals current_path 'Assignment')}}
+                        <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right text-green"></i>
+                    </span>
+                    {{/if}}
+                </a>
+            </li>
+
+            <li {{#if (isEquals current_path 'Assignment_history')}}class="active"{{/if}}>
+                <a href="/assignment_history">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <span>교육과정 배정이력</span>
+                    {{#if (isEquals current_path 'Assignment_history')}}
                         <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right text-green"></i>
                     </span>

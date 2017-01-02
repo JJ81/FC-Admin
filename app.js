@@ -11,6 +11,7 @@ var dashboard = require('./routes/dashboard');
 var employee = require('./routes/employee');
 var education = require('./routes/education');
 var assignment = require('./routes/assignment');
+var assignment_history = require('./routes/assignment_history');
 var course = require('./routes/course');
 var achievement = require('./routes/achievement');
 
@@ -56,6 +57,7 @@ app.use('/dashboard', dashboard);
 app.use('/employee', employee);
 app.use('/education', education);
 app.use('/assignment', assignment);
+app.use('/assignment_history', assignment_history);
 app.use('/course', course);
 app.use('/achievement', achievement);
 

@@ -5,13 +5,18 @@
                 <div class="col-md-3">
                     <form class="" action="" method="post">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="교육명 검색" required />
+                            <input type="text" class="form-control" placeholder="교육과정명 검색" required />
                             <span class="input-group-btn">
-                              <button type="submit" class="btn btn-warning btn-flat">검색</button>
+                              <button type="submit" class="btn btn-primary btn-flat">검색</button>
                             </span>
                         </div>
                     </form>
                 </div>
+
+                <button class="btn btn-default pull-right" style="margin-left: 10px;">
+                    <i class="fa fa-download"></i>&nbsp;
+                    교육과정 전체
+                </button>
                 <button class="btn btn-create-edu btn-primary pull-right">
                     <i class="fa fa-pencil-square-o"></i>
                     교육과정생성
@@ -23,7 +28,6 @@
                     <thead>
                     <tr>
                         <th class="center">교육과정명</th>
-                        <th class="center">강사명</th>
                         <th class="center">생성일</th>
                         <th class="center">시작일</th>
                         <th class="center">종료일</th>
@@ -35,7 +39,6 @@
                     {{#for 0 10 1}}
                     <tr>
                         <td class="center"><a href="#" class="btn-link">일반상식에 대한 강의입니다.</a></td>
-                        <td class="center">박민규</td>
                         <td class="center">2017.01.01</td>
                         <td class="center">2017.01.02</td>
                         <td class="center">2017.01.17</td>
@@ -56,7 +59,6 @@
                     <tfoot>
                     <tr>
                         <th class="center">교육과정명</th>
-                        <th class="center">강사명</th>
                         <th class="center">생성일</th>
                         <th class="center">시작일</th>
                         <th class="center">종료일</th>
