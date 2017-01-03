@@ -45,3 +45,32 @@ hbs.registerHelper('for', function(from, to, incr, block) {
 		accum += block.fn(i);
 	return accum;
 });
+
+// course details (별평가에 따라서 어떤 클래스가 필요한지 리턴한다.)
+hbs.registerHelper('star-rating', function(rating) {
+	var _class = '';
+	if(rating === 0 ){
+		_class='empty';
+	} else if(rating > 0 && rating < 1.4){
+		_class='half';
+	}else if(rating > 0 && rating <= 1.4){
+		_class='one';
+	}else if(rating >= 1.5 && rating < 2){
+		_class='onehalf';
+	}else if(rating >= 2 && rating < 2.5){
+		_class='two';
+	}else if(rating >= 2.5 && rating < 3){
+		_class='twohalf';
+	}else if(rating >= 3 && rating < 3.5){
+		_class='three';
+	}else if(rating >= 3.5 && rating < 4){
+		_class='threehalf';
+	}else if(rating >= 4 && rating < 4.5){
+		_class='four';
+	}else if(rating >= 4.5 && rating < 5){
+		_class='fourhalf';
+	}else{
+		_class=''; // full
+	}
+	return _class;
+});

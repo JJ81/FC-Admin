@@ -61,6 +61,30 @@ QUERY.COURSE = {
     "on a.id = c.creator_id " +
     "where a.fc_id=? " +
     "order by c.created_dt desc;"
+  ,GetCourseListById :
+    "select c.id as course_id, c.name, t.name as teacher, c.created_dt, a.name as creator, c.desc " +
+    "from `course` as c " +
+    "left join `teacher` as t " +
+    "on c.teacher_id = t.id " +
+    "left join `admin` as a " +
+    "on a.id = c.creator_id " +
+    "where a.fc_id=? and c.id=? " +
+    "order by c.created_dt desc;"
+  ,GetStarRatingByCourseId:
+    "select round(avg(rate),1) as rate " +
+    "from `user_rating` " +
+    "where course_id=? " +
+    "group by `course_id`;"
+  ,GetSessionListByCourseId:
+    "select * from `course_list` as cl " +
+    "where cl.course_id=? " +
+    "order by cl.`order` desc, cl.`id` asc;"
+  ,GetTeacherInfoByCourseId :
+    "select t.name, t.desc " +
+    "from `course` as c " +
+    "left join `teacher` as t " +
+    "on c.teacher_id = t.id " +
+    "where c.id=? ;"
 };
 
 

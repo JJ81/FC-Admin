@@ -72,6 +72,12 @@
     content: "\f005\f005\f005\f005\f005";
     overflow: hidden; }
 
+.ratings.empty:after {
+  content: ""; }
+
+.ratings.half:after {
+  content: "\f089"; }
+
 .ratings.one:after {
   content: "\f005"; }
 
@@ -118,5 +124,26 @@
 
 .course-name {
   font-size: 14px; }
+
+.session-list {
+  list-style: none;
+  position: relative;
+  left: -20px; }
+  .session-list li {
+    padding: 6px 0; }
+  .session-list li:hover {
+    background: #eee; }
+
+.course-desc {
+  margin-top: 20px; }
+
+.teacher-desc {
+  margin-top: 20px; }
+
+.btn-modify-session {
+  margin-left: -5px; }
+
+.btn-delete-session {
+  margin-left: -5px; }
 
 /*# sourceMappingURL=styles.css.map */

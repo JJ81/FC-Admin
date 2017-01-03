@@ -103,7 +103,8 @@ $star-size: 17px;
     overflow: hidden;
   }
 }
-
+.ratings.empty:after{content: "";}
+.ratings.half:after{content: "\f089";}
 .ratings.one:after{content: "\f005";}
 .ratings.onehalf:after{content: "\f005\f089";}
 .ratings.two:after{content: "\f005\f005";}
@@ -144,4 +145,32 @@ $star-size: 17px;
 
 .course-name{
   font-size: 14px;
+}
+
+.session-list{
+  list-style: none;
+  position: relative;
+  left: -20px;
+  li{
+    padding: 6px 0;
+  }
+  li:hover{
+    background: #eee;
+  }
+}
+
+.course-desc{
+  margin-top: 20px;
+}
+
+.teacher-desc{
+  margin-top: 20px;
+}
+
+.btn-modify-session{
+  margin-left: -5px;
+}
+
+.btn-delete-session{
+  margin-left: -5px;
 }

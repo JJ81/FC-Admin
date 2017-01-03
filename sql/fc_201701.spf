@@ -45,32 +45,30 @@
 		<dict>
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
-			<key>contentFilter</key>
-			<dict/>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
 			<data>
-			YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFy
-			Y2hpdmVyVCR0b3ASAAGGoK8QDwcIFRYXGBkfICEoLDA0OFUkbnVs
-			bNMJCgsMEBRXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6MNDg+A
-			AoADgASjERITgAWABoAKgA5UdHlwZVRyb3dzVGtleXNfECZTZWxl
-			Y3Rpb25EZXRhaWxUeXBlUHJpbWFyeUtleWVkRGV0YWlsc9MJCgsa
-			HB6hG4AHoR2ACIAJUTIJ0iIjJCVaJGNsYXNzbmFtZVgkY2xhc3Nl
-			c18QE05TTXV0YWJsZURpY3Rpb25hcnmjJCYnXE5TRGljdGlvbmFy
-			eVhOU09iamVjdNIKCykroSqAC4AN0gstLi9ZTlMuc3RyaW5ngAxS
-			aWTSIiMxMl8QD05TTXV0YWJsZVN0cmluZ6MxMydYTlNTdHJpbmfS
-			IiM1Nl5OU011dGFibGVBcnJheaM1NydXTlNBcnJhedIiIyY5oiYn
-			XxAPTlNLZXllZEFyY2hpdmVy0Tw9VGRhdGGAAQAIABEAGgAjAC0A
-			MgA3AEkATwBWAF4AaQBwAHQAdgB4AHoAfgCAAIIAhACGAIsAkACV
-			AL4AxQDHAMkAywDNAM8A0QDSANcA4gDrAQEBBQESARsBIAEiASQB
-			JgErATUBNwE6AT8BUQFVAV4BYwFyAXYBfgGDAYYBmAGbAaAAAAAA
-			AAACAQAAAAAAAAA+AAAAAAAAAAAAAAAAAAABog==
+			YnBsaXN0MDDUAQIDBAUGNjdYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoK0HCBUWFxgZHSQoLDA0VSRudWxs0wkK
+			CwwQFFdOUy5rZXlzWk5TLm9iamVjdHNWJGNsYXNzow0OD4ACgAOA
+			BKMREhOABYAGgAiADFR0eXBlVHJvd3NUa2V5c18QJlNlbGVjdGlv
+			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
+			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
+			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
+			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClJpZNIeHy0uXxAPTlNN
+			dXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5TTXV0YWJs
+			ZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tleWVkQXJj
+			aGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBLAFIAWgBl
+			AGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIAwwDFAMoA
+			1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEtATIBRAFIAVEBVgFl
+			AWkBcQF2AXkBiwGOAZMAAAAAAAACAQAAAAAAAAA6AAAAAAAAAAAA
+			AAAAAAABlQ==
 			</data>
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1230, 717}}</string>
+			<string>{{0, 0}, {1186.5, 717}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -143,25 +141,54 @@ where id='';
 
 
 # 강의 리스트 가져오기
-select c.id as course_id, c.name, t.name as teacher, c.created_dt, a.name as creator 
+select c.id as course_id, c.name, t.name as teacher, c.created_dt, a.name as creator, c.desc
 from `course` as c
 left join `teacher` as t
 on c.teacher_id = t.id
 left join `admin` as a
 on a.id = c.creator_id
+where a.fc_id='1'
 order by c.created_dt desc;
 
 
+
+select course_id, round(avg(rate),1) as rate
+from `user_rating`
+where course_id='1'
+group by `course_id`;
+
+select *
+from `user_rating`
+where course_id='3';
+
+
+select * from `course_list` as cl
+where cl.course_id='1'
+order by `order` desc, `id` asc;
+
+alter table `course_list` drop column `title`;
+
+alter table `course_list`
+add column `title` varchar(255) character set utf8 default null after `type`;
+
+
+select * from `quiz_group`;
+
+
+
+select * from `course_list` as cl
+where cl.course_id='1'
+order by `order` desc, `id` asc;
 
 
 
 </string>
 			<key>table</key>
-			<string>admin</string>
+			<string>course_list</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
-			<real>210</real>
+			<real>253.5</real>
 		</dict>
 	</dict>
 	<key>encrypted</key>
@@ -172,113 +199,68 @@ order by c.created_dt desc;
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string>select * from `course_list` as cl
+where cl.course_id='1'
+order by `order` desc, `id` asc</string>
+		<string>alter table `course_list`
+add column `title` varchar(255) character set utf8 default null after `type`</string>
+		<string>alter table `course_list` drop column `title`</string>
+		<string>alter table `course_list`
+add column `title` varchar(255) character set utf8 not null after `type`</string>
+		<string>select * from `quiz_group`</string>
+		<string>select * from `course_list` as cl
+where cl.course_id='1'</string>
+		<string>select * from `course_list` as cl</string>
+		<string>select course_id, round(avg(rate),1) as rate
+from `user_rating`
+where course_id='1'
+group by `course_id`</string>
+		<string>select *
+from `user_rating`
+where course_id='3'</string>
+		<string>select course_id, round(avg(rate),1) as rate
+from `user_rating`
+where course_id='3'
+group by `course_id`</string>
+		<string>select course_id, round(avg(rate),2) as rate
+from `user_rating`
+where course_id='3'
+group by `course_id`</string>
+		<string>select course_id, rate
+from `user_rating`
+where course_id='3'</string>
+		<string>select course_id, round(avg(rate)) as rate
+from `user_rating`
+where course_id='3'
+group by `course_id`</string>
+		<string>select course_id, avg(rate) as rate
+from `user_rating`
+where course_id='3'
+group by `course_id`</string>
+		<string>select course_id, avg(sum(rate)) as rate
+from `user_rating`
+where course_id='3'
+group by `course_id`</string>
+		<string>select course_id, avg(sum(rate))
+from `user_rating`
+where course_id='3'
+group by `course_id`</string>
+		<string>select course_id, sum(rate)
+from `user_rating`
+where course_id='3'
+group by `course_id`</string>
+		<string>select * from `user_rating`
+where course_id='3'</string>
+		<string>select * from `user_rating`</string>
 		<string># 강의 리스트 가져오기
-select c.id as course_id, c.name, t.name as teacher, c.created_dt, a.name as creator 
+select c.id as course_id, c.name, t.name as teacher, c.created_dt, a.name as creator, c.desc
 from `course` as c
 left join `teacher` as t
 on c.teacher_id = t.id
 left join `admin` as a
 on a.id = c.creator_id
+where a.fc_id='1'
 order by c.created_dt desc</string>
-		<string># 강의 리스트 가져오기
-select c.id as course_id, c.name, t.name as teacher, c.created_dt, a.name as creator 
-from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id
-left join `admin` as a
-on a.id = c.creator_id
-order by c.created_dt asc</string>
-		<string># 강의 리스트 가져오기
-select c.id as course_id, c.name, t.name as teacher, c.created_dt, a.name as creator 
-from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id
-left join `admin` as a
-on a.id = c.creator_id</string>
-		<string># 강의 리스트 가져오기
-select c.id as course_id, c.name, t.name as teacher, c.created_dt 
-from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id</string>
-		<string># 강의 리스트 가져오기
-select * from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id</string>
-		<string># 강의 리스트 가져오기
-select * from `course`</string>
-		<string>select * from `admin`</string>
-		<string>update `admin` set password='qwer123456' 
-where `id`='1' and name='이재준'</string>
-		<string>select * from `users`</string>
-		<string>update `users` set password='qwer123456' 
-where `id`='1' and name='이재준'</string>
-		<string>update `users` set password='qwer12345' 
-where `id`='1' and name='이재준'</string>
-		<string>update `users` set password='qwer12345' 
-where `id`='1' and `id`='1'</string>
-		<string>update `users` set password='qwer1234' 
-where `id`='1' and `id`='1'</string>
-		<string>update `users` set password='qwer1234' 
-where `fc_id`='1' and `id`='1'</string>
-		<string>select u.id as id, u.name as name, u.phone as phone, u.email as email, b.name as branch, d.name as duty
-from `users` as u
-left join `fc` as f
-on f.id = u.fc_id
-left join `branch` as b
-on b.id = u.branch_id
-left join `duty` as d
-on d.id = u.duty_id
-where u.fc_id='1' and u.active=true
-order by u.id desc</string>
-		<string>select u.name as name, u.phone as phone, u.email as email, b.name as branch, d.name as duty
-from `users` as u
-left join `fc` as f
-on f.id = u.fc_id
-left join `branch` as b
-on b.id = u.branch_id
-left join `duty` as d
-on d.id = u.duty_id
-where u.fc_id='1' and u.active=true
-order by u.id desc</string>
-		<string>select u.name as name, u.phone as phone, u.email as email, b.name as branch, d.name as duty
-u.*, f.*, b.*, d.*
-from `users` as u
-left join `fc` as f
-on f.id = u.fc_id
-left join `branch` as b
-on b.id = u.branch_id
-left join `duty` as d
-on d.id = u.duty_id
-where u.fc_id='1' and u.active=true
-order by u.id desc</string>
-		<string>select u.*, f.*, b.*, d.*
-from `users` as u
-left join `fc` as f
-on f.id = u.fc_id
-left join `branch` as b
-on b.id = u.branch_id
-left join `duty` as d
-on d.id = u.duty_id
-where u.fc_id='1' and u.active=true
-order by u.id desc</string>
-		<string>select u.*, f.*, b.*, d.*
-from `users` as u
-left join `fc` as f
-on f.id = u.fc_id
-left join `branch` as b
-on b.id = u.branch_id
-left join `duty` ad d
-on d.id = u.duty_id
-where u.fc_id='1' and u.active=true
-order by u.id desc</string>
-		<string>select u.*, f.*, b.* 
-from `users` as u
-left join `fc` as f
-on f.id = u.fc_id
-left join `branch` as b
-on b.id = u.branch_id
-where u.fc_id='1' and u.active=true
-order by u.id desc</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

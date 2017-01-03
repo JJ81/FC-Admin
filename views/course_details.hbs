@@ -6,19 +6,134 @@
                     <i class="fa fa-list"></i>
                     목록으로
                 </a>
-                <button class="btn btn-warning">
-                    <i class="fa fa-pencil-square-o"></i>
-                    수정
-                </button>
+                <button class="btn btn-warning pull-right">수정</button>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <h3>강의 이름</h3>
-                    
+                {{#each list}}
+                <div class="course-info">
+                    <h2 class="course-title">{{name}}</h2>
+                    <p class="star-rating-area">
+
+                        <div class="star-rating">
+                            강의 평점 :
+                            <span class="ratings {{star-rating ../rating}}"></span> ( {{../rating}} )
+                        </div>
+                    </p>
+                    <span class="author">
+                        강사명 : {{teacher}}
+                    </span>
+
+                    <div class="course-desc">
+                        <h4>강의 설명</h4>
+                        {{desc}}
+                    </div>
+                </div>
+                {{/each}}
             </div>
             <!-- /.box-body -->
+            <div class="box-footer"></div>
+        </div>
+
+        <div class="box">
+            <div class="box-header with-border">
+                <h3>
+                    이 강좌의 커리큘럼
+                    <button class="btn btn-primary btn-sm pull-right">
+                        <i class="fa fa-plus"></i>&nbsp;
+                        커리큘럼 추가
+                    </button>
+                </h3>
+            </div>
+            <div class="box-body">
+                <div class="course-session">
+
+                    <!--강의에 속한 세션 항목 나열과 선택시 볼 수 있어야 한다.-->
+                    {{#if session_list}}
+                        {{#each session_list}}
+                            <ul class="session-list">
+                            {{#if (isEquals type 'QUIZ')}}
+                                <li>
+                                    <a href="#quiz" data-quiz-group="{{quiz_group_id}}" data-order="{{order}}" data-id="{{id}}">
+                                        <i class="fa fa-quora"></i> &nbsp;
+                                        {{title}}
+                                    </a>
+                                    <a href="#view" class="btn btn-sm btn-session-detail text-green" style="margin-left: 40px;" data-quiz-group="{{quiz_group_id}}">
+                                        <i class="fa fa-eye"></i>
+                                        보기
+                                    </a>
+                                    <a href="#modify" class="btn btn-sm btn-modify-session" data-quiz-group="{{quiz_group_id}}">
+                                        <i class="fa fa-pencil"></i> &nbsp; 수정
+                                    </a>
+                                    <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-quiz-group="{{quiz_group_id}}">
+                                        <i class="fa fa-eraser"></i> &nbsp; 삭제
+                                    </a>
+                                </li>
+                            {{else if (isEquals type 'VIDEO') }}
+                                <li>
+                                    <a href="#video" data-video-id="{{video_id}}" data-order="{{order}}" data-id="{{id}}">
+                                        <i class="fa fa-file-video-o"></i> &nbsp;
+                                        {{title}}
+                                    </a>
+                                    <a href="#view" class="btn btn-sm btn-session-detail text-green" style="margin-left: 40px;" data-video-id="{{video_id}}">
+                                        <i class="fa fa-eye"></i>
+                                        보기
+                                    </a>
+                                    <a href="#modify" class="btn btn-sm btn-modify-session" data-video-id="{{video_id}}">
+                                        <i class="fa fa-pencil"></i> &nbsp; 수정
+                                    </a>
+                                    <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-video-id="{{video_id}}">
+                                        <i class="fa fa-eraser"></i> &nbsp; 삭제
+                                    </a>
+                                </li>
+                            {{else if (isEquals type 'FINAL') }}
+                                <li>
+                                    <a href="#final" data-quiz-group_id="{{quiz_group_id}}" data-order="{{order}}" data-id="{{id}}">
+                                        <i class="fa fa-sticky-note"></i> &nbsp;
+                                        {{title}}
+                                    </a>
+                                    <a href="#view" class="btn btn-sm btn-session-detail text-green" style="margin-left: 40px;" data-quiz-group="{{quiz_group_id}}">
+                                        <i class="fa fa-eye"></i>
+                                        보기
+                                    </a>
+                                    <a href="#modify" class="btn btn-sm btn-modify-session" data-quiz-group="{{quiz_group_id}}">
+                                        <i class="fa fa-pencil"></i> &nbsp; 수정
+                                    </a>
+                                    <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-quiz-group="{{quiz_group_id}}">
+                                        <i class="fa fa-eraser"></i> &nbsp; 삭제
+                                    </a>
+                                </li>
+                            {{/if}}
+                            </ul>
+                        {{/each}}
+                    {{else}}
+                        <div>
+                            아직 등록된 커리큘럼이 없습니다.
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+            <div class="box-footer"></div>
         </div>
         <!-- /.box -->
+
+        <div class="box">
+            <div class="box-header with-border">
+                <h3>강사 정보</h3>
+            </div>
+            <div class="box-body">
+                {{#if teacher_info}}
+                    {{#each teacher_info}}
+                    <h4>{{name}}</h4>
+                    <div class="teacher-desc">{{desc}}</div>
+                    {{/each}}
+                {{else}}
+                    등록된 강사 정보가 없습니다.
+                {{/if}}
+
+            </div>
+            <div class="box-footer"></div>
+        </div>
     </div>
     <!-- /.col -->
 </div>
