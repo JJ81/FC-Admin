@@ -189,7 +189,7 @@ router.post('/modify', function (req, res) {
       _teacher_id,
       _course_desc,
       req.user.admin_id,
-      '2017.01.01',
+      new Date(),
       _course_id
     ],
     function (err, rows) {
@@ -198,7 +198,6 @@ router.post('/modify', function (req, res) {
       }else{
         res.redirect('/course/details?id=' + _course_id);
       }
-
   });
 });
 
