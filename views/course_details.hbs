@@ -3,10 +3,13 @@
         <div class="box">
             <div class="box-header with-border">
                 <a href="/course" class="btn btn-default">
-                    <i class="fa fa-list"></i>
+                    <i class="fa fa-list"></i> &nbsp;
                     목록으로
                 </a>
-                <button class="btn btn-warning pull-right">수정</button>
+                <button class="btn btn-warning pull-right btn-sm" data-toggle="modal" data-target="#modifyCourse">
+                    <i class="fa fa-pencil"></i> &nbsp;
+                    수정
+                </button>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -14,10 +17,16 @@
                 <div class="course-info">
                     <h2 class="course-title">{{name}}</h2>
                     <p class="star-rating-area">
-
                         <div class="star-rating">
                             강의 평점 :
-                            <span class="ratings {{star-rating ../rating}}"></span> ( {{../rating}} )
+                            {{#if ../rating}}
+                                {{#each ../rating}}
+                                    <span class="ratings {{star-rating rate}}"></span> ( {{rate}} )
+                                {{/each}}
+                            {{else}}
+                                <span class="ratings empty"></span> ( 0 )
+                            {{/if}}
+
                         </div>
                     </p>
                     <span class="author">
@@ -26,7 +35,7 @@
 
                     <div class="course-desc">
                         <h4>강의 설명</h4>
-                        {{desc}}
+                        <pre>{{desc}}</pre> <!-- 강의 설명 부분에 개행 처리가 들어가지 않았다. -->
                     </div>
                 </div>
                 {{/each}}
@@ -58,16 +67,18 @@
                                         <i class="fa fa-quora"></i> &nbsp;
                                         {{title}}
                                     </a>
-                                    <a href="#view" class="btn btn-sm btn-session-detail text-green" style="margin-left: 40px;" data-quiz-group="{{quiz_group_id}}">
-                                        <i class="fa fa-eye"></i>
-                                        보기
-                                    </a>
-                                    <a href="#modify" class="btn btn-sm btn-modify-session" data-quiz-group="{{quiz_group_id}}">
-                                        <i class="fa fa-pencil"></i> &nbsp; 수정
-                                    </a>
-                                    <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-quiz-group="{{quiz_group_id}}">
-                                        <i class="fa fa-eraser"></i> &nbsp; 삭제
-                                    </a>
+                                    <span class="pull-right">
+                                        <a href="#view" class="btn btn-sm btn-session-detail text-green" style="margin-left: 40px;" data-quiz-group="{{quiz_group_id}}">
+                                            <i class="fa fa-eye"></i>
+                                            보기
+                                        </a>
+                                        <a href="#modify" class="btn btn-sm btn-modify-session" data-quiz-group="{{quiz_group_id}}">
+                                            <i class="fa fa-pencil"></i> &nbsp; 수정
+                                        </a>
+                                        <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-quiz-group="{{quiz_group_id}}">
+                                            <i class="fa fa-eraser"></i> &nbsp; 삭제
+                                        </a>
+                                    </span>
                                 </li>
                             {{else if (isEquals type 'VIDEO') }}
                                 <li>
@@ -75,16 +86,18 @@
                                         <i class="fa fa-file-video-o"></i> &nbsp;
                                         {{title}}
                                     </a>
-                                    <a href="#view" class="btn btn-sm btn-session-detail text-green" style="margin-left: 40px;" data-video-id="{{video_id}}">
-                                        <i class="fa fa-eye"></i>
-                                        보기
-                                    </a>
-                                    <a href="#modify" class="btn btn-sm btn-modify-session" data-video-id="{{video_id}}">
-                                        <i class="fa fa-pencil"></i> &nbsp; 수정
-                                    </a>
-                                    <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-video-id="{{video_id}}">
-                                        <i class="fa fa-eraser"></i> &nbsp; 삭제
-                                    </a>
+                                    <span class="pull-right">
+                                        <a href="#view" class="btn btn-sm btn-session-detail text-green" style="margin-left: 40px;" data-video-id="{{video_id}}">
+                                            <i class="fa fa-eye"></i>
+                                            보기
+                                        </a>
+                                        <a href="#modify" class="btn btn-sm btn-modify-session" data-video-id="{{video_id}}">
+                                            <i class="fa fa-pencil"></i> &nbsp; 수정
+                                        </a>
+                                        <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-video-id="{{video_id}}">
+                                            <i class="fa fa-eraser"></i> &nbsp; 삭제
+                                        </a>
+                                    </span>
                                 </li>
                             {{else if (isEquals type 'FINAL') }}
                                 <li>
@@ -92,16 +105,18 @@
                                         <i class="fa fa-sticky-note"></i> &nbsp;
                                         {{title}}
                                     </a>
-                                    <a href="#view" class="btn btn-sm btn-session-detail text-green" style="margin-left: 40px;" data-quiz-group="{{quiz_group_id}}">
-                                        <i class="fa fa-eye"></i>
-                                        보기
-                                    </a>
-                                    <a href="#modify" class="btn btn-sm btn-modify-session" data-quiz-group="{{quiz_group_id}}">
-                                        <i class="fa fa-pencil"></i> &nbsp; 수정
-                                    </a>
-                                    <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-quiz-group="{{quiz_group_id}}">
-                                        <i class="fa fa-eraser"></i> &nbsp; 삭제
-                                    </a>
+                                    <span class="pull-right">
+                                        <a href="#view" class="btn btn-sm btn-session-detail text-green" data-quiz-group="{{quiz_group_id}}">
+                                            <i class="fa fa-eye"></i>
+                                            보기
+                                        </a>
+                                        <a href="#modify" class="btn btn-sm btn-modify-session" data-quiz-group="{{quiz_group_id}}">
+                                            <i class="fa fa-pencil"></i> &nbsp; 수정
+                                        </a>
+                                        <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-quiz-group="{{quiz_group_id}}">
+                                            <i class="fa fa-eraser"></i> &nbsp; 삭제
+                                        </a>
+                                    </span>
                                 </li>
                             {{/if}}
                             </ul>
@@ -125,7 +140,7 @@
                 {{#if teacher_info}}
                     {{#each teacher_info}}
                     <h4>{{name}}</h4>
-                    <div class="teacher-desc">{{desc}}</div>
+                    <pre class="teacher-desc">{{desc}}</pre>
                     {{/each}}
                 {{else}}
                     등록된 강사 정보가 없습니다.
@@ -139,3 +154,4 @@
 </div>
 <!-- /.row -->
 
+{{> modal_modify_course}}

@@ -13,9 +13,17 @@
                     </form>
                 </div>
                 <div class="col-md-9">
-                    <button class="btn btn-primary pull-right">
+                    <button class="btn btn-default pull-right" style="margin-left: 5px;" data-toggle="modal" data-target="#registerCourse">
                         <i class="fa fa-pencil-square-o"></i>
-                        강의등록
+                        강의 등록
+                    </button>
+                    <button class="btn btn-default pull-right" style="margin-left: 5px;" data-toggle="modal" data-target="#createTeacher">
+                        <i class="fa fa-pencil-square-o"></i>
+                        강사 등록
+                    </button>
+                    <button class="btn btn-default pull-right" data-toggle="modal" data-target="#teacherList">
+                        <i class="fa fa-user"></i> &nbsp;
+                        등록된 강사
                     </button>
                 </div>
             </div>
@@ -66,3 +74,6 @@
 </div>
 <!-- /.row -->
 
+{{> modal_view_teacher}}
+{{> modal_register_teacher}}
+{{> modal_register_course}}

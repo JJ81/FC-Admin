@@ -85,6 +85,21 @@ QUERY.COURSE = {
     "left join `teacher` as t " +
     "on c.teacher_id = t.id " +
     "where c.id=? ;"
+  ,GetTeacherList: // 특정 fc 소속의 모든 admin이 등록한 강사 리스트를 가져온다.
+    "select t.id, t.name, t.desc " +
+    "from `teacher` as t " +
+    "left join `admin` as a " +
+    "on a.id = t.creator_id " +
+    "where a.fc_id=?;"
+  ,CreateTeacher:
+    "insert into `teacher` (`name`, `desc`, `creator_id`) " +
+    "values(?,?,?);"
+  ,CreateCourse :
+    "insert into `course` (`name`, `teacher_id`, `desc`, `creator_id`) " +
+    "values (?,?,?,?);"
+  ,UpdateCourse:
+    "update `course` set `name`=?, `teacher_id`=?, `desc`=?, `creator_id`=?, `updated_dt`=? " +
+    "where `id`=?;"
 };
 
 

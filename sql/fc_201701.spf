@@ -45,6 +45,8 @@
 		<dict>
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
+			<key>contentFilter</key>
+			<dict/>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
@@ -181,10 +183,42 @@ where cl.course_id='1'
 order by `order` desc, `id` asc;
 
 
+select t.name, t.desc 
+from `course` as c
+left join `teacher` as t
+on c.teacher_id = t.id
+where c.id='1';
+
+select * from `teacher`;
+
+alter table `teacher`
+add column `creator_id` bigint not null after `desc`;
+
+alter table `teacher`
+add foreign key (`creator_id`)
+references `admin`(`id`);
+
+
+select t.id, t.name, t.desc 
+from `teacher` as t
+left join `admin` as a
+on a.id = t.creator_id
+where a.fc_id='1';
+
+
+insert into `teacher` (`name`, `desc`, `creator_id`) 
+values();
+
+
+
+select * from `course`;
+
+insert into `course` (`name`, `teacher_id`, `desc`, `creator_id`)
+values (?,?,?,?);
 
 </string>
 			<key>table</key>
-			<string>course_list</string>
+			<string>course</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -199,6 +233,53 @@ order by `order` desc, `id` asc;
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string>select * from `course`</string>
+		<string>select t.id, t.name, t.desc 
+from `teacher` as t
+left join `admin` as a
+on a.id = t.creator_id
+where a.fc_id='1'</string>
+		<string>select t.name, t.desc 
+from `teacher` as t
+left join `admin` as a
+on a.id = t.creator_id
+where a.fc_id='1'</string>
+		<string>select * 
+from `teacher` as t
+left join `admin` as a
+on a.id = t.creator_id
+where a.fc_id='1'</string>
+		<string>select * 
+from `teacher` as t
+left join `admin` as a
+on a.id = t.creator_id
+where a.fc_id='2'</string>
+		<string>select * from `teacher` as t
+left join `admin` as a
+on a.id = t.creator_id</string>
+		<string>alter table `teacher`
+add foreign key (`creator_id`)
+references `admin`(`id`)</string>
+		<string>alter table `teacher`
+add column `creator_id` bigint not null after `desc`</string>
+		<string>select * from `teacher`</string>
+		<string>select t.name, t.desc 
+from `course` as c
+left join `teacher` as t
+on c.teacher_id = t.id
+where c.id='1'</string>
+		<string>select t.name, t.desc 
+from `course` as c
+left join `teacher` as t
+on c.teacher_id = t.id</string>
+		<string>select * 
+from `course` as c
+left join `teacher` as t
+on c.teacher_id = t.id
+where c.id='1'</string>
+		<string>select * from `course` as c
+left join `teacher` as t
+on c.teacher_id = t.id</string>
 		<string>select * from `course_list` as cl
 where cl.course_id='1'
 order by `order` desc, `id` asc</string>
@@ -211,56 +292,6 @@ add column `title` varchar(255) character set utf8 not null after `type`</string
 		<string>select * from `course_list` as cl
 where cl.course_id='1'</string>
 		<string>select * from `course_list` as cl</string>
-		<string>select course_id, round(avg(rate),1) as rate
-from `user_rating`
-where course_id='1'
-group by `course_id`</string>
-		<string>select *
-from `user_rating`
-where course_id='3'</string>
-		<string>select course_id, round(avg(rate),1) as rate
-from `user_rating`
-where course_id='3'
-group by `course_id`</string>
-		<string>select course_id, round(avg(rate),2) as rate
-from `user_rating`
-where course_id='3'
-group by `course_id`</string>
-		<string>select course_id, rate
-from `user_rating`
-where course_id='3'</string>
-		<string>select course_id, round(avg(rate)) as rate
-from `user_rating`
-where course_id='3'
-group by `course_id`</string>
-		<string>select course_id, avg(rate) as rate
-from `user_rating`
-where course_id='3'
-group by `course_id`</string>
-		<string>select course_id, avg(sum(rate)) as rate
-from `user_rating`
-where course_id='3'
-group by `course_id`</string>
-		<string>select course_id, avg(sum(rate))
-from `user_rating`
-where course_id='3'
-group by `course_id`</string>
-		<string>select course_id, sum(rate)
-from `user_rating`
-where course_id='3'
-group by `course_id`</string>
-		<string>select * from `user_rating`
-where course_id='3'</string>
-		<string>select * from `user_rating`</string>
-		<string># 강의 리스트 가져오기
-select c.id as course_id, c.name, t.name as teacher, c.created_dt, a.name as creator, c.desc
-from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id
-left join `admin` as a
-on a.id = c.creator_id
-where a.fc_id='1'
-order by c.created_dt desc</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>
