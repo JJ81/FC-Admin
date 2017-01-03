@@ -51,6 +51,19 @@ QUERY.EMPLOYEE = {
     "where id=? and fc_id=?;"
 };
 
+QUERY.COURSE = {
+  GetCourseList :
+    "select c.id as course_id, c.name, t.name as teacher, c.created_dt, a.name as creator " +
+    "from `course` as c " +
+    "left join `teacher` as t " +
+    "on c.teacher_id = t.id " +
+    "left join `admin` as a " +
+    "on a.id = c.creator_id " +
+    "where a.fc_id=? " +
+    "order by c.created_dt desc;"
+};
+
+
 //
 //QUERY.HOME = {
 //  READ: "select * from `agent_wallet_history` as awh " +

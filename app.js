@@ -17,6 +17,10 @@ var achievement = require('./routes/achievement');
 
 //var api = require('./routes/_bak/api');
 
+//var path = require('path');
+//global.appRoot = path.resolve(__dirname);
+
+
 
 /*routes*/
 var app = express();
@@ -37,6 +41,9 @@ hbs.registerPartials(__dirname + '/views/modal');
 
 
 global.PROJ_TITLE = "Orangenamu, Backoffice ";
+global.AppRoot = process.env.PWD;
+
+
 app.use(cookieSession({
   keys: ['FC_Admin']
 }));

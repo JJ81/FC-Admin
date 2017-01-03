@@ -12,8 +12,8 @@ define(
 
 
 
-		// todo 공통로직으로 변경할 것.
-		// show modal (reset password)
+
+		// show modal to reset password
 		$('.btn-modify-password').bind('click', function () {
 			$('#frm_set_employee_password .user_id').val($(this).attr('data-user-id'));
 			$('#frm_set_employee_password .user_name').val($(this).attr('data-user-name'));

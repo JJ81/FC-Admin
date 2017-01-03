@@ -13,6 +13,8 @@
             교육과정 배정이력
         {{else if (isEquals current_path 'Course') }}
             강의관리
+        {{else if (isEquals current_path 'CourseDetails') }}
+            강의관리
         {{else if (isEquals current_path 'Achievement') }}
             진척도관리
         {{/if}}
@@ -31,6 +33,8 @@
             {{else if (isEquals current_path 'Assignment_history') }}
                 교육과정 배정이력
             {{else if (isEquals current_path 'Course') }}
+                강의관리
+            {{else if (isEquals current_path 'CourseDetails') }}
                 강의관리
             {{else if (isEquals current_path 'Achievement') }}
                 진척도관리

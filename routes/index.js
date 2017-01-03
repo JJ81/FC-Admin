@@ -9,8 +9,13 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 var bcrypt = require('bcrypt');
-var QUERY = require('../database/query');
+const QUERY = require('../database/query');
 
+const formidable = require('formidable');
+const convertExcel = require('excel-as-json').processFile;
+const UTIL = require('../util/util');
+const RegisterUserService = require('../service/RegisterUserService');
+const async = require('async');
 
 passport.serializeUser(function (user, done) {
   done(null, user);
@@ -115,6 +120,9 @@ router.get('/process', isAuthenticated, function (req, res) {
   });
 });
 
+
+
+// 아래는 공통로직으로 처리할 수 있도록 변경하자.
 router.post('/admin/password/reset', function (req, res) {
   var _pass = req.body.pass.trim();
   var _repass = req.body.re_pass.trim();
@@ -135,5 +143,78 @@ router.post('/admin/password/reset', function (req, res) {
       });
   }
 });
+
+// 엑셀 파일 업로드하기
+router.post('/upload/excel/create/employee', function (req, res, next) {
+  var _file_path = null;
+  var form = new formidable.IncomingForm({
+    encoding: 'utf-8',
+    keepExtensions: true,
+    multiples: false,
+    uploadDir: AppRoot + '/public/uploads/excel'
+  });
+
+  async.waterfall(
+    [
+      function(callback){
+        form.parse(req, function (err, fields, files) {
+          // todo 여기서 에러 처리가 나면 500페이지로 리턴 처리한다.
+          // console.info('A');
+          _file_path = files.file.path;
+          callback(null, _file_path);
+        });
+      },
+
+      function (_file_path, callback){
+        convertExcel(_file_path, undefined, false, function (err, data) {
+          // console.info('B');
+          if(err){
+            // todo 에러가 발생할 경우 500페이지로 리턴처리한다.
+
+          }else{
+            callback(null, data);
+          }
+        });
+      },
+
+      function (data, callback) {
+        RegisterUserService.createUser(data, req.user.fc_id, function (err, ret) {
+          // console.info('C');
+          if(err){
+            // todo 임시 에러 메시지 저장소에 저장을 해놓는다. 세션에 임시로 저장하고 페이지에 보여줄 수 있도록 한다.
+            if(err.length > 0){
+              console.error('[ERROR on RegisterUserService] ' + err);
+            }
+          }
+          callback(null, ret);
+        });
+      },
+
+      function (ret, callback) {
+        UTIL.deleteFile(_file_path, function (err, result) {
+          // console.info('D');
+          if(err){
+            // 로그를 남긴다.
+          }else{
+            callback(null, result);
+          }
+        });
+      }
+
+    ],
+    function (err, result){
+      console.info('E');
+      if(err){
+        console.error(err);
+        // [선택사항] 에러가 검출되었을 경우 에러 메시지를 보여줄 수 있는 페이지로 이동하여 에러를 볼 수 있도록 한다.
+        //
+      }else{
+        res.redirect('/employee');
+      }
+  });
+});
+
+
+
 
 module.exports = router;

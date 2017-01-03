@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 var util ={};
 
 util.isValidEmail =  function (email) {
@@ -17,6 +20,18 @@ util.checkPasswordSize = function (pass, minimum) {
   }
   return false;
 }
+
+util.deleteFile = function (_path, cb) {
+  fs.unlink(path.normalize(_path), function (err) {
+    if(err){
+      console.error(err);
+      cb(err, null);
+    }else{
+      console.log('deleted file');
+      cb(null, true);
+    }
+  });
+};
 
 
 module.exports = util;

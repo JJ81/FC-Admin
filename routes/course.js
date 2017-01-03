@@ -11,10 +11,26 @@ var isAuthenticated = function (req, res, next) {
 require('../commons/helpers');
 
 router.get('/', isAuthenticated, function (req, res) {
-  res.render('course', {
-    current_path: 'Course',
-    title: PROJ_TITLE + 'Course',
-    loggedIn: req.user
+
+  connection.query(QUERY.COURSE.GetCourseList,
+    [req.user.fc_id], function (err, rows) {
+      res.render('course', {
+        current_path: 'Course',
+        title: PROJ_TITLE + 'Course',
+        loggedIn: req.user,
+        list : rows
+      });
+  });
+});
+
+router.get('/details', function (req, res) {
+  var _id = req.query.id;
+  res.render('course_details', {
+    current_path: 'CourseDetails',
+    title: PROJ_TITLE + 'Course Details',
+    loggedIn: req.user,
+    id : _id
+    //list : rows
   });
 });
 

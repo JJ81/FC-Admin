@@ -37,7 +37,7 @@ router.get('/', isAuthenticated, function (req, res) {
       console.error(err);
     }else{
 
-      console.info(results);
+      //console.info(results);
 
       res.render('employee', {
         current_path: 'Employee',
