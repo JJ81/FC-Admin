@@ -54,7 +54,7 @@ router.get('/', isAuthenticated, function (req, res) {
   });
 });
 
-router.get('/details', function (req, res) {
+router.get('/details', isAuthenticated, function (req, res) {
   var _id = req.query.id;
 
   async.series(
@@ -146,7 +146,7 @@ router.get('/details', function (req, res) {
 });
 
 
-router.post('/create/teacher', function (req, res){
+router.post('/create/teacher', isAuthenticated, function (req, res){
   var _name = req.body.teacher.trim();
   var _desc = req.body.teacher_desc.trim();
 
@@ -162,7 +162,7 @@ router.post('/create/teacher', function (req, res){
 });
 
 
-router.post('/register', function (req, res) {
+router.post('/register', isAuthenticated, function (req, res) {
   var course_name = req.body.course_name.trim();
   var course_desc = req.body.course_desc.trim();
   var teacher = req.body.teacher_id.trim();
@@ -184,7 +184,7 @@ router.post('/register', function (req, res) {
   });
 });
 
-router.post('/modify', function (req, res) {
+router.post('/modify', isAuthenticated, function (req, res) {
   var _course_id = req.body.course_id.trim();
   var _course_name = req.body.course_name.trim();
   var _course_desc = req.body.course_desc.trim();
@@ -210,21 +210,30 @@ router.post('/modify', function (req, res) {
 
 
 /**
- *
+ * 등록된 비디오 보기
  */
-router.get('/video', function (req, res) {
+router.get('/video', isAuthenticated, function (req, res) {
   var _video_id = req.query.id;
 
   console.log(_video_id);
 
-  res.render('winpops/win_video', {
-    current_path: 'winpop',
-    title: PROJ_TITLE + 'Video',
-    loggedIn: req.user
-  });
+	connection.query(QUERY.COURSE.GetVideoDataById,
+		[_video_id],
+		function (err, rows) {
+			if(err){
+				console.error(err);
+			}else{
 
+				console.info(rows);
 
-
+				res.render('winpops/win_video', {
+					current_path: 'winpop',
+					title: PROJ_TITLE + 'Video',
+					loggedIn: req.user,
+					video : rows
+				});
+			}
+	});
 });
 
 

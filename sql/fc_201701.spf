@@ -70,7 +70,7 @@
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1186.5, 717}}</string>
+			<string>{{0, 0}, {1161, 800}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -216,13 +216,25 @@ select * from `course`;
 insert into `course` (`name`, `teacher_id`, `desc`, `creator_id`)
 values (?,?,?,?);
 
+# 나중에 보안을 위한 개발을 진행할 수 있도록 한다.
+select * from `video`
+where id='1';
+
+
+
+
+
+
+
+
+
 </string>
 			<key>table</key>
-			<string>course</string>
+			<string>course_list</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
-			<real>253.5</real>
+			<real>184</real>
 		</dict>
 	</dict>
 	<key>encrypted</key>
@@ -233,6 +245,9 @@ values (?,?,?,?);
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string>select * from `video`
+where id='1'</string>
+		<string>select * from `video`</string>
 		<string>select * from `course`</string>
 		<string>select t.id, t.name, t.desc 
 from `teacher` as t
@@ -289,9 +304,6 @@ add column `title` varchar(255) character set utf8 default null after `type`</st
 		<string>alter table `course_list`
 add column `title` varchar(255) character set utf8 not null after `type`</string>
 		<string>select * from `quiz_group`</string>
-		<string>select * from `course_list` as cl
-where cl.course_id='1'</string>
-		<string>select * from `course_list` as cl</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

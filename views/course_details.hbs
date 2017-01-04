@@ -77,7 +77,7 @@
                                 </li>
                             {{else if (isEquals type 'VIDEO') }}
                                 <li>
-                                    <a href="#video" data-video-id="{{video_id}}" data-order="{{order}}" data-id="{{id}}">
+                                    <a href="#video" data-video-id="{{video_id}}" data-order="{{order}}" data-id="{{id}}" class="btn-watch-video">
                                         <i class="fa fa-file-video-o"></i> &nbsp;
                                         {{title}}
                                     </a>
@@ -150,4 +150,3 @@
 <!-- /.row -->
 
 {{> modal_modify_course}}
-{{> modal_video_view}}

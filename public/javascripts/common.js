@@ -7,11 +7,7 @@ define(
 		'jquery'
 	],
 	function ($) {
-
 		// info 공통 로직은 이곳에서 정의한다.
-
-
-
 
 		// show modal to reset password
 		$('.btn-modify-password').bind('click', function () {
@@ -20,6 +16,12 @@ define(
 			$('#frm_set_employee_password').attr('action', $(this).attr('data-url'));
 		});
 
+
+		return {
+			createWindowPopup: function(url, title, option) {
+				window.open(url, title, option);
+			}
+		};
 
 
 

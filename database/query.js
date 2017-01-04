@@ -100,6 +100,8 @@ QUERY.COURSE = {
   ,UpdateCourse:
     "update `course` set `name`=?, `teacher_id`=?, `desc`=?, `creator_id`=?, `updated_dt`=? " +
     "where `id`=?;"
+	,GetVideoDataById :
+		"select * from `video` where id=?;"
 };
 
 
