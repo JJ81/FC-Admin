@@ -58,12 +58,12 @@
                             <ul class="session-list">
                             {{#if (isEquals type 'QUIZ')}}
                                 <li>
-                                    <a href="#quiz" data-quiz-group="{{quiz_group_id}}" data-order="{{order}}" data-id="{{id}}">
+                                    <a href="#quiz" data-quiz-group="{{quiz_group_id}}" data-title="{{title}}" data-order="{{order}}" data-id="{{id}}" class="btn-solve-quiz">
                                         <i class="fa fa-quora"></i> &nbsp;
                                         {{title}}
                                     </a>
                                     <span class="pull-right">
-                                        <a href="#view" class="btn btn-sm btn-session-detail text-green" style="margin-left: 40px;" data-quiz-group="{{quiz_group_id}}">
+                                        <a href="#view" class="btn btn-sm btn-session-detail text-green" data-quiz-group="{{quiz_group_id}}">
                                             <i class="fa fa-eye"></i>
                                             보기
                                         </a>
@@ -82,7 +82,7 @@
                                         {{title}}
                                     </a>
                                     <span class="pull-right">
-                                        <a href="#view" class="btn btn-sm btn-session-detail text-green" style="margin-left: 40px;" data-video-id="{{video_id}}">
+                                        <a href="#view" class="btn btn-sm btn-session-detail text-green" data-video-id="{{video_id}}">
                                             <i class="fa fa-eye"></i>
                                             보기
                                         </a>

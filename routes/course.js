@@ -215,8 +215,6 @@ router.post('/modify', isAuthenticated, function (req, res) {
 router.get('/video', isAuthenticated, function (req, res) {
   var _video_id = req.query.id;
 
-  console.log(_video_id);
-
 	connection.query(QUERY.COURSE.GetVideoDataById,
 		[_video_id],
 		function (err, rows) {
@@ -234,6 +232,33 @@ router.get('/video', isAuthenticated, function (req, res) {
 				});
 			}
 	});
+});
+
+var CourseService = require('../service/CourseService');
+router.get('/quiz', isAuthenticated, function (req, res) {
+	var _quiz_group_id = req.query.id;
+	var _title = req.query.title;
+
+	connection.query(QUERY.COURSE.GetQuizDataByGroupId,
+		[_quiz_group_id],
+		function (err, rows) {
+			if(err){
+				console.error(err);
+			}else{
+
+				// console.info(rows);
+
+				const _quiz = CourseService.makeQuizList(rows);
+
+				res.render('winpops/win_quiz', {
+					current_path: 'winpop',
+					title: PROJ_TITLE + 'Quiz',
+					loggedIn: req.user,
+					quiz_title : _title,
+					quiz : _quiz
+				});
+			}
+		});
 });
 
 

@@ -102,6 +102,18 @@ QUERY.COURSE = {
     "where `id`=?;"
 	,GetVideoDataById :
 		"select * from `video` where id=?;"
+	,GetQuizDataByGroupId :
+		"select " +
+		"q.id, q.question, q.answer, q.answer_desc, qo.option, qo.order, qo.id as option_id " +
+		"from `quiz` as q " +
+		"left join `quiz_option` as qo " +
+		"on qo.opt_id = q.option_id " +
+		"where q.id in ( " +
+			"select quiz_id from `quiz_group` " +
+			"where group_id=? " +
+			"order by `order` desc, id asc " +
+		")" +
+		"order by `order` desc, qo.`id`;"
 };
 
 

@@ -70,7 +70,7 @@
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1161, 800}}</string>
+			<string>{{0, 0}, {1262, 725}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -221,6 +221,49 @@ select * from `video`
 where id='1';
 
 
+select * from `quiz_group`
+where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+order by `order` desc, id asc;
+
+
+#quiz id만 추출하여 퀴즈의 순서에 맞게 퀴즈를 보여줄 수 있도록 한다. 10,3
+select quiz_id from `quiz_group`
+where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+order by `order` desc, id asc;
+
+# 그룹아이디를 통한 질문 가져오기
+select 
+q.* 
+from `quiz` as q
+where `id` in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+);
+
+# group_id로 문제에 대한 선택지 가져오기
+select `option` from `quiz_option`
+where opt_id='09dd14cbace219fc37491dede5e3bf40'
+order by `order` desc, id asc;
+
+select * from `quiz_option`;
+
+# 하나의 퀴즈에 대한 질문과 질문에 대한 선택지를 가져온다. 이 리스트를 통해서 바인딩을 시도해보자.
+select 
+q.id, q.question, q.answer, q.answer_desc, qo.option, qo.order
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
+order by `order` desc, qo.`id`;
+
+
+# 2017.01.04 필요가 없어서 지워버림
+alter table `quiz` drop column `name`;
 
 
 
@@ -230,7 +273,7 @@ where id='1';
 
 </string>
 			<key>table</key>
-			<string>course_list</string>
+			<string>quiz</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -245,65 +288,214 @@ where id='1';
 	<array/>
 	<key>queryHistory</key>
 	<array>
-		<string>select * from `video`
-where id='1'</string>
-		<string>select * from `video`</string>
-		<string>select * from `course`</string>
-		<string>select t.id, t.name, t.desc 
-from `teacher` as t
-left join `admin` as a
-on a.id = t.creator_id
-where a.fc_id='1'</string>
-		<string>select t.name, t.desc 
-from `teacher` as t
-left join `admin` as a
-on a.id = t.creator_id
-where a.fc_id='1'</string>
-		<string>select * 
-from `teacher` as t
-left join `admin` as a
-on a.id = t.creator_id
-where a.fc_id='1'</string>
-		<string>select * 
-from `teacher` as t
-left join `admin` as a
-on a.id = t.creator_id
-where a.fc_id='2'</string>
-		<string>select * from `teacher` as t
-left join `admin` as a
-on a.id = t.creator_id</string>
-		<string>alter table `teacher`
-add foreign key (`creator_id`)
-references `admin`(`id`)</string>
-		<string>alter table `teacher`
-add column `creator_id` bigint not null after `desc`</string>
-		<string>select * from `teacher`</string>
-		<string>select t.name, t.desc 
-from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id
-where c.id='1'</string>
-		<string>select t.name, t.desc 
-from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id</string>
-		<string>select * 
-from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id
-where c.id='1'</string>
-		<string>select * from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id</string>
-		<string>select * from `course_list` as cl
-where cl.course_id='1'
+		<string># 하나의 퀴즈에 대한 질문과 질문에 대한 선택지를 가져온다. 이 리스트를 통해서 바인딩을 시도해보자.
+select 
+q.id, q.question, q.answer, q.answer_desc, qo.option, qo.order
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
+order by `order` desc, qo.`id`</string>
+		<string># 하나의 퀴즈에 대한 질문과 질문에 대한 선택지를 가져온다. 이 리스트를 통해서 바인딩을 시도해보자.
+select 
+q.id, q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
+order by `order` desc, qo.`id`</string>
+		<string>alter table `quiz` drop column `name`</string>
+		<string># 하나의 퀴즈에 대한 질문과 질문에 대한 선택지를 가져온다.
+select 
+q.id, q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
+order by `order` desc, qo.`id`</string>
+		<string># 하나의 퀴즈에 대한 질문과 질문에 대한 선택지를 가져온다.
+select 
+q.id,q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
+order by `order` desc, qo.`id`</string>
+		<string># 하나의 퀴즈에 대한 질문과 질문에 대한 선택지를 가져온다.
+select 
+q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
+order by `order` desc, qo.`id`</string>
+		<string>select 
+q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
+order by `order` desc, qo.`id`</string>
+		<string>select 
+q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order, qo.id
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
+order by `order` desc, qo.`id`</string>
+		<string>select 
+q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order, qo.id
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
+order by `order` desc, qo.`idx`</string>
+		<string>select 
+q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order, qo.id as idx
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
+order by `order` desc, `idx` asc</string>
+		<string>select 
+q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
+order by `order` desc, `id` qo.asc</string>
+		<string>select 
+q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
 order by `order` desc, `id` asc</string>
-		<string>alter table `course_list`
-add column `title` varchar(255) character set utf8 default null after `type`</string>
-		<string>alter table `course_list` drop column `title`</string>
-		<string>alter table `course_list`
-add column `title` varchar(255) character set utf8 not null after `type`</string>
-		<string>select * from `quiz_group`</string>
+		<string>select 
+q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)
+order by `order` desc</string>
+		<string>select 
+q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)</string>
+		<string>select 
+q.name, q.question, q.answer, q.answer_desc, qo.* 
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)</string>
+		<string>select 
+q.*, qo.* 
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)</string>
+		<string>select 
+q.* 
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)</string>
+		<string>select 
+q.* 
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.id` in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+);</string>
+		<string>select 
+q.* 
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where q.answer`id` in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)</string>
+		<string>select 
+q.* 
+from `quiz` as q
+left join `quiz_option` as qo
+on qo.opt_id = q.option_id
+where `id` in (
+	select quiz_id from `quiz_group`
+	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
+	order by `order` desc, id asc
+)</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

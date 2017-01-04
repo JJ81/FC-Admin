@@ -1,0 +1,30 @@
+<div class="winpop_video" id="watchVideo">
+
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">퀴즈 : {{quiz_title}}</h4>
+        </div>
+
+        <div class="modal-body">
+        {{#if quiz}}
+          {{#each quiz}}
+            <h4>질문(Q) -> {{question}}</h4>
+            {{#if option}}
+              <ol>
+                {{#each option}}
+                  <li>{{this}}</li>
+                {{/each}}
+              </ol>
+            {{/if}}
+            <p>답: {{answer}}</p>
+
+            <hr />
+
+          {{/each}}
+        {{else}}
+          등록된 퀴즈가 없습니다.
+        {{/if}}
+
+        </div>
+    </div>
+</div>
