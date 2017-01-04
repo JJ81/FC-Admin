@@ -43,10 +43,20 @@
             <div class="box-header with-border">
                 <h3>
                     이 강좌의 커리큘럼
-                    <button class="btn btn-primary btn-sm pull-right">
-                        <i class="fa fa-plus"></i>&nbsp;
-                        커리큘럼 추가
-                    </button>
+                    <span class="pull-right">
+                        <button class="btn btn-sm btn-default btn-create-video" data-course-id="{{course_id}}">
+                          <i class="fa fa-video-camera"></i> &nbsp;
+                          비디오
+                        </button>
+                        <button class="btn btn-sm btn-default">
+                          <i class="fa fa-quora"></i> &nbsp;
+                          퀴즈
+                        </button>
+                        <button class="btn btn-sm btn-default">
+                          <i class="fa fa-sticky-note-o"></i> &nbsp;
+                          최종테스트
+                        </button>
+                      </span>
                 </h3>
             </div>
             <div class="box-body">
@@ -58,7 +68,7 @@
                             <ul class="session-list">
                             {{#if (isEquals type 'QUIZ')}}
                                 <li>
-                                    <a href="#quiz" data-quiz-group="{{quiz_group_id}}" data-title="{{title}}" data-order="{{order}}" data-id="{{id}}" class="btn-solve-quiz">
+                                    <a href="#quiz" data-quiz-group="{{quiz_group_id}}" data-type="QUIZ" data-title="{{title}}" data-order="{{order}}" data-id="{{id}}" class="btn-solve-quiz">
                                         <i class="fa fa-quora"></i> &nbsp;
                                         {{title}}
                                     </a>
@@ -96,7 +106,7 @@
                                 </li>
                             {{else if (isEquals type 'FINAL') }}
                                 <li>
-                                    <a href="#final" data-quiz-group_id="{{quiz_group_id}}" data-order="{{order}}" data-id="{{id}}">
+                                    <a href="#final" data-quiz-group_id="{{quiz_group_id}}" data-type="FINAL" data-title="{{title}}" data-order="{{order}}" data-id="{{id}}" class="btn-solve-quiz">
                                         <i class="fa fa-sticky-note"></i> &nbsp;
                                         {{title}}
                                     </a>

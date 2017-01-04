@@ -104,7 +104,7 @@ QUERY.COURSE = {
 		"select * from `video` where id=?;"
 	,GetQuizDataByGroupId :
 		"select " +
-		"q.id, q.question, q.answer, q.answer_desc, qo.option, qo.order, qo.id as option_id " +
+		"q.id, q.type, q.question, q.answer, q.answer_desc, qo.option, qo.order, qo.id as option_id " +
 		"from `quiz` as q " +
 		"left join `quiz_option` as qo " +
 		"on qo.opt_id = q.option_id " +

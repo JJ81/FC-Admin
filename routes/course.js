@@ -139,7 +139,8 @@ router.get('/details', isAuthenticated, function (req, res) {
           rating: result[1],
           session_list: result[2],
           teacher_info : result[3],
-          teacher_list : result[4]
+          teacher_list : result[4],
+	        course_id : _id
         });
       }
   });
@@ -238,6 +239,7 @@ var CourseService = require('../service/CourseService');
 router.get('/quiz', isAuthenticated, function (req, res) {
 	var _quiz_group_id = req.query.id;
 	var _title = req.query.title;
+	var _type = req.query.type;
 
 	connection.query(QUERY.COURSE.GetQuizDataByGroupId,
 		[_quiz_group_id],
@@ -255,11 +257,42 @@ router.get('/quiz', isAuthenticated, function (req, res) {
 					title: PROJ_TITLE + 'Quiz',
 					loggedIn: req.user,
 					quiz_title : _title,
-					quiz : _quiz
+					quiz : _quiz,
+					type : _type
 				});
 			}
 		});
 });
 
+
+router.get('/create/video', isAuthenticated, function (req, res) {
+	var _course_id = req.query.course_id;
+
+	res.render('winpops/win_create_video', {
+		current_path: 'winpop',
+		title: PROJ_TITLE + 'Register Video',
+		loggedIn: req.user,
+		course_id: _course_id
+	});
+});
+
+
+/**
+ * 비디오 등록하기
+ */
+router.post('/create/video', isAuthenticated, function(req, res){
+	var _course_id = req.body.course_id;
+	/**
+	 * video table에 name, type, url, admin을 먼저 입력하고
+	 * 리턴받은 video_id를 가지고
+	 * course_list 테이블에
+	 * course_id, type(VIDEO), title(=name), quiz_group_id(null), video_id, order는 기본값
+	 * 으로 설정하고 트랜잭션을 걸어서 처리한다.
+	 *
+	 */
+
+	res.redirect('/course/details?id=' + _course_id);
+
+});
 
 module.exports = router;

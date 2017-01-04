@@ -5,7 +5,6 @@
 requirejs(
 	[
 		'jquery'
-		,'common'
 		,'moment'
 		,'excellentExport'
 		,'bootstrap'
@@ -16,45 +15,11 @@ requirejs(
 		,'jquery_ui'
 		,'adminLTE'
 		,'fastclick'
+		,'common'
 	],
-	function ($, Util) {
+	function ($, moment, excellentCsv) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
-
-
-		var _winpop_option = 'scrollbars=yes, toolbar=no, location=no, status=no, menubar=no, ' +
-			'resizable=yes, width=1040, height=760, left=0, top=0';
-		var _btn_watch = $('.btn-watch-video');
-		var _btn_solve_quiz = $('.btn-solve-quiz');
-		var _btn_create_video = $('.btn-create-video');
-
-
-		_btn_watch.bind('click', function (e) {
-			e.preventDefault();
-
-			// 비디오 아이디를 추출
-			var _video_id = $(this).attr('data-video-id');
-			Util.createWindowPopup('/course/video?id='+_video_id,'Video', _winpop_option);
-		});
-
-
-		_btn_solve_quiz.bind('click', function (e) {
-			e.preventDefault();
-			var _quiz_group_id = $(this).attr('data-quiz-group');
-			var _title = $(this).attr('data-title');
-			var _type = $(this).attr('data-type');
-			Util.createWindowPopup('/course/quiz?id='+_quiz_group_id + '&title='+_title + '&type=' + _type, 'Quiz', _winpop_option);
-		});
-
-
-		_btn_create_video.bind('click', function (e) {
-			e.preventDefault();
-			console.log();
-			var _course_id = $(this).attr('data-course-id');
-			Util.createWindowPopup('/course/create/video?course_id='+_course_id, 'Video', _winpop_option);
-
-		});
-
 
 		//// Download csv
 		//$('.btn_download_csv_home').bind('click', function (){

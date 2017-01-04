@@ -87,6 +87,18 @@
                     {{/if}}
                 </a>
             </li>
+
+            <li {{#if (isEquals current_path 'administrator')}}class="active"{{/if}}>
+                <a href="/administrator">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <span>관리자</span>
+                    {{#if (isEquals current_path 'Administrator')}}
+                      <span class="pull-right-container">
+                            <i class="fa fa-angle-down pull-right text-green"></i>
+                          </span>
+                    {{/if}}
+                </a>
+            </li>
         </ul>
     </section>
 </aside>
