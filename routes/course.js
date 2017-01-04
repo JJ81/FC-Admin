@@ -78,7 +78,11 @@ router.get('/details', function (req, res) {
               console.error(err);
               callback(err, null);
             }else{
-              callback(null, rows);
+              if(rows.length === 0 || rows === null){
+                callback(null, [{course_id : _id ,rate : 0}]);
+              }else{
+                callback(null, rows);
+              }
             }
         });
       },
@@ -123,6 +127,9 @@ router.get('/details', function (req, res) {
       if(err){
         console.error(err);
       }else{
+
+        console.log(result[1]);
+
         res.render('course_details', {
           current_path: 'CourseDetails',
           title: PROJ_TITLE + 'Course Details',
@@ -199,6 +206,25 @@ router.post('/modify', function (req, res) {
         res.redirect('/course/details?id=' + _course_id);
       }
   });
+});
+
+
+/**
+ *
+ */
+router.get('/video', function (req, res) {
+  var _video_id = req.query.id;
+
+  console.log(_video_id);
+
+  res.render('winpops/win_video', {
+    current_path: 'winpop',
+    title: PROJ_TITLE + 'Video',
+    loggedIn: req.user
+  });
+
+
+
 });
 
 

@@ -19,14 +19,9 @@
                     <p class="star-rating-area">
                         <div class="star-rating">
                             강의 평점 :
-                            {{#if ../rating}}
-                                {{#each ../rating}}
-                                    <span class="ratings {{star-rating rate}}"></span> ( {{rate}} )
-                                {{/each}}
-                            {{else}}
-                                <span class="ratings empty"></span> ( 0 )
-                            {{/if}}
-
+                            {{#each ../rating}}
+                            <span class="ratings {{star-rating rate}}"></span> ( {{rate}} )
+                            {{/each}}
                         </div>
                     </p>
                     <span class="author">
@@ -155,3 +150,4 @@
 <!-- /.row -->
 
 {{> modal_modify_course}}
+{{> modal_video_view}}

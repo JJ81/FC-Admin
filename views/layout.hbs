@@ -19,6 +19,8 @@
 <body class="hold-transition skin-green-light sidebar-mini {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
     {{#if (isEquals current_path 'Login')}}
     {{{body}}}
+    {{else if (isEquals current_path 'winpop')}}
+    {{{body}}}
     {{else}}
     <div class="wrapper">
         {{> header}}
