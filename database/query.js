@@ -4,7 +4,6 @@ QUERY.ADMIN = {
   ResetPassword:
   "update `admin` set password=? " +
   "where `id`=? and name=?;"
-
 };
 
 QUERY.LOGIN = {
@@ -15,7 +14,6 @@ QUERY.LOGIN = {
     "on f.id = a.fc_id " +
     "where a.email=?;"
 };
-
 
 QUERY.EMPLOYEE = {
   GETBRANCH :
@@ -85,7 +83,7 @@ QUERY.COURSE = {
     "left join `teacher` as t " +
     "on c.teacher_id = t.id " +
     "where c.id=? ;"
-  ,GetTeacherList: // 특정 fc 소속의 모든 admin이 등록한 강사 리스트를 가져온다.
+  ,GetTeacherList:
     "select t.id, t.name, t.desc " +
     "from `teacher` as t " +
     "left join `admin` as a " +
@@ -114,7 +112,37 @@ QUERY.COURSE = {
 			"order by `order` desc, id asc " +
 		")" +
 		"order by `order` desc, qo.`id`;"
+	,CreateVideo :
+		"insert into `video` (`name`, `type`, `url`, `creator_id`) " +
+		"values(?,?,?,?);"
+	,InsertIntoCourseListForVideo :
+		"insert into `course_list` (`course_id`, `type`, `title`, `video_id`) " +
+		"values (?,?,?,?);"
 };
 
+QUERY.EDU = {
+	GetList : // offset, limit이 한동안 없이 진행한다.
+		"select e.`name`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id " +
+		"from `edu` as e " +
+		"left join `admin` as a " +
+		"on e.creator_id = a.id " +
+		"where e.active=true " +
+		"order by e.`created_dt` desc, e.`id` desc;"
+	,GetCourseListByGroupId :
+		"select c.id, c.name, c.desc, t.name " +
+		"from `course` as c " +
+		"left join `teacher` as t " +
+		"on c.teacher_id = t.id " +
+		"where c.id in ( " +
+			"select course_id from `course_group` " +
+			"where group_id=? " +
+			"order by `order` desc, `id` asc " +
+		")" +
+		"and c.`active`=true;"
+
+
+
+
+};
 
 module.exports = QUERY;

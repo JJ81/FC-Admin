@@ -10,12 +10,23 @@ var isAuthenticated = function (req, res, next) {
 };
 require('../commons/helpers');
 
+
+
 router.get('/', isAuthenticated, function (req, res) {
-  res.render('education', {
-    current_path: 'Education',
-    title: PROJ_TITLE + 'Education',
-    loggedIn: req.user
-  });
+	connection.query(QUERY.EDU.GetList, function (err, rows) {
+		if(err){
+			console.error(err);
+		}else{
+			res.render('education', {
+				current_path: 'Education',
+				title: PROJ_TITLE + 'Education',
+				loggedIn: req.user,
+				list: rows
+			});
+		}
+	});
 });
+
+
 
 module.exports = router;

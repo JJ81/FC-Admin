@@ -277,11 +277,18 @@ router.get('/create/video', isAuthenticated, function (req, res) {
 });
 
 
+// Interface for type in course list table
+const COURSE_LIST = {
+	VIDEO : 'VIDEO',
+	QUIZ : 'QUIZ',
+	FINAL : 'FINAL'
+};
+
 /**
  * 비디오 등록하기
  */
 router.post('/create/video', isAuthenticated, function(req, res){
-	var _course_id = req.body.course_id;
+
 	/**
 	 * video table에 name, type, url, admin을 먼저 입력하고
 	 * 리턴받은 video_id를 가지고
@@ -290,9 +297,67 @@ router.post('/create/video', isAuthenticated, function(req, res){
 	 * 으로 설정하고 트랜잭션을 걸어서 처리한다.
 	 *
 	 */
+	var _course_id = req.body.course_id.trim();
+	var _video_name = req.body.video_name.trim();
+	var _video_provider = req.body.video_provider.trim();
+	var _video_code = req.body.video_code.trim();
+	var _admin_id = req.user.admin_id;
 
-	res.redirect('/course/details?id=' + _course_id);
+	connection.beginTransaction(function () {
+		async.waterfall(
+			[
+				function(callback){
+					connection.query(QUERY.COURSE.CreateVideo,
+						[
+							_video_name,
+							_video_provider,
+							_video_code,
+							_admin_id
+						],
+						function(err, result){
+							if(err){
+								console.error(err);
+								callback(err, null);
+							}else{
+								callback(null, result);
+							}
+					});
+				},
 
+				function (ret, callback){
+					var _video_id = ret.insertId;
+					connection.query(QUERY.COURSE.InsertIntoCourseListForVideo,
+						[
+							_course_id,
+							COURSE_LIST.VIDEO,
+							_video_name,
+							_video_id
+						],
+						function (err, result){
+							if(err){
+								console.error(err);
+								callback(err, null);
+							}else{
+								callback(null, result);
+							}
+					});
+				}
+			],
+			function (err, result){
+				if(err){
+					connection.rollback();
+				}else{
+					if(result){
+						//console.info(result);
+						connection.commit();
+						// todo 팝업을 닫고 parent창을 리프레시를 해야 한다 그럼 어떻게 처리해야 하는가? ajax밖에 없겠군...
+						res.redirect('/course/details?id=' + _course_id);
+					}
+				}
+
+				connection.rollback();
+		});
+	});
 });
 
 module.exports = router;

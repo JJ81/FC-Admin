@@ -70,7 +70,7 @@
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1262, 725}}</string>
+			<string>{{0, 0}, {1345, 855}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -250,7 +250,7 @@ select * from `quiz_option`;
 
 # 하나의 퀴즈에 대한 질문과 질문에 대한 선택지를 가져온다. 이 리스트를 통해서 바인딩을 시도해보자.
 select 
-q.id, q.question, q.answer, q.answer_desc, qo.option, qo.order
+q.id, q.type, q.question, q.answer, q.answer_desc, qo.option, qo.order, qo.id as option_id
 from `quiz` as q
 left join `quiz_option` as qo
 on qo.opt_id = q.option_id
@@ -265,7 +265,43 @@ order by `order` desc, qo.`id`;
 # 2017.01.04 필요가 없어서 지워버림
 alter table `quiz` drop column `name`;
 
+# type은 VIMEO or YOUTUBE 밖에 입력이 될 수 없게 처리한다.!
+select * from `video`;
+insert into `video` (`name`, `type`, `url`, `creator_id`) 
+values(?,?,?,?);
 
+# todo type에 VIDEO, QUIZ, FINAL만 들어갈 수 있도록 수정한다.
+select * from `course_list`;
+insert into `course_list` (`course_id`, `type`, `title`, `video_id`)
+values (?,?,?,?);
+
+select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id 
+from `edu` as e
+left join `admin` as a
+on e.creator_id = a.id
+where e.active=true
+order by e.`created_dt` desc, e.`id` desc;
+
+
+# 강의 아이디를 가져온다.
+select * from `course_group`
+where group_id='qwer1234'
+order by `order` desc, `id` asc;
+
+# 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
+
+# 나중에 각 강의의 상세 정보와 별점까지도 가져올 수 있도록 한다.
+select 
+c.id, c.name, c.desc, t.name
+from `course` as c
+left join `teacher` as t
+on c.teacher_id = t.id
+where c.id in (
+select course_id from `course_group`
+where group_id='qwer1234'
+order by `order` desc, `id` asc
+)
+and c.`active`=true;
 
 
 
@@ -273,11 +309,11 @@ alter table `quiz` drop column `name`;
 
 </string>
 			<key>table</key>
-			<string>quiz</string>
+			<string>course_group</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
-			<real>184</real>
+			<real>202</real>
 		</dict>
 	</dict>
 	<key>encrypted</key>
@@ -288,214 +324,128 @@ alter table `quiz` drop column `name`;
 	<array/>
 	<key>queryHistory</key>
 	<array>
-		<string># 하나의 퀴즈에 대한 질문과 질문에 대한 선택지를 가져온다. 이 리스트를 통해서 바인딩을 시도해보자.
-select 
-q.id, q.question, q.answer, q.answer_desc, qo.option, qo.order
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
+		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
+
+select *
+from `course` as c
+left join `teacher` as t
+on c.teacher_id = t.id
+where c.id in (
+select course_id from `course_group`
+where group_id='qwer1234'
+order by `order` desc, `id` asc
 )
-order by `order` desc, qo.`id`</string>
-		<string># 하나의 퀴즈에 대한 질문과 질문에 대한 선택지를 가져온다. 이 리스트를 통해서 바인딩을 시도해보자.
-select 
-q.id, q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
+and c.`active`=true</string>
+		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
+
+select *
+from `course` as c
+left join `teacher` as t
+on c.teacher_id = t.id
+where id in (
+select course_id from `course_group`
+where group_id='qwer1234'
+order by `order` desc, `id` asc
 )
-order by `order` desc, qo.`id`</string>
-		<string>alter table `quiz` drop column `name`</string>
-		<string># 하나의 퀴즈에 대한 질문과 질문에 대한 선택지를 가져온다.
-select 
-q.id, q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
+and c.`active`=true</string>
+		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
+
+select *
+from `course` as c
+left join `teacher` as t
+on c.teacher_id = t.id
+where id in (
+select course_id from `course_group`
+where group_id='qwer1234'
+order by `order` desc, `id` asc
 )
-order by `order` desc, qo.`id`</string>
-		<string># 하나의 퀴즈에 대한 질문과 질문에 대한 선택지를 가져온다.
-select 
-q.id,q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
+and `active`=true</string>
+		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
+
+select * from `course`
+where id in (
+select course_id from `course_group`
+where group_id='qwer1234'
+order by `order` desc, `id` asc
 )
-order by `order` desc, qo.`id`</string>
-		<string># 하나의 퀴즈에 대한 질문과 질문에 대한 선택지를 가져온다.
-select 
-q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
+and `active`=true</string>
+		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
+
+select * from `course`
+where id in (
+select course_id from `course_group`
+where group_id='qwer1234'
+order by `order` desc, `id` asc
 )
-order by `order` desc, qo.`id`</string>
-		<string>select 
-q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-)
-order by `order` desc, qo.`id`</string>
-		<string>select 
-q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order, qo.id
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-)
-order by `order` desc, qo.`id`</string>
-		<string>select 
-q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order, qo.id
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-)
-order by `order` desc, qo.`idx`</string>
-		<string>select 
-q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order, qo.id as idx
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-)
-order by `order` desc, `idx` asc</string>
-		<string>select 
-q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-)
-order by `order` desc, `id` qo.asc</string>
-		<string>select 
-q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
+where `active`=true</string>
+		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
+
+select * from `course`
+where id in (
+select course_id from `course_group`
+where group_id='qwer1234'
+order by `order` desc, `id` asc
+)</string>
+		<string># 강의 아이디를 가져온다.
+select * from `course_group`
+where group_id='qwer1234'
+order by `order` desc, `id` asc</string>
+		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
+
+select * from `course`
+where id in ('1','2')</string>
+		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
+
+select * from `course`</string>
+		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
+
+select * from `course`
+where `id` in 
+(select * from `course_group`
+where group_id='qwer1234'
+)</string>
+		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
+
+select * from `course`
+where `id` in 
+(select * from `course_group`
+where group_id='qwer1234'
 )
 order by `order` desc, `id` asc</string>
-		<string>select 
-q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-)
+		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
+
+select * from `course`
+where `id` in 
+(select * from `course_group`
+where group_id='qwer1234'
+order by `order` desc, `id` asc)</string>
+		<string>select * from `course_group`
+where group_id='qwer1234'
+order by `order` desc, `id` asc</string>
+		<string>select * from `course_group`
+where group_id='qwer1234'
+order by `order` desc, `id` desc</string>
+		<string>select * from `course_group`
+where group_id='qwer1234'
 order by `order` desc</string>
-		<string>select 
-q.name, q.question, q.answer, q.answer_desc, qo.option, qo.order
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-)</string>
-		<string>select 
-q.name, q.question, q.answer, q.answer_desc, qo.* 
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-)</string>
-		<string>select 
-q.*, qo.* 
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-)</string>
-		<string>select 
-q.* 
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-)</string>
-		<string>select 
-q.* 
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.id` in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-);</string>
-		<string>select 
-q.* 
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where q.answer`id` in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-)</string>
-		<string>select 
-q.* 
-from `quiz` as q
-left join `quiz_option` as qo
-on qo.opt_id = q.option_id
-where `id` in (
-	select quiz_id from `quiz_group`
-	where group_id='de9b9ed78d7e2e1dceeffee780e2f919'
-	order by `order` desc, id asc
-)</string>
+		<string>select * from `course_group`
+where group_id='qwer1234'
+order by `order` desx</string>
+		<string>select * from `course_group`
+where group_id='qwer1234'</string>
+		<string>select * from `course_group`</string>
+		<string>select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id 
+from `edu` as e
+left join `admin` as a
+on e.creator_id = a.id
+where e.active=true
+order by e.`created_dt` desc, e.`id` desc</string>
+		<string>select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.name` as creator, e.course_group_id 
+from `edu` as e
+left join `admin` as a
+on e.creator_id = a.id
+where e.active=true
+order by e.`created_dt` desc, e.`id` desc;</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

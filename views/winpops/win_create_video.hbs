@@ -1,26 +1,43 @@
 <div class="winpop_video" id="watchVideo">
-    <form action="/create/video" method="post">
+    <form action="/course/create/video" method="post">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">비디오 강좌 등록하기</h4>
+                <h4 class="modal-title">
+                    비디오 강좌 등록하기
+                    <button type="submit" class="btn btn-primary pull-right">등록</button>
+                </h4>
             </div>
 
             <div class="modal-body">
 
-                여기에 입력 필드가 나타납니다.
+                <div class="form-group">
+                    <label for="video_title">비디오 강좌명</label>
+                    <input type="text" name="video_name" class="form-control" id="video_title" placeholder="비디오 강좌명" autocomplete="off" required autofocus />
+                </div>
+
+                <div class="form-group">
+                    <label>비디오 제공수단</label>
+                    <select class="form-control" name="video_provider">
+                        <option value="YOUTUBE">YOUTUBE</option>
+                        <option value="VIMEO">VIMEO</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="video_title">비디오 코드</label>
+                    <input type="text" name="video_code" class="form-control" id="video_title" placeholder="비디오 코드를 입력해주세요." autocomplete="off" required />
+                    <small class="text-red">* Domain을 제외한 영상의 고유 코드를 입력해주세요. (ex. 189789781 or A_jTJ3CM8YU1)</small>
+                </div>
 
                 <input type="hidden" name="course_id" value="{{course_id}}" />
 
+                <hr />
 
-              <hr />
-
-              <div class="video-preview">비디오를 미리 볼 수 있습니다.</div>
+                <div class="video-preview">비디오를 미리 볼 수 있습니다.</div>
 
             </div>
 
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">등록</button>
-            </div>
+            <div class="modal-footer"></div>
         </div>
     </form>
 </div>

@@ -29,17 +29,18 @@ const RegisterUserService = {
 				_info.branch_code
 			],
 			function (err, result) {
-			if(err){
-				console.error('RegisterUserService : ' + err);
-				_error.push(err);
-			}else{
+				if(err){
+					console.error('RegisterUserService : ' + err);
+					_error.push(err);
+				}
+
 				if(_count_info < _count_size-1){
 					_count_info++;
 					RegisterUserService.createUser(user_info, fc_id, cb);
 				}else{
 					cb(_error, result);
 				}
-			}
+
 		});
 	}
 };

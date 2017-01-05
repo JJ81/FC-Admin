@@ -27,43 +27,31 @@
                 <table id="table_education" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th class="center">교육과정명</th>
                         <th class="center">생성일</th>
+                        <th class="center">교육과정명</th>
                         <th class="center">시작일</th>
                         <th class="center">종료일</th>
                         <th class="center">생성자</th>
-                        <th class="center">Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {{#for 0 10 1}}
+                    {{#each list}}
                     <tr>
-                        <td class="center"><a href="#" class="btn-link">일반상식에 대한 강의입니다.</a></td>
-                        <td class="center">2017.01.01</td>
-                        <td class="center">2017.01.02</td>
-                        <td class="center">2017.01.17</td>
-                        <td class="center">이재준</td>
-                        <td class="center">
-                            <button class="btn btn-default btn-sm">
-                                <i class="fa fa-eye"></i>&nbsp;
-                                상세보기
-                            </button>
-                            <button class="btn btn-default btn-sm">
-                                <i class="fa fa-pencil"></i>&nbsp;
-                                수정
-                            </button>
-                        </td>
+                        <td class="center">{{time created_dt}}</td>
+                        <td class="center"><a href="#" class="btn-link" data-course-group-id="{{course_group_id}}">{{name}}</a></td>
+                        <td class="center">{{time start_dt}}</td>
+                        <td class="center">{{time end_dt}}</td>
+                        <td class="center">{{creator}}</td>
                     </tr>
-                    {{/for}}
+                    {{/each}}
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th class="center">교육과정명</th>
                         <th class="center">생성일</th>
+                        <th class="center">교육과정명</th>
                         <th class="center">시작일</th>
                         <th class="center">종료일</th>
                         <th class="center">생성자</th>
-                        <th class="center">Action</th>
                     </tr>
                     </tfoot>
                 </table>
