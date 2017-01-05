@@ -150,4 +150,12 @@
   max-width: 1024px;
   margin: 0 auto; }
 
+#draggablePanelList li {
+  cursor: move; }
+#draggablePanelList .course {
+  position: relative; }
+#draggablePanelList .btn-delete-course {
+  position: absolute;
+  right: 0; }
+
 /*# sourceMappingURL=styles.css.map */

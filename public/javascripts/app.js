@@ -19,6 +19,7 @@ requirejs.config({
 		,jqueryCookie : '/vendor/plugins/jquery_cookie/jquery.cookie.1.4.1'
     ,jqueryValidate :'/vendor/plugins/jquery_validate/jquery.validate.min'
 		,common : '/javascripts/common'
+		,axios : 'https://unpkg.com/axios/dist/axios.min'
 	},
 	shim : {
 		'bootstrap' : {

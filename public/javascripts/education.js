@@ -5,6 +5,7 @@
 requirejs(
 	[
 		'jquery'
+		,'axios'
 		,'moment'
 		,'excellentExport'
 		,'bootstrap'
@@ -15,112 +16,105 @@ requirejs(
 		,'jquery_ui'
 		,'adminLTE'
 		,'fastclick'
-		,'common'
+	  ,'common'
 	],
-	function ($, moment, excellentCsv) {
+	function ($, axios) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
 
 
-		// todo 데이터가 없을 때 출력되는 영어 문구 대신 커스텀으로 html을 설정할 수 있는 옵션을 레퍼런스에서 찾아본다.
-		var table_education =
-			$('#table_education').DataTable({
-				"paging": true,
-				"lengthChange": false,
-				"searching": false,
-				"ordering": false,
-				"info": false,
-				"autoWidth": true,
-				"processing": true
+		// todo 교육과정 생성하기를 눌렀을 경우 group_id를 발급받아서 input에 저장한다.
+		// 선택한 강의에 대해서 강의 번호를 배열에 담아 놓고 서버로 전달한다
+		// group_id를 통해서 선택한 강의를 테이블에 저장하고,
+		// course 테이블에 교육명과 교육설명 등을 저정한다
+
+		var btn_create_edu = $('.btn-create-edu');
+		var btn_add_course = $('.btn-add-course-edu');
+		var select_course_list = $('.select-course-list');
+		var course_group_id = $('.course_group_id');
+		//var courseIdList = [];
+		window.courseIdList = [];
+		///var _tmp_courseIdList = [];
+		var _course_container = $('#draggablePanelList');
+		var _submit = $('.btn-register-course-submit');
+
+		btn_create_edu.bind('click', function () {
+			var _group_id = null;
+			axios.get('/api/v1/course/group/id/create')
+				.then(function (res) {
+					// console.log(res.data.id);
+					_group_id = res.data.id;
+					course_group_id.val(_group_id);
+				})
+				.catch(function (err) {
+					console.error(err);
+				})
+		});
+
+		// 강의를 선택할 때마다 하단에 선택한 강의를 추가할 수 있도록 한다
+		btn_add_course.bind('click', function () {
+			var _text = select_course_list.find('option:selected').text().trim();
+			var _id = select_course_list.find('option:selected').val().trim();
+			var elem = '<li class="list-group-item" data-course-id="'+_id+'">';
+			elem += '<div class="course">'+_text+'<a href="#" class="btn-delete-course" onclick="education.removeElement(this);"><i class="fa fa-remove text-red"></i></a></div>';
+			elem += '</li>';
+
+			/// todo 추가하기 전에 이미 등록된 것이라면 등록하지 않도록 한다
+			// 배열을 돌면서 중복인지 아닌지 체크를 하는 로직을 넣는다.
+
+			if(!checkDuplicateCourseId(_id)){
+				_course_container.append(elem);
+				courseIdList.push(_id);
+			}
+
+
+
+
+		});
+
+		// ref. http://www.bootply.com/dUQiGMggWO
+		var panelList = $('#draggablePanelList');
+		panelList.sortable({
+			handle: '.course',
+			update: function() {
+				courseIdList = reCountCourseList();
+			}
+		});
+
+
+		window.education = {
+			removeElement : function (el) {
+				$(el).parent().parent().remove();
+
+				// todo 지울 때 아래 코드가 실행이 혹은 반영이 되지 않는 것 같다.
+				console.log('delete : ' + courseIdList);
+				courseIdList = reCountCourseList();
+				console.log('delete2 : ' + courseIdList);
+				return false;
+			}
+		};
+
+		// 추가한 강의중에 중복이 있는지 확인을 한다.
+		function checkDuplicateCourseId(id){
+			for(var i= 0,len=courseIdList.length;i<len;i++){
+				if(courseIdList[i] === id){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// 강의 리스트를 다시 점검한다
+		function reCountCourseList(){
+			var _tmp = [];
+			$('.list-group-item', panelList).each(function(index, elem) {
+				var _id = $(elem).attr('data-course-id');
+				_tmp.push(_id);
 			});
+			return _tmp;
+		}
 
-
-
-
-
-		//// Download csv
-		//$('.btn_download_csv_home').bind('click', function (){
-		//	return excellentCsv.csv(this, 'table_home', ',');
-		//});
-		//
-		//// set table func.
-		//var table_home =
-		//$('#table_home').DataTable({
-		//	"paging": true,
-		//	"lengthChange": true,
-		//	"searching": true,
-		//	"ordering": true,
-		//	"info": true,
-		//	"autoWidth": true,
-		//	"processing": true
-		//});
-		//
-		//table_home
-		//	.column( '0:visible' )
-		//	.order( 'desc' )
-		//	.draw();
-		//
-		//// select box
-		//// $(".select2").select2();
-		//
-		//// datepicker
-		//$('#daterange-btn').daterangepicker({
-		//	ranges: {
-		//		'Today': [moment(), moment()],
-		//		'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-		//		'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-		//		'Last 30 Days': [moment().subtract(30, 'days'), moment()],
-		//		'This Month': [moment().startOf('month'), moment().endOf('month')],
-		//		'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-		//	},
-		//	startDate: moment().subtract(30, 'days'),
-		//	endDate: moment()
-		//},
-		//function (start, end) {
-		//	//$('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-		//	$('#daterange-btn span').html(start.format('YYYY.M.D') + ' - ' + end.format('YYYY.M.D'));
-		//});
-		//
-		//// Implement with datatables's API
-		//$('.realSelectBox').bind('change', function () {
-		//	var _self = $(this);
-		//	var val = _self.val();
-		//	if(_self.val() === 'Any Type'){
-		//		val = '';
-		//	}
-		//	table_home.columns( 1 ).search(val).draw();
-		//});
-		//
-		//
-		//// Filtering with date
-		//$('.daterangepicker .ranges li, .daterangepicker .applyBtn').bind('click', function () {
-		//	if($(this).text().trim() === 'Custom Range'){
-		//		return;
-		//	}
-		//
-		//	setTimeout(function () {
-		//		var date = $('.filter_date').text();
-		//
-		//		date = date.split('-');
-		//		console.info(date);
-		//
-		//		$('#startDate').val(date[0].trim());
-		//		$('#endDate').val(date[1].trim());
-		//
-		//		$('.filterWithDate').submit();
-		//
-		//	}, 100);
-		//});
-		//
-		//// daterangepicker의 액션을 제어하기 귀찮아서 액티브를 제거한다.
-		//
-		//$('#daterange-btn').bind('click', function () {
-		//	$('.daterangepicker .ranges li').removeClass('active');
-		//	$('.daterangepicker .ranges').bind('mouseover', function () {
-		//		$('.daterangepicker .ranges li').removeClass('active');
-		//	})
-		//});
-
-
+		window.reCountCourseList = reCountCourseList;
+		//window.courseIdList = courseIdList;
 
 	}); // end of func

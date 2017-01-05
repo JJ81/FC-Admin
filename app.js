@@ -15,18 +15,11 @@ var assignment_history = require('./routes/assignment_history');
 var course = require('./routes/course');
 var achievement = require('./routes/achievement');
 var administrator = require('./routes/administrator');
-
-//var api = require('./routes/_bak/api');
-
-//var path = require('path');
-//global.appRoot = path.resolve(__dirname);
-
-
+const api = require('./routes/api');
 
 /*routes*/
 var app = express();
 var hbs = require('hbs');
-
 var passport = require('passport');
 var flash = require('connect-flash');
 var cookieSession = require('cookie-session');
@@ -39,13 +32,12 @@ hbs.registerPartials(__dirname + '/views/modal');
 
 app.use('/static', express.static(__dirname + '/public'));
 
+// todo favicon 설정할 것
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
-
 global.PROJ_TITLE = "Orangenamu, Backoffice ";
 global.AppRoot = process.env.PWD;
-
 
 app.use(cookieSession({
   keys: ['FC_Admin']
@@ -71,6 +63,7 @@ app.use('/assignment_history', assignment_history);
 app.use('/course', course);
 app.use('/achievement', achievement);
 app.use('/administrator', administrator);
+app.use('/api/v1', api);
 
 
 //app.use('/api/v1', api);

@@ -122,12 +122,12 @@ QUERY.COURSE = {
 
 QUERY.EDU = {
 	GetList : // offset, limit이 한동안 없이 진행한다.
-		"select e.`name`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id " +
-		"from `edu` as e " +
-		"left join `admin` as a " +
-		"on e.creator_id = a.id " +
-		"where e.active=true " +
-		"order by e.`created_dt` desc, e.`id` desc;"
+	"select e.`name`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id " +
+	"from `edu` as e " +
+	"left join `admin` as a " +
+	"on e.creator_id = a.id " +
+	"where e.active=true and a.fc_id=? " +
+	"order by e.`created_dt` desc, e.`id` desc;"
 	,GetCourseListByGroupId :
 		"select c.`id`, c.`name` as name, c.`desc`, t.`name` as teacher " +
 		"from `course` as c " +
@@ -139,6 +139,14 @@ QUERY.EDU = {
 			"order by `order` desc, `id` asc " +
 		")" +
 		"and c.`active`=true;"
+	,GetCourseList :
+		"select c.id, c.name, t.name as teacher " +
+		"from `course` as c " +
+		"left join `admin` as a " +
+		"on a.id = c.creator_id " +
+		"left join `teacher` as t " +
+		"on t.id = c.teacher_id " +
+		"where a.fc_id=?;"
 
 
 

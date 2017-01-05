@@ -13,11 +13,11 @@
                     </form>
                 </div>
 
-                <button class="btn btn-default pull-right" style="margin-left: 10px;">
+                <button class="btn btn-default pull-right" style="margin-left: 10px;" >
                     <i class="fa fa-download"></i>&nbsp;
                     교육과정 전체
                 </button>
-                <button class="btn btn-create-edu btn-primary pull-right">
+                <button class="btn btn-create-edu btn-primary pull-right" data-toggle="modal" data-target="#registerEdu">
                     <i class="fa fa-pencil-square-o"></i>
                     교육과정생성
                 </button>
@@ -38,7 +38,13 @@
                     {{#each list}}
                     <tr>
                         <td class="center">{{time created_dt}}</td>
-                        <td class="center"><a href="/education/details?id={{course_group_id}}" class="btn-link" data-course-group-id="{{course_group_id}}">{{name}}</a></td>
+                        <td class="center">
+                            <a href="/education/details?id={{course_group_id}}"
+                               class="btn-link"
+                               data-course-group-id="{{course_group_id}}">
+                              {{name}}
+                            </a>
+                        </td>
                         <td class="center">{{time start_dt}}</td>
                         <td class="center">{{time end_dt}}</td>
                         <td class="center">{{creator}}</td>
@@ -64,3 +70,4 @@
 </div>
 <!-- /.row -->
 
+{{>modal_register_edu}}

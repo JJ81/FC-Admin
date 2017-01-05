@@ -180,3 +180,17 @@ $star-size: 17px;
   margin: 0 auto;
 }
 
+#draggablePanelList{
+  li{
+    cursor: move;
+  }
+  .course{
+    position: relative;
+  }
+
+  .btn-delete-course{
+    position: absolute;
+    right: 0;
+  }
+
+}

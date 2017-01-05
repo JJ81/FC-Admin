@@ -70,7 +70,7 @@
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1345, 855}}</string>
+			<string>{{0, 0}, {1104, 843}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -275,11 +275,11 @@ select * from `course_list`;
 insert into `course_list` (`course_id`, `type`, `title`, `video_id`)
 values (?,?,?,?);
 
-select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id 
+select e.`name`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id
 from `edu` as e
 left join `admin` as a
 on e.creator_id = a.id
-where e.active=true
+where e.active=true and a.fc_id='1'
 order by e.`created_dt` desc, e.`id` desc;
 
 
@@ -304,13 +304,14 @@ order by `order` desc, `id` asc
 and c.`active`=true;
 
 
-#
+# 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from ``
 
 
 
 </string>
 			<key>table</key>
-			<string>course_group</string>
+			<string>admin</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -325,6 +326,36 @@ and c.`active`=true;
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string>select e.`name`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id
+from `edu` as e
+left join `admin` as a
+on e.creator_id = a.id
+where e.active=true and a.fc_id='1'
+order by e.`created_dt` desc, e.`id` desc</string>
+		<string>select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id
+from `edu` as e
+left join `admin` as a
+on e.creator_id = a.id
+where e.active=true and a.fc_id='1'
+order by e.`created_dt` desc, e.`id` desc</string>
+		<string>select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id, a.fc_id 
+from `edu` as e
+left join `admin` as a
+on e.creator_id = a.id
+where e.active=true and a.fc_id='1'
+order by e.`created_dt` desc, e.`id` desc</string>
+		<string>select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id, a.fc_id 
+from `edu` as e
+left join `admin` as a
+on e.creator_id = a.id
+where e.active=true
+order by e.`created_dt` desc, e.`id` desc</string>
+		<string>select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id 
+from `edu` as e
+left join `admin` as a
+on e.creator_id = a.id
+where e.active=true
+order by e.`created_dt` desc, e.`id` desc</string>
 		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
 
 # 나중에 각 강의의 상세 정보와 별점까지도 가져올 수 있도록 한다.
@@ -451,18 +482,6 @@ order by `order` desc, `id` asc)</string>
 		<string>select * from `course_group`
 where group_id='qwer1234'
 order by `order` desc, `id` asc</string>
-		<string>select * from `course_group`
-where group_id='qwer1234'
-order by `order` desc, `id` desc</string>
-		<string>select * from `course_group`
-where group_id='qwer1234'
-order by `order` desc</string>
-		<string>select * from `course_group`
-where group_id='qwer1234'
-order by `order` desx</string>
-		<string>select * from `course_group`
-where group_id='qwer1234'</string>
-		<string>select * from `course_group`</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

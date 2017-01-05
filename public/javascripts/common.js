@@ -5,8 +5,9 @@
 define(
 	[
 		'jquery'
+		,'axios'
 	],
-	function ($) {
+	function ($, axios) {
 		// info 공통 로직은 이곳에서 정의한다.
 
 		// show modal to reset password
@@ -22,7 +23,4 @@ define(
 				window.open(url, title, option);
 			}
 		};
-
-
-
 	}); // end of func
