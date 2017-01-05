@@ -85,17 +85,6 @@ router.post('/create/edu', isAuthenticated, function (req, res) {
 		async.series(
 			[
 				function (callback) {
-					EducationService.addCourseList(_data.group_id, _data.course_list,
-						function (err, result) {
-							if(err){
-								callback(null, null);
-							}else{
-								console.info(result);
-								callback(null, result);
-							}
-						});
-				},
-				function (callback) {
 					connection.query(QUERY.EDU.InsertCourseDataInEdu, [
 						_data.course_name, _data.course_desc, _data.group_id, _data.creator_id
 					], function (err, result) {
@@ -108,11 +97,25 @@ router.post('/create/edu', isAuthenticated, function (req, res) {
 							callback(null, result);
 						}
 					});
+				},
+
+				function (callback) {
+					EducationService.addCourseList(_data.group_id, _data.course_list,
+						function (err, result) {
+							if(err){
+								callback(null, null);
+							}else{
+								console.info(result);
+								callback(null, result);
+							}
+						});
 				}
+
 			],
 			function (err, result) {
 				if(err) {
 					console.error(err);
+					console.log('rollback');
 					connection.rollback();
 					res.json({
 						success : false
