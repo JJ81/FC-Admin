@@ -70,7 +70,7 @@
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1104, 843}}</string>
+			<string>{{0, 0}, {1296, 843}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -305,13 +305,30 @@ and c.`active`=true;
 
 
 # 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
-select * from ``
+select c.id, c.name, t.name as teacher
+from `course` as c
+left join `admin` as a
+on a.id = c.creator_id
+left join `teacher` as t
+on t.id = c.teacher_id
+where a.fc_id='1';
 
+select * from `edu`;
 
+insert into `edu` (`name`,`desc`,`course_group_id`,`creator_id`)
+values(?,?,?,?);
 
+select * from `course_group`;
+insert into `course_group` (`group_id`, `course_id`)
+values(?,?);
+
+select * from edu where id='6';
+
+insert into `edu` (`name`,`desc`,`course_group_id`,`creator_id`)
+values('test','desc','qwer1234qwer',1);
 </string>
 			<key>table</key>
-			<string>admin</string>
+			<string>edu</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -326,6 +343,58 @@ select * from ``
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string>insert into `edu` (`name`,`desc`,`course_group_id`,`creator_id`)
+values('test','desc','qwer1234qwer',1)</string>
+		<string>select * from edu where id='6'</string>
+		<string>select * from edu</string>
+		<string>select * from `course_group`</string>
+		<string>select * from `edu`</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select c.id, c.name, t.name as teacher
+from `course` as c
+left join `admin` as a
+on a.id = c.creator_id
+left join `teacher` as t
+on t.id = c.teacher_id
+where a.fc_id='1'</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select c.name, t.name as teacher
+from `course` as c
+left join `admin` as a
+on a.id = c.creator_id
+left join `teacher` as t
+on t.id = c.teacher_id
+where a.fc_id='1'</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select *
+from `course` as c
+left join `admin` as a
+on a.id = c.creator_id
+left join `teacher` as t
+on t.id = c.teacher_id
+where a.fc_id='1'</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from `course` as c
+left join `admin` as a
+on a.id = c.creator_id
+where a.fc_id='1'</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from `course` as c
+left join `admin` as a
+on a.id = c.creator_id</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from `course` as c
+left join `admin` as a
+a.id = c.creator_id</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from `course` as c
+left join `admin` as a</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from `course` as c
+left join `admin` as a
+c.creator_id = c.id</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from `course`</string>
 		<string>select e.`name`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id
 from `edu` as e
 left join `admin` as a
@@ -370,118 +439,6 @@ where group_id='qwer1234'
 order by `order` desc, `id` asc
 )
 and c.`active`=true</string>
-		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
-
-# 나중에 각 강의의 상세 정보와 별점까지도 가져올 수 있도록 한다.
-select 
-c.id, c.name, c.desc, t.name
-from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id
-where c.id in (
-select course_id from `course_group`
-where group_id='qwer1234'
-order by `order` desc, `id` asc
-)
-and c.`active`=true</string>
-		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
-
-select *
-from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id
-where c.id in (
-select course_id from `course_group`
-where group_id='qwer1234'
-order by `order` desc, `id` asc
-)
-and c.`active`=true</string>
-		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
-
-select *
-from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id
-where id in (
-select course_id from `course_group`
-where group_id='qwer1234'
-order by `order` desc, `id` asc
-)
-and c.`active`=true</string>
-		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
-
-select *
-from `course` as c
-left join `teacher` as t
-on c.teacher_id = t.id
-where id in (
-select course_id from `course_group`
-where group_id='qwer1234'
-order by `order` desc, `id` asc
-)
-and `active`=true</string>
-		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
-
-select * from `course`
-where id in (
-select course_id from `course_group`
-where group_id='qwer1234'
-order by `order` desc, `id` asc
-)
-and `active`=true</string>
-		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
-
-select * from `course`
-where id in (
-select course_id from `course_group`
-where group_id='qwer1234'
-order by `order` desc, `id` asc
-)
-where `active`=true</string>
-		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
-
-select * from `course`
-where id in (
-select course_id from `course_group`
-where group_id='qwer1234'
-order by `order` desc, `id` asc
-)</string>
-		<string># 강의 아이디를 가져온다.
-select * from `course_group`
-where group_id='qwer1234'
-order by `order` desc, `id` asc</string>
-		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
-
-select * from `course`
-where id in ('1','2')</string>
-		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
-
-select * from `course`</string>
-		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
-
-select * from `course`
-where `id` in 
-(select * from `course_group`
-where group_id='qwer1234'
-)</string>
-		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
-
-select * from `course`
-where `id` in 
-(select * from `course_group`
-where group_id='qwer1234'
-)
-order by `order` desc, `id` asc</string>
-		<string># 가져온 강의 아이디를 가지고 강의 테이블에서 해당 강의 정보를 조회하여 가져온다.
-
-select * from `course`
-where `id` in 
-(select * from `course_group`
-where group_id='qwer1234'
-order by `order` desc, `id` asc)</string>
-		<string>select * from `course_group`
-where group_id='qwer1234'
-order by `order` desc, `id` asc</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

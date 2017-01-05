@@ -10,12 +10,12 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>강의명</label>
-                    <input type="text" class="form-control" name="course_name" placeholder="강의명" required autocomplete="off" />
+                    <input type="text" class="form-control course-name" name="course_name" placeholder="강의명" required autocomplete="off" />
                 </div>
 
                 <div class="form-group">
                     <label>강의 소개</label>
-                    <textarea class="form-control" name="course_desc" placeholder="강의소개를 입력하세요."></textarea>
+                    <textarea class="form-control course-desc" name="course_desc" placeholder="강의소개를 입력하세요."></textarea>
                 </div>
 
                 <div class="form-group">
@@ -39,11 +39,11 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary btn-register-course-submit">등록</button>
+                <button type="submit" class="btn btn-primary btn-register-course-submit">등록</button>
             </div>
         </div>
         <!-- /.modal-content -->
-      <input type="hidden" name="group_id" class="course_group_id" value="" />
+      <input type="hidden" name="group_id" class="course_group_id" />
     </form>
     <!-- /.modal-dialog -->
 </div>

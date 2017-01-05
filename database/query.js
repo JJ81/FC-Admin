@@ -147,7 +147,12 @@ QUERY.EDU = {
 		"left join `teacher` as t " +
 		"on t.id = c.teacher_id " +
 		"where a.fc_id=?;"
-
+	,InsertCourseDataInEdu :
+		"insert into `edu` (`name`, `desc`, `course_group_id`, `creator_id`) " +
+		"values(?,?,?,?);"
+	,InsertCourseGroup :
+		"insert into `course_group` (`group_id`, `course_id`) " +
+		"values(?,?);"
 
 
 

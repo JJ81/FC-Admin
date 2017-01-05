@@ -68,7 +68,66 @@ router.get('/details', isAuthenticated, function (req, res) {
 				});
 			}
 	});
+});
 
+const EducationService = require('../service/EducationService');
+router.post('/create/edu', isAuthenticated, function (req, res) {
+	var _data = {};
+	_data.group_id = req.body.course_group_id.trim();
+	_data.course_name = req.body.course_name.trim();
+	_data.course_desc = req.body.course_desc.trim();
+	_data.course_list = req.body.course_list;
+	_data.creator_id = req.user.admin_id;
+
+	console.info(_data);
+
+	connection.beginTransaction(function () {
+		async.series(
+			[
+				function (callback) {
+					EducationService.addCourseList(_data.group_id, _data.course_list,
+						function (err, result) {
+							if(err){
+								callback(null, null);
+							}else{
+								console.info(result);
+								callback(null, result);
+							}
+						});
+				},
+				function (callback) {
+					connection.query(QUERY.EDU.InsertCourseDataInEdu, [
+						_data.course_name, _data.course_desc, _data.group_id, _data.creator_id
+					], function (err, result) {
+						if(err){
+							console.error(err);
+							callback(err, null);
+						}else{
+							console.info('check!');
+							console.info(result);
+							callback(null, result);
+						}
+					});
+				}
+			],
+			function (err, result) {
+				if(err) {
+					console.error(err);
+					connection.rollback();
+					res.json({
+						success : false
+					});
+				}else{
+					//connection.commit();
+					console.log('result !!');
+					console.info(result);
+					res.json({
+						success: true
+					});
+				}
+				// connection.rollback();
+			});
+	});
 });
 
 

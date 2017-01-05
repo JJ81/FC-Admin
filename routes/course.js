@@ -354,8 +354,6 @@ router.post('/create/video', isAuthenticated, function(req, res){
 						res.redirect('/course/details?id=' + _course_id);
 					}
 				}
-
-				connection.rollback();
 		});
 	});
 });

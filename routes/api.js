@@ -16,7 +16,7 @@ router.get('/course/group/id/create', isAuthenticated, function (req, res) {
 	// 절대 중복이 나올 수 없는 난수를 만들어보자.
 
 	res.json({
-		id : 'qwer1234'
+		id : 'qwer12345'
 	});
 });
 

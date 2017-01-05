@@ -32,9 +32,7 @@ requirejs(
 		var btn_add_course = $('.btn-add-course-edu');
 		var select_course_list = $('.select-course-list');
 		var course_group_id = $('.course_group_id');
-		//var courseIdList = [];
-		window.courseIdList = [];
-		///var _tmp_courseIdList = [];
+		var courseIdList = [];
 		var _course_container = $('#draggablePanelList');
 		var _submit = $('.btn-register-course-submit');
 
@@ -59,17 +57,10 @@ requirejs(
 			elem += '<div class="course">'+_text+'<a href="#" class="btn-delete-course" onclick="education.removeElement(this);"><i class="fa fa-remove text-red"></i></a></div>';
 			elem += '</li>';
 
-			/// todo 추가하기 전에 이미 등록된 것이라면 등록하지 않도록 한다
-			// 배열을 돌면서 중복인지 아닌지 체크를 하는 로직을 넣는다.
-
 			if(!checkDuplicateCourseId(_id)){
 				_course_container.append(elem);
 				courseIdList.push(_id);
 			}
-
-
-
-
 		});
 
 		// ref. http://www.bootply.com/dUQiGMggWO
@@ -85,11 +76,7 @@ requirejs(
 		window.education = {
 			removeElement : function (el) {
 				$(el).parent().parent().remove();
-
-				// todo 지울 때 아래 코드가 실행이 혹은 반영이 되지 않는 것 같다.
-				console.log('delete : ' + courseIdList);
 				courseIdList = reCountCourseList();
-				console.log('delete2 : ' + courseIdList);
 				return false;
 			}
 		};
@@ -114,7 +101,62 @@ requirejs(
 			return _tmp;
 		}
 
-		window.reCountCourseList = reCountCourseList;
+		var courseName = $('.course-name');
+		var courseDesc = $('.course-desc');
+
+		_submit.bind('click', function (e) {
+			e.preventDefault();
+
+			if(courseName.val() === ''){
+				alert('강의명을 입력하세요.');
+				courseName.focus();
+				return;
+			}
+
+			if(courseDesc.val() === ''){
+				alert('강의소개를 입력해주세요.');
+				courseDesc.focus();
+				return;
+			}
+
+			if(courseIdList.length <= 0){
+				alert('강의를 추가하세요.');
+				return;
+			}
+
+			// todo axios로 전송을 한다.
+			//axios.post('/education/create/edu', {
+			//		course_group_id : course_group_id.val(),
+			//		course_name : courseName.val().trim(),
+			//		course_desc : courseDesc.val().trim(),
+			//		course_list : courseIdList
+			//	})
+			//	.then(function (res){
+			//		console.log('client return');
+			//		console.info(res);
+			//	})
+			//	.catch(function (err){
+			//		console.error(err);
+			//	});
+
+
+			axios({
+				method : 'post',
+				url: '/education/create/edu',
+				data : {
+					course_group_id : course_group_id.val(),
+					course_name : courseName.val().trim(),
+					course_desc : courseDesc.val().trim(),
+					course_list : courseIdList
+				}
+			}).then(function (res){
+				console.info(res);
+			}).catch(function(err){
+				console.error(err);
+			});
+
+		});
+		//window.reCountCourseList = reCountCourseList;
 		//window.courseIdList = courseIdList;
 
 	}); // end of func
