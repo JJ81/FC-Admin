@@ -116,13 +116,14 @@ router.post('/create/edu', isAuthenticated, function (req, res) {
 				if(err) {
 					console.error(err);
 					console.log('rollback');
-					// todo 롤백를 일어나서 데이터 유출이 있을 수도 있다 
-					// connection.rollback();
+					// todo 롤백를 일어나서 데이터 유출이 있을 수도 있다
+					connection.rollback();
 					res.json({
 						success : false
 					});
 				}else{
-					//connection.commit();
+					connection.commit();
+
 					console.log('result !!');
 					console.info(result);
 					res.json({
