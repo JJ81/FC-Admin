@@ -129,7 +129,7 @@ QUERY.EDU = {
 		"where e.active=true " +
 		"order by e.`created_dt` desc, e.`id` desc;"
 	,GetCourseListByGroupId :
-		"select c.id, c.name, c.desc, t.name " +
+		"select c.`id`, c.`name` as name, c.`desc`, t.`name` as teacher " +
 		"from `course` as c " +
 		"left join `teacher` as t " +
 		"on c.teacher_id = t.id " +

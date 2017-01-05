@@ -28,5 +28,24 @@ router.get('/', isAuthenticated, function (req, res) {
 });
 
 
+router.get('/details', isAuthenticated, function (req, res) {
+	var _course_group_id = req.query.id;
+	connection.query(QUERY.EDU.GetCourseListByGroupId,
+		[_course_group_id],
+		function (err, rows) {
+			if(err){
+				console.error(err);
+			}else{
+				res.render('education_details', {
+					current_path: 'EducationDetails',
+					title: PROJ_TITLE + 'Education Details',
+					loggedIn: req.user,
+					list: rows
+				});
+			}
+	});
+
+});
+
 
 module.exports = router;

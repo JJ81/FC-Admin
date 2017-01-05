@@ -29,7 +29,11 @@
                     <i class="fa fa-database" aria-hidden="true"></i>
                     <span>교육과정 등록관리</span>
                     {{#if (isEquals current_path 'Education')}}
-                        <span class="pull-right-container">
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right text-green"></i>
+                    </span>
+                    {{else if (isEquals current_path 'EducationDetails')}}
+                    <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right text-green"></i>
                     </span>
                     {{/if}}
