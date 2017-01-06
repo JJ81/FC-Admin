@@ -122,7 +122,7 @@ QUERY.COURSE = {
 
 QUERY.EDU = {
 	GetList : // offset, limit이 한동안 없이 진행한다.
-	"select e.`name`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id " +
+	"select e.id, e.`name`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id " +
 	"from `edu` as e " +
 	"left join `admin` as a " +
 	"on e.creator_id = a.id " +
@@ -163,12 +163,31 @@ QUERY.EDU = {
 		"insert into `log_bind_users` (`title`,`desc`,`creator_id`, `group_id`) " +
 		"values(?,?,?,?);"
 	,GetCustomUserList :
-		"select lbu.id, lbu.title, lbu.desc, a.name as creator, lbu.created_dt " +
+		"select lbu.id, lbu.title, lbu.desc, a.name as creator, lbu.created_dt, lbu.group_id " +
 		"from `log_bind_users` as lbu " +
 		"left join `admin` as a " +
 		"on a.id = lbu.creator_id " +
 		"where a.fc_id=? " +
 		"order by lbu.`created_dt` desc, lbu.`id` desc;"
+	,GetAssignmentDataById :
+		"select lbu.title, lbu.desc, lbu.group_id, lbu.created_dt, a.name as creator " +
+		"from `log_bind_users` as lbu " +
+		"left join `admin` as a " +
+		"on a.id = lbu.creator_id " +
+		"where lbu.`id`=?;"
+	,GetUserListByGroupId :
+		"select u.name, u.email, u.phone, b.name as branch, d.name as duty " +
+		"from `users` as u " +
+		"left join `branch` as b " +
+		"on b.id = u.branch_id " +
+		"left join `duty` as d " +
+		"on d.id = u.duty_id " +
+		"where u.`id` in " +
+		"( " +
+			"select user_id from `log_group_user` " +
+			"where `group_id`=? " +
+			"order by `id` asc " +
+		");"
 
 
 

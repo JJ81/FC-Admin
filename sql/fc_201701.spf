@@ -376,6 +376,7 @@ lbu.id, lbu.title, lbu.desc, a.name as creator, lbu.created_dt
 from `log_bind_users` as lbu
 left join `admin` as a
 on a.id = lbu.creator_id
+where a.fc_id='1'
 order by lbu.`created_dt` desc, lbu.`id` desc;
 
 
@@ -386,6 +387,13 @@ add column `created_dt` timestamp default CURRENT_TIMESTAMP after `group_id`;
 alter table `log_bind_users`
 add column `active` boolean default true;
 
+
+# log_bind_user 테이블의 id를 통해서 관리자가 업로드한 유저 목록을 볼 수 있도록 한다..
+select lbu.title, lbu.desc, lbu.group_id, lbu.created_dt, a.name as creator 
+from `log_bind_users` as lbu
+left join `admin` as a
+on a.id = lbu.creator_id
+where lbu.`id`='1';
 
 
 </string>
@@ -405,6 +413,49 @@ add column `active` boolean default true;
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string># log_bind_user 테이블의 id를 통해서 관리자가 업로드한 유저 목록을 볼 수 있도록 한다..
+select lbu.title, lbu.desc, lbu.group_id, lbu.created_dt, a.name as creator 
+from `log_bind_users` as lbu
+left join `admin` as a
+on a.id = lbu.creator_id
+where lbu.`id`='1'</string>
+		<string># log_bind_user 테이블의 id를 통해서 관리자가 업로드한 유저 목록을 볼 수 있도록 한다..
+select lbu.title, lbu.desc, lbu.group_id, lbu.created_id, a.name as creator 
+from `log_bind_users` as lbu
+left join `admin` as a
+on a.id = lbu.creator_id
+where lbu.`id`='1'</string>
+		<string># log_bind_user 테이블의 id를 통해서 관리자가 업로드한 유저 목록을 볼 수 있도록 한다..
+select * from `log_bind_users` as lbu
+left join `admin` as a
+on a.id = lbu.creator_id
+where lbu.`id`='1'</string>
+		<string># log_bind_user 테이블의 id를 통해서 관리자가 업로드한 유저 목록을 볼 수 있도록 한다..
+select * from `log_bind_users` as lbu
+left join `admin` as a
+on a.id = lbu.creator_id
+where `id`='1'</string>
+		<string># log_bind_user 테이블의 id를 통해서 관리자가 업로드한 유저 목록을 볼 수 있도록 한다..
+select * from `log_bind_users` as lbu
+left join `admin` as a
+where `id`='1'</string>
+		<string># log_bind_user 테이블의 id를 통해서 관리자가 업로드한 유저 목록을 볼 수 있도록 한다..
+select * from `log_bind_users`
+where `id`='1'</string>
+		<string># log_bind_user 테이블의 id를 통해서 관리자가 업로드한 유저 목록을 볼 수 있도록 한다..
+select * from `log_bind_user`</string>
+		<string># log_bind_user 테이블의 id를 통해서 관리자가 업로드한 유저 목록을 볼 수 있도록 한다..
+select * from `log_bind_user`
+where `id`=1</string>
+		<string>select 
+lbu.id, lbu.title, lbu.desc, a.name as creator, lbu.created_dt
+from `log_bind_users` as lbu
+left join `admin` as a
+on a.id = lbu.creator_id
+where a.fc_id='1'
+order by lbu.`created_dt` desc, lbu.`id` desc</string>
+		<string>alter table `log_bind_users`
+add column `created_dt` timestamp default CURRENT_TIMESTAMP after `group_id`</string>
 		<string>select 
 lbu.id, lbu.title, lbu.desc, a.name as creator, lbu.created_dt
 from `log_bind_users` as lbu
@@ -427,46 +478,10 @@ order by `created_dt` desc, `id` asc</string>
 order by `created_dt` desc</string>
 		<string>alter table `log_bind_users`
 add column `active` boolean default true</string>
-		<string>alter table `log_bind_users`
-add column `created_dt` timestamp default CURRENT_TIMESTAMP after `group_id`</string>
 		<string>select * from `log_bind_users`</string>
 		<string>select * from `log_bind_user`</string>
 		<string>select * from `users`
 where `phone` in ('1033650511')</string>
-		<string>select * from `users`
-where `phone` in ('01033650511', '01020091407')</string>
-		<string>select * from `users`
-where `phone` in ('01033650511')</string>
-		<string>select * from `users`
-where `phone` in ('')</string>
-		<string>alter table `log_group_user`
-add foreign key (`user_id`)
-references `users`(`id`)</string>
-		<string>create table `log_group_user`(
-	`id` bigint not null auto_increment,
-	`group_id` varchar(255) character set utf8 not null,
-	`user_id` bigint not null,
-	primary key(`id`)
-) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT</string>
-		<string>alter table `log_bind_users`
-add foreign key (`creator_id`)
-references `admin`(`id`)</string>
-		<string>alter table `log_bind_users`
-add foreign key (`createor_id`)
-references `admin`(`id`)</string>
-		<string>create table `log_bind_users`(
-	`id` bigint not null auto_increment,
-	`title` varchar(255) character set utf8 not null,
-	`desc` text character set utf8 default null,
-	`creator_id` bigint not null,
-	`group_id` varchar(255) character set utf8 not null,
-	primary key (`id`)
-) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT</string>
-		<string># 임의의 교육 대상자 그룹핑을 모아놓을 수 있는 테이블이 필요하다.
-
-
-# 관리자가 교육을 위해 특정 유저를 그룹핑하고 그 그룹에게 교육을 부여할 경우
-drop table `log_bind_users`</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

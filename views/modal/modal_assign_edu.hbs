@@ -1,0 +1,31 @@
+<!-- Create Employee -->
+<div class="modal" id="allocationEdu" role="dialog">
+    <form class="modal-dialog" method="post" action="/assignment/allocation/edu" id="frm_allocation_edu">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">교육 배정</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>교육리스트</label>
+                    <select name="edu_list" class="form-control">
+                        {{#each edu_list}}
+                        <option value="{{id}}">{{name}} <small>(강사 : {{creator}})</small></option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+                <button type="submit" class="btn btn-primary btn-set-agent-password-submit">배정</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+        <input type="hidden" name="group_id" class="user_group_id" />
+    </form>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

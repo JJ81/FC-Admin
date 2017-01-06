@@ -45,7 +45,11 @@
                     <i class="fa fa-suitcase" aria-hidden="true"></i>
                     <span>교육과정 배정관리</span>
                     {{#if (isEquals current_path 'Assignment')}}
-                        <span class="pull-right-container">
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right text-green"></i>
+                    </span>
+                    {{else if (isEquals current_path 'AssignmentDetails')}}
+                    <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right text-green"></i>
                     </span>
                     {{/if}}
