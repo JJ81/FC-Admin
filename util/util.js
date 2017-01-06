@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const md5 = require('md5');
 
 var util ={};
 
@@ -11,7 +12,6 @@ util.isValidEmail =  function (email) {
 util.checkOnlyDigit = function (num){
   return /^\d+$/.test(num);
 };
-
 
 // check password length
 util.checkPasswordSize = function (pass, minimum) {
@@ -33,5 +33,8 @@ util.deleteFile = function (_path, cb) {
   });
 };
 
+util.publishHashByMD5 = function (value) {
+  return md5(value);
+};
 
 module.exports = util;

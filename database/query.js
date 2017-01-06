@@ -153,6 +153,22 @@ QUERY.EDU = {
 	,InsertCourseGroup :
 		"insert into `course_group` (`group_id`, `course_id`) " +
 		"values(?,?);"
+	,GetUserDataByPhone :
+		"select id from `users` " +
+		"where `phone` in (?);"
+	,InsertIntoLogGroupUser :
+		"insert into `log_group_user` (`user_id`, `group_id`) " +
+		"values(?,?);"
+	,InsertIntoLogBindUser :
+		"insert into `log_bind_users` (`title`,`desc`,`creator_id`, `group_id`) " +
+		"values(?,?,?,?);"
+	,GetCustomUserList :
+		"select lbu.id, lbu.title, lbu.desc, a.name as creator, lbu.created_dt " +
+		"from `log_bind_users` as lbu " +
+		"left join `admin` as a " +
+		"on a.id = lbu.creator_id " +
+		"where a.fc_id=? " +
+		"order by lbu.`created_dt` desc, lbu.`id` desc;"
 
 
 
