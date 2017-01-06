@@ -2,26 +2,24 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <form action="">
-                    <div class="col-md-9">
-                        <button class="btn btn-default">
-                            <i class="fa fa-upload"></i> &nbsp;
-                            교육배정자 업로드(.xls)
-                        </button>
-                        <button class="btn btn-default">
-                            <i class="fa fa-file-excel-o"></i> &nbsp;
-                            업로드 양식
-                        </button>
+                <div class="col-md-9">
+                    <button class="btn btn-default" data-toggle="modal" data-target="#uploadFile">
+                        <i class="fa fa-upload"></i> &nbsp;
+                        교육배정자 업로드(.xls)
+                    </button>
+                    <a href="/static/uploads/excel/sample_group.xlsx" class="btn btn-default">
+                        <i class="fa fa-file-excel-o"></i> &nbsp;
+                        업로드 양식
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group pull-right">
+                        <input type="text" class="form-control" placeholder="교육명 검색" required />
+                        <span class="input-group-btn">
+                          <button type="submit" class="btn btn-primary btn-flat">검색</button>
+                        </span>
                     </div>
-                    <div class="col-md-3">
-                        <div class="input-group pull-right">
-                            <input type="text" class="form-control" placeholder="교육명 검색" required />
-                            <span class="input-group-btn">
-                              <button type="submit" class="btn btn-primary btn-flat">검색</button>
-                            </span>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -37,12 +35,12 @@
                     </thead>
 
                     <tbody>
-                    {{#for 0 10 1}}
+                    {{#each list}}
                     <tr>
-                        <td class="center">2017.01월 특별 점장 교육 시행 대상자</td>
-                        <td class="center">2017.01.01</td>
-                        <td class="center">이재준</td>
-                        <td class="center">이수율이 저조한 점장들만을 대상으로 재교육을 실시 하고자 한다.</td>
+                        <td class="center"><a href="/assignment/details?id={{id}}">{{title}}</a></td>
+                        <td class="center">{{time created_dt}}</td>
+                        <td class="center">{{creator}}</td>
+                        <td class="center">{{desc}}</td>
                         <td class="center">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-warning">보기</button>
@@ -52,14 +50,14 @@
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="#">교육과정 배정</a></li>
-                                    <li><a href="#">수정</a></li>
-                                    <li><a href="#">삭제</a></li>
-                                    <li><a href="#">다운로드</a></li>
+                                    <!--<li><a href="#">수정</a></li>-->
+                                    <!--<li><a href="#">삭제</a></li>-->
+                                    <!--<li><a href="#">다운로드</a></li>-->
                                 </ul>
                             </div>
                         </td>
                     </tr>
-                    {{/for}}
+                    {{/each}}
                     </tbody>
                     <tfoot>
                     <tr>
@@ -80,3 +78,4 @@
 </div>
 <!-- /.row -->
 
+{{>modal_upload_excel_register}}

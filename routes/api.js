@@ -1,22 +1,18 @@
-var express = require('express');
-var router = express.Router();
-var mysql_dbc = require('../commons/db_conn')();
-var connection = mysql_dbc.init();
-var QUERY = require('../database/query');
-var isAuthenticated = function (req, res, next) {
+const express = require('express');
+const router = express.Router();
+const mysql_dbc = require('../commons/db_conn')();
+const connection = mysql_dbc.init();
+const QUERY = require('../database/query');
+const isAuthenticated = function (req, res, next) {
   if (req.isAuthenticated())
     return next();
   res.redirect('/login');
 };
-//require('../commons/helpers');
-//const async = require('async');
-
+const util = require('../util/util');
 
 router.get('/course/group/id/create', isAuthenticated, function (req, res) {
-	// 절대 중복이 나올 수 없는 난수를 만들어보자.
-
 	res.json({
-		id : 'qwer12345'
+		id : util.publishHashByMD5(new Date())
 	});
 });
 

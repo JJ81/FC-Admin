@@ -10,12 +10,25 @@ var isAuthenticated = function (req, res, next) {
 };
 require('../commons/helpers');
 
+
+
 router.get('/', isAuthenticated, function (req, res) {
-  res.render('assignment', {
-    current_path: 'Assignment',
-    title: PROJ_TITLE + 'Assignment',
-    loggedIn: req.user
+  connection.query(QUERY.EDU.GetCustomUserList,
+    [req.user.fc_id],
+    function (err, rows) {
+      if(err){
+        console.error(err);
+      }else{
+        res.render('assignment', {
+          current_path: 'Assignment',
+          title: PROJ_TITLE + 'Assignment',
+          loggedIn: req.user,
+          list : rows
+        });
+      }
   });
 });
+
+
 
 module.exports = router;

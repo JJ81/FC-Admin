@@ -1,0 +1,40 @@
+<!-- Create Employee -->
+<div class="modal" id="uploadFile" role="dialog">
+    <form class="modal-dialog" method="post" action="/upload/excel/register/employee" id="frm_upload_file" enctype="multipart/form-data">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">피교육자 그룹 등록</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>그룹명</label>
+                    <input type="text" class="form-control" name="group_name" placeholder="그룹명" required autocomplete="off" autofocus />
+                </div>
+
+                <div class="form-group">
+                    <label>그룹 설명</label>
+                    <textarea class="form-control" name="group_desc" placeholder="그룹에 대한 설명을 입력해주세요" autocomplete="off" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputFile">직원 정보가 있는 엑셀 파일을 업로드해주세요. <br />
+                        <small class="text-red">(엑셀파일만 가능합니다. 업로드 후에 처리 결과를 면밀히 검토하세요.)</small>
+                    </label><br /><br />
+                    <input type="file" name="file" id="exampleInputFile" required />
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+                <button type="submit" class="btn btn-primary btn-set-agent-password-submit">등록</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </form>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
