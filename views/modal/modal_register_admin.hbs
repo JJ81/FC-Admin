@@ -1,40 +1,39 @@
 <!-- Create Employee -->
-<div class="modal" id="registerEdu" role="dialog">
-    <form class="modal-dialog" method="post" action="/education/register" id="frm_register_edu">
+<div class="modal" id="registerAdmin" role="dialog">
+    <form class="modal-dialog" method="post" action="/administrator/register" id="frm_register_admin">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">교육과정등록</h4>
+                <h4 class="modal-title">관리자 생성</h4>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>강의명</label>
-                    <input type="text" class="form-control course-name" name="course_name" placeholder="강의명" required autocomplete="off" />
+                    <label>관리자명</label>
+                    <input type="text" class="form-control" name="name" placeholder="관리자명" required autocomplete="off" />
                 </div>
 
                 <div class="form-group">
-                    <label>강의 소개</label>
-                    <textarea class="form-control course-desc" name="course_desc" placeholder="강의소개를 입력하세요."></textarea>
+                    <label>이메일</label>
+                  <input type="email" class="form-control" name="email" placeholder="이메일" required autocomplete="off" />
                 </div>
 
                 <div class="form-group">
-                    <label>교육에 추가할 강의를 선택하세요.</label>
-                    <select name="teacher_id" class="form-control select-course-list">
-                        {{#each course_list}}
-                        <option value="{{id}}">{{name}} <small>({{teacher}})</small></option>
-                        {{/each}}
+                    <label>권한을 선택하세요.</label>
+                    <select name="authority" class="form-control">
+                        <option value="admin">관리자</option>
+                        <option value="supervisor">감독관</option>
                     </select>
-                    <div style="text-align: right;margin-top: 5px;">
-                        <button type="button" class="btn btn-default btn-add-course-edu">추가</button>
-                    </div>
-                    
                 </div>
 
-                <hr />
-
-                <h5>교육과정 내 강의 리스트</h5>
-                <ul id="draggablePanelList" class="list-unstyled"></ul>
+                <div class="form-group">
+                    <label>비밀번호</label>
+                    <input type="password" name="pass" class="form-control" required autocomplete="off" placeholder="비밀번호를 입력하세요." />
+                </div>
+                <div class="form-group">
+                    <label>비밀번호확인</label>
+                    <input type="password" name="re_pass" class="form-control" required autocomplete="off" placeholder="비밀번호를 재입력하세요." />
+                </div>
             </div>
 
             <div class="modal-footer">

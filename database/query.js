@@ -7,7 +7,7 @@ QUERY.ADMIN = {
 	,GetList :
 		"select * from `admin` "+
 		"where fc_id=? " +
-		"order by `id` desc;"
+		"order by `id` asc;"
 	,CreateAdmin :
 		"insert into `admin` (`name`, `email`, `password`, `role`, `fc_id`) " +
 		"values(?,?,?,?,?);"

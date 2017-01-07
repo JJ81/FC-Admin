@@ -2,7 +2,7 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <button class="btn btn-default pull-right">
+                <button class="btn btn-default pull-right" data-toggle="modal" data-target="#registerAdmin">
                   <i class="fa fa-user-circle-o"></i> &nbsp;
                   관리자생성
                 </button>
@@ -42,6 +42,7 @@
                                    data-toggle="modal"
                                    data-target="#modifyEmployee">정보수정</a>
                             </li>
+                            <li><a href="#">권한수정</a></li>
                             <li><a href="#"
                                    data-user-id="{{id}}"
                                    data-user-name="{{name}}"
@@ -77,3 +78,4 @@
 </div>
 <!-- /.row -->
 
+{{> modal_register_admin}}
