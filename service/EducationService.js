@@ -32,6 +32,8 @@ const EducationService = {
 					_count_info++;
 					EducationService.addCourseList(group_id, course_list, cb);
 				}else{
+					// result를 모아서 던질 수 있어야 하나?
+					// todo 마지막 result를 던지지 말고 모든 result를 담아서 객체를 던지든가 아니면 true값만 던진다.
 					cb(null, result);
 				}
 			});

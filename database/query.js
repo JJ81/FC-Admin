@@ -176,7 +176,7 @@ QUERY.EDU = {
 		"on a.id = lbu.creator_id " +
 		"where lbu.`id`=?;"
 	,GetUserListByGroupId :
-		"select u.name, u.email, u.phone, b.name as branch, d.name as duty " +
+		"select u.id, u.name, u.email, u.phone, b.name as branch, d.name as duty " +
 		"from `users` as u " +
 		"left join `branch` as b " +
 		"on b.id = u.branch_id " +
@@ -188,6 +188,12 @@ QUERY.EDU = {
 			"where `group_id`=? " +
 			"order by `id` asc " +
 		");"
+	,InsertTrainingEdu :
+		"insert into `training_edu` (`edu_id`, `assigner`) " +
+		"values(?,?);"
+	,InsertUserIdInTrainingUsers :
+		"insert into `training_users` (`user_id`, `training_edu_id`) " +
+		"values(?,?);"
 
 
 
