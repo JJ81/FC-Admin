@@ -4,6 +4,13 @@ QUERY.ADMIN = {
   ResetPassword:
   "update `admin` set password=? " +
   "where `id`=? and name=?;"
+	,GetList :
+		"select * from `admin` "+
+		"where fc_id=? " +
+		"order by `id` desc;"
+	,CreateAdmin :
+		"insert into `admin` (`name`, `email`, `password`, `role`, `fc_id`) " +
+		"values(?,?,?,?,?);"
 };
 
 QUERY.LOGIN = {
@@ -222,9 +229,8 @@ QUERY.HISTORY = {
 		"on lbu.id = lae.target_users_id " +
 		"where a.fc_id=? " +
 		"order by te.created_dt desc;"
-
-
-
 };
+
+
 
 module.exports = QUERY;

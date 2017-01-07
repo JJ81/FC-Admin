@@ -45,6 +45,8 @@
 		<dict>
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
+			<key>contentFilter</key>
+			<dict/>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
@@ -68,7 +70,7 @@
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1238, 717}}</string>
+			<string>{{0, 0}, {1143, 800}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -456,9 +458,17 @@ add foreign key (`target_users_id`)
 references `log_bind_users`(`id`);
 
 
+#관리자 페이지
+## 관리자는 정의를 내릴 수 있어야 한다.
+# supervisor, superadmin, admin, root(모든 계정을 생성할 수 있으며 별도의 인하우스툴을 관리할 수 있다./내부계정)
+# superadmin만이 계정을 생성할 수 있다. (s/v, admin ) 입력값의 범위를 설정할 수 있어야 한다.
 
+select * from `admin`
+where fc_id='1'
+order by `id` desc;
 
-
+insert into `admin` (`name`, `email`, `password`, `role`, `fc_id`)
+values(?,?,?,?,?);
 
 
 
@@ -466,7 +476,7 @@ references `log_bind_users`(`id`);
 
 </string>
 			<key>table</key>
-			<string>log_bind_users</string>
+			<string>admin</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -481,135 +491,97 @@ references `log_bind_users`(`id`);
 	<array/>
 	<key>queryHistory</key>
 	<array>
-		<string>alter table `log_assign_edu`
-add foreign key (`target_users_id`)
-references `log_bind_users`(`id`)</string>
-		<string>alter table `log_assign_edu`
-add foreign key (`training_edu_id`)
-references `training_edu`(`id`)</string>
-		<string>create table `log_assign_edu`(
-	`id` bigint not null auto_increment,
-	`training_edu_id` bigint not null,
-	`target_users_id` bigint not null,
-	primary key(`id`)
-) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT</string>
-		<string># 배정 대상자를 어떻게 가져오지.....
-select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
+		<string>#관리자 페이지
+## 관리자는 정의를 내릴 수 있어야 한다.
+# supervisor, superadmin, admin, root(모든 계정을 생성할 수 있으며 별도의 인하우스툴을 관리할 수 있다./내부계정)
+# superadmin만이 계정을 생성할 수 있다. (s/v, admin ) 입력값의 범위를 설정할 수 있어야 한다.
+
+select * from `admin`
+where fc_id='1'
+order by `id` desc</string>
+		<string>#관리자 페이지
+## 관리자는 정의를 내릴 수 있어야 한다.
+# supervisor, superadmin, admin
+# superadmin만이 계정을 생성할 수 있다. (s/v, admin ) 입력값의 범위를 설정할 수 있어야 한다.
+
+select * from `admin`
+where fc_id='1'</string>
+		<string>insert into `edu` (`name`,`desc`,`course_group_id`,`creator_id`)
+values('test','desc','qwer1234qwer',1)</string>
+		<string>select * from edu where id='6'</string>
+		<string>select * from edu</string>
+		<string>select * from `course_group`</string>
+		<string>select * from `edu`</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select c.id, c.name, t.name as teacher
+from `course` as c
 left join `admin` as a
-on a.id = te.assigner
-where a.fc_id='1'
-order by te.created_dt desc</string>
-		<string># 배정 대상자를 어떻게 가져오지.....
-select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
+on a.id = c.creator_id
+left join `teacher` as t
+on t.id = c.teacher_id
+where a.fc_id='1'</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select c.name, t.name as teacher
+from `course` as c
 left join `admin` as a
-on a.id = te.assigner
-order by te.created_dt desc</string>
-		<string># 배정 대상자를 어떻게 가져오지.....
-select e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
+on a.id = c.creator_id
+left join `teacher` as t
+on t.id = c.teacher_id
+where a.fc_id='1'</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select *
+from `course` as c
 left join `admin` as a
-on a.id = te.assigner
-order by te.created_dt desc</string>
-		<string># title(대상),
-select e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
+on a.id = c.creator_id
+left join `teacher` as t
+on t.id = c.teacher_id
+where a.fc_id='1'</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from `course` as c
 left join `admin` as a
-on a.id = te.assigner
-order by te.created_dt desc</string>
-		<string># title(대상),
-select e.name, te.created_dt 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
+on a.id = c.creator_id
+where a.fc_id='1'</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from `course` as c
 left join `admin` as a
-on a.id = te.assigner
-order by te.created_dt desc</string>
-		<string># title(대상),
-select te.created_dt 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
+on a.id = c.creator_id</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from `course` as c
 left join `admin` as a
-on a.id = te.assigner
-order by te.created_dt desc</string>
-		<string>select * from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
-order by te.created_dt desc</string>
-		<string>select * from `training_edu` as te
-order by te.created_dt desc</string>
-		<string>select * from `training_edu` as te
-order by te.created_dt</string>
-		<string>select * from `training_edu`</string>
-		<string># id와 group_id를 통해서 등록된 유저 테이블 가져오기
-# log_bind_user 테이블의 id를 통해서 관리자가 업로드한 유저 목록을 볼 수 있도록 한다..
-select lbu.title, lbu.desc, lbu.group_id, lbu.created_dt, a.name as creator 
-from `log_bind_users` as lbu
+a.id = c.creator_id</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from `course` as c
+left join `admin` as a</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from `course` as c
 left join `admin` as a
-on a.id = lbu.creator_id
-where lbu.`id`='1'</string>
-		<string>select * from `log_group_user`
-where `group_id`='77428a8b4040a6a39531ae84b5cd50f8'
-order by `id` asc</string>
-		<string># user_id만 추출
-select user_id from `log_group_user`
-where `group_id`='77428a8b4040a6a39531ae84b5cd50f8'
-order by `id` asc</string>
-		<string>select 
-u.name, u.email, u.phone, b.name as branch, d.name as duty
-from `users` as u
-left join `branch` as b
-on b.id = u.branch_id
-left join `duty` as d
-on d.id = u.duty_id
-where u.`id` in 
-(
-select user_id from `log_group_user`
-where `group_id`='77428a8b4040a6a39531ae84b5cd50f8'
-order by `id` asc
-)</string>
-		<string>select *
-from `users` as u
-left join `branch` as b
-on b.id = u.branch_id
-left join `duty` as d
-on d.id = u.duty_id
-where u.`id` in 
-(
-select user_id from `log_group_user`
-where `group_id`='77428a8b4040a6a39531ae84b5cd50f8'
-order by `id` asc
-)</string>
-		<string>select *
-from `users` as u
-left join `branch` as b
-on b.id = u.branch_id
-where u.`id` in 
-(
-select user_id from `log_group_user`
-where `group_id`='77428a8b4040a6a39531ae84b5cd50f8'
-order by `id` asc
-)</string>
-		<string>select *
-from `users` as u
-left join `branch` as b
-on b.id = u.branch_id
-where `id` in 
-(
-select user_id from `log_group_user`
-where `group_id`='77428a8b4040a6a39531ae84b5cd50f8'
-order by `id` asc
-)</string>
+c.creator_id = c.id</string>
+		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+select * from `course`</string>
+		<string>select e.`name`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id
+from `edu` as e
+left join `admin` as a
+on e.creator_id = a.id
+where e.active=true and a.fc_id='1'
+order by e.`created_dt` desc, e.`id` desc</string>
+		<string>select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id
+from `edu` as e
+left join `admin` as a
+on e.creator_id = a.id
+where e.active=true and a.fc_id='1'
+order by e.`created_dt` desc, e.`id` desc</string>
+		<string>select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id, a.fc_id 
+from `edu` as e
+left join `admin` as a
+on e.creator_id = a.id
+where e.active=true and a.fc_id='1'
+order by e.`created_dt` desc, e.`id` desc</string>
+		<string>select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id, a.fc_id 
+from `edu` as e
+left join `admin` as a
+on e.creator_id = a.id
+where e.active=true
+order by e.`created_dt` desc, e.`id` desc</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>
