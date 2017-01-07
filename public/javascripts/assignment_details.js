@@ -24,6 +24,7 @@ requirejs(
 		var btnAssignEducation = $('.btn-assign-education');
 		btnAssignEducation.bind('click', function () {
 			$('#allocationEdu .user_group_id').val($('.description .group_id').val());
+			$('#allocationEdu .bind_group_id').val($('.description .bind_group_id').val());
 		});
 
 	}); // end of func

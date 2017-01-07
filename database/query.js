@@ -170,7 +170,7 @@ QUERY.EDU = {
 		"where a.fc_id=? " +
 		"order by lbu.`created_dt` desc, lbu.`id` desc;"
 	,GetAssignmentDataById :
-		"select lbu.title, lbu.desc, lbu.group_id, lbu.created_dt, a.name as creator " +
+		"select lbu.id, lbu.title, lbu.desc, lbu.group_id, lbu.created_dt, a.name as creator " +
 		"from `log_bind_users` as lbu " +
 		"left join `admin` as a " +
 		"on a.id = lbu.creator_id " +
@@ -194,6 +194,34 @@ QUERY.EDU = {
 	,InsertUserIdInTrainingUsers :
 		"insert into `training_users` (`user_id`, `training_edu_id`) " +
 		"values(?,?);"
+};
+
+QUERY.HISTORY = {
+	GetAssignHistory :
+		"select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin " +
+		"from `training_edu` as te " +
+		"left join `edu` as e " +
+		"on e.id = te.edu_id " +
+		"left join `admin` as a " +
+		"on a.id = te.assigner " +
+		"where a.fc_id=? " +
+		"order by te.created_dt desc;"
+	,InsertIntoLogAssignEdu :
+		"insert into `log_assign_edu` (`training_edu_id`, `target_users_id`) " +
+		"values(?,?);"
+	,GetAssignEduHistory :
+		"select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin, lbu.title as target " +
+		"from `training_edu` as te " +
+		"left join `edu` as e " +
+		"on e.id = te.edu_id " +
+		"left join `admin` as a " +
+		"on a.id = te.assigner " +
+		"left join `log_assign_edu` as lae " +
+		"on lae.training_edu_id = te.id " +
+		"left join `log_bind_users` as lbu " +
+		"on lbu.id = lae.target_users_id " +
+		"where a.fc_id=? " +
+		"order by te.created_dt desc;"
 
 
 

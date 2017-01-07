@@ -90,21 +90,8 @@ const UserService = require('../service/UserService');
 router.post('/allocation/edu', function (req, res) {
   var _group_id = req.body.group_id; // 교육 대상자 그룹 아이디
   var _edu_id = req.body.edu_list; // 교육 아이디
+  var _bind_user_id = req.body.bind_group_id;
 
-  console.info(_group_id + ' / ' + _edu_id);
-  // todo log_group_user 테이블애서 그룹 아이디로 user_id를 배열로 추출한다.
-
-  // todo training_edu에 데이터를 입력한 후에 리턴 받은 아이디를 들고 (training_edu)
-
-  // todo loop를 돌면서 training_users에 유저의 데이터를 입력 한다. (training_users)
-
-
-
-  // todo 오류 처리할 내용들
-  // todo 배정에 오류가 난 경우 처리는 어떻게 할 것인가?
-  // todo 미배정자의 경우 요청이 들어올 경우, 별도로 직원관리에서 개인적으로 배정을 할 수는 있다.
-  // 이 때 문제가 되는 건 진척도 관리시 누락되어서 이후에 배정한 유저들의 교육 진척도가 그룹에 합산되어 나오느냐에 있다.
-  // todo transaction 처리는 어떻게 할 것인가?
   connection.beginTransaction(function () {
     async.waterfall(
       [
@@ -139,16 +126,32 @@ router.post('/allocation/edu', function (req, res) {
 
         // todo 리턴받은 training_edu_id, user_id를 가지고 training_users 테이블에 입력한다. 이 때 손실된 데이터가 생겼을 경우 다시 로그를 남기고 관리자가 알 수 있도록 해야 한다.
         function (user_id, result, callback) {
-          UserService.InsertUsersWithTrainingEduId(user_id, result.insertId, function (err, result) {
+          UserService.InsertUsersWithTrainingEduId(user_id, result.insertId, function (err, ret) {
             if(err){
               console.error(err);
               callback(err, null);
             }else{
-              callback(null, result);
+              callback(null, result.insertId);
             }
+          });
+        },
+
+        // todo log_assign_edu 테이블에 log_bind_edu id와 training_edu id를 입력한다.
+        function (training_edu_id, callback) {
+          // _bind_user_id
+          connection.query(QUERY.HISTORY.InsertIntoLogAssignEdu,
+            [training_edu_id, _bind_user_id],
+            function (err, ret) {
+              if(err){
+                console.error(err);
+                callback(err, null);
+              }else{
+                callback(null, ret);
+              }
           });
         }
       ],
+
       function (err, result) {
         if(err){
           console.error(err);
