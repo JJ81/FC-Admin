@@ -37,9 +37,10 @@
                         </tr>
                         </thead>
                         <tbody>
+                        {{#if user_list}}
                         {{#each user_list}}
                         <tr>
-                            <td class="center">1</td>
+                            <td class="center">{{addOneForIndex @key}}</td>
                             <td class="center">{{name}}</td>
                             <td class="center">{{branch}}</td>
                             <td class="center">{{duty}}</td>
@@ -48,6 +49,12 @@
                             </td>
                         </tr>
                         {{/each}}
+                        {{else}}
+                        <tr>
+                            <td colspan="5">출력할 데이터가 없습니다.</td>
+                        </tr>
+                        {{/if}}
+
                         </tbody>
                     </table>
                 </div>

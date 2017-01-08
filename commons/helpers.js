@@ -78,3 +78,7 @@ hbs.registerHelper('star-rating', function(rating) {
 hbs.registerHelper('percentage', function(num, total) {
 	return Math.ceil((num/total)*100);
 });
+
+hbs.registerHelper('addOneForIndex', function(num) {
+	return parseInt(num) + 1;
+});
