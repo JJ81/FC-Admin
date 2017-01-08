@@ -70,7 +70,7 @@
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1143, 800}}</string>
+			<string>{{0, 0}, {1452, 1016}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -474,9 +474,138 @@ values(?,?,?,?,?);
 # admin의 email은 unique key로 설정할 것.
 
 
+
+# 진척도 관리 리스트뷰
+
+
+select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, lbu.title as target
+from `training_edu` as te
+left join `edu` as e
+on e.id = te.edu_id
+left join `admin` as a
+on a.id = te.assigner
+left join `log_assign_edu` as lae
+on lae.training_edu_id = te.id
+left join `log_bind_users` as lbu
+on lbu.id = lae.target_users_id
+where a.fc_id='1'
+order by te.created_dt desc;
+
+
+
+# log_course_progress를 삭제할 것.
+
+# 유저별 강의 내 완료된 세션 개수를 확인할 수 있다.
+select count(*) as session_completed from `log_session_progress`
+where `course_id`='3' and user_id='2' and end_dt is not null;
+
+# 강의별 세션 개수를 가져와보자.
+select * from `course_list`;
+select count(*) as total_session from `course_list`
+where course_id='7';
+
+
+# edu_id를 통해서 강의 id 추출
+select c.`id`, c.`name` as name
+from `course` as c
+where c.id in (
+	select course_id from `course_group`	
+	where group_id=(select course_group_id from `edu` where id='22')
+	order by `order` desc, `id` asc
+) and c.`active`=true;
+
+
+# 강의 순서와 관계없이 이와 같이 가져와서 비교하여 서버에서 연산을 할 수 있도록 한다..
+select course_id, count(*) as sess_total from `course_list`
+where `course_id` in ('7','8')
+group by `course_id`;
+
+/* select course_id, count(*) as session_total from `course_list`
+where `course_id` in ('8','7')
+group by `course_id`; */
+
+/* select * from `course_list`
+where `course_id` in ('7','8'); */
+
+
+# edu아이디를 통해서 강의별 총 세션수를 가져온다.
+select course_id, count(*) as sess_total from `course_list`
+where `course_id` in (
+select c.`id`
+from `course` as c
+where c.id in (
+	select course_id from `course_group`	
+	where group_id=(select course_group_id from `edu` where id='22')
+	order by `order` desc, `id` asc
+) and c.`active`=true
+)
+group by `course_id`;
+
+
+# 이제 유저별로 강의 완료된 세션수를 강의별로 가져온다.
+
+# 그리고 강의별 이수율을 가져온다.
+
+# 강의별 이수율을 통해서 총 교육에 대한 해당 유저의 이수율을 계산한다.
+
+# 점포별 이수율을 계산할 수 있도록 유저리스트에서 branch_id를 함께 가져온다.
+
+/* select * from `course`;
+select * from `course_list`;
+
+
+select *
+from `course` as c
+where c.id in (
+	select course_id from `course_group`	
+	where group_id=(select course_group_id from `edu` where id='22')
+	order by `order` desc, `id` asc
+) and c.`active`=true; */
+
+
+/* select tu.user_id, e.course_group_id 
+from `training_users` as tu
+left join `trainig_edu` as e
+on tu.training_edu_id = e.id; */
+
+alter table `training_users`
+add foreign key(`training_edu_id`)
+references training_edu(`id`);
+
+
+/* insert into `training_users` (`user_id`, `training_edu_id`)
+values('1','13'); */
+# training_edu 테이블의 열을 지우지 못하는 버그가 있다. 
+/* select * from `training_edu`
+where `edu_id`='23'; */
+
+;
+# 일단 진행중인 교육에 참가중인 유저를 추출
+select * from `training_users`
+where `training_edu_id`='15';
+
+
+# 추출한 유저 아이디와 테이블 아이디를 통해서 log_session_progress 테이블을 조회할 수 있다.
+select user_id, count(*) as total from `log_session_progress`
+where `user_id`='2' and training_user_id='2' and end_dt is not null
+group by `user_id`;
+
+# 다시
+# 유저들을 나열한 후에 course_id에 따라서 이수율을 알 수 있어야 한다.
+
+
+
+
+
+
+
+
+
+
+
 </string>
 			<key>table</key>
-			<string>admin</string>
+			<string>log_session_progress</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -491,97 +620,191 @@ values(?,?,?,?,?);
 	<array/>
 	<key>queryHistory</key>
 	<array>
-		<string>#관리자 페이지
-## 관리자는 정의를 내릴 수 있어야 한다.
-# supervisor, superadmin, admin, root(모든 계정을 생성할 수 있으며 별도의 인하우스툴을 관리할 수 있다./내부계정)
-# superadmin만이 계정을 생성할 수 있다. (s/v, admin ) 입력값의 범위를 설정할 수 있어야 한다.
+		<string># 추출한 유저 아이디와 테이블 아이디를 통해서 log_session_progress 테이블을 조회할 수 있다.
+select user_id, count(*) as total from `log_session_progress`
+where `user_id`='2' and training_user_id='2' and end_dt is not null
+group by `user_id`</string>
+		<string># 추출한 유저 아이디와 테이블 아이디를 통해서 log_session_progress 테이블을 조회할 수 있다.
+select user_id, count(*) as total from `log_session_progress`
+where `user_id`='2' and training_user_id='2'
+group by `user_id`</string>
+		<string># 추출한 유저 아이디와 테이블 아이디를 통해서 log_session_progress 테이블을 조회할 수 있다.
+select * from `log_session_progress`
+where `user_id`='2' and training_user_id='2'</string>
+		<string># 일단 진행중인 교육에 참가중인 유저를 추출
+select * from `training_users`
+where `training_edu_id`='15'</string>
+		<string># 추출한 유저 아이디와 테이블 아이디를 통해서 log_session_progress 테이블을 조회할 수 있다.
+select * from `log_session_progress`</string>
+		<string>select * from `training_users`
+where `training_edu_id`='15'</string>
+		<string>select * from `training_edu`
+where `edu_id`='23'</string>
+		<string>select * from `training_users`</string>
+		<string>select tu.user_id, e.course_group_id 
+from `training_users` as tu
+left join `trainig_edu` as e
+on tu.training_edu_id = e.id</string>
+		<string>/* insert into `training_users` (`user_id`, `training_edu_id`)
+values('1','13'); */
 
-select * from `admin`
-where fc_id='1'
-order by `id` desc</string>
-		<string>#관리자 페이지
-## 관리자는 정의를 내릴 수 있어야 한다.
-# supervisor, superadmin, admin
-# superadmin만이 계정을 생성할 수 있다. (s/v, admin ) 입력값의 범위를 설정할 수 있어야 한다.
 
-select * from `admin`
-where fc_id='1'</string>
-		<string>insert into `edu` (`name`,`desc`,`course_group_id`,`creator_id`)
-values('test','desc','qwer1234qwer',1)</string>
-		<string>select * from edu where id='6'</string>
-		<string>select * from edu</string>
-		<string>select * from `course_group`</string>
-		<string>select * from `edu`</string>
-		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
-select c.id, c.name, t.name as teacher
-from `course` as c
-left join `admin` as a
-on a.id = c.creator_id
-left join `teacher` as t
-on t.id = c.teacher_id
-where a.fc_id='1'</string>
-		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
-select c.name, t.name as teacher
-from `course` as c
-left join `admin` as a
-on a.id = c.creator_id
-left join `teacher` as t
-on t.id = c.teacher_id
-where a.fc_id='1'</string>
-		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
+
+select tu.user_id, e.course_group_id 
+from `training_users` as tu
+left join `trainig_edu` as e
+on tu.training_edu_id = e.id</string>
+		<string>insert into `training_users` (`user_id`, `training_edu_id`)
+values('1','13')</string>
+		<string>insert into `training_users` (`user_id`, `training_edu_id`)
+values('1','22')</string>
+		<string>select * from `training_users`
+where id='8'</string>
+		<string>select * from `training_users`
+where training_edu_id = '8'</string>
+		<string>alter table `training_users`
+add foreign key(`training_edu_id`)
+references training_edu(`id`)</string>
+		<string># 이제 유저별로 강의 완료된 세션수를 강의별로 가져온다.
+
+# 그리고 강의별 이수율을 가져온다.
+
+# 강의별 이수율을 통해서 총 교육에 대한 해당 유저의 이수율을 계산한다.
+
+# 점포별 이수율을 계산할 수 있도록 유저리스트에서 branch_id를 함께 가져온다.
+
+/* select * from `course`;
+select * from `course_list`;
+
+
 select *
 from `course` as c
-left join `admin` as a
-on a.id = c.creator_id
-left join `teacher` as t
-on t.id = c.teacher_id
-where a.fc_id='1'</string>
-		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
-select * from `course` as c
-left join `admin` as a
-on a.id = c.creator_id
-where a.fc_id='1'</string>
-		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
-select * from `course` as c
-left join `admin` as a
-on a.id = c.creator_id</string>
-		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
-select * from `course` as c
-left join `admin` as a
-a.id = c.creator_id</string>
-		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
-select * from `course` as c
-left join `admin` as a</string>
-		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
-select * from `course` as c
-left join `admin` as a
-c.creator_id = c.id</string>
-		<string># 접속한 admin의 fc에 등록된 강의만 추려서 가져온다.
-select * from `course`</string>
-		<string>select e.`name`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id
-from `edu` as e
-left join `admin` as a
-on e.creator_id = a.id
-where e.active=true and a.fc_id='1'
-order by e.`created_dt` desc, e.`id` desc</string>
-		<string>select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id
-from `edu` as e
-left join `admin` as a
-on e.creator_id = a.id
-where e.active=true and a.fc_id='1'
-order by e.`created_dt` desc, e.`id` desc</string>
-		<string>select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id, a.fc_id 
-from `edu` as e
-left join `admin` as a
-on e.creator_id = a.id
-where e.active=true and a.fc_id='1'
-order by e.`created_dt` desc, e.`id` desc</string>
-		<string>select e.`active`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id, a.fc_id 
-from `edu` as e
-left join `admin` as a
-on e.creator_id = a.id
-where e.active=true
-order by e.`created_dt` desc, e.`id` desc</string>
+where c.id in (
+	select course_id from `course_group`	
+	where group_id=(select course_group_id from `edu` where id='22')
+	order by `order` desc, `id` asc
+) and c.`active`=true; */
+
+
+/* select tu.user_id, e.course_group_id 
+from `training_users` as tu
+left join `trainig_edu` as e
+on tu.training_edu_id = e.id; */
+
+select * from `training_users`
+where training_edu_id = '8'</string>
+		<string># 이제 유저별로 강의 완료된 세션수를 강의별로 가져온다.
+
+# 그리고 강의별 이수율을 가져온다.
+
+# 강의별 이수율을 통해서 총 교육에 대한 해당 유저의 이수율을 계산한다.
+
+# 점포별 이수율을 계산할 수 있도록 유저리스트에서 branch_id를 함께 가져온다.
+
+/* select * from `course`;
+select * from `course_list`;
+
+
+select *
+from `course` as c
+where c.id in (
+	select course_id from `course_group`	
+	where group_id=(select course_group_id from `edu` where id='22')
+	order by `order` desc, `id` asc
+) and c.`active`=true; */
+
+
+/* select tu.user_id, e.course_group_id 
+from `training_users` as tu
+left join `trainig_edu` as e
+on tu.training_edu_id = e.id; */
+
+select * from `training_users`
+where training_edu_id = (
+select `id` from training_edu
+where `edu_id`='21'
+)</string>
+		<string># 이제 유저별로 강의 완료된 세션수를 강의별로 가져온다.
+
+# 그리고 강의별 이수율을 가져온다.
+
+# 강의별 이수율을 통해서 총 교육에 대한 해당 유저의 이수율을 계산한다.
+
+# 점포별 이수율을 계산할 수 있도록 유저리스트에서 branch_id를 함께 가져온다.
+
+/* select * from `course`;
+select * from `course_list`;
+
+
+select *
+from `course` as c
+where c.id in (
+	select course_id from `course_group`	
+	where group_id=(select course_group_id from `edu` where id='22')
+	order by `order` desc, `id` asc
+) and c.`active`=true; */
+
+
+/* select tu.user_id, e.course_group_id 
+from `training_users` as tu
+left join `trainig_edu` as e
+on tu.training_edu_id = e.id; */
+
+select * from `training_users`</string>
+		<string># 이제 유저별로 강의 완료된 세션수를 강의별로 가져온다.
+
+# 그리고 강의별 이수율을 가져온다.
+
+# 강의별 이수율을 통해서 총 교육에 대한 해당 유저의 이수율을 계산한다.
+
+# 점포별 이수율을 계산할 수 있도록 유저리스트에서 branch_id를 함께 가져온다.
+
+/* select * from `course`;
+select * from `course_list`;
+
+
+select *
+from `course` as c
+where c.id in (
+	select course_id from `course_group`	
+	where group_id=(select course_group_id from `edu` where id='22')
+	order by `order` desc, `id` asc
+) and c.`active`=true; */
+
+
+/* select tu.user_id, e.course_group_id 
+from `training_users` as tu
+left join `trainig_edu` as e
+on tu.training_edu_id = e.id; */
+
+select * from `training_edu`</string>
+		<string># 이제 유저별로 강의 완료된 세션수를 강의별로 가져온다.
+
+# 그리고 강의별 이수율을 가져온다.
+
+# 강의별 이수율을 통해서 총 교육에 대한 해당 유저의 이수율을 계산한다.
+
+# 점포별 이수율을 계산할 수 있도록 유저리스트에서 branch_id를 함께 가져온다.
+
+/* select * from `course`;
+select * from `course_list`;
+
+
+select *
+from `course` as c
+where c.id in (
+	select course_id from `course_group`	
+	where group_id=(select course_group_id from `edu` where id='22')
+	order by `order` desc, `id` asc
+) and c.`active`=true; */
+
+
+/* select tu.user_id, e.course_group_id 
+from `training_users` as tu
+left join `trainig_edu` as e
+on tu.training_edu_id = e.id; */
+
+select * from `trainig_edu`</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

@@ -3,7 +3,7 @@
         <div class="box">
             <div class="box-header">
                 <div class="col-md-3">
-                    <form class="" action="" method="post">
+                    <form class="" action="#" method="post">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="교육과정명 검색" required />
                             <span class="input-group-btn">
@@ -18,36 +18,28 @@
                 <table id="table_achievement" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th class="center">교육과정명</th>
+                        <th class="center">교육기간</th>
+                        <th class="center">교육과정</th>
                         <th class="center">교육대상</th>
                         <th class="center">배정일</th>
-                        <th class="center">교육기간</th>
-                        <th class="center">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     {{#for 0 10 1}}
                         <tr>
-                            <td class="center">커피 맛있게 내리는 방법</td>
-                            <td class="center"><a href="#" class="btn-link">2017.01월 특별 점장 교육 시행 대상자</a></td>
-                            <td class="center">2017.01.01</td>
                             <td class="center">2017.01.02 ~ 2017.01.12</td>
-                            <td class="center">
-                                <button class="btn btn-default btn-sm">
-                                    <i class="fa fa-eye"></i>&nbsp;
-                                    상세보기
-                                </button>
-                            </td>
+                            <td class="center"><a href="#" class="btn-link">커피 맛있게 내리는 방법</a></td>
+                            <td class="center">2017.01월 특별 점장 교육 시행 대상자</td>
+                            <td class="center">2017.01.01</td>
                         </tr>
                     {{/for}}
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th class="center">교육과정명</th>
+                        <th class="center">교육기간</th>
+                        <th class="center">교육과정</th>
                         <th class="center">교육대상</th>
                         <th class="center">배정일</th>
-                        <th class="center">교육기간</th>
-                        <th class="center">Action</th>
                     </tr>
                     </tfoot>
                 </table>

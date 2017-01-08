@@ -126,6 +126,9 @@ UserService.InsertUsersWithTrainingEduId = function (user_id, training_edu_id, c
 		__userSize = user_id.length;
 	}
 
+	console.log('try to insert user data in training users : ' + training_edu_id);
+
+
 	connection.query(QUERY.EDU.InsertUserIdInTrainingUsers,
 		[user_id[__pointer], training_edu_id],
 		function (err, result) {

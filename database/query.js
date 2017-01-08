@@ -76,7 +76,7 @@ QUERY.COURSE = {
     "where a.fc_id=? and c.id=? " +
     "order by c.created_dt desc;"
   ,GetStarRatingByCourseId:
-    "select round(avg(rate),1) as rate " +
+    "select round(avg(course_rate),1) as rate " +
     "from `user_rating` " +
     "where course_id=? " +
     "group by `course_id`;"
