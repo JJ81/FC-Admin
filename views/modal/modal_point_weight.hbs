@@ -1,0 +1,50 @@
+<!-- Create Employee -->
+<div class="modal" id="pointWeight" role="dialog">
+    <form class="modal-dialog" method="post" action="#" id="frm_point_weight">
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">포인트 환산 기준(가중치) 설정</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>출석 및 이수 완료</label>
+                    <input type="number" class="form-control" name="complete" placeholder="(%)" required autocomplete="off" min="0" max="100" />
+                </div>
+                <div class="form-group">
+                    <label>퀴즈</label>
+                    <input type="number" class="form-control" name="quiz" placeholder="(%)" required autocomplete="off" min="0" max="100" />
+                </div>
+                <div class="form-group">
+                    <label>최종 테스트</label>
+                    <input type="number" class="form-control" name="final_test" placeholder="(%)" required autocomplete="off" min="0" max="100" />
+                </div>
+                <div class="form-group">
+                    <label>교육시청시간</label>
+                    <input type="number" class="form-control" name="final_test" placeholder="(%)" required autocomplete="off" min="0" max="100" />
+                </div>
+                <div class="form-group">
+                    <label>이수 속도</label>
+                    <input type="number" class="form-control" name="final_test" placeholder="(%)" required autocomplete="off" min="0" max="100" />
+                </div>
+                <div class="form-group">
+                    <label>반복 학습율</label>
+                    <input type="number" class="form-control" name="final_test" placeholder="(%)" required autocomplete="off" min="0" max="100" />
+                </div>
+
+                <div class="point_weight_total">
+                  <strong>total</strong> : 100%
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+                <button type="submit" class="btn btn-primary btn-register-course-submit">등록</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </form>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

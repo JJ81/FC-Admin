@@ -158,4 +158,9 @@
   position: absolute;
   right: 0; }
 
+.point_weight_total {
+  text-align: right;
+  font-size: 23px;
+  margin-top: 20px; }
+
 /*# sourceMappingURL=styles.css.map */
