@@ -303,5 +303,27 @@ QUERY.ACHIEVEMENT = {
 		"where `id`=?;"
 };
 
+QUERY.DASHBOARD = {
+	GetUserCount :
+		"select count(*) as total_users from `users` " +
+		"where fc_id=?;"
+	,GetBranchCount :
+		"select count(*) total_branch from `branch` " +
+		"where fc_id=?;"
+	,GetCurrentEduCount :
+		"select count(*) as current_edu from `training_edu` as te " +
+		"left join `edu` as e " +
+		"on e.id = te.edu_id " +
+		"left join `admin` as a " +
+		"on a.id = e.creator_id " +
+		"where start_dt <= now() and end_dt >= now() " +
+		"and a.fc_id=?;"
+	,GetTotalEduCount :
+		"select count(*) as total_edu from `edu` as e " +
+		"left join `admin` as a " +
+		"on a.id = e.creator_id " +
+		"where fc_id=?;"
+};
+
 
 module.exports = QUERY;

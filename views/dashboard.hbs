@@ -7,7 +7,7 @@
                 <!-- small box -->
                 <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3>44</h3>
+                      <h3>{{#each total_users}}{{total_users}}{{/each}}</h3>
                         <p>총교육생수</p>
                     </div>
                     <div class="icon">
@@ -20,7 +20,7 @@
                 <!-- small box -->
                 <div class="small-box bg-aqua">
                     <div class="inner">
-                        <h3>150</h3>
+                        <h3>{{#each total_branch}}{{total_branch}}{{/each}}</h3>
                         <p>총점포수</p>
                     </div>
                     <div class="icon">
@@ -33,7 +33,9 @@
                 <!-- small box -->
                 <div class="small-box bg-red">
                     <div class="inner">
-                        <h3>65/100</h3>
+                        <h3>
+                          {{#each current_edu}}{{current_edu}}{{/each}} / {{#each total_edu}}{{total_edu}}{{/each}}
+                        </h3>
                         <p>배정된 교육과정</p>
                     </div>
                     <div class="icon">
@@ -46,7 +48,7 @@
                 <!-- small box -->
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3>53<sup style="font-size: 20px">%</sup></h3>
+                        <h3>? <sup style="font-size: 20px">%</sup></h3>
                         <p>전월대비 교육 이수율</p>
                     </div>
                     <div class="icon">
