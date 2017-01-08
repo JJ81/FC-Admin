@@ -51,26 +51,26 @@
 			<integer>1</integer>
 			<key>contentSelection</key>
 			<data>
-			YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFy
-			Y2hpdmVyVCR0b3ASAAGGoK8QDwcIFRYXGBkfICEoLDA0OFUkbnVs
-			bNMJCgsMEBRXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6MNDg+A
-			AoADgASjERITgAWABoAKgA5UdHlwZVRyb3dzVGtleXNfECZTZWxl
-			Y3Rpb25EZXRhaWxUeXBlUHJpbWFyeUtleWVkRGV0YWlsc9MJCgsa
-			HB6hG4AHoR2ACIAJUjIzCdIiIyQlWiRjbGFzc25hbWVYJGNsYXNz
-			ZXNfEBNOU011dGFibGVEaWN0aW9uYXJ5oyQmJ1xOU0RpY3Rpb25h
-			cnlYTlNPYmplY3TSCgspK6EqgAuADdILLS4vWU5TLnN0cmluZ4AM
-			Umlk0iIjMTJfEA9OU011dGFibGVTdHJpbmejMTMnWE5TU3RyaW5n
-			0iIjNTZeTlNNdXRhYmxlQXJyYXmjNTcnV05TQXJyYXnSIiMmOaIm
-			J18QD05TS2V5ZWRBcmNoaXZlctE8PVRkYXRhgAEACAARABoAIwAt
-			ADIANwBJAE8AVgBeAGkAcAB0AHYAeAB6AH4AgACCAIQAhgCLAJAA
-			lQC+AMUAxwDJAMsAzQDPANIA0wDYAOMA7AECAQYBEwEcASEBIwEl
-			AScBLAE2ATgBOwFAAVIBVgFfAWQBcwF3AX8BhAGHAZkBnAGhAAAA
-			AAAAAgEAAAAAAAAAPgAAAAAAAAAAAAAAAAAAAaM=
+			YnBsaXN0MDDUAQIDBAUGNjdYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoK0HCBUWFxgZHSQoLDA0VSRudWxs0wkK
+			CwwQFFdOUy5rZXlzWk5TLm9iamVjdHNWJGNsYXNzow0OD4ACgAOA
+			BKMREhOABYAGgAiADFR0eXBlVHJvd3NUa2V5c18QJlNlbGVjdGlv
+			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
+			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
+			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
+			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClJpZNIeHy0uXxAPTlNN
+			dXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5TTXV0YWJs
+			ZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tleWVkQXJj
+			aGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBLAFIAWgBl
+			AGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIAwwDFAMoA
+			1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEtATIBRAFIAVEBVgFl
+			AWkBcQF2AXkBiwGOAZMAAAAAAAACAQAAAAAAAAA6AAAAAAAAAAAA
+			AAAAAAABlQ==
 			</data>
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1563, 1051}}</string>
+			<string>{{0, 0}, {1364, 958}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -703,72 +703,10 @@ group by `course_id`;
 
 
 
-</string>
-			<key>table</key>
-			<string>edu</string>
-			<key>view</key>
-			<string>SP_VIEW_CUSTOMQUERY</string>
-			<key>windowVerticalDividerPosition</key>
-			<real>184</real>
-		</dict>
-	</dict>
-	<key>encrypted</key>
-	<false/>
-	<key>format</key>
-	<string>connection</string>
-	<key>queryFavorites</key>
-	<array/>
-	<key>queryHistory</key>
-	<array>
-		<string># trainig_edu_id를 통해서 가져올 수 없나??
-select course_id, count(*) as sess_total from `course_list`
-where `course_id` in (
-select c.`id`
-from `course` as c
-where c.id in (
-	select course_id from `course_group`	
-	where group_id=(select course_group_id from `edu` where id='23')
-	order by `order` desc, `id` asc
-) and c.`active`=true
-)
-group by `course_id`</string>
-		<string># edu아이디를 통해서 강의별 총 세션수를 가져온다.
-select course_id, count(*) as sess_total from `course_list`
-where `course_id` in (
-select c.`id`
-from `course` as c
-where c.id in (
-	select course_id from `course_group`	
-	where group_id=(select course_group_id from `edu` where id='23')
-	order by `order` desc, `id` asc
-) and c.`active`=true
-)
-group by `course_id`</string>
-		<string># edu아이디를 통해서 강의별 총 세션수를 가져온다.
-select course_id, count(*) as sess_total from `course_list`
-where `course_id` in (
-select c.`id`
-from `course` as c
-where c.id in (
-	select course_id from `course_group`	
-	where group_id=(select course_group_id from `edu` where id='21')
-	order by `order` desc, `id` asc
-) and c.`active`=true
-)
-group by `course_id`</string>
-		<string># edu아이디를 통해서 강의별 총 세션수를 가져온다.
-select course_id, count(*) as sess_total from `course_list`
-where `course_id` in (
-select c.`id`
-from `course` as c
-where c.id in (
-	select course_id from `course_group`	
-	where group_id=(select course_group_id from `edu` where id='22')
-	order by `order` desc, `id` asc
-) and c.`active`=true
-)
-group by `course_id`</string>
-		<string>select 
+
+
+# 아래 결과값을 지점을 기준으로 합산하여 계산할 수 있도록 하자..
+select 
 tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty, b.name as branch
 from `training_users` as tu
 left join (
@@ -784,13 +722,14 @@ on u.branch_id = b.id
 left join `duty` as d
 on d.id = u.duty_id
 where tu.training_edu_id='15'
-order by `completed_sess` desc</string>
-		<string>select 
-tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty, b.name as branch
+order by `completed_sess` desc;
+
+
+select sess.completed_sess, b.name as branch
 from `training_users` as tu
 left join (
 select user_id, count(*) as completed_sess from `log_session_progress`
-where user_id in ('1', '2') and course_id in ('7', '8')
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
@@ -801,14 +740,163 @@ on u.branch_id = b.id
 left join `duty` as d
 on d.id = u.duty_id
 where tu.training_edu_id='15'
+order by `completed_sess` desc;
+
+
+
+select b.name as branch, if( sum(sess.completed_sess) is null, 0, sum(sess.completed_sess)) as sess_sum
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc;
+
+
+
+
+
+
+
+</string>
+			<key>table</key>
+			<string>log_user_point</string>
+			<key>view</key>
+			<string>SP_VIEW_CUSTOMQUERY</string>
+			<key>windowVerticalDividerPosition</key>
+			<real>184</real>
+		</dict>
+	</dict>
+	<key>encrypted</key>
+	<false/>
+	<key>format</key>
+	<string>connection</string>
+	<key>queryFavorites</key>
+	<array/>
+	<key>queryHistory</key>
+	<array>
+		<string>select b.name as branch, if( sum(sess.completed_sess) is null, 0, sum(sess.completed_sess)) as sess_sum
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
 order by `completed_sess` desc</string>
-		<string>user_id in ('1', '2') and</string>
-		<string>select 
-tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty, b.name as branch
+		<string>select b.id as id, b.name as branch, sum(sess.completed_sess) as sess_sum
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc</string>
+		<string>select b.name as branch, sum(sess.completed_sess) as sess_sum
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc</string>
+		<string>select b.name as branch, sum(sess.completed_sess)
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc</string>
+		<string>select b.name as branch, sess.completed_sess
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc</string>
+		<string>select b.name as branch, sess.completed_sess
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc
+
+
+
+
+select 
+sum(sess.completed_sess) as sum, b.name as branch
 from `training_users` as tu
 left join (
 select user_id, count(*) as completed_sess from `log_session_progress`
-where  course_id in ('7', '8')
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
@@ -819,15 +907,35 @@ on u.branch_id = b.id
 left join `duty` as d
 on d.id = u.duty_id
 where tu.training_edu_id='15'
+group by branch
 order by `completed_sess` desc</string>
-		<string>## 이제는 현재 교육을 받는 인원 모든 사람을 끌어와서 left join으로 현재까지 완료한 총 세션 개수를 붙여서 출력을 해보자.
+		<string>select b.name as branch, sess.completed_sess
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc
+
+
+
 
 select 
-tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty, b.name as branch
+tu.user_id, sum(sess.completed_sess) as sum, b.name as branch
 from `training_users` as tu
 left join (
 select user_id, count(*) as completed_sess from `log_session_progress`
-where user_id in ('1', '2') and course_id in ('7', '8') and training_user_id in ('25', '26')
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
@@ -838,16 +946,35 @@ on u.branch_id = b.id
 left join `duty` as d
 on d.id = u.duty_id
 where tu.training_edu_id='15'
+group by branch
 order by `completed_sess` desc</string>
-		<string>and training_user_id in ('25', '26')</string>
-		<string>## 이제는 현재 교육을 받는 인원 모든 사람을 끌어와서 left join으로 현재까지 완료한 총 세션 개수를 붙여서 출력을 해보자.
+		<string>select b.name as branch, sess.completed_sess
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc
+
+
+
 
 select 
-tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty, b.name as branch
+tu.user_id, sess.completed_sess, u.name, d.name as duty, b.name as branch
 from `training_users` as tu
 left join (
 select user_id, count(*) as completed_sess from `log_session_progress`
-where user_id in ('1', '2') and course_id in ('7', '8') 
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
@@ -858,15 +985,35 @@ on u.branch_id = b.id
 left join `duty` as d
 on d.id = u.duty_id
 where tu.training_edu_id='15'
+group by branch
 order by `completed_sess` desc</string>
-		<string>## 이제는 현재 교육을 받는 인원 모든 사람을 끌어와서 left join으로 현재까지 완료한 총 세션 개수를 붙여서 출력을 해보자.
+		<string>select b.name as branch, sess.completed_sess
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc
+
+
+
 
 select 
 tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty, b.name as branch
 from `training_users` as tu
 left join (
 select user_id, count(*) as completed_sess from `log_session_progress`
-where user_id in ('1', '2') and course_id in ('7', '8') and training_user_id in ('25', '26')
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
@@ -876,15 +1023,36 @@ left join `branch` as b
 on u.branch_id = b.id
 left join `duty` as d
 on d.id = u.duty_id
-where tu.training_edu_id='15'</string>
-		<string>## 이제는 현재 교육을 받는 인원 모든 사람을 끌어와서 left join으로 현재까지 완료한 총 세션 개수를 붙여서 출력을 해보자.
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc</string>
+		<string>select b.name as branch, sess.completed_sess
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc
+
+
+
 
 select 
-tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty, b.name as branh
+tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty, b.name as branch
 from `training_users` as tu
 left join (
 select user_id, count(*) as completed_sess from `log_session_progress`
-where user_id in ('1', '2') and course_id in ('7', '8') and training_user_id in ('25', '26')
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
@@ -894,127 +1062,150 @@ left join `branch` as b
 on u.branch_id = b.id
 left join `duty` as d
 on d.id = u.duty_id
-where tu.training_edu_id='15'</string>
-		<string>## 이제는 현재 교육을 받는 인원 모든 사람을 끌어와서 left join으로 현재까지 완료한 총 세션 개수를 붙여서 출력을 해보자.
-
-select 
-tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty, b.name
+where tu.training_edu_id='15'
+group by `branch`
+order by `completed_sess` desc</string>
+		<string>select b.name as branch, sess.completed_sess
 from `training_users` as tu
-left join (
-select user_id, count(*) as completed_sess from `log_session_progress`
-where user_id in ('1', '2') and course_id in ('7', '8') and training_user_id in ('25', '26')
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
 left join `users` as u
-on tu.user_id = u.id
+on u.id = tu.user_id
 left join `branch` as b
-on u.branch_id = b.id
-left join `duty` as d
-on d.id = u.duty_id
-where tu.training_edu_id='15'</string>
-		<string>## 이제는 현재 교육을 받는 인원 모든 사람을 끌어와서 left join으로 현재까지 완료한 총 세션 개수를 붙여서 출력을 해보자.
-
-select 
-tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+order by `completed_sess` desc
+group by b.branch</string>
+		<string>select b.name as branch, sess.completed_sess
 from `training_users` as tu
-left join (
-select user_id, count(*) as completed_sess from `log_session_progress`
-where user_id in ('1', '2') and course_id in ('7', '8') and training_user_id in ('25', '26')
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
 left join `users` as u
-on tu.user_id = u.id
+on u.id = tu.user_id
 left join `branch` as b
-on u.branch_id = b.id
-left join `duty` as d
-on d.id = u.duty_id
-where tu.training_edu_id='15'</string>
-		<string>## 이제는 현재 교육을 받는 인원 모든 사람을 끌어와서 left join으로 현재까지 완료한 총 세션 개수를 붙여서 출력을 해보자.
-
-select 
-tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+order by `completed_sess` desc
+group by `branch`</string>
+		<string>select b.name as branch, sess.completed_sess
 from `training_users` as tu
-left join (
-select user_id, count(*) as completed_sess from `log_session_progress`
-where user_id in ('1', '2') and course_id in ('7', '8') and training_user_id in ('25', '26')
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
 left join `users` as u
-on tu.user_id = u.id
+on u.id = tu.user_id
 left join `branch` as b
-on u.branch_id = b.id
-left join `duty` as d
-on d.id = u.duty_id
-where tu.training_edu_id='15'</string>
-		<string>## 이제는 현재 교육을 받는 인원 모든 사람을 끌어와서 left join으로 현재까지 완료한 총 세션 개수를 붙여서 출력을 해보자.
-
-select 
-tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+order by `completed_sess` desc</string>
+		<string>select sess.completed_sess, b.name as branch
 from `training_users` as tu
-left join (
-select user_id, count(*) as completed_sess from `log_session_progress`
-where user_id in ('1', '2') and course_id in ('7', '8') and training_user_id in ('25', '26')
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
 left join `users` as u
-on tu.user_id = u.id
+on u.id = tu.user_id
 left join `branch` as b
-on u.branch_id = b.id
-left join `duty` as d
-on d.id = u.duty_id
-where tu.training_edu_id='15'</string>
-		<string>## 이제는 현재 교육을 받는 인원 모든 사람을 끌어와서 left join으로 현재까지 완료한 총 세션 개수를 붙여서 출력을 해보자.
-
-select 
-tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+order by `completed_sess` desc</string>
+		<string>select *
 from `training_users` as tu
-left join (
-select user_id, count(*) as completed_sess from `log_session_progress`
-where user_id in ('1', '2') and course_id in ('7', '8') and training_user_id in ('25', '26')
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
 left join `users` as u
-on tu.user_id = u.id
+on u.id = tu.user_id
 left join `branch` as b
-on u.branch_id = b.id
-left join `duty` as d
-on d.id = u.duty_id
-where tu.training_edu_id='15'</string>
-		<string>## 이제는 현재 교육을 받는 인원 모든 사람을 끌어와서 left join으로 현재까지 완료한 총 세션 개수를 붙여서 출력을 해보자.
-
-select 
-tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+order by `completed_sess` desc</string>
+		<string>select *
 from `training_users` as tu
-left join (
-select user_id, count(*) as completed_sess from `log_session_progress`
-where user_id in ('1', '2') and course_id in ('7', '8') and training_user_id in ('25', '26')
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
 left join `users` as u
-on tu.user_id = u.id
-left join `branch` as b
-on u.branch_id = b.id
-where tu.training_edu_id='15'</string>
-		<string>## 이제는 현재 교육을 받는 인원 모든 사람을 끌어와서 left join으로 현재까지 완료한 총 세션 개수를 붙여서 출력을 해보자.
-
-select 
-tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess
+on u.id = tu.user_id
+where tu.training_edu_id='15'
+order by `completed_sess` desc</string>
+		<string>select *
 from `training_users` as tu
-left join (
-select user_id, count(*) as completed_sess from `log_session_progress`
-where user_id in ('1', '2') and course_id in ('7', '8') and training_user_id in ('25', '26')
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
 group by `user_id`
 ) as sess
 on tu.user_id = sess.user_id
-left join `users` as u
-on tu.user_id = u.id
-where tu.training_edu_id='15'</string>
+
+where tu.training_edu_id='15'
+order by `completed_sess` desc</string>
+		<string>select *
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+where tu.training_edu_id='15'
+order by `completed_sess` desc</string>
+		<string>select *
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id</string>
+		<string>select sess.completed_sess, b.name as branch
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

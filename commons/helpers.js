@@ -82,3 +82,7 @@ hbs.registerHelper('percentage', function(num, total) {
 hbs.registerHelper('addOneForIndex', function(num) {
 	return parseInt(num) + 1;
 });
+
+hbs.registerHelper('extractRatio', function(current, total, user_count) {
+	return Math.ceil(current/(total*user_count)*100);
+});

@@ -66,8 +66,6 @@ router.get('/details', isAuthenticated, function (req, res) {
 					course_id.push(course_info[i].course_id);
 				}
 
-				// console.info(course_id);
-
 				connection.query(QUERY.ACHIEVEMENT.GetListWithCompletedSessByTrainingEduId,
 					[course_id, _training_edu_id],
 					function (err, rows) {
@@ -78,18 +76,54 @@ router.get('/details', isAuthenticated, function (req, res) {
 							callback(null, course_info, rows);
 						}
 					});
+			},
+
+			function (course_info, list_info, callback){
+				var course_id = [];
+
+				for(var i = 0, len = course_info.length;i<len;i++){
+					course_id.push(course_info[i].course_id);
+				}
+
+				connection.query(QUERY.ACHIEVEMENT.GetCompletionByBranch,
+					[course_id, _training_edu_id],
+					function (err, rows) {
+						if(err){
+							console.error(err);
+							callback(err, null);
+						}else{
+							callback(null, course_info, list_info, rows);
+						}
+				});
+			},
+
+			function (course_info, list_info, branch_info, callback) {
+				connection.query(QUERY.ACHIEVEMENT.GetEduInfoById,
+					[_edu_id],
+					function (err, rows) {
+						if(err){
+							console.error(err);
+							callback(err, null);
+						}else{
+							callback(null, course_info, list_info, branch_info, rows);
+						}
+					});
 			}
 		],
-		function (err, course_info, result){
+
+		function (err, course_info, list_info, branch_info, edu_info){
 			if(err){
 				console.error(err);
 				throw new Error(err);
 			}else{
 
+
+				console.info(branch_info);
+
 				// 교육 내부에 총 세션 개수를 구한다.
 				var _total = 0;
 				for(var j= 0, len2 = course_info.length; j<len2;j++){
-					console.info(course_info[j].sess_total);
+					// console.info(course_info[j].sess_total);
 					_total += parseInt(course_info[j].sess_total);
 				}
 
@@ -97,8 +131,10 @@ router.get('/details', isAuthenticated, function (req, res) {
 					current_path: 'AchievementDetails',
 					title: PROJ_TITLE + 'Achievement Details',
 					loggedIn: req.user,
-					user_list: result,
-					total_sess : _total
+					user_list: list_info,
+					total_sess : _total,
+					branch_info : branch_info,
+					edu_info : edu_info
 				});
 			}
 		});

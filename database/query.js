@@ -280,6 +280,27 @@ QUERY.ACHIEVEMENT = {
 		"on d.id = u.duty_id " +
 		"where tu.training_edu_id=? " + // training_edu_id는 테이블에서 넘겨 받도록 한다
 		"order by `completed_sess` desc;"
+	,GetCompletionByBranch :
+		"select b.name as branch, if( sum(sess.completed_sess) is null, 0, sum(sess.completed_sess)) as sess_sum, count(*) as user_count " +
+		"from `training_users` as tu " +
+		"left join " +
+		"( " +
+			"select user_id, count(*) as completed_sess " +
+			"from `log_session_progress` as lsp " +
+			"where course_id in (?) " +
+			"group by `user_id` " +
+		") as sess " +
+		"on tu.user_id = sess.user_id " +
+		"left join `users` as u " +
+		"on u.id = tu.user_id " +
+		"left join `branch` as b " +
+		"on b.id = u.branch_id " +
+		"where tu.training_edu_id=? " +
+		"group by branch " +
+		"order by `completed_sess` desc;"
+	,GetEduInfoById :
+		"select * from `edu` " +
+		"where `id`=?;"
 };
 
 
