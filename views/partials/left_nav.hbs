@@ -89,7 +89,11 @@
                     <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
                     <span>진척도관리</span>
                     {{#if (isEquals current_path 'Achievement')}}
-                        <span class="pull-right-container">
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right text-green"></i>
+                    </span>
+                    {{else if (isEquals current_path 'AchievementDetails')}}
+                    <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right text-green"></i>
                     </span>
                     {{/if}}

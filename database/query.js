@@ -217,7 +217,7 @@ QUERY.HISTORY = {
 		"insert into `log_assign_edu` (`training_edu_id`, `target_users_id`) " +
 		"values(?,?);"
 	,GetAssignEduHistory :
-		"select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin, lbu.title as target " +
+		"select e.id as edu_id, te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin, lbu.title as target " +
 		"from `training_edu` as te " +
 		"left join `edu` as e " +
 		"on e.id = te.edu_id " +
@@ -231,6 +231,56 @@ QUERY.HISTORY = {
 		"order by te.created_dt desc;"
 };
 
+QUERY.ACHIEVEMENT = {
+	GetTotalSessByEdu : // edu아이디를 통해서 강의별 총 세션수를 가져온다.
+		"select course_id, count(*) as sess_total from `course_list` " +
+		"where `course_id` in ( " +
+		"select c.`id` " +
+		"from `course` as c " +
+		"where c.id in ( " +
+			"select course_id from `course_group` " +
+		"where group_id=(select course_group_id from `edu` where id=?) " + // edu_id를 바인딩할 것.(ex 22)
+		"order by `order` desc, `id` asc " +
+		") and c.`active`=true " +
+		") " +
+		"group by `course_id`;",
+	GetListWithCompletedSessByTrainingEduId_old : // deprecated
+		"select " +
+		"tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty, b.name as branch " +
+		"from `training_users` as tu " +
+		"left join ( " +
+			"select user_id, count(*) as completed_sess from `log_session_progress` " +
+			"where user_id in ('1', '2') and course_id in ('7', '8') and training_user_id in ('25', '26') " +
+			"group by `user_id` " +
+		") as sess " +
+		"on tu.user_id = sess.user_id " +
+		"left join `users` as u " +
+		"on tu.user_id = u.id " +
+		"left join `branch` as b " +
+		"on u.branch_id = b.id " +
+		"left join `duty` as d " +
+		"on d.id = u.duty_id " +
+		"where tu.training_edu_id=15 " + // training_edu_id는 테이블에서 넘겨 받도록 한다
+		"order by `completed_sess` desc;"
+	,GetListWithCompletedSessByTrainingEduId :
+		"select " +
+		"tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty, b.name as branch " +
+		"from `training_users` as tu " +
+		"left join ( " +
+		"select user_id, count(*) as completed_sess from `log_session_progress` " +
+		"where course_id in (?) " +
+		"group by `user_id` " +
+		") as sess " +
+		"on tu.user_id = sess.user_id " +
+		"left join `users` as u " +
+		"on tu.user_id = u.id " +
+		"left join `branch` as b " +
+		"on u.branch_id = b.id " +
+		"left join `duty` as d " +
+		"on d.id = u.duty_id " +
+		"where tu.training_edu_id=? " + // training_edu_id는 테이블에서 넘겨 받도록 한다
+		"order by `completed_sess` desc;"
+};
 
 
 module.exports = QUERY;

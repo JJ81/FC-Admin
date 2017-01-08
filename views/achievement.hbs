@@ -25,14 +25,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {{#for 0 10 1}}
+                    {{#each list}}
                         <tr>
-                            <td class="center">2017.01.02 ~ 2017.01.12</td>
-                            <td class="center"><a href="#" class="btn-link">커피 맛있게 내리는 방법</a></td>
-                            <td class="center">2017.01월 특별 점장 교육 시행 대상자</td>
-                            <td class="center">2017.01.01</td>
+                            <td class="center">{{time start_dt}} ~ {{time end_dt}}</td>
+                            <td class="center"><a href="/achievement/details?id={{id}}&edu_id={{edu_id}}" class="btn-link">{{name}}</a></td>
+                            <td class="center">{{target}}</td>
+                            <td class="center">{{time created_dt}}</td>
                         </tr>
-                    {{/for}}
+                    {{/each}}
                     </tbody>
                     <tfoot>
                     <tr>

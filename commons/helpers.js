@@ -74,3 +74,7 @@ hbs.registerHelper('star-rating', function(rating) {
 	}
 	return _class;
 });
+
+hbs.registerHelper('percentage', function(num, total) {
+	return Math.ceil((num/total)*100);
+});

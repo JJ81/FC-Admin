@@ -1,0 +1,63 @@
+<div class="row home_section">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header with-border">
+              <a href="/achievement" class="btn btn-default">
+                  <i class="fa fa-list"></i> &nbsp;
+                  목록으로
+              </a>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="col-md-4">
+                    <h4>점포별 순위 및 이수율</h4>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th class="center">순위</th>
+                            <th class="center">지점</th>
+                            <th class="center">이수율</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr><td colspan="3">데이터 처리중...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-8">
+                    <h4>개인별 순위 및 이수율</h4>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th class="center">순위</th>
+                            <th class="center">이름</th>
+                            <th class="center">지점</th>
+                            <th class="center">직책</th>
+                            <th class="center">이수율</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each user_list}}
+                        <tr>
+                            <td class="center">1</td>
+                            <td class="center">{{name}}</td>
+                            <td class="center">{{branch}}</td>
+                            <td class="center">{{duty}}</td>
+                            <td class="center text-red">
+                              <strong>{{percentage completed_sess ../total_sess}}</strong> %
+                            </td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+
+{{>modal_assign_edu}}
