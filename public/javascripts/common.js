@@ -5,9 +5,9 @@
 define(
 	[
 		'jquery'
-		,'axios'
+		// ,'axios'
 	],
-	function ($, axios) {
+	function ($) {
 		// info 공통 로직은 이곳에서 정의한다.
 
 		// show modal to reset password
@@ -16,6 +16,11 @@ define(
 			$('#frm_set_employee_password .user_name').val($(this).attr('data-user-name'));
 			$('#frm_set_employee_password').attr('action', $(this).attr('data-url'));
 		});
+
+
+
+		var validation = {};
+
 
 
 		return {

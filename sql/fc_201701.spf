@@ -45,8 +45,6 @@
 		<dict>
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
-			<key>contentFilter</key>
-			<dict/>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
@@ -70,7 +68,7 @@
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1645, 919}}</string>
+			<string>{{0, 0}, {694, 450}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -799,6 +797,14 @@ where fc_id='1';
 ## 이 데이터를 어디에 쌓고 있어야 하지??
 # 이 테이터는 별도로 쌓고 있어야 한다..
 
+select * from `point_weight`;
+
+
+
+
+
+
+
 
 
 
@@ -807,7 +813,7 @@ where fc_id='1';
 
 </string>
 			<key>table</key>
-			<string>training_edu</string>
+			<string>point_weight</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -822,103 +828,149 @@ where fc_id='1';
 	<array/>
 	<key>queryHistory</key>
 	<array>
-		<string># 여태까지 발급된 교육
-select count(*) as total_edu from `edu` as e
-left join `admin` as a
-on a.id = e.creator_id
-where fc_id='1'</string>
-		<string># 배정된 교육과정
-select count(*) as current_edu from `training_edu` as te
+		<string>#전월대비 교육 이수율
+# 전월이수율을 구하고 (전달 전체 교육 이수율 )
+# 이번달 이수율을 구할 수 있어야 한다. (이달 전체 교육 이수율)
+## 이 데이터를 어디에 쌓고 있어야 하지??
+# 이 테이터는 별도로 쌓고 있어야 한다..
+
+
+
+select * from `point_weight`</string>
+		<string>select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin, lbu.title
+from `training_edu` as te
 left join `edu` as e
 on e.id = te.edu_id
 left join `admin` as a
-on a.id = e.creator_id
-where start_dt &lt;= '2017.01.08' and end_dt &gt;= '2017.01.08'
-and a.fc_id='1'</string>
-		<string># 배정된 교육과정
-select count(*) from `training_edu` as te
+on a.id = te.assigner
+left join `log_assign_edu` as lae
+on lae.training_edu_id = te.id
+left join `log_bind_users` as lbu
+on lbu.id = lae.target_users_id
+where a.fc_id='1'
+order by te.created_dt desc</string>
+		<string>select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
+from `training_edu` as te
 left join `edu` as e
 on e.id = te.edu_id
 left join `admin` as a
-on a.id = e.creator_id
-where start_dt &lt;= '2017.01.08' and end_dt &gt;= '2017.01.08'
-and a.fc_id='1'</string>
-		<string>select count(*) as total_edu from `edu` as e
-left join `admin` as a
-on a.id = e.creator_id</string>
-		<string>select * from `edu` as e
-left join `admin` as a
-on a.id = e.creator_id</string>
-		<string>select * from `edu`</string>
-		<string># 배정된 교육과정
-select * from `training_edu` as te
+on a.id = te.assigner
+left join `log_assign_edu` as lae
+on lae.training_edu_id = te.id
+left join `log_bind_users` as lbu
+on lbu.id = lae.target_users_id
+where a.fc_id='1'
+order by te.created_dt desc</string>
+		<string>select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
+from `training_edu` as te
 left join `edu` as e
 on e.id = te.edu_id
 left join `admin` as a
-on a.id = e.creator_id
-where start_dt &lt;= '2017.01.08' and end_dt &gt;= '2017.01.08'
-and a.fc_id='1'</string>
-		<string># 배정된 교육과정
-select * from `training_edu` as te
+on a.id = te.assigner
+left join `log_assign_edu` as lae
+on lae.training_edu_id = te.id
+where a.fc_id='1'
+order by te.created_dt desc</string>
+		<string>select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
+from `training_edu` as te
 left join `edu` as e
 on e.id = te.edu_id
 left join `admin` as a
-on a.id = e.creator_id
-where start_dt &lt;= '2017.01.08' and end_dt &gt;= '2017.01.08'
-and e.fc_id='1'</string>
-		<string># 배정된 교육과정
-select * from `training_edu` as te
+left join `log_assign_edu` as lae
+on lae.training_edu_id = te.id
+on a.id = te.assigner
+where a.fc_id='1'
+order by te.created_dt desc</string>
+		<string>select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
+from `training_edu` as te
 left join `edu` as e
 on e.id = te.edu_id
 left join `admin` as a
-on a.id = e.creator_id
-where start_dt &lt;= '2017.01.08' and end_dt &gt;= '2017.01.08'</string>
-		<string># 배정된 교육과정
-select * from `training_edu` as te
+left join `log_assign_edu` as lae
+on lae.training_edu_id = `te`.`id`
+on a.id = te.assigner
+where a.fc_id='1'
+order by te.created_dt desc</string>
+		<string>select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
+from `training_edu` as te
 left join `edu` as e
 on e.id = te.edu_id
 left join `admin` as a
-on a.id = te.creator_id
-where start_dt &lt;= '2017.01.08' and end_dt &gt;= '2017.01.08'</string>
-		<string># 배정된 교육과정
-select * from `training_edu` as te
+left join `log_assign_edu` as lae
+on lae.training_edu_id = te.`id`
+on a.id = te.assigner
+where a.fc_id='1'
+order by te.created_dt desc</string>
+		<string># 배정 대상자를 어떻게 가져오지.....
+select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
+from `training_edu` as te
 left join `edu` as e
 on e.id = te.edu_id
-where start_dt &lt;= '2017.01.08' and end_dt &gt;= '2017.01.08'</string>
-		<string># 배정된 교육과정
-select * from `training_edu` as te
+left join `admin` as a
+on a.id = te.assigner
+where a.fc_id='1'
+order by te.created_dt desc</string>
+		<string>select * from `log_assign_edu`</string>
+		<string>alter table `log_assign_edu`
+add foreign key (`target_users_id`)
+references `log_bind_users`(`id`)</string>
+		<string>alter table `log_assign_edu`
+add foreign key (`training_edu_id`)
+references `training_edu`(`id`)</string>
+		<string>create table `log_assign_edu`(
+	`id` bigint not null auto_increment,
+	`training_edu_id` bigint not null,
+	`target_users_id` bigint not null,
+	primary key(`id`)
+) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT</string>
+		<string># 배정 대상자를 어떻게 가져오지.....
+select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
+from `training_edu` as te
 left join `edu` as e
 on e.id = te.edu_id
-where end_dt &gt;= '2017.01.08'</string>
-		<string># 배정된 교육과정
-select * from `training_edu` as te
+left join `admin` as a
+on a.id = te.assigner
+order by te.created_dt desc</string>
+		<string># 배정 대상자를 어떻게 가져오지.....
+select e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
+from `training_edu` as te
 left join `edu` as e
 on e.id = te.edu_id
-where end_dt &lt;= '2017.01.08'</string>
-		<string># 배정된 교육과정
-select * from `training_edu` as te
+left join `admin` as a
+on a.id = te.assigner
+order by te.created_dt desc</string>
+		<string># title(대상),
+select e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
+from `training_edu` as te
 left join `edu` as e
 on e.id = te.edu_id
-where end_dt &lt;= 2017.01.08</string>
-		<string># 배정된 교육과정
-select * from `training_edu` as te
+left join `admin` as a
+on a.id = te.assigner
+order by te.created_dt desc</string>
+		<string># title(대상),
+select e.name, te.created_dt 
+from `training_edu` as te
 left join `edu` as e
 on e.id = te.edu_id
-where end_dt &lt;= now()</string>
-		<string># 배정된 교육과정
-select * from `training_edu` as te
+left join `admin` as a
+on a.id = te.assigner
+order by te.created_dt desc</string>
+		<string># title(대상),
+select te.created_dt 
+from `training_edu` as te
 left join `edu` as e
-on e.id = te.edu_id</string>
-		<string># 배정된 교육과정
-select * from `training_edu`</string>
-		<string># 배정된 교육과정
-select * from `trainig_edu`</string>
-		<string># 총점포수
-select count(*) total_branch from `branch`
-where fc_id='1'</string>
-		<string># 총점포수
-select * from `branch`
-where fc_id='1'</string>
+on e.id = te.edu_id
+left join `admin` as a
+on a.id = te.assigner
+order by te.created_dt desc</string>
+		<string>select * from `training_edu` as te
+left join `edu` as e
+on e.id = te.edu_id
+order by te.created_dt desc</string>
+		<string>select * from `training_edu` as te
+order by te.created_dt desc</string>
+		<string>select * from `training_edu` as te
+order by te.created_dt</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

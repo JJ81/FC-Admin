@@ -323,6 +323,18 @@ QUERY.DASHBOARD = {
 		"left join `admin` as a " +
 		"on a.id = e.creator_id " +
 		"where fc_id=?;"
+	,GetRecentPointWeight :
+		"select pw.point_complete, pw.point_quiz, pw.point_final, pw.point_reeltime, pw.point_speed, pw.point_repetition " +
+		"from `point_weight` as pw " +
+		"left join `admin` as a " +
+		"on a.id = pw.setter_id " +
+		"where a.fc_id=? " +
+		"order by `created_dt` desc " +
+		"limit 1;"
+	,SetPointWeight :
+		"insert into `point_weight` (`point_complete`,`point_quiz`, `point_final`, " +
+		"`point_reeltime`, `point_speed`, `point_repetition`, `setter_id`) " +
+		"values(?,?,?,?,?,?,?);"
 };
 
 
