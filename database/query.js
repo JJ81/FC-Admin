@@ -243,8 +243,8 @@ QUERY.ACHIEVEMENT = {
 		"order by `order` desc, `id` asc " +
 		") and c.`active`=true " +
 		") " +
-		"group by `course_id`;",
-	GetListWithCompletedSessByTrainingEduId_old : // deprecated
+		"group by `course_id`;"
+	,GetListWithCompletedSessByTrainingEduId_old : // deprecated
 		"select " +
 		"tu.user_id, if(sess.completed_sess is null, 0, sess.completed_sess) as completed_sess, u.name, d.name as duty, b.name as branch " +
 		"from `training_users` as tu " +

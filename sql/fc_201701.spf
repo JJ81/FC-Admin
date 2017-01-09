@@ -45,30 +45,32 @@
 		<dict>
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
+			<key>contentFilter</key>
+			<dict/>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
 			<data>
-			YnBsaXN0MDDUAQIDBAUGNjdYJHZlcnNpb25YJG9iamVjdHNZJGFy
-			Y2hpdmVyVCR0b3ASAAGGoK0HCBUWFxgZHSQoLDA0VSRudWxs0wkK
-			CwwQFFdOUy5rZXlzWk5TLm9iamVjdHNWJGNsYXNzow0OD4ACgAOA
-			BKMREhOABYAGgAiADFR0eXBlVHJvd3NUa2V5c18QJlNlbGVjdGlv
-			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
-			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
-			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
-			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClJpZNIeHy0uXxAPTlNN
-			dXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5TTXV0YWJs
-			ZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tleWVkQXJj
-			aGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBLAFIAWgBl
-			AGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIAwwDFAMoA
-			1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEtATIBRAFIAVEBVgFl
-			AWkBcQF2AXkBiwGOAZMAAAAAAAACAQAAAAAAAAA6AAAAAAAAAAAA
-			AAAAAAABlQ==
+			YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoK8QDwcIFRYXGBkfICEoLDA0OFUkbnVs
+			bNMJCgsMEBRXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6MNDg+A
+			AoADgASjERITgAWABoAKgA5UdHlwZVRyb3dzVGtleXNfECZTZWxl
+			Y3Rpb25EZXRhaWxUeXBlUHJpbWFyeUtleWVkRGV0YWlsc9MJCgsa
+			HB6hG4AHoR2ACIAJUjE1CdIiIyQlWiRjbGFzc25hbWVYJGNsYXNz
+			ZXNfEBNOU011dGFibGVEaWN0aW9uYXJ5oyQmJ1xOU0RpY3Rpb25h
+			cnlYTlNPYmplY3TSCgspK6EqgAuADdILLS4vWU5TLnN0cmluZ4AM
+			Umlk0iIjMTJfEA9OU011dGFibGVTdHJpbmejMTMnWE5TU3RyaW5n
+			0iIjNTZeTlNNdXRhYmxlQXJyYXmjNTcnV05TQXJyYXnSIiMmOaIm
+			J18QD05TS2V5ZWRBcmNoaXZlctE8PVRkYXRhgAEACAARABoAIwAt
+			ADIANwBJAE8AVgBeAGkAcAB0AHYAeAB6AH4AgACCAIQAhgCLAJAA
+			lQC+AMUAxwDJAMsAzQDPANIA0wDYAOMA7AECAQYBEwEcASEBIwEl
+			AScBLAE2ATgBOwFAAVIBVgFfAWQBcwF3AX8BhAGHAZkBnAGhAAAA
+			AAAAAgEAAAAAAAAAPgAAAAAAAAAAAAAAAAAAAaM=
 			</data>
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {694, 450}}</string>
+			<string>{{0, 0}, {1541, 1002}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -797,11 +799,219 @@ where fc_id='1';
 ## 이 데이터를 어디에 쌓고 있어야 하지??
 # 이 테이터는 별도로 쌓고 있어야 한다..
 
-select * from `point_weight`;
+select pw.point_complete, pw.point_quiz, pw.point_final, pw.point_reeltime, pw.point_speed, pw.point_repetition
+from `point_weight` as pw
+left join `admin` as a
+on a.id = pw.setter_id
+where a.fc_id='1'
+order by `created_dt` desc
+limit 1;
+
+insert into `point_weight` (`point_complete`,`point_quiz`, `point_final`, `point_reeltime`, `point_speed`, `point_repetition`, `setter_id`)
+values(?,?,?,?,?,?,?);
+
+
+#####################################################
+#################### 대시 보드 #########################
+# 교육 아이디에 대한 모든 개인의 세션 진행율에 대한 전체 이수율을 가져온다.
+#####################################################
+
+# 일단 현재 진행중인 교육을 가져와보자.
+select te.id as training_edu_id, e.id as edu_id, e.name,e.start_dt, e.end_dt
+from `training_edu` as te
+left join `edu` as e
+on e.id = te.edu_id
+left join `admin` as a
+on a.id = e.creator_id
+where e.start_dt &lt;= '2017.01.08' and e.end_dt &gt;= '2017.01.08'
+and a.fc_id='1'
+order by e.created_dt desc, `training_edu_id` desc;
+
+
+# 위의 데이터를 토대로 각 진행중 강의 아이디를 통해서 해당 강의를 총 이수율을 가져오자
+select b.name as branch, if( sum(sess.completed_sess) is null, 0, sum(sess.completed_sess)) as sess_sum, count(*) as idx
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8')
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc;
+
+
+select sum(sess.completed_sess) as sess_sum, count(*) as idx
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in ('7', '8') # 각 교육당 할당된 강의 아이디가 필요하다.
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15' #진행중인 교육의 아이디가 필요하다.
+order by `completed_sess` desc;
+
+
+# 교육 아이디나 진행중인 교육 아이디를 통해서 해당 교육의 강의 리스트를 가져온다.
+select * from `course_group`
+where `group_id`='qwer1234';
+/* 
+
+select * from `course_group`
+where `group_id` = (
+	select e.course_group_id from `edu` as e
+	left join `course_group` as cg
+	on e.course_group_id = cg.group_id
+	where e.`id`='15'
+);
+
+select e.course_group_id from `edu` as e
+	left join `course_group` as cg
+	on e.course_group_id = cg.group_id
+	where e.`id`='15'; */
+
+# 진행중인 교육 아이디를 통해서 교육 아이디를 가져온다.
+select course_id from `course_group`
+where `group_id`= (
+select course_group_id from `training_edu` as te
+left join `edu` as e
+on e.id =  te.edu_id
+where te.id='15'
+);
+
+############################################################
+# 진행중인 강의 아이디를 통해서 지점별 인원수와 총 세션 수를 가져온다. -&gt; 이 쿼리를 교육 개수마다 쿼리를 돌아서 세션합계를 내보자.
+# 기존 쿼리가 갖은 문제 1) 총 인원수가 무의미한다. 실제  총 인원수를 별도로 조회하여 나눌 수 있어야 한다. 교육을 시작하지 않아서 아직 진입하지 못한 사람들까지 포함한 이수율 계산이어야 한다.
+############################################################
+select b.name as branch, sum(sess.completed_sess) as sess_sum, count(*) as idx
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in (
+	select course_id from `course_group`
+	where `group_id`= (
+		select course_group_id from `training_edu` as te
+		left join `edu` as e
+		on e.id =  te.edu_id
+		where te.id='15'
+	)
+)
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc;
+
+
+## 전체 진행된 세션 합산과 참여인원수를 뽑아보자.
+
+select b.name as branch, sum(sess.completed_sess) as sess_sum, count(*) as idx
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in (
+	select course_id from `course_group`
+	where `group_id`= (
+		select course_group_id from `training_edu` as te
+		left join `edu` as e
+		on e.id =  te.edu_id
+		where te.id='15'
+	)
+)
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc;
+
+# 진행중인 교육에 참여할 총 인원수 산출 (training_edu_id만으로 산출함)
+;
+
+
+select * from `log_assign_edu` as lae
+left join `log_bind_users` as lbu
+on lae.`target_users_id` = lbu.`id`
+where lae.`training_edu_id`='15';
+
+
+select group_id from `log_assign_edu` as lae
+left join `log_bind_users` as lbu
+on lae.`target_users_id` = lbu.`id`
+where lae.`training_edu_id`='15';
+
+# user list
+select * from `log_group_user`
+where group_id=(
+select group_id from `log_assign_edu` as lae
+left join `log_bind_users` as lbu
+on lae.`target_users_id` = lbu.`id`
+where lae.`training_edu_id`='15'
+);
+
+# 참여한 유저수
+select count(*) from `log_group_user`
+where group_id=(
+select group_id from `log_assign_edu` as lae
+left join `log_bind_users` as lbu
+on lae.`target_users_id` = lbu.`id`
+where lae.`training_edu_id`='15'
+);
 
 
 
+# 각 강의의 총 세션수와 이를 합산한 교육당 총 세션수 산출
+;
 
+select * from `training_edu` as te
+left join `edu` as e
+on te.edu_id = e.id
+where te.`id`='15';
+
+
+select course_id, count(*) as sess_total from `course_list`
+where `course_id` in (
+	select c.`id`
+	from `course` as c
+	where c.id in (
+		select course_id from `course_group`
+		where group_id=(
+			select course_group_id from `training_edu` as te
+			left join `edu` as e
+			on te.edu_id = e.id
+			where te.`id`='15'
+		) # 이건 edu_id를 통해서 출력하는 방식이고 training_edu_id를 통해서 출력을 할 수 있도록 변경하자.
+		order by `order` desc, `id` asc
+	) and c.`active`=true
+)
+group by `course_id`;
 
 
 
@@ -813,7 +1023,7 @@ select * from `point_weight`;
 
 </string>
 			<key>table</key>
-			<string>point_weight</string>
+			<string>training_edu</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -828,149 +1038,259 @@ select * from `point_weight`;
 	<array/>
 	<key>queryHistory</key>
 	<array>
-		<string>#전월대비 교육 이수율
-# 전월이수율을 구하고 (전달 전체 교육 이수율 )
-# 이번달 이수율을 구할 수 있어야 한다. (이달 전체 교육 이수율)
-## 이 데이터를 어디에 쌓고 있어야 하지??
-# 이 테이터는 별도로 쌓고 있어야 한다..
-
-
-
-select * from `point_weight`</string>
-		<string>select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin, lbu.title
-from `training_edu` as te
+		<string>select course_id, count(*) as sess_total from `course_list`
+where `course_id` in (
+	select c.`id`
+	from `course` as c
+	where c.id in (
+		select course_id from `course_group`
+		where group_id=(
+			select course_group_id from `training_edu` as te
+			left join `edu` as e
+			on te.edu_id = e.id
+			where te.`id`='15'
+		) # 이건 edu_id를 통해서 출력하는 방식이고 training_edu_id를 통해서 출력을 할 수 있도록 변경하자.
+		order by `order` desc, `id` asc
+	) and c.`active`=true
+)
+group by `course_id`</string>
+		<string>select course_id, count(*) as sess_total from `course_list`
+where `course_id` in (
+	select c.`id`
+	from `course` as c
+	where c.id in (
+		select course_id from `course_group`
+		where group_id=(
+			select * from `training_edu` as te
+			left join `edu` as e
+			on te.edu_id = e.id
+			where te.`id`='15'
+		) # 이건 edu_id를 통해서 출력하는 방식이고 training_edu_id를 통해서 출력을 할 수 있도록 변경하자.
+		order by `order` desc, `id` asc
+	) and c.`active`=true
+)
+group by `course_id`</string>
+		<string>select * from `training_edu` as te
 left join `edu` as e
-on e.id = te.edu_id
-left join `admin` as a
-on a.id = te.assigner
-left join `log_assign_edu` as lae
-on lae.training_edu_id = te.id
+on te.edu_id = e.id
+where te.`id`='15'</string>
+		<string>select * from `training_edu` as te
+left join `edu` as e
+on te.edu_id = e.id
+where te`id`='15'</string>
+		<string>select * from `training_edu` as te
+left join `edu` as e
+on te.edu_id = e.id
+where `id`='15'</string>
+		<string>select * from `training_edu`
+where `id`='15'</string>
+		<string>select course_id, count(*) as sess_total from `course_list`
+where `course_id` in (
+select c.`id`
+from `course` as c
+where c.id in (
+select course_id from `course_group`
+where group_id=(select course_group_id from `edu` where id='23')
+order by `order` desc, `id` asc
+) and c.`active`=true
+)
+group by `course_id`</string>
+		<string># 참여한 유저수
+select count(*) from `log_group_user`
+where group_id=(
+select group_id from `log_assign_edu` as lae
 left join `log_bind_users` as lbu
-on lbu.id = lae.target_users_id
-where a.fc_id='1'
-order by te.created_dt desc</string>
-		<string>select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
-left join `admin` as a
-on a.id = te.assigner
-left join `log_assign_edu` as lae
-on lae.training_edu_id = te.id
+on lae.`target_users_id` = lbu.`id`
+where lae.`training_edu_id`='15'
+)</string>
+		<string>select * from `log_group_user`
+where group_id=(
+select group_id from `log_assign_edu` as lae
 left join `log_bind_users` as lbu
-on lbu.id = lae.target_users_id
-where a.fc_id='1'
-order by te.created_dt desc</string>
-		<string>select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
-left join `admin` as a
-on a.id = te.assigner
-left join `log_assign_edu` as lae
-on lae.training_edu_id = te.id
-where a.fc_id='1'
-order by te.created_dt desc</string>
-		<string>select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
-left join `admin` as a
-left join `log_assign_edu` as lae
-on lae.training_edu_id = te.id
-on a.id = te.assigner
-where a.fc_id='1'
-order by te.created_dt desc</string>
-		<string>select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
-left join `admin` as a
-left join `log_assign_edu` as lae
-on lae.training_edu_id = `te`.`id`
-on a.id = te.assigner
-where a.fc_id='1'
-order by te.created_dt desc</string>
-		<string>select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
-left join `admin` as a
-left join `log_assign_edu` as lae
-on lae.training_edu_id = te.`id`
-on a.id = te.assigner
-where a.fc_id='1'
-order by te.created_dt desc</string>
-		<string># 배정 대상자를 어떻게 가져오지.....
-select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
-left join `admin` as a
-on a.id = te.assigner
-where a.fc_id='1'
-order by te.created_dt desc</string>
+on lae.`target_users_id` = lbu.`id`
+where lae.`training_edu_id`='15'
+)</string>
+		<string>select * from `log_group_user`</string>
+		<string>select * from `log_assign_edu` as lae
+left join `log_bind_users` as lbu
+on lae.`target_users_id` = lbu.`id`
+where lae.`training_edu_id`='15'</string>
+		<string>select * from `log_assign_edu` as lae
+left join `log_bind_users` as lbu
+on lae.`target_users_id` = lbu.`id`</string>
 		<string>select * from `log_assign_edu`</string>
-		<string>alter table `log_assign_edu`
-add foreign key (`target_users_id`)
-references `log_bind_users`(`id`)</string>
-		<string>alter table `log_assign_edu`
-add foreign key (`training_edu_id`)
-references `training_edu`(`id`)</string>
-		<string>create table `log_assign_edu`(
-	`id` bigint not null auto_increment,
-	`training_edu_id` bigint not null,
-	`target_users_id` bigint not null,
-	primary key(`id`)
-) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT</string>
-		<string># 배정 대상자를 어떻게 가져오지.....
-select te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
+		<string>## 전체 진행된 세션 합산과 참여인원수를 뽑아보자.
+
+select b.name as branch, sum(sess.completed_sess) as sess_sum, count(*) as idx
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in (
+	select course_id from `course_group`
+	where `group_id`= (
+		select course_group_id from `training_edu` as te
+		left join `edu` as e
+		on e.id =  te.edu_id
+		where te.id='15'
+	)
+)
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc</string>
+		<string>#################### 대시 보드 #########################
+# 교육 아이디에 대한 모든 개인의 세션 진행율에 대한 전체 이수율을 가져온다.
+#####################################################
+
+# 일단 현재 진행중인 교육을 가져와보자.
+select te.id as training_edu_id, e.id as edu_id, e.name,e.start_dt, e.end_dt
 from `training_edu` as te
 left join `edu` as e
 on e.id = te.edu_id
 left join `admin` as a
-on a.id = te.assigner
-order by te.created_dt desc</string>
-		<string># 배정 대상자를 어떻게 가져오지.....
-select e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
-from `training_edu` as te
+on a.id = e.creator_id
+where e.start_dt &lt;= '2017.01.08' and e.end_dt &gt;= '2017.01.08'
+and a.fc_id='1'
+order by e.created_dt desc, `training_edu_id` desc</string>
+		<string>/* 
+
+select * from `course_group`
+where `group_id` = (
+	select e.course_group_id from `edu` as e
+	left join `course_group` as cg
+	on e.course_group_id = cg.group_id
+	where e.`id`='15'
+);
+
+select e.course_group_id from `edu` as e
+	left join `course_group` as cg
+	on e.course_group_id = cg.group_id
+	where e.`id`='15'; */
+
+# 진행중인 교육 아이디를 통해서 교육 아이디를 가져온다.
+select course_id from `course_group`
+where `group_id`= (
+select course_group_id from `training_edu` as te
 left join `edu` as e
-on e.id = te.edu_id
-left join `admin` as a
-on a.id = te.assigner
-order by te.created_dt desc</string>
-		<string># title(대상),
-select e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
-left join `admin` as a
-on a.id = te.assigner
-order by te.created_dt desc</string>
-		<string># title(대상),
-select e.name, te.created_dt 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
-left join `admin` as a
-on a.id = te.assigner
-order by te.created_dt desc</string>
-		<string># title(대상),
-select te.created_dt 
-from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
-left join `admin` as a
-on a.id = te.assigner
-order by te.created_dt desc</string>
-		<string>select * from `training_edu` as te
-left join `edu` as e
-on e.id = te.edu_id
-order by te.created_dt desc</string>
-		<string>select * from `training_edu` as te
-order by te.created_dt desc</string>
-		<string>select * from `training_edu` as te
-order by te.created_dt</string>
+on e.id =  te.edu_id
+where te.id='15'
+)</string>
+		<string>## 전체 진행된 세션 합산과 참여인원수를 뽑아보자.
+
+select b.name as branch, sum(sess.completed_sess) as sess_sum, count(*) as idx
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in (
+	select course_id from `course_group`
+	where `group_id`= (
+		select course_group_id from `training_edu` as te
+		left join `edu` as e
+		on e.id =  te.edu_id
+		where te.id='12'
+	)
+)
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='12'
+group by branch
+order by `completed_sess` desc</string>
+		<string>## 전체 진행된 세션 합산과 참여인원수를 뽑아보자.
+
+select b.name as branch, sum(sess.completed_sess) as sess_sum, count(*) as idx
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in (
+	select course_id from `course_group`
+	where `group_id`= (
+		select course_group_id from `training_edu` as te
+		left join `edu` as e
+		on e.id =  te.edu_id
+		where te.id='13'
+	)
+)
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='13'
+group by branch
+order by `completed_sess` desc</string>
+		<string>## 전체 진행된 세션 합산과 참여인원수를 뽑아보자.
+
+select b.name as branch, sum(sess.completed_sess) as sess_sum, count(*) as idx
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in (
+	select course_id from `course_group`
+	where `group_id`= (
+		select course_group_id from `training_edu` as te
+		left join `edu` as e
+		on e.id =  te.edu_id
+		where te.id='14'
+	)
+)
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='14'
+group by branch
+order by `completed_sess` desc</string>
+		<string>## 전체 진행된 세션 합산과 참여인원수를 뽑아보자.
+
+select tu.id, b.name as branch, sum(sess.completed_sess) as sess_sum, count(*) as idx
+from `training_users` as tu
+left join 
+(
+select user_id, count(*) as completed_sess
+from `log_session_progress` as lsp
+where course_id in (
+	select course_id from `course_group`
+	where `group_id`= (
+		select course_group_id from `training_edu` as te
+		left join `edu` as e
+		on e.id =  te.edu_id
+		where te.id='15'
+	)
+)
+group by `user_id`
+) as sess
+on tu.user_id = sess.user_id
+left join `users` as u
+on u.id = tu.user_id
+left join `branch` as b
+on b.id = u.branch_id
+where tu.training_edu_id='15'
+group by branch
+order by `completed_sess` desc</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>
