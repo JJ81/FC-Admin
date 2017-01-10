@@ -214,7 +214,7 @@ QUERY.HISTORY = {
 		"where a.fc_id=? " +
 		"order by te.created_dt desc;"
 	,InsertIntoLogAssignEdu :
-		"insert into `log_assign_edu` (`training_edu_id`, `target_users_id`) " +
+		"insert into `log_assign_edu` (`training_edu_id`, `target_users_id`, `creator_id`) " +
 		"values(?,?);"
 	,GetAssignEduHistory :
 		"select e.id as edu_id, te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name as admin, lbu.title as target " +
@@ -316,7 +316,7 @@ QUERY.DASHBOARD = {
 		"on e.id = te.edu_id " +
 		"left join `admin` as a " +
 		"on a.id = e.creator_id " +
-		"where start_dt <= now() and end_dt >= now() " +
+		"where e.start_dt <= now() and e.end_dt >= now() " +
 		"and a.fc_id=?;"
 	,GetTotalEduCount :
 		"select count(*) as total_edu from `edu` as e " +

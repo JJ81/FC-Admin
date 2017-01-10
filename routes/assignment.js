@@ -144,7 +144,7 @@ router.post('/allocation/edu', function (req, res) {
         function (training_edu_id, callback) {
           // _bind_user_id
           connection.query(QUERY.HISTORY.InsertIntoLogAssignEdu,
-            [training_edu_id, _bind_user_id],
+            [training_edu_id, _bind_user_id, req.user.admin_id],
             function (err, ret) {
               if(err){
                 console.error(err);
