@@ -12,7 +12,16 @@ require('../commons/helpers');
 const async = require('async');
 
 router.get('/', isAuthenticated, function (req, res) {
-	connection.query(QUERY.HISTORY.GetAssignEduHistory,[req.user.fc_id], function (err, rows) {
+
+	var querystring = null;
+
+	// 슈퍼바이저일 경우 자신의 점포만 볼 수 있다.
+	if (req.user.role === 'supervisor')
+		querystring = QUERY.HISTORY.GetAssignEduHistory2;
+	else
+		querystring = QUERY.HISTORY.GetAssignEduHistory;
+
+	var query = connection.query(querystring, [req.user.fc_id, req.user.admin_id], function (err, rows) {
 		if(err){
 			console.error(err);
 			throw new Error(err);
@@ -28,18 +37,72 @@ router.get('/', isAuthenticated, function (req, res) {
 });
 
 router.get('/details', isAuthenticated, function (req, res) {
+	
 	var _training_edu_id = req.query.id;
 	var _edu_id = req.query.edu_id;
 
-	// todo 전체 강의당 세션 수를 가져온다
+	async.series([
+		function (callback) {
+			connection.query(QUERY.ACHIEVEMENT.GetBranchProgress, [
+					req.user.fc_id,
+					req.user.admin_id,
+					_edu_id,
+					_edu_id
+				], 
+				function (err, data) {
+					callback(err, data); // results[0]
+				}
+			);
+		},
+		function (callback) {
+			connection.query(QUERY.ACHIEVEMENT.GetUserProgress, [
+					req.user.fc_id,
+					req.user.admin_id,
+					_edu_id,
+					_edu_id
+				], 
+				function (err, data) {
+					callback(err, data); // results[1]
+				}
+			);
+		},
+		function (callback) {
+			connection.query(QUERY.ACHIEVEMENT.GetEduInfoById, [
+					_edu_id
+				], 
+				function (err, data) {
+					callback(err, data); // results[2]
+				}
+			);			
+		}
+	], function (err, results) {
+		if (err) {
+			console.error(err);
+		} else {
+			console.info(results);
 
-	// todo 해당 교육에 배정된 유저들의 데이터를 가져온다.
+			res.render('achievement_details', {
+				current_path: 'AchievementDetails',
+				title: PROJ_TITLE + 'Achievement Details',
+				loggedIn: req.user,
+				branch_progress: results[0],
+				user_progress: results[1],
+				edu_name: results[2][0].name
+			});			
+		}
+	});	
 
-	// todo 점포별 이수율을 가져온다.
+});
 
-	// todo 진행중인 교육의 강의 번호를 가져와야 한다
+router.get('/details_old', isAuthenticated, function (req, res) {
+	var _training_edu_id = req.query.id;
+	var _edu_id = req.query.edu_id;
 
-
+	// TODO List
+	// 1. 전체 강의당 세션 수를 가져온다
+	// 2. 해당 교육에 배정된 유저들의 데이터를 가져온다.
+	// 3. 점포별 이수율을 가져온다.
+	// 4. 진행중인 교육의 강의 번호를 가져와야 한다
 
 	async.waterfall(
 		[

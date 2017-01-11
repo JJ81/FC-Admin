@@ -6,6 +6,39 @@ hbs.registerHelper('isEquals', function (a, b) {
 	return (a === b);
 });
 
+// 참고 : http://bdadam.com/blog/comparison-helper-for-handlebars.html
+// 사용법 : {{#ifCond var1 '==' var2}} {{/ifCond}}
+(function() {
+    function checkCondition(v1, operator, v2) {
+        switch(operator) {
+            case '==':
+                return (v1 == v2);
+            case '===':
+                return (v1 === v2);
+            case '!==':
+                return (v1 !== v2);
+            case '<':
+                return (v1 < v2);
+            case '<=':
+                return (v1 <= v2);
+            case '>':
+                return (v1 > v2);
+            case '>=':
+                return (v1 >= v2);
+            case '&&':
+                return (v1 && v2);
+            case '||':
+                return (v1 || v2);
+            default:
+                return false;
+        }
+    }
+
+    hbs.registerHelper('ifCond', function (v1, operator, v2, options) {
+        return checkCondition(v1, operator, v2) ? options.fn(this) : options.inverse (this);
+    });
+}());
+
 hbs.registerHelper('isEmpty', function (a) {
 	return (a === '' || a === null);
 });

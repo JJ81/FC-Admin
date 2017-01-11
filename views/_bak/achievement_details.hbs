@@ -9,11 +9,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+                {{#each edu_info}}
                 <div class="page-header">
-                    <h3><small>교육과정명</small><br />{{edu_name}}</h3>
+                    <h3><small>강의명</small><br />{{name}}</h3>
                 </div>
+                {{/each}}
                 <div class="col-md-4">
-                    <h4>지점별 순위 및 이수율</h4>
+                    <h4>점포별 순위 및 이수율</h4>
                     <table class="table table-bordered table-striped">
                         <thead>
                         <tr>
@@ -23,13 +25,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {{#if branch_progress}}
-                        {{#each branch_progress}}
+                        {{#if branch_info}}
+                        {{#each branch_info}}
                         <tr>
                             <td class="center">{{addOneForIndex @key}}</td>
-                            <td class="center">{{branch_name}}</td>
+                            <td class="center">{{branch}}</td>
                             <td class="center text-red">
-                              <strong>{{completed_rate}} </strong> %
+                              <strong>{{extractRatio sess_sum ../total_sess user_count}} </strong> %
                             </td>
                         </tr>
                         {{/each}}
@@ -53,15 +55,15 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {{#if user_progress}}
-                        {{#each user_progress}}
+                        {{#if user_list}}
+                        {{#each user_list}}
                         <tr>
                             <td class="center">{{addOneForIndex @key}}</td>
-                            <td class="center"><a href="#{{user_name}}">{{user_name}}</a></td>
-                            <td class="center">{{branch_name}}</td>
-                            <td class="center">{{duty_name}}</td>
+                            <td class="center"><a href="#{{name}}">{{name}}</a></td>
+                            <td class="center">{{branch}}</td>
+                            <td class="center">{{duty}}</td>
                             <td class="center text-red">
-                              <strong>{{completed_rate}}</strong> %
+                              <strong>{{percentage completed_sess ../total_sess}}</strong> %
                             </td>
                         </tr>
                         {{/each}}
@@ -83,4 +85,4 @@
 </div>
 <!-- /.row -->
 
-{{> modal_assign_edu}}
+{{>modal_assign_edu}}

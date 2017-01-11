@@ -22,7 +22,6 @@ requirejs(
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
 
-
 		// todo 교육과정 생성하기를 눌렀을 경우 group_id를 발급받아서 input에 저장한다.
 		// 선택한 강의에 대해서 강의 번호를 배열에 담아 놓고 서버로 전달한다
 		// group_id를 통해서 선택한 강의를 테이블에 저장하고,

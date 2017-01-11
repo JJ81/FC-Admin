@@ -176,6 +176,9 @@ router.post('/create/duty', function (req, res) {
   }
 });
 
+/**
+ * 암호 재설정
+ */
 router.post('/password/reset', function (req, res) {
   var _pass = req.body.pass.trim();
   var _repass = req.body.re_pass.trim();

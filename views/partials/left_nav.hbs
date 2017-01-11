@@ -71,7 +71,7 @@
             <li {{#if (isEquals current_path 'Course')}}class="active"{{/if}}>
                 <a href="/course">
                     <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
-                    <span>강의관리</span>
+                    <span>강의/강사 등록</span>
                     {{#if (isEquals current_path 'Course')}}
                     <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right text-green"></i>
@@ -83,7 +83,7 @@
                     {{/if}}
                 </a>
             </li>
-
+            
             <li {{#if (isEquals current_path 'Achievement')}}class="active"{{/if}}>
                 <a href="/achievement">
                     <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
@@ -100,7 +100,8 @@
                 </a>
             </li>
 
-            <li {{#if (isEquals current_path 'administrator')}}class="active"{{/if}}>
+            {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+            <li {{#if (isEquals current_path 'Administrator')}}class="active"{{/if}}>
                 <a href="/administrator">
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <span>관리자</span>
@@ -111,6 +112,7 @@
                     {{/if}}
                 </a>
             </li>
+            {{/ifCond}}
         </ul>
     </section>
 </aside>

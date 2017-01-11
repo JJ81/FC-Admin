@@ -1,0 +1,32 @@
+<!-- Modify Admin -->
+<div class="modal" id="modifyAdmin" role="dialog">
+    <form class="modal-dialog" method="post" action="/administrator/modify" id="frm_modify_admin">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">관리자 수정</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>관리자명</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="관리자명" required autocomplete="off" />
+                </div>
+
+                <div class="form-group">
+                    <label>이메일</label>
+                  <input type="email" class="form-control" name="email" id="email" placeholder="이메일" required autocomplete="off" />
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+                <button type="submit" class="btn btn-primary btn-register-course-submit">수정</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+      <input type="hidden" name="employee_id" class="employee_id" />
+    </form>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
