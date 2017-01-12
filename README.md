@@ -1,14 +1,14 @@
 
-*JIRA URL* 
+###JIRA URL 
 https://holdemclubtv.atlassian.net/
 
-*Issue ID* 
+###Issue ID 
 FC-113
 
-*Tags*
+###Tags
 강의관리
 
-*Description*
+###Description
 - 퀴즈/파이널테스트 입력/수정/삭제 기능
 - 세션 순서변경 기능
 
