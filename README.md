@@ -3,11 +3,12 @@
 https://holdemclubtv.atlassian.net/
 
 ###Issue ID 
-FC-114
+FC-115
 
 ###Tags
-강의관리
+교육과정등록
 
 ###Description
-- 강사 별평가
+- 시작, 종료일자를 설정할 수 있어야 한다.
+- 강의 순서를 변경할 수 있어야 한다.
 
