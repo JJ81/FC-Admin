@@ -109,6 +109,13 @@ QUERY.COURSE = {
     "where course_id=? " +
     "group by `course_id`;"
 
+  // 강의평가를 조회한다.
+  ,GetStarRatingByTeacherId:
+    "SELECT ROUND(AVG(`teacher_rate`), 1) AS teacher_rate " +
+    "  FROM `user_rating` " +
+    " WHERE teacher_id = ? " +
+    " GROUP BY `teacher_id`; "    
+
   // 세션목록을 조회한다.
   ,GetSessionListByCourseId:
     "select * from `course_list` as cl " +
@@ -123,7 +130,7 @@ QUERY.COURSE = {
 
   // 강사정보를 조회한다.
   ,GetTeacherInfoByCourseId :
-    "select t.name, t.desc " +
+    "select t.`id` AS teacher_id, t.name, t.desc " +
     "from `course` as c " +
     "left join `teacher` as t " +
     "on c.teacher_id = t.id " +

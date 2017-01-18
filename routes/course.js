@@ -63,11 +63,13 @@ router.get('/', isAuthenticated, function (req, res) {
  * 강의/강사등록 상세페이지
  */
 router.get('/details', isAuthenticated, function (req, res) {
+
   var _id = req.query.id;
+  var _teacher_id = null;
 
   async.series([
-      // 세션목록을 조회한다.(course_list)
-      // result[0]
+    // 세션목록을 조회한다.(course_list)
+    // result[0]
     function(callback){
         connection.query(QUERY.COURSE.GetCourseListById,
             [req.user.fc_id, _id], 
@@ -117,14 +119,16 @@ router.get('/details', isAuthenticated, function (req, res) {
     function (callback) {
         connection.query(QUERY.COURSE.GetTeacherInfoByCourseId,
             [_id],
-            function (err, rows) {
-            if(err){
-                console.error(err);
-                callback(err, null);
-            }else{
-                callback(null, rows);
+            function (err, rows) {                
+                if(err){
+                    console.error(err);
+                    callback(err, null);
+                }else{
+                    _teacher_id = rows[0].teacher_id;
+                    callback(null, rows);
+                }
             }
-        });
+        );
     },
     // 강사 목록을 조회한다.
     // result[4]
@@ -132,34 +136,53 @@ router.get('/details', isAuthenticated, function (req, res) {
         connection.query(QUERY.COURSE.GetTeacherList,
             [req.user.fc_id],
             function (err, rows) {
-            if(err){
-                console.error(err);
-                callback(err, null);
-            }else{
-                callback(null, rows);
+                if(err){
+                    console.error(err);
+                    callback(err, null);
+                }else{
+                    callback(null, rows);
+                }
             }
-            });
-        }
-    ],
+        );
+    },
+    // 강사평가 정보를 조회한다.
+    // result[5]
+    function (callback) {
+        connection.query(QUERY.COURSE.GetStarRatingByTeacherId,
+            [ _teacher_id ],
+            function (err, rows) {
+                if (err) {
+                    console.error(err);
+                    callback(err, null);
+                } else {
+                    if (rows.length === 0 || rows === null) {
+                        callback(null, [{course_id : _id ,rate : 0}]);
+                    } else {
+                        callback(null, rows);
+                    }
+                }
+            }
+        );
+    }],    
     // out
     function (err, result) {
       if(err){
         console.error(err);
       }else{
 
-        console.log(result[1]);
+        console.log(result);
 
         res.render('course_details', {
-          current_path: 'CourseDetails',
-          title: PROJ_TITLE + 'Course Details',
-          loggedIn: req.user,
-          list : result[0],
-          //rating: result[1][0].rate,
-          rating: result[1],
-          session_list: result[2],
-          teacher_info : result[3],
-          teacher_list : result[4],
-	        course_id : _id
+            current_path: 'CourseDetails',
+            title: PROJ_TITLE + 'Course Details',
+            loggedIn: req.user,
+            list : result[0],
+            rating: result[1],
+            session_list: result[2],
+            teacher_info : result[3],
+            teacher_list : result[4],
+            teacher_rating : result[5][0],
+            course_id : _id
         });
       }
   });
