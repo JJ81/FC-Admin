@@ -12,14 +12,15 @@
     <link rel="stylesheet" href="/vendor/plugins/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="/vendor/plugins/select2/select2.min.css" />
     <link rel="stylesheet" href="/vendor/plugins/datatables/dataTables.bootstrap.css" />
-    <link rel='stylesheet' href='/stylesheets/styles.css' />
+    <link rel='stylesheet' href="/stylesheets/styles.css" />
+
     <title>{{title}}</title>
 </head>
 
 <body class="hold-transition skin-green-light sidebar-mini {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
     {{#if (isEquals current_path 'Login')}}
     {{{body}}}
-    {{else if (isEquals current_path 'winpop')}}
+    {{else if (isEquals current_path 'winpop')}}    
     {{{body}}}
     {{else}}
     <div class="wrapper">
@@ -33,8 +34,10 @@
     {{> modal_change_password}}
     {{> footer}}
     {{/if}}
+
     <script src="/vendor/plugins/requirejs/require.2.3.2.js"></script>
     <script src="/javascripts/app.js"></script>
+
     {{#if (isEquals current_path 'Login')}}<script src="/static/javascripts/login.js"></script>{{/if}}
     {{#if (isEquals current_path 'Dashboard')}}<script src="/static/javascripts/dashboard.js"></script>{{/if}}
     {{#if (isEquals current_path 'Employee')}}<script src="/static/javascripts/employee.js"></script>{{/if}}
@@ -47,8 +50,13 @@
     {{#if (isEquals current_path 'Achievement')}}<script src="/static/javascripts/achievement.js"></script>{{/if}}
     {{#if (isEquals current_path 'AchievementDetails')}}<script src="/static/javascripts/achievement_details.js"></script>{{/if}}
     {{#if (isEquals current_path 'CourseDetails')}}<script src="/static/javascripts/course_details.js"></script>{{/if}}
-    {{#if (isEquals current_path 'Administrator')}}<script src="/static/javascripts/administrator.js"></script>{{/if}}
-    {{#if (isEquals current_path 'winpop')}}<script src="/static/javascripts/win_pop.js"></script>{{/if}}
+    {{#if (isEquals current_path 'Administrator')}}<script src="/static/javascripts/administrator.js"></script>{{/if}}    
+    
+    {{#if (isEquals module_type 'create_video')}}<script src="/static/javascripts/winpops/win_create_video.js"></script>{{/if}}
+    {{#if (isEquals module_type 'modify_video')}}<script src="/static/javascripts/winpops/win_modify_video.js"></script>{{/if}}
+    {{#if (isEquals module_type 'create_quiz')}}<script src="/static/javascripts/winpops/win_create_quiz.js"></script>{{/if}}
+    {{#if (isEquals module_type 'modify_quiz')}}<script src="/static/javascripts/winpops/win_modify_quiz.js"></script>{{/if}}
+    {{#if (isEquals module_type 'show_quiz')}}<script src="/static/javascripts/winpops/win_show_quiz.js"></script>{{/if}}
 
 </body>
 </html>

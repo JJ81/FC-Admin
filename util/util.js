@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const md5 = require('md5');
+const randomstring = require('randomstring'); // randomstring
+const moment = require('moment');
 
 var util ={};
 
@@ -34,7 +36,8 @@ util.deleteFile = function (_path, cb) {
 };
 
 util.publishHashByMD5 = function (value) {
-  return md5(value);
+    // return md5(value);
+    return md5(value + randomstring.generate(7));
 };
 
 module.exports = util;

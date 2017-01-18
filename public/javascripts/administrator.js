@@ -67,7 +67,7 @@ requirejs(
 			_target.find('#select_authority').val(_role);
 		});
         
-		// supervisor 지점배정
+    // supervisor 지점배정
 		$('.btn-add-branch').bind('click', function () {
 			var _self = $(this);
 			var _target = $('#frm_assign_branch');

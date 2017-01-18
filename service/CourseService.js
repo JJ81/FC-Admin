@@ -1,102 +1,138 @@
 /**
  * Created by yijaejun on 03/01/2017.
  */
-
-const CourseService = {};
+var QUERY = require('../database/query');
+var async = require('async');
+var CourseService = {};
 
 /**
- *
- * @param data
- * @returns {Array}
+ * 퀴즈 보기를 입력/수정을 수행하는 내부함수
+ * 
+ * @param {object} option
+ * @param {any} callback
  */
-CourseService.makeQuizList = function (rows) {
-	// todo 퀴즈 테이블에서 answer 파트에서 어떤 것이 답인지 찾아내는 로직이 필요하다
+function saveQuizOption (data, callback) {
+    
+    var _query = null;
 
+    if (data.id) {
+        // 수정
+        _query = 
+            CourseService.connection.query(QUERY.COURSE.UpdateQuizOption, [
+                    data.option, 
+                    data.iscorrect,
+                    data.order,
+                    data.id
+                ], 
+                function (err, data) {
+                    console.log(_query.sql);
+                    callback(err, data); // results[1]
+                }
+            );
+    } else {
+        // 입력
+        _query = 
+            CourseService.connection.query(QUERY.COURSE.CreateQuizOption, data, function (err, data) {
+                console.log(_query.sql);
+                callback(err, data); // results[1]
+            });
+    }
 
+}
 
-	var i = 0;
-	var __size = rows.length;
-	var __tmp_data = []; // 재가공된 데이터를 저장할 공간
+/**
+ * 퀴즈 보기를 입력/수정한다.
+ */
+CourseService.InsertOrUpdateQuizOptions = function (connection, data, callback) {
 
-	var __tmp_option_id_list = [];
-	var __tmp_option = []; // 옵션을 임시로 저장할 공간
-	var __pos = 0; // 기록해야 할 포인터 역할
+    CourseService.connection = connection;
+    async.each(data, saveQuizOption, function (err, data) {
+        callback(err, data);
+    });
 
-	for(;i<__size;i++){
-		if(i === 0){
-			__tmp_data.push({
-				name : rows[i].name,
-				question : rows[i].question
-			});
-
-			if(rows[i].answer !== null){
-				__tmp_data[__pos].answer = rows[i].answer; // todo 답을 적어 내는 이 부분은 별도의 처리가 필요하다!!
-			}else{
-				__tmp_data[__pos].answer = rows[i].answer_desc;
-			}
-
-			if(rows[i].option !== null){
-				__tmp_option.push(rows[i].option);
-				// option_id를 일단 수집하자.
-				__tmp_option_id_list.push(rows[i].option_id);
-			}
-
-		}else{
-
-			if(rows[i-1].id === rows[i].id){
-				__tmp_option.push(rows[i].option);
-				__tmp_option_id_list.push(rows[i].option_id);
-			}else{
-
-				// 답을 갱신한다.
-				__tmp_data[__pos].answer = getRealAnswer(__tmp_data[__pos].answer, __tmp_option_id_list);
-
-				__tmp_data[__pos].option = __tmp_option;
-				__tmp_option = []; // 다음 질문으로 넘어갈 경우 옵션 저장소를 초기화한다.
-				__pos++;
-
-				// 일단 어떤 열이든 다른 질문이라면 무조건 이름과 질문을 입력한다.
-				__tmp_data[__pos] = {
-					name : rows[i].name,
-					question : rows[i].question
-				};
-
-				// 답을 입력한다.
-				if(rows[i].answer !== null){ // 단답형일 경우
-					__tmp_data[__pos].answer = rows[i].answer; // todo 답을 적어 내는 이 부분은 별도의 처리가 필요하다!!
-				}else{
-					__tmp_data[__pos].answer = rows[i].answer_desc;
-				}
-
-				// 선택지가 있을 경우 선택지를 넣기 시작한다.
-				if(rows[i].option !== null){
-					__tmp_option.push(rows[i].option);
-					// option_id를 일단 수집하자.
-					__tmp_option_id_list.push(rows[i].option_id);
-				}
-
-			}
-		}
-	}
-
-	return __tmp_data;
 };
 
 /**
- * 퀴즈 아이디를 받아서 선택지의 순서상의 번호 즉 답을 리턴한다.
- * @param value
- * @param list
- * @returns {number}
+ * 퀴즈리스트를 가공한다.
  */
-function getRealAnswer(value, list){
-	for(var i= 0,len=list.length;i<len;i++){
-		// console.log(value + ' / ' + list[i]);
-		if(list[i] == value){
-			return i+1;
-		}
-	}
-	return null;
-}
+CourseService.makeQuizList = function (quiz_list) {
 
+    var quiz_id = null;
+    var return_list = [];            
+
+    // 데이터를 가공한다.
+    // 퀴즈 별도 obj 로 분리.
+    // 보기 array 형태로 퀴즈별로 할당
+    quiz_list.forEach(function (quiz) {
+        
+        if (quiz_id !== quiz.quiz_id) {
+            
+            var quizdata = {};
+            
+            switch (quiz.quiz_type) {
+                case "A": // 단답형       
+                    quizdata = {
+                        type: quiz.type,
+                        quiz_id : quiz.quiz_id,
+                        quiz_type: quiz.quiz_type,
+                        question: quiz.question,
+                        answer: quiz.answer_desc,
+                        order: quiz.quiz_order
+                    };
+                    break;
+
+                case "B": // 선택형    
+                case "C": // 다답형      
+                    quizdata = {
+                        type: quiz.type,
+                        quiz_id : quiz.quiz_id,
+                        quiz_type: quiz.quiz_type,
+                        question: quiz.question,
+                        answer: [],
+                        order: quiz.quiz_order,
+                        option_group_id: quiz.option_group_id,
+                        options: []
+                    };
+
+                    var optiondata = quiz_list.filter(function (data) {
+                        return data.quiz_id == quiz.quiz_id && data.option !== null;
+                    });
+                    
+                    if (optiondata) {
+                        for (var index = 0; index < optiondata.length; index++) {
+                            var option = optiondata[index];
+
+                            if (option.iscorrect) {
+                                quizdata.answer.push(option.option);
+                            }
+
+                            quizdata.options.push ({
+                                id: option.option_id,
+                                opt_id: option.option_group_id,
+                                option: option.option,
+                                iscorrect: option.iscorrect,
+                                order: option.option_order
+                            });
+                        }
+
+                        quizdata.answer = quizdata.answer.join(", ");
+                    }
+
+                    break;     
+                                                
+                default:
+                    break;
+            }
+
+            // 마지막 quiz_id 를 임시 저장한다.
+            quiz_id = quiz.quiz_id;
+            // 퀴즈를 리스트에 입력한다.
+            return_list.push(quizdata);
+        }
+    });
+    
+    return return_list;   
+
+};
 
 module.exports = CourseService;

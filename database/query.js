@@ -1,9 +1,9 @@
 var QUERY = {};
 
 QUERY.ADMIN = {
-  ResetPassword:
-  "update `admin` set password=? " +
-  "where `id`=? and name=?;"
+    ResetPassword:
+    "update `admin` set password=? " +
+    "where `id`=? and name=?;"
 	,GetList :
 		"select * from `admin` "+
 		"where fc_id=? " +
@@ -79,6 +79,8 @@ QUERY.EMPLOYEE = {
 };
 
 QUERY.COURSE = {
+
+  // 특정 fc 의 전체 강의목록을 조회한다.
   GetCourseList :
     "select c.id as course_id, c.name, t.name as teacher, c.created_dt, a.name as creator " +
     "from `course` as c " +
@@ -88,8 +90,10 @@ QUERY.COURSE = {
     "on a.id = c.creator_id " +
     "where a.fc_id=? " +
     "order by c.created_dt desc;"
+
+   // 강의정보를 조회한다.
   ,GetCourseListById :
-    "select c.id as course_id, c.name, t.name as teacher, c.created_dt, a.name as creator, c.desc " +
+    "SELECT c.id as course_id, c.name, t.name as teacher, c.created_dt, a.name as creator, c.desc " +
     "from `course` as c " +
     "left join `teacher` as t " +
     "on c.teacher_id = t.id " +
@@ -97,56 +101,226 @@ QUERY.COURSE = {
     "on a.id = c.creator_id " +
     "where a.fc_id=? and c.id=? " +
     "order by c.created_dt desc;"
+
+  // 강의평가를 조회한다.
   ,GetStarRatingByCourseId:
     "select round(avg(course_rate),1) as rate " +
     "from `user_rating` " +
     "where course_id=? " +
     "group by `course_id`;"
+
+  // 세션목록을 조회한다.
   ,GetSessionListByCourseId:
     "select * from `course_list` as cl " +
     "where cl.course_id=? " +
-    "order by cl.`order` desc, cl.`id` asc;"
+    "order by cl.`order` asc, cl.`id` asc;"
+
+ // 세션 정보를 id 로 조회한다.
+ ,GetSessionById:
+    "SELECT `id`, `course_id`, `type`,`title`,`quiz_group_id`, `order` " +
+    "  FROM `course_list` " +
+    " WHERE `id` = ? "
+
+  // 강사정보를 조회한다.
   ,GetTeacherInfoByCourseId :
     "select t.name, t.desc " +
     "from `course` as c " +
     "left join `teacher` as t " +
     "on c.teacher_id = t.id " +
     "where c.id=? ;"
+
+  // 강사목록을 조회한다.
   ,GetTeacherList:
     "select t.id, t.name, t.desc " +
     "from `teacher` as t " +
     "left join `admin` as a " +
     "on a.id = t.creator_id " +
     "where a.fc_id=?;"
+
+  // 강사를 생성한다.
   ,CreateTeacher:
     "insert into `teacher` (`name`, `desc`, `creator_id`) " +
     "values(?,?,?);"
+
+  // 강의를 생성한다.
   ,CreateCourse :
     "insert into `course` (`name`, `teacher_id`, `desc`, `creator_id`) " +
     "values (?,?,?,?);"
+
+  // 강의를 수정한다.
   ,UpdateCourse:
     "update `course` set `name`=?, `teacher_id`=?, `desc`=?, `creator_id`=?, `updated_dt`=? " +
     "where `id`=?;"
-	,GetVideoDataById :
-		"select * from `video` where id=?;"
-	,GetQuizDataByGroupId :
-		"select " +
-		"q.id, q.type, q.question, q.answer, q.answer_desc, qo.option, qo.order, qo.id as option_id " +
-		"from `quiz` as q " +
-		"left join `quiz_option` as qo " +
-		"on qo.opt_id = q.option_id " +
-		"where q.id in ( " +
-			"select quiz_id from `quiz_group` " +
-			"where group_id=? " +
-			"order by `order` desc, id asc " +
-		")" +
-		"order by `order` desc, qo.`id`;"
+  
+  // 강의 세션수를 조회한다.
+  ,GetSessionCount:
+    "SELECT COUNT(*) AS session_count FROM `course_list` WHERE `course_id` = ?; "
+  
+  // 비디오를 ID로 조회한다.
+  ,GetVideoDataById :
+    "select * from `video` where id=?;"
+
+  // 비디오 ID 로 삭제한다.
+  ,DeleteVideoById :
+    "DELETE FROM `video` WHERE `id` = ?; "    
+
+  // 비디오 ID 로 수정한다.
+  ,UpdateVideoById:
+    "UPDATE `video` SET `name` = ?, `type` = ?, `url` = ?, `updated_dt` = NOW() " +
+    " WHERE `id` = ?; "     
+
+  // 특정 세션의 그룹아이디로 퀴즈를 조회한다.
+  ,GetQuizDataByGroupId:
+    "SELECT q.`id` AS quiz_id " +
+    "     , q.`type` " +
+    "     , q.`quiz_type` AS quiz_type " +
+    "     , q.`question` " +
+    "     , q.`answer_desc` " +
+    "     , q.`answer_desc` " +
+    "     , qg.`order` AS quiz_order " +
+    "     , q.`option_id` as `option_group_id` " +
+    "     , qo.`id` as `option_id` " +    
+    "     , qo.`option` " +
+    "     , qo.`order` AS option_order " +     
+    "     , qo.`iscorrect`  " +
+    "  FROM `quiz_group` AS qg " +
+    " INNER JOIN `quiz` AS q " +
+    "    ON qg.`quiz_id` = q.`id` " +
+    "  LEFT JOIN `quiz_option` AS qo " +
+    "    ON qo.`opt_id` = q.`option_id` " +
+    " WHERE qg.`group_id` = ? " +
+    " ORDER BY qg.`order`, qo.`order` "
+  
+  // 특정 세션의 그룹아이디로 퀴즈를 조회한다.(deprecated)
+  ,GetQuizDataByGroupId_bak :
+    "select " +
+    "q.id, q.type, q.question, q.answer, q.answer_desc, qo.option, qo.order, qo.id as option_id " +
+    "from `quiz` as q " +
+    "left join `quiz_option` as qo " +
+    "on qo.opt_id = q.option_id " +
+    "where q.id in ( " +
+        "select quiz_id from `quiz_group` " +
+        "where group_id=? " +
+        "order by `order` desc, id asc " +
+    ")" +
+    "order by `order` desc, qo.`id`;"
+
+    // 비디오를 생성한다.
 	,CreateVideo :
 		"insert into `video` (`name`, `type`, `url`, `creator_id`) " +
 		"values(?,?,?,?);"
+
+    // 비디오 세션을 생성한다.
 	,InsertIntoCourseListForVideo :
 		"insert into `course_list` (`course_id`, `type`, `title`, `video_id`) " +
 		"values (?,?,?,?);"
+    
+    // 퀴즈/파이널테스트 세션을 생생헌다.
+	,InsertIntoCourseListForQuiz :
+		"INSERT IGNORE INTO `course_list` (`course_id`, `type`, `title`, `quiz_group_id`, `order`) " +
+		"VALUES (?,?,?,?,?);"
+
+    // 퀴즈 그룹을 생생헌다.
+    // `group_id`, `quiz_id` 가 중복일 경우 순서만 변경할 수 있다.
+	,InsertOrUpdateQuizGroup  :
+		"INSERT INTO `quiz_group` (`group_id`, `quiz_id`, `order`) " +
+		"VALUES (?,?,?) " +
+        "ON DUPLICATE KEY UPDATE `order` = ?; "
+    
+    // 퀴즈(단합형) 를 생성한다.
+    ,CreateQuizNoOption :
+        "INSERT INTO `quiz` (`type`, `quiz_type`, `question`, `answer_desc`) " +
+        "VALUES (?,?,?,?) "
+
+    // 퀴즈(선택형, 다답형)를 수정한다.
+    ,UpdateQuizWithNoOption:
+        "UPDATE `quiz` SET `question` = ?, `answer_desc` = ?, updated_dt = NOW() WHERE `id` = ?; "
+
+    // 퀴즈(선택형, 다답형)를 생성한다.
+    ,CreateQuizWithOption:
+        "INSERT INTO `quiz` (`type`, `quiz_type`, `question`, `option_id`) " +
+        "VALUES (?,?,?,?) "
+    
+    // 퀴즈(선택형, 다답형)를 수정한다.
+    ,UpdateQuizWithOption:
+        "UPDATE `quiz` SET `question` = ?, `updated_dt` = NOW() WHERE `id` = ?; "
+
+    // 퀴즈(선택형, 다답형)의 보기를 생성한다.
+    ,CreateQuizOption:
+        "INSERT INTO `quiz_option` SET ? "
+
+    ,UpdateQuizOption:
+        "UPDATE `quiz_option` SET `option` = ?, `iscorrect` = ?, `order` = ?, `updated_dt` = NOW() WHERE `id` = ?; "        
+
+    // 퀴즈(선택형, 다답형)의 보기를 일괄 생성한다.
+    ,CreateQuizMultipleOption:
+        "INSERT INTO `quiz_option` (`opt_id`, `option`, `iscorrect`, `order`) " +
+        "VALUES ?; "
+
+    // 세션정보(course_list) 삭제
+    ,DeleteCourseListId :
+        "DELETE FROM `course_list` WHERE `id` = ? "
+    
+    // 퀴즈 보기(quiz_option) 삭제
+    ,DeleteQuizOptionByGroupId :
+        "DELETE qo FROM `quiz_option` AS qo " +
+        " WHERE EXISTS ( " +
+		"           SELECT 'X' " +
+		"             FROM `quiz` AS q " +
+		"            WHERE EXISTS ( " +
+		"	                SELECT 'X' " +
+		"	                  FROM `quiz_group` " +
+		"	                 WHERE `group_id` = ? " +
+		"	                   AND `quiz_id` = q.`id`) " +
+        "              AND qo.`opt_id` = q.`option_id`) "
+
+    // 퀴즈 보기(quiz_option) option_group_id 로 삭제
+    ,DeleteQuizOptionByOptionGroupId :
+        "DELETE qo FROM `quiz_option` AS qo " +
+        " WHERE qo.`opt_id` = ?; "
+
+    // 퀴즈 보기(quiz_option) id로 삭제
+    ,DeleteQuizOptionById :
+        "DELETE qo FROM `quiz_option` AS qo " +
+        " WHERE qo.`id` = ?; "
+
+    // 퀴즈(quiz) 를 삭제한다.
+    ,DeleteQuizByGroupId:
+        "DELETE q " +
+        "  FROM `quiz` AS q " +
+        " WHERE EXISTS ( " +
+	    "           SELECT 'X' " +
+	    "             FROM `quiz_group` " +
+	    "            WHERE `group_id` = ? " +
+        "              AND `quiz_id` = q.`id`) "  
+
+    // 퀴즈(quiz) id로 삭제한다.
+    ,DeleteQuizById:
+        "DELETE q " +
+        "  FROM `quiz` AS q " +
+        " WHERE q.`id` = ?; "
+
+    // 퀴즈 보기 그룹(quiz_group) 삭제 (deprecated)
+    // 퀴즈가 삭제 시 CASCADE 제약으로 함께 삭제된다.
+    ,DeleteQuizGroupByGroupId:
+        "DELETE qg " + 
+        "  FROM `quiz_group` AS qg " +
+        " WHERE qg.`group_id` = ? "
+    
+    // 세션을 수정한다.
+    ,UpdateSession:
+        "UPDATE `course_list` SET " +
+        "       `title` = ? " +
+        "     , `order` = ? " +
+        "     , `updated_dt` = NOW() " + 
+        " WHERE `id` = ?; "
+
+    // 세션 제목을 수정한다.
+    ,UpdateSessionTitleById:
+        "UPDATE `course_list` SET " +
+        "       `title` = ? " +
+        "     , `updated_dt` = NOW() " + 
+        " WHERE `id` = ?; "        
 };
 
 QUERY.EDU = {

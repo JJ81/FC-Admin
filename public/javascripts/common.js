@@ -17,11 +17,7 @@ define(
 			$('#frm_set_employee_password').attr('action', $(this).attr('data-url'));
 		});
 
-
-
 		var validation = {};
-
-
 
 		return {
 			createWindowPopup: function(url, title, option) {

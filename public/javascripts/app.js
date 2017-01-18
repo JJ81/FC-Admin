@@ -20,8 +20,15 @@ requirejs.config({
         ,jqueryValidate :'/vendor/plugins/jquery_validate/jquery.validate.min'
 		,common : '/javascripts/common'
 		,axios : 'https://unpkg.com/axios/dist/axios.min'
+        ,quiz_component: ['/javascripts/components/quiz_component']
+        ,quiz_service: ['/javascripts/components/quiz_service']
+        ,slimScroll: '/vendor/plugins/slimScroll/jquery.slimscroll.min'
 	},
 	shim : {
+
+        'quiz_component': {
+			deps: ['jquery']
+		},
 		'bootstrap' : {
 			deps: ['jquery']
 		},
@@ -43,8 +50,11 @@ requirejs.config({
 		'jqueryCookie' : {
 			deps: ['jquery']
 		},
-    'jqueryValidate':{
-      deps: ['jquery']
-    }
+        'jqueryValidate':{
+            deps: ['jquery']
+        },
+        'slimScroll':{
+            deps: ['jquery']
+        }             
 	}
 });

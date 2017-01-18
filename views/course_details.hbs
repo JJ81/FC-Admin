@@ -48,13 +48,13 @@
                           <i class="fa fa-video-camera"></i> &nbsp;
                           비디오
                         </button>
-                        <button class="btn btn-sm btn-default">
+                        <button class="btn btn-sm btn-default btn-create-quiz" data-course-id="{{course_id}}">
                           <i class="fa fa-quora"></i> &nbsp;
                           퀴즈
                         </button>
-                        <button class="btn btn-sm btn-default">
+                        <button class="btn btn-sm btn-default btn-create-final" data-course-id="{{course_id}}">
                           <i class="fa fa-sticky-note-o"></i> &nbsp;
-                          최종테스트
+                          파이널테스트
                         </button>
                       </span>
                 </h3>
@@ -65,57 +65,110 @@
                     <!--강의에 속한 세션 항목 나열과 선택시 볼 수 있어야 한다.-->
                     {{#if session_list}}
                         {{#each session_list}}
-                            <ul class="session-list">
+                            <ul class="session-list">  
                             {{#if (isEquals type 'QUIZ')}}
-                                <li>
-                                    <a href="#quiz" data-quiz-group="{{quiz_group_id}}" data-type="QUIZ" data-title="{{title}}" data-order="{{order}}" data-id="{{id}}" class="btn-solve-quiz">
+                                <li>              
+                                    <span class="handle ui-sortable-handle">
+                                        <i class="fa fa-ellipsis-v"></i>
+                                        <i class="fa fa-ellipsis-v"></i>
+                                    </span>                                                        
+                                    <a href="#quiz" class="btn-solve-quiz"
+                                        data-quiz-group="{{quiz_group_id}}" 
+                                        data-type="QUIZ" 
+                                        data-title="{{title}}"
+                                        data-order="{{order}}" 
+                                        data-id="{{id}}"
+                                    >
                                         <i class="fa fa-quora"></i> &nbsp;
                                         {{title}}
                                     </a>
-                                    <span class="pull-right">
-                                        <a href="#view" class="btn btn-sm btn-session-detail text-green" data-quiz-group="{{quiz_group_id}}">
+                                    <span class="pull-right" 
+                                        data-course-id="{{course_id}}" 
+                                        data-course-list-id="{{id}}" 
+                                        data-type="{{type}}"
+                                    >
+                                        <a href="#view" class="btn btn-sm btn-session-detail text-green btn-solve-quiz" 
+                                            data-quiz-group="{{quiz_group_id}}" 
+                                            data-type="QUIZ" 
+                                            data-title="{{title}}">
                                             <i class="fa fa-eye"></i>
                                             보기
                                         </a>
-                                        <a href="#modify" class="btn btn-sm btn-modify-session" data-quiz-group="{{quiz_group_id}}">
+                                        <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-quiz" 
+                                            data-id="{{id}}" 
+                                            data-quiz-group="{{quiz_group_id}}"
+                                        >
                                             <i class="fa fa-pencil"></i> &nbsp; 수정
                                         </a>
-                                        <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-quiz-group="{{quiz_group_id}}">
+                                        <a href="#delete" class="btn btn-sm text-red btn-delete-session btn-delete-session" 
+                                            data-id="{{id}}" 
+                                            data-quiz-group="{{quiz_group_id}}"
+                                        >
                                             <i class="fa fa-eraser"></i> &nbsp; 삭제
                                         </a>
                                     </span>
                                 </li>
                             {{else if (isEquals type 'VIDEO') }}
                                 <li>
-                                    <a href="#video" data-video-id="{{video_id}}" data-order="{{order}}" data-id="{{id}}" class="btn-watch-video">
+                                    <span class="handle ui-sortable-handle">
+                                        <i class="fa fa-ellipsis-v"></i>
+                                        <i class="fa fa-ellipsis-v"></i>
+                                    </span>                                            
+                                    <a href="#video" class="btn-watch-video"
+                                        data-video-id="{{video_id}}" 
+                                        data-order="{{order}}" 
+                                        data-title="{{title}}" 
+                                        data-id="{{id}}"
+                                    >
                                         <i class="fa fa-file-video-o"></i> &nbsp;
                                         {{title}}
                                     </a>
-                                    <span class="pull-right">
-                                        <a href="#view" class="btn btn-sm btn-session-detail text-green" data-video-id="{{video_id}}">
+                                    <span class="pull-right" data-course-id="{{course_id}}" data-course-list-id="{{id}}" data-type="{{type}}">
+                                        <a href="#view" class="btn btn-sm btn-session-detail text-green btn-watch-video" data-video-id="{{video_id}}">
                                             <i class="fa fa-eye"></i>
                                             보기
                                         </a>
-                                        <a href="#modify" class="btn btn-sm btn-modify-session" data-video-id="{{video_id}}">
+                                        <a href="#modify" class="btn btn-sm btn-modify-session" data-id="{{id}}" data-video-id="{{video_id}}">
                                             <i class="fa fa-pencil"></i> &nbsp; 수정
                                         </a>
-                                        <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-video-id="{{video_id}}">
+                                        <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-id="{{id}}" data-video-id="{{video_id}}">
                                             <i class="fa fa-eraser"></i> &nbsp; 삭제
                                         </a>
                                     </span>
                                 </li>
                             {{else if (isEquals type 'FINAL') }}
                                 <li>
-                                    <a href="#final" data-quiz-group_id="{{quiz_group_id}}" data-type="FINAL" data-title="{{title}}" data-order="{{order}}" data-id="{{id}}" class="btn-solve-quiz">
+                                    <span class="handle ui-sortable-handle">
+                                        <i class="fa fa-ellipsis-v"></i>
+                                        <i class="fa fa-ellipsis-v"></i>
+                                    </span>                                            
+                                    <a href="#final" class="btn-solve-quiz"
+                                        data-quiz-group="{{quiz_group_id}}" 
+                                        data-type="{{type}}" 
+                                        data-title="{{title}}" 
+                                        data-order="{{order}}" 
+                                        data-id="{{id}}"
+                                    >
                                         <i class="fa fa-sticky-note"></i> &nbsp;
                                         {{title}}
                                     </a>
-                                    <span class="pull-right">
-                                        <a href="#view" class="btn btn-sm btn-session-detail text-green" data-quiz-group="{{quiz_group_id}}">
+                                    <span class="pull-right" 
+                                        data-course-id="{{course_id}}" 
+                                        data-course-list-id="{{id}}" 
+                                        data-type="{{type}}"
+                                    >
+                                        <a href="#view" class="btn btn-sm btn-session-detail text-green btn-solve-quiz" 
+                                            data-quiz-group="{{quiz_group_id}}" 
+                                            data-type="{{type}}" 
+                                            data-title="{{title}}"
+                                        >
                                             <i class="fa fa-eye"></i>
                                             보기
                                         </a>
-                                        <a href="#modify" class="btn btn-sm btn-modify-session" data-quiz-group="{{quiz_group_id}}">
+                                        <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-quiz" 
+                                            data-id="{{id}}" 
+                                            data-quiz-group="{{quiz_group_id}}"
+                                        >
                                             <i class="fa fa-pencil"></i> &nbsp; 수정
                                         </a>
                                         <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-quiz-group="{{quiz_group_id}}">

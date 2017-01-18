@@ -150,6 +150,10 @@
   max-width: 1024px;
   margin: 0 auto; }
 
+.winpop_quiz {
+  max-width: 800px;
+  margin: 0 auto; }
+
 #draggablePanelList li {
   cursor: move; }
 #draggablePanelList .course {
@@ -162,5 +166,27 @@
   text-align: right;
   font-size: 23px;
   margin-top: 20px; }
+
+.fixed-footer {
+   position:fixed;
+   left:0px;
+   bottom:0px;
+   height:30px;
+   width:100%;
+   background:#999;
+}  
+
+span.handle {
+  display: inline-block;
+  cursor: move;
+  margin: 0 5px;
+}
+
+.blocks .btn-primary 
+{
+    padding: 24px 12px;
+    margin: 0 5px;  
+    border-radius: 0;
+}
 
 /*# sourceMappingURL=styles.css.map */
