@@ -7,18 +7,20 @@ requirejs(
 		'jquery'
 		,'axios'
 		,'moment'
-		,'excellentExport'
+		// ,'excellentExport'
 		,'bootstrap'
-		,'jquery_datatable'
-		,'bootstrap_datatable'
-		,'select2'
-		,'daterangepicker'
+		// ,'jquery_datatable'
+		// ,'bootstrap_datatable'
+		// ,'select2'
+		// ,'daterangepicker'
+        ,'bootstrap_datetimepicker'
 		,'jquery_ui'
-		,'adminLTE'
-		,'fastclick'
-	  ,'common'
+		// ,'adminLTE'
+		// ,'fastclick'
+	//   ,'common'
 	],
 	function ($, axios) {
+
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
 
@@ -34,6 +36,17 @@ requirejs(
 		var courseIdList = [];
 		var _course_container = $('#draggablePanelList');
 		var _submit = $('.btn-register-course-submit');
+
+        $(function () {
+            // $('input[name="daterange"]').daterangepicker();
+            $('#start_dt').datetimepicker({
+                
+            });
+
+            $('#end_dt').datetimepicker({
+                
+            });            
+        });
 
 		btn_create_edu.bind('click', function () {
 			var _group_id = null;

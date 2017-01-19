@@ -23,6 +23,7 @@ requirejs.config({
         ,quiz_component: ['/javascripts/components/quiz_component']
         ,quiz_service: ['/javascripts/components/quiz_service']
         ,slimScroll: '/vendor/plugins/slimScroll/jquery.slimscroll.min'
+        ,bootstrap_datetimepicker: ['/vendor/plugins/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min']
 	},
 	shim : {
 
@@ -38,6 +39,9 @@ requirejs.config({
 		'daterangepicker' : {
 			deps: ['jquery', 'moment']
 		},
+		// 'bootstrap_datetimepicker' : {
+		// 	deps: ['jquery', 'moment']
+		// },        
 		'bootstrap_datepicker' : {
 			deps: ['jquery']
 		},

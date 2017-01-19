@@ -1,0 +1,28 @@
+<div class="winpop_video" id="watchVideo">
+    {{#each video}}
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">비디오 강좌 : <strong>{{name}}</strong>
+                <div class="pull-right">                 
+                    <button type="button" class="btn btn-default" onclick="window.close();">
+                        <i class="fa fa-sign-out"> 나가기</i>
+                    </button>
+                </div>            
+            </h4>
+        </div>
+
+        <div class="modal-body">
+          {{#if (isEquals type 'YOUTUBE')}}
+            <iframe width="100%" height="600" src="https://www.youtube.com/embed/{{url}}" frameborder="0" allowfullscreen></iframe>
+          {{else if (isEquals type 'VIMEO')}}
+            <iframe src="https://player.vimeo.com/video/{{url}}?title=0&byline=0&portrait=0" width="100%" height="600"
+                    frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+          {{/if}}
+        </div>
+
+        <div class="modal-footer">
+
+        </div>
+    </div>
+    {{/each}}
+</div>

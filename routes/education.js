@@ -11,8 +11,11 @@ var isAuthenticated = function (req, res, next) {
 require('../commons/helpers');
 const async = require('async');
 
-
+/**
+ * 교육과정괸리 첫페이지
+ */
 router.get('/', isAuthenticated, function (req, res) {
+
 	async.series(
 		[
 			function (callback) {
@@ -51,15 +54,20 @@ router.get('/', isAuthenticated, function (req, res) {
 	});
 });
 
-
+/**
+ * 교육과정관리 상세페이지
+ */
 router.get('/details', isAuthenticated, function (req, res) {
+
 	var _course_group_id = req.query.id;
-	connection.query(QUERY.EDU.GetCourseListByGroupId,
+	
+    connection.query(QUERY.EDU.GetCourseListByGroupId,
 		[_course_group_id],
 		function (err, rows) {
 			if(err){
 				console.error(err);
 			}else{
+                console.log(rows);
 				res.render('education_details', {
 					current_path: 'EducationDetails',
 					title: PROJ_TITLE + 'Education Details',
@@ -135,5 +143,34 @@ router.post('/create/edu', isAuthenticated, function (req, res) {
 	});
 });
 
+/**
+ * 강의순서 변경
+ */
+router.put('/coursegroup', isAuthenticated, function (req, res) {
+
+    var _inputs = req.body;
+    var _query = null;
+
+    _query = connection.query(QUERY.EDU.UpdateCourseGroup, [             
+            _inputs.order,
+            _inputs.id
+        ],
+        function (err, data) {
+            console.log(_query.sql);
+
+            if (err) {
+                return res.json({
+                    success: false,
+                    msg: err
+                });
+            } else {
+                return res.json({
+                    success: true
+                });
+            }
+            
+        }
+    );
+});
 
 module.exports = router;

@@ -338,7 +338,25 @@ QUERY.EDU = {
 	"on e.creator_id = a.id " +
 	"where e.active=true and a.fc_id=? " +
 	"order by e.`created_dt` desc, e.`id` desc;"
-	,GetCourseListByGroupId :
+    // 교육과정의 강의를 조회한다.
+    ,GetCourseListByGroupId:
+        "SELECT c.`id` AS course_id " +
+        "     , c.`name` AS course_name " +
+        "     , c.`desc` AS course_desc " +
+        "     , t.`name` AS teacher_name " +
+        "     , cg.`id` AS course_group_id " +
+        "     , cg.`group_id` AS course_group_key " +
+        "  FROM `course_group` AS cg " +
+        " INNER JOIN `course` AS c " +
+        "    ON cg.`course_id` = c.`id` " +
+        "   AND c.`active` = 1 " +
+        "  LEFT JOIN `teacher` AS t " +
+        "    ON c.`teacher_id` = t.`id` " +    
+        " WHERE `group_id` = ? " +
+        " ORDER BY cg.`order` ASC, cg.`id` ASC "
+
+    // 교육과정의 강의를 조회한다. (deprecated)
+	,GetCourseListByGroupId_bak :
 		"select c.`id`, c.`name` as name, c.`desc`, t.`name` as teacher " +
 		"from `course` as c " +
 		"left join `teacher` as t " +
@@ -363,6 +381,10 @@ QUERY.EDU = {
 	,InsertCourseGroup :
 		"insert into `course_group` (`group_id`, `course_id`) " +
 		"values(?,?);"
+    // 강의그룹 순서를 변경한다.
+    ,UpdateCourseGroup:
+        "UPDATE `course_group` SET `order` = ? WHERE `id` = ?; "
+
 	,GetUserDataByPhone :
 		"select id from `users` " +
 		"where `phone` in (?);"

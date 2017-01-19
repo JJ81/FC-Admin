@@ -11,13 +11,22 @@
             <div class="box-body">
 
                 <div class="list-group">
-                    {{#each list}}
-                    <div class="list-group-item list-group-item-action">
-                        <h4 class="list-group-item-heading">{{name}}</h4>
+                    {{#each list}}                    
+                    <div class="list-group-item list-group-item-action"
+                        data-course-group-id="{{course_group_id}}"
+                        data-course-group-key="{{course_group_key}}"
+                    >  
+                        <h4 class="list-group-item-heading">                            
+                            <span class="handle ui-sortable-handle">
+                                <i class="fa fa-ellipsis-v"></i>
+                                <i class="fa fa-ellipsis-v"></i>
+                            </span> 
+                            {{course_name}}
+                        </h4>
                         <p class="list-group-item-text">
-                          <pre>{{desc}}</pre>
+                          <pre>{{course_desc}}</pre>
                         </p>
-                        <strong>강사명 : {{teacher}}</strong>
+                        <strong>강사명 : {{teacher_name}}</strong>
                     </div>
                     {{/each}}
             </div>
