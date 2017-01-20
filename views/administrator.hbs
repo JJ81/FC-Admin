@@ -1,7 +1,7 @@
 <div class="row home_section">
     <div class="col-xs-12">
         <div class="box">
-            {{#if (isEquals role 'superadmin')}}
+            {{#if (isEquals loggedIn.role 'superadmin')}}
             <div class="box-header">
                 <button class="btn btn-default pull-right" data-toggle="modal" data-target="#registerAdmin">
                   <i class="fa fa-user-circle-o"></i> &nbsp;
@@ -29,7 +29,7 @@
                       <td class="center">{{email}}</td>
                       <td class="center">{{role}}</td>
                       <td class="center">
-                        {{#ifCond (isEquals role 'superadmin') '||' (isEquals ../loggedIn.role 'admin')}}
+                        {{#ifCond (isEquals ../loggedIn.role 'supervisor') '||' (isEquals ../loggedIn.role 'admin')}}
                         -
                         {{else}}
                         <div class="btn-group">
@@ -61,7 +61,7 @@
                                    data-url="/administrator/password/reset"
                                    class="btn-modify-password">비밀번호변경</a>
                             </li>
-                            {{#if (isEquals role 'supervisor') }}
+                            {{#if (isEquals loggedIn.role 'supervisor') }}
                             <li><a href="#"
                                    data-user-id="{{id}}"
                                    data-toggle="modal"
@@ -69,7 +69,7 @@
                                    class="btn-add-branch">지점배정</a>
                             </li>                            
                             {{/if}}
-                            <li><a href="#" class="btn-suspend">정지</a></li>
+                            <!--<li><a href="#" class="btn-suspend">정지</a></li>-->
                           </ul>
                         </div>
                         {{/ifCond}}

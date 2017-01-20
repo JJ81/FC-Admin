@@ -1,5 +1,26 @@
 var QUERY = {};
 
+
+
+/* boilerplate
+
+,SELECT :
+    "SELECT" +
+    "  FROM" +
+    " WHERE" +
+    "" +
+
+,UPDATE :
+    "UPDATE `` " +
+    " WHERE" +
+    "" +
+
+,DELETE
+    "DELETE FROM `` " +
+    " WHERE " +
+    ""
+*/
+
 QUERY.ADMIN = {
     ResetPassword:
     "update `admin` set password=? " +
@@ -45,7 +66,7 @@ QUERY.LOGIN = {
 };
 
 QUERY.EMPLOYEE = {
-  GETBRANCH :
+  GetBranch :
     "select b.id, b.name from `branch` as b " +
     "where b.fc_id=? and b.active=true;"
   ,GETDUTY:
@@ -331,13 +352,42 @@ QUERY.COURSE = {
 };
 
 QUERY.EDU = {
-	GetList : // offset, limit이 한동안 없이 진행한다.
-	"select e.id, e.`name`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id " +
-	"from `edu` as e " +
-	"left join `admin` as a " +
-	"on e.creator_id = a.id " +
-	"where e.active=true and a.fc_id=? " +
-	"order by e.`created_dt` desc, e.`id` desc;"
+
+    // 교육과정 리스트를 조회한다.
+    // offset, limit이 한동안 없이 진행한다.
+	GetList : 
+        "SELECT e.`id` AS education_id " +
+        "     , e.`name` " +   
+        "     , e.`created_dt` " +   
+        "     , e.`start_dt` " +   
+        "     , e.`end_dt` " +   
+        "     , a.`name` AS creator " +   
+        "     , e.`course_group_id` " +   
+        "  FROM `edu` AS e " +
+        "  LEFT JOIN `admin` AS a " +
+        "    ON e.`creator_id` = a.`id` " +
+        " WHERE e.`active` = 1 " +
+        "   AND a.`fc_id` = ? " +
+        " ORDER BY e.`created_dt` DESC, e.`id` DESC; "
+
+        // "select e.id, e.`name`, e.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` as creator, e.course_group_id " +
+        // "from `edu` as e " +
+        // "left join `admin` as a " +
+        // "on e.creator_id = a.id " +
+        // "where e.active=true and a.fc_id=? " +
+        // "order by e.`created_dt` desc, e.`id` desc;"
+
+    // 교육과정 정보를 조회한다.
+    ,GetEduInfoById : 
+        "SELECT e.`id` " +
+        "     , e.`name` " +
+        "     , e.`desc` " +
+        "     , e.`start_dt` " +
+        "     , e.`end_dt` " +
+        "     , e.`course_group_id` AS course_group_key " +
+        "  FROM `edu` AS e " + 
+        " WHERE e.`id` = ?; "
+
     // 교육과정의 강의를 조회한다.
     ,GetCourseListByGroupId:
         "SELECT c.`id` AS course_id " +
@@ -367,17 +417,33 @@ QUERY.EDU = {
 			"order by `order` desc, `id` asc " +
 		")" +
 		"and c.`active`=true;"
+
+    // 해당 FC의 전체 강의리스트를 조회한다. 
 	,GetCourseList :
-		"select c.id, c.name, t.name as teacher " +
-		"from `course` as c " +
-		"left join `admin` as a " +
-		"on a.id = c.creator_id " +
-		"left join `teacher` as t " +
-		"on t.id = c.teacher_id " +
-		"where a.fc_id=?;"
-	,InsertCourseDataInEdu :
-		"insert into `edu` (`name`, `desc`, `course_group_id`, `creator_id`) " +
-		"values(?,?,?,?);"
+        "SELECT c.`id` AS course_id " +
+        "     , c.`name` AS course_name " +
+        "     , t.`name` AS teacher_name " +
+        "  FROM `course` AS c " +
+		"  LEFT JOIN `admin` AS a " +
+		"    ON a.`id` = c.`creator_id` " +
+		"  LEFT JOIN `teacher` AS t " +
+		"    ON t.`id` = c.`teacher_id` " +        
+        " WHERE a.`fc_id` = ? " +
+        " ORDER BY c.`name` ASC "
+    
+		// "select c.id, c.name, t.name as teacher " +
+		// "from `course` as c " +
+		// "left join `admin` as a " +
+		// "on a.id = c.creator_id " +
+		// "left join `teacher` as t " +
+		// "on t.id = c.teacher_id " +
+		// "where a.fc_id=?; "    
+    
+    // 교육과정을 생성한다.
+    ,InsertCourseDataInEdu :
+		"insert into `edu` (`name`, `desc`, `course_group_id`, `creator_id`, `start_dt`, `end_dt`) " +
+		"values(?,?,?,?,?,?); "
+        
 	,InsertCourseGroup :
 		"insert into `course_group` (`group_id`, `course_id`) " +
 		"values(?,?);"
@@ -421,11 +487,16 @@ QUERY.EDU = {
 			"order by `id` asc " +
 		");"
 	,InsertTrainingEdu :
-		"insert into `training_edu` (`edu_id`, `assigner`) " +
-		"values(?,?);"
-	,InsertUserIdInTrainingUsers :
-		"insert into `training_users` (`user_id`, `training_edu_id`) " +
-		"values(?,?);"
+        "insert into `training_edu` (`edu_id`, `assigner`) " +
+        "values(?,?);"
+    ,InsertUserIdInTrainingUsers :
+        "insert into `training_users` (`user_id`, `training_edu_id`) " +
+        "values(?,?);"
+    
+    // 강의그룹에서 id로 삭제한다.
+    ,DeleteCourseGroupById:
+        "DELETE FROM `course_group` " +
+        " WHERE `id` = ?; "
 };
 
 QUERY.HISTORY = {

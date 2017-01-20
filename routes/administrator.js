@@ -26,14 +26,14 @@ router.get('/', isAuthenticated, function (req, res) {
 				});
 			},
 			function (callback) {
-				connection.query(QUERY.EMPLOYEE.GETBRANCH, [req.user.fc_id], function (err, results) {
+				connection.query(QUERY.EMPLOYEE.GetBranch, [req.user.fc_id], function (err, results) {
 					callback(err, results);
 				});
 			}
 		],
 		function (err, results) {
 
-			console.log(results[2]);
+			console.log(results);
 			
 			if(err){
 				console.error(err);
@@ -43,8 +43,8 @@ router.get('/', isAuthenticated, function (req, res) {
 					title: PROJ_TITLE + 'administrator',
 					loggedIn: req.user,
 					list : results[0],
-					branches: results[1],
-					admin_branches: results[2] 
+					branches: results[1]
+					// admin_branches: results[2] 
 				});
 			}
 	});

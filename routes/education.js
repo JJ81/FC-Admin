@@ -59,33 +59,75 @@ router.get('/', isAuthenticated, function (req, res) {
  */
 router.get('/details', isAuthenticated, function (req, res) {
 
-	var _course_group_id = req.query.id;
+	// var _course_group_id = req.query.course_group_id;
+    var _params = req.query;
+
+    async.series([
+
+        // results[0]: 교육과정정보를 조회한다.
+        function (callback) {
+            connection.query(QUERY.EDU.GetEduInfoById, [ _params.id ], function (err, data) {
+                callback(err, data); 
+            });
+        },
+        // results[1]: 교육과정의 강의목록을 조회한다.
+        function (callback) {
+            connection.query(QUERY.EDU.GetCourseListByGroupId, [ _params.course_group_id ], function (err, data) {
+                callback(err, data);
+            });
+        },
+        // results[2]: 전체 강의목록을 조회한다.
+        function (callback) {
+            connection.query(QUERY.EDU.GetCourseList, [ req.user.fc_id ], function (err, data) {
+                callback(err, data);
+            });
+        }        
+    ], function (err, results) {
+        if (err) {
+            console.error(err);
+        } else {
+            console.info(results[0][0]);
+
+            res.render('education_details', {
+                current_path: 'EducationDetails',
+                title: PROJ_TITLE + 'Education Details',
+                loggedIn: req.user,
+                edu: results[0][0],
+                edu_course_list: results[1],
+                course_list: results[2]
+            });            
+        }
+    });    
+        
 	
-    connection.query(QUERY.EDU.GetCourseListByGroupId,
-		[_course_group_id],
-		function (err, rows) {
-			if(err){
-				console.error(err);
-			}else{
-                console.log(rows);
-				res.render('education_details', {
-					current_path: 'EducationDetails',
-					title: PROJ_TITLE + 'Education Details',
-					loggedIn: req.user,
-					list: rows
-				});
-			}
-	});
+    // connection.query(QUERY.EDU.GetCourseListByGroupId,
+	// 	[_course_group_id],
+	// 	function (err, rows) {
+	// 		if(err){
+	// 			console.error(err);
+	// 		}else{
+    //             console.log(rows);
+	// 			res.render('education_details', {
+	// 				current_path: 'EducationDetails',
+	// 				title: PROJ_TITLE + 'Education Details',
+	// 				loggedIn: req.user,
+	// 				list: rows
+	// 			});
+	// 		}
+	// });
 });
 
 const EducationService = require('../service/EducationService');
 router.post('/create/edu', isAuthenticated, function (req, res) {
-	var _data = {};
+	
+    var _data = {};
 	_data.group_id = req.body.course_group_id.trim();
 	_data.course_name = req.body.course_name.trim();
 	_data.course_desc = req.body.course_desc.trim();
 	_data.course_list = req.body.course_list;
 	_data.creator_id = req.user.admin_id;
+    _data.start_dt = req.body.start_dt;
+    _data.end_dt = req.body.end_dt;
 
 	console.info(_data);
 
@@ -94,7 +136,7 @@ router.post('/create/edu', isAuthenticated, function (req, res) {
 			[
 				function (callback) {
 					connection.query(QUERY.EDU.InsertCourseDataInEdu, [
-						_data.course_name, _data.course_desc, _data.group_id, _data.creator_id
+						_data.course_name, _data.course_desc, _data.group_id, _data.creator_id, _data.start_dt, _data.end_dt
 					], function (err, result) {
 						if(err){
 							console.error(err);
@@ -171,6 +213,25 @@ router.put('/coursegroup', isAuthenticated, function (req, res) {
             
         }
     );
+});
+
+/**
+ * 강의를 그룹에서 삭제한다.
+ */
+router.delete('/course', isAuthenticated, function (req, res) {
+
+    var _params = req.query;
+    var _query = null;
+
+    _query = connection.query(QUERY.EDU.DeleteCourseGroupById, [_params.course_group_id], function (err, data) {
+        console.log(_query.sql);
+        if (err) 
+            res.json({ success: false, msg: err }); 
+        else 
+            res.json({ success: true });
+    });
+    
+
 });
 
 module.exports = router;

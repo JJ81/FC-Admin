@@ -2,21 +2,20 @@
  * Created by yijaejun on 30/11/2016.
  */
 'use strict';
-requirejs(
-	[
-		'jquery'
-		,'axios'
-		,'moment'
-		,'excellentExport'
-		,'bootstrap'
-		,'jquery_datatable'
-		,'bootstrap_datatable'
-		,'select2'
-		,'daterangepicker'
-		,'jquery_ui'
-		,'adminLTE'
-		,'fastclick'
-		,'common'
+requirejs([
+		'jquery',
+		'axios',
+		'moment',
+		'excellentExport',
+		'bootstrap',
+		'jquery_datatable',
+		'bootstrap_datatable',
+		'select2',
+		'daterangepicker',
+		'jquery_ui',
+		'adminLTE',
+		'fastclick',
+		'common',
 	],
 	function ($, axios) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
@@ -67,7 +66,7 @@ requirejs(
 			_target.find('#select_authority').val(_role);
 		});
         
-    // supervisor 지점배정
+        // supervisor 지점배정
 		$('.btn-add-branch').bind('click', function () {
 			var _self = $(this);
 			var _target = $('#frm_assign_branch');
@@ -113,11 +112,11 @@ requirejs(
 		// 지점 템플릿에 데이터를 바인딩 후 반환한다. 
 		function getItemElement(branch_id, branch_name) {
 
-			return '<li class="list-group-item" data-branch-id="' + branch_id + '">' +
-						 '	<div class="course">' + branch_name + '<a href="#" class="btn-delete-course" onclick="administrator.removeElement(this);">' +
-						 '		<i class="fa fa-remove text-red"></i></a>' +
-						 '	</div>' +
-						 '</li>';
+			return  '<li class="list-group-item" data-branch-id="' + branch_id + '">' +
+                    '	<div class="course">' + branch_name + '<a href="#" class="btn-delete-course" onclick="administrator.removeElement(this);">' +
+                    '		<i class="fa fa-remove text-red"></i></a>' +
+                    '	</div>' +
+                    '</li>';
 
 		}
 
@@ -128,7 +127,7 @@ requirejs(
 			update: function() {
 				branchIdList = reCountBranchList();
 			}
-		});  
+		});
 
 		// 추가한 강의중에 중복이 있는지 확인을 한다.
 		function checkDuplicateBranchId(id){
@@ -181,6 +180,5 @@ requirejs(
 
 
 		});
-
 
 	}); // end of func

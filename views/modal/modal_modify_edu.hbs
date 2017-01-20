@@ -1,0 +1,99 @@
+<!-- Modify Education -->
+<div class="modal" id="modifyEdu" role="dialog">
+    <form class="modal-dialog" method="post" action="/education/modify" id="frm_modify_edu">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">교육과정 수정</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>강의명</label>
+                    <input type="text" class="form-control course-name" 
+                        name="course_name" 
+                        placeholder="강의명" 
+                        required autocomplete="off"
+                        value="{{edu.name}}" 
+                    />
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="start_dt">시작일 :</label>
+                            <div class="input-group date" id="start_dt">
+                                <input type="text" class="form-control" value="{{ time edu.start_dt}}" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-sm-6'>
+                        <div class="form-group">
+                            <label for="end_dt">종료일 :</label>
+                            <div class="input-group date" id="end_dt">
+                                <input type="text" class="form-control" value="{{ time edu.end_dt}}" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>강의 소개</label>
+                    <textarea class="form-control course-desc" name="course_desc" placeholder="강의소개를 입력하세요.">{{edu.desc}}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>교육에 추가할 강의를 선택하세요.</label>
+                    <select name="teacher_id" id="select-course-list" class="form-control">
+                        {{#each course_list}}
+                        <option value="{{course_id}}">{{course_name}} <small>({{teacher_name}})</small></option>
+                        {{/each}}
+                    </select>
+                    <div style="text-align: right;margin-top: 5px;">
+                        <button type="button" id="btn-add-course-edu" class="btn btn-default">추가</button>
+                    </div>
+                    
+                </div>
+
+                <hr />
+
+                <h5>교육과정 내 강의 리스트</h5>
+                <ul id="draggablePanelList" class="list-unstyled">
+                    {{#if edu_course_list}}
+                    {{#each edu_course_list}}
+                    <li class="list-group-item" data-course-id="{{course_id}}" data-course-group-id="{{course_group_id}}" data-course-group-key="{{course_group_key}}">
+                        <div class="course">
+                            <span class="handle ui-sortable-handle">
+                                <i class="fa fa-ellipsis-v"></i>
+                                <i class="fa fa-ellipsis-v"></i>
+                            </span>                             
+                            {{course_name}}
+                            <a href="#" class="btn-delete-course">
+                                <i class="fa fa-remove text-red"></i>
+                            </a>
+                        </div>
+                    </li>
+                    {{/each}}
+                    {{/if}}
+                </ul>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+                <button type="submit" class="btn btn-primary btn-register-course-submit">수정</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+      <input type="hidden" id="course_group_key" value="{{edu.course_group_key}}" />
+      
+    </form>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+            

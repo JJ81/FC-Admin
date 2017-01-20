@@ -22,7 +22,6 @@ requirejs(
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
 
-
 		var _winpop_option = 'scrollbars=yes, toolbar=no, location=no, status=no, menubar=no, ' +
 			'resizable=yes, width=1040, height=760, left=0, top=0';
             
@@ -34,6 +33,29 @@ requirejs(
         var _btn_create_final = $('.btn-create-final'); // 파이널테스트 생성
         var _btn_delete_session = $('.btn-delete-session'); // 세션 삭제버튼
         var _btn_modify_session = $('.btn-modify-session'); // 세션 수정버튼
+
+        $(function () {
+
+            // jQuery UI sortable 초기화
+            $('.course-session').sortable({
+                placeholder: "sort-highlight",
+                handle: ".handle",
+                forcePlaceholderSize: true,
+                zIndex: 999999,
+                start: function(e, ui) {
+                    $(this).attr('data-previndex', ui.item.index());
+                },
+                update: function(e, ui) {
+                    var newIndex = ui.item.index();
+                    var oldIndex = $(this).attr('data-previndex');
+                    $(this).removeAttr('data-previndex');
+                    console.log('newIndex : ' + newIndex + ' oldIndex : ' + oldIndex);
+                    
+                    changeSessionOrder();
+                }
+            });
+
+        });
 
         // 비디오 보기
 		_btn_watch.bind('click', function (e) {
@@ -151,30 +173,6 @@ requirejs(
 			    
 		});      
 
-        $(function () {
-
-            // jQuery UI sortable 초기화
-            $('.course-session').sortable({
-                placeholder: "sort-highlight",
-                handle: ".handle",
-                forcePlaceholderSize: true,
-                zIndex: 999999,
-                start: function(e, ui) {
-                    $(this).attr('data-previndex', ui.item.index());
-                },
-                update: function(e, ui) {
-                    var newIndex = ui.item.index();
-                    var oldIndex = $(this).attr('data-previndex');
-                    $(this).removeAttr('data-previndex');
-                    console.log('newIndex : ' + newIndex + ' oldIndex : ' + oldIndex);
-                    
-                    changeSessionOrder();
-                }
-            });
-
-        });
-
-
         /**
          * DB 에서 세션 순서를 변경한다.
          */
@@ -207,7 +205,6 @@ requirejs(
                     // console.log(response);
                 });
             });
-        }
-        
+        }        
 
 	}); // end of func

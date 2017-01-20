@@ -6,12 +6,16 @@
                     <i class="fa fa-list"></i> &nbsp;
                     목록으로
                 </a>
+                <button id="modify-edu" class="btn btn-warning pull-right btn-sm" data-toggle="modal" data-target="#modifyEdu">
+                    <i class="fa fa-pencil"></i> &nbsp;
+                    수정
+                </button>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
 
                 <div class="list-group">
-                    {{#each list}}                    
+                    {{#each edu_course_list}}                    
                     <div class="list-group-item list-group-item-action"
                         data-course-group-id="{{course_group_id}}"
                         data-course-group-key="{{course_group_key}}"
@@ -35,6 +39,8 @@
         <!-- /.box -->
     </div>
     <!-- /.col -->
+    
 </div>
 <!-- /.row -->
 
+{{>modal_modify_edu}}

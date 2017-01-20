@@ -1,25 +1,27 @@
 /**
  * Created by yijaejun on 30/11/2016.
+ * TODO
+ * locale 적용이 안되는 문제. (관련항목 : moment_ko) 
  */
 'use strict';
 requirejs(
 	[
-		'jquery'
-		,'axios'
-		,'moment'
-		// ,'excellentExport'
-		,'bootstrap'
-		// ,'jquery_datatable'
-		// ,'bootstrap_datatable'
-		// ,'select2'
-		// ,'daterangepicker'
-        ,'bootstrap_datetimepicker'
-		,'jquery_ui'
-		// ,'adminLTE'
-		// ,'fastclick'
-	//   ,'common'
+		'jquery',
+		'axios',		
+        'moment',
+		'bootstrap',
+        'bootstrap_datetimepicker',
+		'jquery_ui',
+		'excellentExport',
+		'bootstrap',
+		'jquery_datatable',
+		'bootstrap_datatable',
+		'select2',
+		'adminLTE',
+		'fastclick',
+		'common',    
 	],
-	function ($, axios) {
+	function ($, axios, moment) {
 
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
@@ -35,30 +37,48 @@ requirejs(
 		var course_group_id = $('.course_group_id');
 		var courseIdList = [];
 		var _course_container = $('#draggablePanelList');
-		var _submit = $('.btn-register-course-submit');
+		var _submit = $('.btn-register-course-submit');        
 
         $(function () {
-            // $('input[name="daterange"]').daterangepicker();
+
+            // DateTimePicker 설정
+            var start_dt = moment().format();
+            var end_dt = moment().add(6, 'days');
+
+            // 교육 시작일자
             $('#start_dt').datetimepicker({
-                
+                defaultDate: start_dt,
+                format: 'YYYY-MM-DD',
+                showTodayButton: true
             });
 
+            // 교육 종료일자
             $('#end_dt').datetimepicker({
-                
-            });            
+                defaultDate: end_dt,
+                format: 'YYYY-MM-DD',
+                useCurrent: false,
+                showTodayButton: true
+            });
+
+            // 날짜가 서로 겹치지 않도록 설정한다.
+            $("#start_dt").on("dp.change", function (e) {
+                $('#end_dt').data("DateTimePicker").minDate(e.date);
+            });
+            $("#end_dt").on("dp.change", function (e) {
+                $('#start_dt').data("DateTimePicker").maxDate(e.date);
+            });
         });
 
-		btn_create_edu.bind('click', function () {
+        btn_create_edu.bind('click', function () {
 			var _group_id = null;
 			axios.get('/api/v1/course/group/id/create')
 				.then(function (res) {
-					// console.log(res.data.id);
 					_group_id = res.data.id;
 					course_group_id.val(_group_id);
 				})
 				.catch(function (err) {
 					console.error(err);
-				})
+				});
 		});
 
 		// 강의를 선택할 때마다 하단에 선택한 강의를 추가할 수 있도록 한다
@@ -135,23 +155,7 @@ requirejs(
 				alert('강의를 추가하세요.');
 				return;
 			}
-
-			// todo axios로 전송을 한다.
-			//axios.post('/education/create/edu', {
-			//		course_group_id : course_group_id.val(),
-			//		course_name : courseName.val().trim(),
-			//		course_desc : courseDesc.val().trim(),
-			//		course_list : courseIdList
-			//	})
-			//	.then(function (res){
-			//		console.log('client return');
-			//		console.info(res);
-			//	})
-			//	.catch(function (err){
-			//		console.error(err);
-			//	});
-
-
+            
 			axios({
 				method : 'post',
 				url: '/education/create/edu',
@@ -159,17 +163,18 @@ requirejs(
 					course_group_id : course_group_id.val(),
 					course_name : courseName.val().trim(),
 					course_desc : courseDesc.val().trim(),
-					course_list : courseIdList
+					course_list : courseIdList,
+                    start_dt: $('#start_dt').find("input").val() + ' ' + '00:00:00',
+                    end_dt: $('#end_dt').find("input").val() + ' ' + '23:59:59'
 				}
 			}).then(function (res){
 				if(res.data.success == true){
-					//
+					alert('교육과정을 생성하였습니다.');
 				}else{
 					alert('알 수 없는 오류가 발생했습니다. 잠시 후에 다시 시도해주세요.');
 				}
 
 				window.location.reload();
-
 			});
 
 		});

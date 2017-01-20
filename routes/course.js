@@ -68,7 +68,7 @@ router.get('/details', isAuthenticated, function (req, res) {
   var _teacher_id = null;
 
   async.series([
-    // 세션목록을 조회한다.(course_list)
+    // 강의정보를 조회한다.
     // result[0]
     function(callback){
         connection.query(QUERY.COURSE.GetCourseListById,
@@ -1211,8 +1211,5 @@ router.delete('/courselist', isAuthenticated, function (req, res) {
     });
 
 });
-
-
-
 
 module.exports = router;

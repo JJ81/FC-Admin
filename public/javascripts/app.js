@@ -9,7 +9,9 @@ requirejs.config({
 		,bootstrap : ['/vendor/bootstrap/js/bootstrap.min']
 		,jquery_datatable : '/vendor/plugins/datatables/jquery.dataTables.min'
 		,bootstrap_datatable : '/vendor/plugins/datatables/dataTables.bootstrap.min'
-		,moment : '/vendor/plugins/moment/moment.2.11.2'
+		,moment : '/vendor/plugins/moment/moment.2.11.2.min'
+        ,moment_ko : '/vendor/plugins/moment/locale/kr'
+        // ,moment_ko : '/vendor/plugins/moment/locale/ko'
 		,daterangepicker : '/vendor/plugins/daterangepicker/daterangepicker'
 		,bootstrap_datepicker : '/vendor/plugins/datepicker/bootstrap-datepicker'
 		,excellentExport : '/vendor/plugins/ExcellentExport/csv.2.0.0'
