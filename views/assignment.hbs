@@ -1,29 +1,20 @@
 <div class="row home_section">
     <div class="col-xs-12">
         <div class="box">
-            <div class="box-header">
-                <div class="col-md-9">
-                    <button class="btn btn-default" data-toggle="modal" data-target="#uploadFile">
+            <div class="box-header with-border">
+                <div class="pull-right">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#uploadFile">
                         <i class="fa fa-upload"></i> &nbsp;
-                        교육배정자 업로드(.xls)
+                        교육배정자 업로드
                     </button>
                     <a href="/static/uploads/excel/sample_group.xlsx" class="btn btn-default">
-                        <i class="fa fa-file-excel-o"></i> &nbsp;
-                        업로드 양식
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <div class="input-group pull-right">
-                        <input type="text" class="form-control" placeholder="교육명 검색" required />
-                        <span class="input-group-btn">
-                          <button type="submit" class="btn btn-primary btn-flat">검색</button>
-                        </span>
-                    </div>
-                </div>
+                        <i class="fa fa-download"></i> &nbsp;
+                        양식
+                    </a>    
+                </div>            
             </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                <table id="table_assignment" class="table table-bordered table-striped">
+            <div class="box-body table-responsive">
+                <table id="table_assignment" class="table no-margin table-bordered table-striped" width="100%">
                     <thead>
                     <tr>
                         <th class="center">생성일</th>
@@ -38,36 +29,12 @@
                     {{#each list}}
                     <tr>
                         <td class="center">{{time created_dt}}</td>
-                        <td class="center"><a href="/assignment/details?id={{id}}&group_id={{group_id}}">{{title}}</a></td>
+                        <td class=""><a href="/assignment/details?id={{id}}&group_id={{group_id}}">{{title}}</a></td>
                         <td class="center">{{creator}}</td>
-                        <td class="center">{{desc}}</td>
-                        <!--<td class="center">-->
-                            <!--<div class="btn-group">-->
-                                <!--<button type="button" class="btn btn-warning">보기</button>-->
-                                <!--<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">-->
-                                    <!--<span class="caret"></span>-->
-                                    <!--<span class="sr-only">Toggle Dropdown</span>-->
-                                <!--</button>-->
-                                <!--<ul class="dropdown-menu" role="menu">-->
-                                    <!--<li><a href="#">교육과정 배정</a></li>-->
-                                    <!--&lt;!&ndash;<li><a href="#">수정</a></li>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<li><a href="#">삭제</a></li>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<li><a href="#">다운로드</a></li>&ndash;&gt;-->
-                                <!--</ul>-->
-                            <!--</div>-->
-                        <!--</td>-->
+                        <td class="">{{desc}}</td>
                     </tr>
                     {{/each}}
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <th class="center">생성일</th>
-                        <th class="center">교육대상명</th>
-                        <th class="center">생성자</th>
-                        <th class="center">설명</th>
-                        <!--<th class="center">Action</th>-->
-                    </tr>
-                    </tfoot>
                 </table>
             </div>
             <!-- /.box-body -->

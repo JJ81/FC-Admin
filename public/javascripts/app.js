@@ -9,6 +9,7 @@ requirejs.config({
 		,bootstrap : ['/vendor/bootstrap/js/bootstrap.min']
 		,jquery_datatable : '/vendor/plugins/datatables/jquery.dataTables.min'
 		,bootstrap_datatable : '/vendor/plugins/datatables/dataTables.bootstrap.min'
+        ,responsive_datatable : '/vendor/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min'
 		,moment : '/vendor/plugins/moment/moment.2.11.2.min'
         ,moment_ko : '/vendor/plugins/moment/locale/kr'
         // ,moment_ko : '/vendor/plugins/moment/locale/ko'
@@ -38,6 +39,9 @@ requirejs.config({
 		'bootstrap_datatable' : {
 			deps: ['jquery', 'jquery_datatable']
 		},
+		'responsive_datatable' : {
+			deps: ['jquery', 'jquery_datatable']
+		},        
 		'daterangepicker' : {
 			deps: ['jquery', 'moment']
 		},

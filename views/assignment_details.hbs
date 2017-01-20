@@ -1,7 +1,7 @@
 <div class="row home_section">
     <div class="col-xs-12">
         <div class="box">
-            <div class="box-header with-border">
+            <div class="box-header with-border margin">
                 <a href="/assignment" class="btn btn-default">
                     <i class="fa fa-list"></i> &nbsp;
                     목록으로
@@ -14,9 +14,9 @@
                 <!--교육 배정을 할 수 있다. <br />-->
             </div>
             <!-- /.box-header -->
-            <div class="box-body">
+            <div class="box-body table-responsive margin">
 
-                <h3 class="description">
+                <h3 class="box-title">
                    {{#each detail}}
                        {{title}}
                        <input type="hidden" class="group_id" value="{{group_id}}" />
@@ -26,7 +26,7 @@
 
                 <hr />
 
-                <table id="table_assignment_details" class="table table-bordered table-striped">
+                <table id="table_assignment_details" class="table no-margin table-bordered table-striped" width="100%">
                     <thead>
                     <tr>
                         <th class="center">지점</th>

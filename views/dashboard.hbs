@@ -1,5 +1,5 @@
-<div class="row home_section">
-    <div class="col-xs-12">
+<section class="section">
+    <!--<div class="col-xs-12">-->
         <!-- Summary -->
         <div class="row">
             <div class="col-lg-3 col-xs-6">
@@ -7,27 +7,25 @@
                 <div class="small-box bg-yellow">
                     <div class="inner">
                       <h3>{{#each total_users}}{{total_users}}{{/each}}</h3>
-                        <p>총교육생수</p>
+                        <p>총 교육생수</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-person-add"></i>
                     </div>
                 </div>
             </div>
-            <!-- ./col -->
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3>{{#each total_branch}}{{total_branch}}{{/each}}</h3>
-                        <p>총점포수</p>
+                        <p>총 점포수</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
                 </div>
             </div>
-            <!-- ./col -->
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-red">
@@ -35,155 +33,137 @@
                         <h3>
                           {{#each current_edu}}{{current_edu}}{{/each}} / {{#each total_edu}}{{total_edu}}{{/each}}
                         </h3>
-                        <p>진행중 교육과정 / 총 교육과정</p>
+                        <p>진행중인 교육과정 / 총 교육과정</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>
                     </div>
                 </div>
             </div>
-            <!-- ./col -->
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3>? <sup style="font-size: 20px">%</sup></h3>
-                        <p>전월대비 교육 이수율</p>
+                        <p>이번 달 전체 교육 이수율</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                     </div>
                 </div>
             </div>
-            <!-- ./col -->
         </div>
-        <!-- // Summary -->
 
-        <!-- 기간별 교육과정 진척도 -->
         <div class="row">
-            <div class="col-md-12">
+            <!-- 이번 달 교육 진척도 -->
+            <div class="col-lg-6">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">기간별 교육 진척도 <span class="blind">(2017.01 ~ 2017.02)</span></h3>
-
-                        <div class="box-tools pull-right">
-                            <!-- 달력 컴퍼넌트가 위치해야 함. -->
-                        </div>
+                        <h3 class="box-title">이번 달 교육 진척도</h3>
                     </div>
-                    <!-- /.box-header -->
                     <div class="box-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p class="text-center">
-                                    <strong>교육과정별 이수율</strong>
-                                </p>
-                                {{#for 0 5 1}}
-                                <div class="progress-group">
-                                    <span class="progress-text">일반상식1 <small>(2017.01.01 ~ 2017.01.01)</small></span>
-                                    <span class="progress-number"><b>80%</b>/100%</span>
+                        {{#for 0 5 1}}
+                        <div class="progress-group">
+                            <span class="progress-text">일반상식1 <small>(2017.01.01 ~ 2017.01.01)</small></span>
+                            <span class="progress-number"><b>80%</b>/100%</span>
 
-                                    <div class="progress progress-sm active">
-                                        <div class="progress-bar progress-bar-green progress-bar-striped" style="width: 80%"></div>
-                                    </div>
+                            <div class="progress progress-sm active">
+                                <div class="progress-bar progress-bar-green progress-bar-striped" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <!-- /.progress-group -->
+                        {{/for}}                            
+                    </div>
+                </div>
+            </div>
+            <!-- 교육이수율 점포별 순위 -->
+            <div class="col-lg-6">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">교육 이수율 랭킹 (지점)</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="agentRankList">
+                            <div class="col-md-6 agentTopRankList">
+                                <p class="list-header header-bottom-line">
+                                    <i class="fa fa-thumbs-o-up"></i>&nbsp; 상위 10위
+                                </p>
+                                <ol>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                </ol>
+                            </div>
+                            <div class="col-md-6 agentBottomRankList">
+                                <p class="list-header header-bottom-line">
+                                    <i class="fa fa-thumbs-o-down"></i>&nbsp;하위 10위
+                                </p>
+                                <ol>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                    <li>성동구 (100%)</li>
+                                </ol>
+                            </div>
+                        </div>                            
+                    </div>                        
+                </div>
+            </div>    
+        </div>
+
+        <div class="row">
+            <!-- 교육과정별 강의 이수율 -->
+            <div class="col-lg-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">이번 달 교육 강의별 이수율</h3>
+                    </div>
+
+                    <div class="box-body">
+                        {{#for 0 4 1}}
+                        <!-- course details -->
+                        <div class="col-md-3 course-achievement">
+                            <p class="list-header header-bottom-line">교육명1</p>
+                            <div class="conainer-course-list">
+                                {{#for 0 6 1}}
+                                <!-- course details -->
+                                <div class="progress-course-detail">
+                                <h4 class="course-name">일반상식1 <small>(2017.01.01 ~ 2017.01.31)</small></h4>
+                                <div class="progress progress-sm active">
+                                    <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"></div>
                                 </div>
-                                <!-- /.progress-group -->
+                                <div class="star-rating">
+                                    <span class="ratings twohalf"></span>
+                                </div>
+                                </div>
+                                <!-- // course details -->
                                 {{/for}}
                             </div>
-                            <!-- /.col -->
-
-                            <div class="col-md-6">
-                                <p class="text-center">
-                                    <strong>교육 이수율별 점포 순위</strong>
-                                </p>
-
-                                <div class="agentRankList">
-                                    <div class="col-md-6 agentTopRankList">
-                                        <p class="list-header header-bottom-line">
-                                            <i class="fa fa-thumbs-o-up"></i>&nbsp; 상위 10위
-                                        </p>
-                                        <ol>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                        </ol>
-                                    </div>
-                                    <div class="col-md-6 agentBottomRankList">
-                                        <p class="list-header header-bottom-line">
-                                            <i class="fa fa-thumbs-o-down"></i>&nbsp;하위 10위
-                                        </p>
-                                        <ol>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                            <li>성동구 (100%)</li>
-                                        </ol>
-                                    </div>
-                                </div>
-                                <!-- /.chart-responsive -->
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.row -->
-                    </div>
-                    <!-- ./box-body -->
-                </div>
-                <!-- /.box -->
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
-        <!-- // 기간별 교육과정 진척도 -->
-
-        <!-- 교육과정별 달성율 및 평가 -->
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">각 교육과정의 강의별 이수율 및 평가</h3>
-            </div>
-
-            <div class="box-body">
-                {{#for 0 4 1}}
-                <!-- course details -->
-                <div class="col-md-3 course-achievement">
-                    <p class="list-header header-bottom-line">교육명1</p>
-                    <div class="conainer-course-list">
-                        {{#for 0 6 1}}
-                        <!-- course details -->
-                        <div class="progress-course-detail">
-                          <h4 class="course-name">일반상식1 <small>(2017.01.01 ~ 2017.01.31)</small></h4>
-                          <div class="progress progress-sm active">
-                            <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"></div>
-                          </div>
-                          <div class="star-rating">
-                            <span class="ratings twohalf"></span>
-                          </div>
                         </div>
                         <!-- // course details -->
                         {{/for}}
                     </div>
+                    <!-- // course details list -->
                 </div>
-                <!-- // course details -->
-                {{/for}}
             </div>
-            <!-- // course details list -->
         </div>
-        <!-- // 교육과정별 달성율 및 평가 -->
 
-        <!-- 기간별 포인트 -->
         <div class="row">
-            <div class="col-xs-12">
+            <!-- 기간별 포인트 -->
+            <div class="col-lg-12">
                 <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">
@@ -205,8 +185,8 @@
                         </div>
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body table-responsive no-padding">
-                        <table class="table table-hover">
+                    <div class="box-body table-responsive">
+                        <table id="table_point" class="table no-margin table-bordered table-striped" width="100%">
                             <thead>
                                 <tr>
                                     <th class="center">지점</th>
@@ -242,10 +222,8 @@
                         <!--</ul>-->
                     </div>
                 </div>
-                <!-- /.box -->
             </div>
         </div>
-        <!-- // 기간별 포인트 -->
 
         <!-- 기간별 누적 포인트 -->
         <div class="row blind">
@@ -263,38 +241,38 @@
                                 <!--<button class="btn btn-default btn-sm pull-right" style="margin-right: 5px;">-->
                                     <!--<i class="fa fa-plus"></i> &nbsp;더보기-->
                                 <!--</button>-->
-                                <button class="btn btn-default btn-sm pull-right" style="margin-right: 5px;" data-toggle="modal" data-target="#pointWeight">
+                                <button class="btn btn-primary pull-right" style="margin-right: 5px;" data-toggle="modal" data-target="#pointWeight">
                                     <i class="fa fa-cogs"></i> &nbsp;가중치 설정
                                 </button>
                             </div>
                         </div>
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body table-responsive no-padding">
-                        <table class="table table-hover">
+                    <div class="box-body table-responsive">
+                        <table id="table_stacked_point" class="table no-margin table-bordered table-striped" width="100%">
                             <thead>
-                            <tr>
-                                <th class="center">지점</th>
-                                <th class="center">직책</th>
-                                <th class="center">이름</th>
-                                <th class="center">포인트</th>
-                                <th class="center">근거</th>
-                            </tr>
+                                <tr>
+                                    <th class="center">지점</th>
+                                    <th class="center">직책</th>
+                                    <th class="center">이름</th>
+                                    <th class="center">포인트</th>
+                                    <th class="center">근거</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            {{#for 0 10 1}}
-                            <tr>
-                                <td class="center">성동구</td>
-                                <td class="center">점장</td>
-                                <td class="center">박민규</td>
-                                <td class="center">1,000</td>
-                                <td class="center">
-                                    <button class="btn btn-sm btn-success">상세보기</button>
-                                    <!-- 팝업으로 띄울 것 -->
-                                    <!--이수율 100%, 퀴즈(20문항 중 20문항), 테스트(240문항 중 240문항), 총 비디오 시청 기록 (300분), 이수속도(상위1%), 반복학습빈도(상위1%)-->
-                                </td>
-                            </tr>
-                            {{/for}}
+                                {{#for 0 10 1}}
+                                <tr>
+                                    <td class="center">성동구</td>
+                                    <td class="center">점장</td>
+                                    <td class="center">박민규</td>
+                                    <td class="center">1,000</td>
+                                    <td class="center">
+                                        <button class="btn btn-sm btn-success">상세보기</button>
+                                        <!-- 팝업으로 띄울 것 -->
+                                        <!--이수율 100%, 퀴즈(20문항 중 20문항), 테스트(240문항 중 240문항), 총 비디오 시청 기록 (300분), 이수속도(상위1%), 반복학습빈도(상위1%)-->
+                                    </td>
+                                </tr>
+                                {{/for}}
                             </tbody>
                         </table>
                     </div>
@@ -311,9 +289,9 @@
             </div>
         </div>
         <!-- // 기간별 누적 포인트 -->
-    </div>
+    <!--</div>-->
     <!-- /.col -->
-</div>
+</section>
 <!-- /.row -->
 
 {{> modal_point_weight}}

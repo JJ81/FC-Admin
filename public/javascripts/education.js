@@ -9,19 +9,20 @@ requirejs(
 		'jquery',
 		'axios',		
         'moment',
-		'bootstrap',
+        'common',
+		'bootstrap',        
         'bootstrap_datetimepicker',
 		'jquery_ui',
 		'excellentExport',
 		'bootstrap',
 		'jquery_datatable',
 		'bootstrap_datatable',
+        'responsive_datatable',  
 		'select2',
 		'adminLTE',
-		'fastclick',
-		'common',    
+		'fastclick',		
 	],
-	function ($, axios, moment) {
+	function ($, axios, moment, Util) {
 
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
@@ -67,6 +68,10 @@ requirejs(
             $("#end_dt").on("dp.change", function (e) {
                 $('#start_dt').data("DateTimePicker").maxDate(e.date);
             });
+
+            // datatable 설정
+            Util.initDataTable($('#table_education'));
+              
         });
 
         btn_create_edu.bind('click', function () {

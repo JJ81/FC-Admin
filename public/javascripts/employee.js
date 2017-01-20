@@ -7,6 +7,7 @@ requirejs(
 		'jquery'
 		,'moment'
 		,'excellentExport'
+        ,'common'
 		,'bootstrap'
 		,'jquery_datatable'
 		,'bootstrap_datatable'
@@ -14,15 +15,13 @@ requirejs(
 		,'daterangepicker'
 		,'jquery_ui'
 		,'adminLTE'
-		,'fastclick'
-		,'common'
+		,'fastclick'		
 	],
-	function ($, moment, excellentCsv) {
+	function ($, moment, excellentCsv, Util) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
 
 		$(".select2").select2();
-
 
 		//// Download csv
 		//$('.btn_download_csv_home').bind('click', function (){
@@ -31,17 +30,9 @@ requirejs(
 		//
 
 
-		//// set table func.
+		// datatable 설정
 		var table_employee =
-		$('#table_employee').DataTable({
-			"paging": true,
-			"lengthChange": false, // todo 첫 로딩시 100개씩 보여줄 수 있게 하려면 어떤 옵션이 필요한가?
-			"searching": false,
-		  "ordering": false,
-			"info": true,
-			"autoWidth": true,
-			"processing": true
-		});
+        Util.initDataTable($('#table_employee'));
 
 
 		// 직원정보 수정 페이지

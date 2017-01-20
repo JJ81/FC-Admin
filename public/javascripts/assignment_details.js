@@ -5,6 +5,7 @@
 requirejs(
 	[
 		'jquery'
+        ,'common'
 		,'moment'
 		,'excellentExport'
 		,'bootstrap'
@@ -14,10 +15,9 @@ requirejs(
 		,'daterangepicker'
 		,'jquery_ui'
 		,'adminLTE'
-		,'fastclick'
-		,'common'
+		,'fastclick'		
 	],
-	function ($) {
+	function ($, Util) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
 
@@ -26,5 +26,8 @@ requirejs(
 			$('#allocationEdu .user_group_id').val($('.description .group_id').val());
 			$('#allocationEdu .bind_group_id').val($('.description .bind_group_id').val());
 		});
+
+        // datatable 설정
+        Util.initDataTable($('#table_assignment_details'));        
 
 	}); // end of func

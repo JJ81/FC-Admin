@@ -4,7 +4,10 @@
 'use strict';
 define(
 	[
-		'jquery'
+		'jquery',
+		'jquery_datatable',
+		// 'bootstrap_datatable',
+        'responsive_datatable',
 		// ,'axios'
 	],
 	function ($) {
@@ -15,11 +18,21 @@ define(
 			$('#frm_set_employee_password .user_id').val($(this).attr('data-user-id'));
 			$('#frm_set_employee_password .user_name').val($(this).attr('data-user-name'));
 			$('#frm_set_employee_password').attr('action', $(this).attr('data-url'));
-		});
+		});  
 
 		var validation = {};
 
 		return {
+            initDataTable: function (element) {
+                element.DataTable({
+                    responsive: true,
+                    language: {            
+                        "url": "https://cdn.datatables.net/plug-ins/1.10.13/i18n/Korean.json"
+                        // "url": "/datatable.kr.json"
+                    },
+                    "order": [[ 0, 'desc' ]],
+                });
+            },           
 			createWindowPopup: function(url, title, option) {
 				window.open(url, title, option);
 			}

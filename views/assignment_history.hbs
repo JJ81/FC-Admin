@@ -1,12 +1,10 @@
 <div class="row home_section">
     <div class="col-xs-12">
         <div class="box">
-            <div class="box-header">
-
-            </div>
+            <!--<div class="box-header"></div>-->
             <!-- /.box-header -->
-            <div class="box-body">
-                <table id="table_assignment_history" class="table table-bordered table-striped">
+            <div class="box-body table-responsive">
+                <table id="table_assignment_history" class="table no-margin table-bordered table-striped" width="100%">
                     <thead>
                     <tr>
                         <th class="center">배정일</th>
@@ -21,8 +19,8 @@
                     {{#each list}}
                         <tr>
                             <td class="center">{{time created_dt}}</td>
-                            <td class="center">{{name}}</td>
-                            <td class="center">
+                            <td class="">{{name}}</td>
+                            <td class="">
                                 {{#if (isEmpty target)}}
                                     -
                                 {{else}}
@@ -35,16 +33,6 @@
                         </tr>
                     {{/each}}
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <th class="center">배정일</th>
-                        <th class="center">교육과정</th>
-                        <th class="center">대상자</th>
-                        <th class="center">시작일</th>
-                        <th class="center">종료일</th>
-                        <th class="center">배정자</th>
-                    </tr>
-                    </tfoot>
                 </table>
             </div>
             <!-- /.box-body -->

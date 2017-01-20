@@ -4,15 +4,28 @@
 'use strict';
 requirejs(
 	[
-		'jquery'
-		,'bootstrap'
-		,'adminLTE'
-		,'fastclick'
-		,'common'
+		'jquery',
+        'common',
+		'moment',
+		'excellentExport',
+		'bootstrap',
+		'jquery_datatable',
+		'bootstrap_datatable',
+		'select2',
+		'daterangepicker',
+		'jquery_ui',
+		'adminLTE',
+		'fastclick',	
 	],
-	function ($) {
+	function ($, Util) {
 		// todo 위의 기능중에서 유틸성 기능은 common으로 이동시킨다.
 		// 여기서부터 포인트 환산 모달 컴퍼넌트를 위한 로직
+
+        $.widget.bridge('uibutton', $.ui.button);
+
+        // datatable 설정
+        Util.initDataTable($('#table_point'));
+
 		var
 			_total = 0,
 			frm_point_weight = $('#frm_point_weight'),

@@ -5,21 +5,24 @@
 requirejs([
 		'jquery',
 		'axios',
+        'common',
 		'moment',
 		'excellentExport',
 		'bootstrap',
 		'jquery_datatable',
 		'bootstrap_datatable',
-		'select2',
-		'daterangepicker',
+		// 'select2',
+		// 'daterangepicker',
 		'jquery_ui',
 		'adminLTE',
 		'fastclick',
-		'common',
 	],
-	function ($, axios) {
+	function ($, axios, Util) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
+
+        // datatable 설정
+        Util.initDataTable($('#table_admin'));        
 
 		var select_branch_list = $('.select_branch_list');
 		var branchIdList = [];		        

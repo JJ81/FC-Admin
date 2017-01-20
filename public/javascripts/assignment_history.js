@@ -7,6 +7,7 @@ requirejs(
 		'jquery'
 		,'moment'
 		,'excellentExport'
+        ,'common'
 		,'bootstrap'
 		,'jquery_datatable'
 		,'bootstrap_datatable'
@@ -14,26 +15,13 @@ requirejs(
 		,'daterangepicker'
 		,'jquery_ui'
 		,'adminLTE'
-		,'fastclick'
-		,'common'
+		,'fastclick'		
 	],
-	function ($, moment, excellentCsv) {
+	function ($, moment, excellentCsv, Util) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
 
-		var table_assignment_history =
-		$('#table_assignment_history').DataTable({
-			"paging": true,
-			"lengthChange": false, // 첫번째로 불러오는 리스트 개수 설정 셀렉트 박스 설정
-			"searching": false,
-			"ordering": false,
-			"info": false,
-			"autoWidth": true,
-			"processing": true
-		});
-
-
-
+        Util.initDataTable($('#table_assignment_history'));
 
 		//// Download csv
 		//$('.btn_download_csv_home').bind('click', function (){
