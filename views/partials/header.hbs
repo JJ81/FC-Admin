@@ -13,7 +13,7 @@
         </span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
+    <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->
         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
@@ -27,13 +27,16 @@
                         {{loggedIn.name}}
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#"
+                            <li class="">
+                                <a href="#"
                                    data-user-id="{{loggedIn.admin_id}}"
                                    data-user-name="{{loggedIn.name}}"
                                    data-url="/admin/password/reset"
                                    data-toggle="modal"
                                    data-target="#setEmployeePassword"
-                                   class="btn-modify-password">비밀번호 변경</a></li>
+                                   class="btn-modify-password">비밀번호 변경
+                                </a>
+                            </li>
                             <li class="divider"></li>
                             <li><a href="/logout">로그아웃</a></li>
                         </ul>
