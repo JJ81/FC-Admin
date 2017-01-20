@@ -19,6 +19,7 @@ router.get('/', isAuthenticated, function (req, res) {
     }else{
       res.render('assignment_history', {
         current_path: 'Assignment_history',
+        menu_group: 'education',
         title: PROJ_TITLE + 'Assignment History',
         loggedIn: req.user,
         list : rows

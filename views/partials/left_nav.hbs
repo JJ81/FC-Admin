@@ -12,27 +12,16 @@
                     {{/if}}
                 </a>
             </li>
-            <li {{#if (isEquals current_path 'Employee')}}class="active"{{/if}}>
-                <a href="/employee">
-                    <i class="fa fa-users"></i>
-                    <span>직원관리</span>
-                    {{#if (isEquals current_path 'Employee')}}
-                        <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right text-green"></i>
-                    </span>
-                    {{/if}}
-                </a>
-            </li>
 
-            <li {{#if (isEquals current_path 'Education')}}class="active"{{/if}}>
-                <a href="/education">
-                    <i class="fa fa-database" aria-hidden="true"></i>
-                    <span>교육과정 등록관리</span>
-                    {{#if (isEquals current_path 'Education')}}
+            <li {{#if (isEquals current_path 'Achievement')}}class="active"{{/if}}>
+                <a href="/achievement">
+                    <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
+                    <span>교육 진척도</span>
+                    {{#if (isEquals current_path 'Achievement')}}
                     <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right text-green"></i>
                     </span>
-                    {{else if (isEquals current_path 'EducationDetails')}}
+                    {{else if (isEquals current_path 'AchievementDetails')}}
                     <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right text-green"></i>
                     </span>
@@ -40,32 +29,17 @@
                 </a>
             </li>
 
-            <li {{#if (isEquals current_path 'Assignment')}}class="active"{{/if}}>
-                <a href="/assignment">
-                    <i class="fa fa-suitcase" aria-hidden="true"></i>
-                    <span>교육과정 배정관리</span>
-                    {{#if (isEquals current_path 'Assignment')}}
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right text-green"></i>
-                    </span>
-                    {{else if (isEquals current_path 'AssignmentDetails')}}
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right text-green"></i>
-                    </span>
-                    {{/if}}
+            <li class="{{#if (isEquals menu_group 'education')}}active {{/if}}treeview">
+                <a href="#">
+                    <i class="fa fa-database"></i>
+                    <span>교육과정 관리</span>                    
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right text-green"></i></span>                
                 </a>
-            </li>
-
-            <li {{#if (isEquals current_path 'Assignment_history')}}class="active"{{/if}}>
-                <a href="/assignment_history">
-                    <i class="fa fa-clock-o" aria-hidden="true"></i>
-                    <span>교육과정 배정이력</span>
-                    {{#if (isEquals current_path 'Assignment_history')}}
-                        <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right text-green"></i>
-                    </span>
-                    {{/if}}
-                </a>
+                <ul class="treeview-menu">
+                    <li><a href="/education"><i class="fa fa-circle-o"></i> 등록</a></li>
+                    <li><a href="/assignment"><i class="fa fa-circle-o"></i> 배정</a></li>
+                    <li><a href="/assignment_history"><i class="fa fa-circle-o"></i> 배정이력</a></li>
+                </ul>
             </li>
 
             <li {{#if (isEquals current_path 'Course')}}class="active"{{/if}}>
@@ -83,22 +57,18 @@
                     {{/if}}
                 </a>
             </li>
-            
-            <li {{#if (isEquals current_path 'Achievement')}}class="active"{{/if}}>
-                <a href="/achievement">
-                    <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
-                    <span>진척도관리</span>
-                    {{#if (isEquals current_path 'Achievement')}}
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right text-green"></i>
-                    </span>
-                    {{else if (isEquals current_path 'AchievementDetails')}}
-                    <span class="pull-right-container">
+
+            <li {{#if (isEquals current_path 'Employee')}}class="active"{{/if}}>
+                <a href="/employee">
+                    <i class="fa fa-users"></i>
+                    <span>직원관리</span>
+                    {{#if (isEquals current_path 'Employee')}}
+                        <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right text-green"></i>
                     </span>
                     {{/if}}
                 </a>
-            </li>
+            </li>            
 
             {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
             <li {{#if (isEquals current_path 'Administrator')}}class="active"{{/if}}>

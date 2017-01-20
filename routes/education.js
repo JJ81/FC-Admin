@@ -45,6 +45,7 @@ router.get('/', isAuthenticated, function (req, res) {
 			}else{
 				res.render('education', {
 					current_path: 'Education',
+                    menu_group: 'education',
 					title: PROJ_TITLE + 'Education',
 					loggedIn: req.user,
 					list: result[0],
@@ -90,6 +91,7 @@ router.get('/details', isAuthenticated, function (req, res) {
 
             res.render('education_details', {
                 current_path: 'EducationDetails',
+                menu_group: 'education',
                 title: PROJ_TITLE + 'Education Details',
                 loggedIn: req.user,
                 edu: results[0][0],
