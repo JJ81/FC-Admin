@@ -18,17 +18,17 @@ router.get('/', isAuthenticated, function (req, res) {
 
   async.series([
     function (callback) {
-      connection.query(QUERY.EMPLOYEE.GET_EMPLOYEE_LIST, [req.user.fc_id], function (err, employee) {
+      connection.query(QUERY.EMPLOYEE.GetEmployeeList, [req.user.fc_id], function (err, employee) {
         callback(err, employee);
       })
     },
     function (callback) {
-      connection.query(QUERY.EMPLOYEE.GETBRANCH, [req.user.fc_id], function (err, branch) {
+      connection.query(QUERY.EMPLOYEE.GetBranch, [req.user.fc_id], function (err, branch) {
         callback(err, branch);
       })
     },
     function (callback) {
-      connection.query(QUERY.EMPLOYEE.GETDUTY, [req.user.fc_id], function (err, duty) {
+      connection.query(QUERY.EMPLOYEE.GetDuty, [req.user.fc_id], function (err, duty) {
         callback(err, duty);
       })
     }

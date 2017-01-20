@@ -69,7 +69,7 @@ QUERY.EMPLOYEE = {
   GetBranch :
     "select b.id, b.name from `branch` as b " +
     "where b.fc_id=? and b.active=true;"
-  ,GETDUTY:
+  ,GetDuty:
     "select d.id, d.name from `duty` as d " +
     "where d.fc_id=? and d.active=true;"
   ,CreateEmployee :
@@ -79,7 +79,7 @@ QUERY.EMPLOYEE = {
     "insert into `branch` (`name`, `fc_id`) values(?,?);"
   ,CreateDuty :
     "insert into `duty` (`name`, `fc_id`) values(?,?);"
-  ,GET_EMPLOYEE_LIST:
+  ,GetEmployeeList:
     "select u.id as id, u.name as name, u.phone as phone, u.email as email, b.name as branch, d.name as duty, b.id as branch_id, d.id as duty_id " +
     "from `users` as u " +
     "left join `fc` as f " +
