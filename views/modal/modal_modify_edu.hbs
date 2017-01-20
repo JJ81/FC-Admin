@@ -86,11 +86,12 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
-                <button type="submit" class="btn btn-primary btn-register-course-submit">수정</button>
+                <button type="button" id="modify-edu" class="btn btn-primary btn-modify-edu">수정</button>
             </div>
         </div>
         <!-- /.modal-content -->
       <input type="hidden" id="course_group_key" value="{{edu.course_group_key}}" />
+      <input type="hidden" id="edu_id" value="{{edu.id}}" />
       
     </form>
     <!-- /.modal-dialog -->

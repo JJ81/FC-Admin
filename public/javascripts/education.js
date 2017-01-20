@@ -140,13 +140,13 @@ requirejs(
 			e.preventDefault();
 
 			if(courseName.val() === ''){
-				alert('강의명을 입력하세요.');
+				alert('교육과정명을 입력하세요.');
 				courseName.focus();
 				return;
 			}
 
 			if(courseDesc.val() === ''){
-				alert('강의소개를 입력해주세요.');
+				alert('교육과정명 소개를 입력해주세요.');
 				courseDesc.focus();
 				return;
 			}

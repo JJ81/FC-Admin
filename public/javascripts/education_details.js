@@ -14,7 +14,7 @@ requirejs([
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
 
-        var _btn_modify_edu = $('#modify-edu'); // 교육과정 수정버튼
+        var _btn_modify_edu = $('.btn-modify-edu'); // 교육과정 수정버튼
         var _btn_add_course_edu = $('#btn-add-course-edu'); //강의추가 버튼
         var _select_course_list = $('#select-course-list'); // 추가할 강의 리스트
         var _course_container = $('#draggablePanelList'); // 추가된 강의 목록
@@ -90,49 +90,110 @@ requirejs([
 
             var button = $(this);
             var modal = $('#frm_modify_edu');
+            var edu_name = $('.course-name');
+            var edu_desc = $('.course-desc');                        
+            var course_group_list = makeCourseGroupList();
 
-            // axios.get('education/courses', {
-            //     params: {
-            //         education_id: 0
-            //     }
-            // })
-            // .then(function (res) {
-            //     console.err(res);
-            // })
-            // .catch(function(err) {
-            //     console.err(err);
-            // });
+			if (edu_name.val() === ''){
+				alert('교육과정명을 입력하세요.');
+				edu_name.focus();
+				return false;
+			}
+
+			if (edu_desc.val() === ''){
+				alert('교육과정 소개를 입력해주세요.');
+				edu_desc.focus();
+				return false;
+			}
+
+            if (!course_group_list.valid_course_count) {
+                alert('강의를 추가해주세요.');
+                return false;
+            }
+
+            if (!confirm("수정하시겠습니까?"))
+                return false;
+
+            // 저장한다.
+			axios({
+				method : 'put',
+				url: '/education/modify/edu',
+				data : {
+                    id: $('#edu_id').val(),
+					name : edu_name.val().trim(),
+					desc : edu_desc.val().trim(),
+					course_group_list : course_group_list.data,
+                    start_dt: $('#start_dt').find("input").val() + ' ' + '00:00:00',
+                    end_dt: $('#end_dt').find("input").val() + ' ' + '23:59:59'
+				}
+			}).then(function (res){
+				if(res.data.success == true){
+					alert('교육과정을 수정하였습니다.');
+				}else{
+					alert('알 수 없는 오류가 발생했습니다. 잠시 후에 다시 시도해주세요.');
+				}
+
+				window.location.reload();
+			});
+
 
         });
 
+        // 강의그룹 데이터를 생성한다.
+        function makeCourseGroupList () {
+
+            var course_group_list = [];
+            var order = 0;
+            var mode = "";
+            var valid_course_count = 0; 
+
+            $('#draggablePanelList').find('li.list-group-item').each(function (index) { 
+                
+                var course_group = {
+                    id: $(this).data('course-group-id'),
+                    course_id: $(this).data('course-id'),
+                    course_group_id: $(this).data('course-group-key'),
+                    order: order
+                };
+
+                if (course_group.id)
+                    if ($(this).is(":visible")) 
+                        course_group.mode = "UPDATE";
+                    else
+                        course_group.mode = "DELETE";
+                else
+                    course_group.mode = "INSERT";
+                
+                course_group_list.push(course_group);
+
+                if (course_group.mode !== "DELETE") {
+                    valid_course_count += 1;
+                    order += 1;
+                }
+
+            });
+
+            return { data: course_group_list, valid_course_count: valid_course_count };
+            
+        }
+
         // 강의 삭제
         $('.btn-delete-course').bind('click', function () {
-
-            console.log('delete?');
-
             // API 삭제 요청
             deleteEduCourse($(this).parent().parent());
         });
 
         // 강의 추가
-        _btn_add_course_edu.bind('click', function () {
-        
+        _btn_add_course_edu.bind('click', function () {        
             addCourseGroupItem();
-
         });
 
         /**
          * 동적으로 추가된 강의에 이벤트 바인딩
          */
         _course_container.on('click', '> li', function (e) {
-
-            // console.log('delete?');
-            // console.log(e);
-            // console.log($(e.target).parent().parent().parent());
-
             // API 삭제 요청
-            deleteEduCourse($(e.target).parent().parent().parent());            
-
+            deleteEduCourse($(e.target).parent().parent().parent());
         });
 
         // 강의를 그룹에 추가한다.

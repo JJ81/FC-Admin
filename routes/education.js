@@ -10,6 +10,7 @@ var isAuthenticated = function (req, res, next) {
 };
 require('../commons/helpers');
 const async = require('async');
+const EducationService = require('../service/EducationService');
 
 /**
  * 교육과정괸리 첫페이지
@@ -119,7 +120,9 @@ router.get('/details', isAuthenticated, function (req, res) {
 	// });
 });
 
-const EducationService = require('../service/EducationService');
+/**
+ * 교육과정을 등록한다.
+ */
 router.post('/create/edu', isAuthenticated, function (req, res) {
 	
     var _data = {};
@@ -137,7 +140,7 @@ router.post('/create/edu', isAuthenticated, function (req, res) {
 		async.series(
 			[
 				function (callback) {
-					connection.query(QUERY.EDU.InsertCourseDataInEdu, [
+					connection.query(QUERY.EDU.InsertEdu, [
 						_data.course_name, _data.course_desc, _data.group_id, _data.creator_id, _data.start_dt, _data.end_dt
 					], function (err, result) {
 						if(err){
@@ -183,6 +186,60 @@ router.post('/create/edu', isAuthenticated, function (req, res) {
 					});
 				}
 				// connection.rollback();
+			});
+	});
+});
+
+/**
+ * 교육과정을 수정한다.
+ */
+router.put('/modify/edu', isAuthenticated, function (req, res) {
+	
+    var _inputs = req.body;
+
+    // console.log (_inputs);
+    // return res.json({
+    //     success: true
+    // });
+
+	connection.beginTransaction(function () {
+		async.series(
+			[
+                // 교육과정을 수정한다.
+				function (callback) {
+					connection.query(QUERY.EDU.UpdateEdu, [
+						_inputs.name, 
+                        _inputs.desc,  
+                        _inputs.start_dt, 
+                        _inputs.end_dt,
+                        _inputs.id
+					], function (err, result) {
+                        callback(err, result);
+					});
+				},
+
+                // 강의그룹을 입력/수정한다.
+				function (callback) {
+					EducationService.InsertOrUpdateCourseGroup(connection, _inputs.course_group_list,
+						function (err, result) {
+							callback(err, result);
+						});
+				}
+
+			],
+			function (err, result) {
+				if(err) {
+					console.error(err);
+					connection.rollback();
+					return res.json({
+						success : false
+					});
+				}else{
+					connection.commit();
+					 return res.json({
+						success: true
+					});
+				}
 			});
 	});
 });

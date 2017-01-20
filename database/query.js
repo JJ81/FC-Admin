@@ -440,16 +440,32 @@ QUERY.EDU = {
 		// "where a.fc_id=?; "    
     
     // 교육과정을 생성한다.
-    ,InsertCourseDataInEdu :
+    ,InsertEdu :
 		"insert into `edu` (`name`, `desc`, `course_group_id`, `creator_id`, `start_dt`, `end_dt`) " +
 		"values(?,?,?,?,?,?); "
-        
+    
+    // 교육과정을 수정한다.
+    ,UpdateEdu:
+        "UPDATE `edu` SET " +
+        "       `name` = ? " +
+        "     , `desc` = ? " +
+        "     , `updated_dt` = NOW() " +
+        "     , `start_dt` = ? " +
+        "     , `end_dt` = ? " +
+        " WHERE `id` = ?; "     
+    
+    // 강의그룹을 생성한다.
 	,InsertCourseGroup :
-		"insert into `course_group` (`group_id`, `course_id`) " +
-		"values(?,?);"
+		"insert into `course_group` (`group_id`, `course_id`, `order`) " +
+		"values(?,?,?);"
+
     // 강의그룹 순서를 변경한다.
     ,UpdateCourseGroup:
         "UPDATE `course_group` SET `order` = ? WHERE `id` = ?; "
+
+    // 강의그룹을 삭제한다.
+    ,DeleteCourseGroup:
+        "DELETE FROM `course_group` WHERE `id` = ?; "        
 
 	,GetUserDataByPhone :
 		"select id from `users` " +
