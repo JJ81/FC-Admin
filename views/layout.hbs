@@ -7,20 +7,21 @@
     <link rel="stylesheet" href="/vendor/font-awesome-4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/vendor/ionicons-2.0.1/css/ionicons.min.css" />
     <link rel="stylesheet" href="/vendor/dist/css/AdminLTE.min.css" />
-    <link rel="stylesheet" href="/vendor/dist/css/skins/_all-skins.min.css" />
+    <link rel="stylesheet" href="/vendor/dist/css/skins/skin-green-light.min.css">
+    <!--<link rel="stylesheet" href="/vendor/dist/css/skins/_all-skins.min.css" />-->
     <link rel="stylesheet" href="/vendor/plugins/datepicker/datepicker3.css" />
     <link rel="stylesheet" href="/vendor/plugins/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="/vendor/plugins/select2/select2.min.css" />
     <link rel="stylesheet" href="/vendor/plugins/datatables/dataTables.bootstrap.css" />
     <link rel="stylesheet" href="/vendor/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css" />
     <link rel="stylesheet" href="/vendor/plugins/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />    
-    <link rel='stylesheet' href="/stylesheets/styles.css" />
+    <link rel='stylesheet' href="/stylesheets/styles.css" /> 
     
 
     <title>{{title}}</title>
 </head>
 
-<body class="hold-transition skin-black sidebar-mini {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
+<body class="hold-transition skin-green-light sidebar-mini {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
     {{#if (isEquals current_path 'Login')}}
     {{{body}}}
     {{else if (isEquals current_path 'winpop')}}    

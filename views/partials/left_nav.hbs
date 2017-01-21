@@ -36,9 +36,9 @@
                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right text-green"></i></span>                
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="/education"><i class="fa fa-circle-o"></i> 등록</a></li>
-                    <li><a href="/assignment"><i class="fa fa-circle-o"></i> 배정</a></li>
-                    <li><a href="/assignment_history"><i class="fa fa-circle-o"></i> 배정이력</a></li>
+                    <li {{#if (isEquals current_path 'Education')}}class="active"{{/if}}><a href="/education"><i class="fa fa-circle-o"></i> 등록</a></li>
+                    <li {{#ifCond (isEquals current_path 'Assignment') '||' (isEquals current_path 'AssignmentDetails')}}class="active"{{/ifCond}}><a href="/assignment"><i class="fa fa-circle-o"></i> 배정</a></li>
+                    <li {{#if (isEquals current_path 'Assignment_history')}}class="active"{{/if}}><a href="/assignment_history"><i class="fa fa-circle-o"></i> 배정이력</a></li>
                 </ul>
             </li>
 

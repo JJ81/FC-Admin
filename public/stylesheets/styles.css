@@ -120,7 +120,13 @@
   top: 24px; }
 
 .dropdown-menu {
-  left: -84px !important; }
+    right: 0% !important;    
+  /*left: -84px !important; */
+}
+
+.dropdown-menu li a {
+    color: #111 !important;
+}
 
 .course-name {
   font-size: 14px; }
