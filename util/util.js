@@ -40,4 +40,6 @@ util.publishHashByMD5 = function (value) {
     return md5(value + randomstring.generate(7));
 };
 
+
+
 module.exports = util;

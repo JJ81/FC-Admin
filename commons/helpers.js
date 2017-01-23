@@ -119,3 +119,14 @@ hbs.registerHelper('addOneForIndex', function(num) {
 hbs.registerHelper('extractRatio', function(current, total, user_count) {
 	return Math.ceil(current/(total*user_count)*100);
 });
+
+/**
+ * 배열 0 번째 인덱스에서 offset 인덱스까지의 데이터만 반환한다. 
+ */
+hbs.registerHelper('top', function (offset, context, options) { 
+    var ret = ""; 
+    for (var i = 0, j = offset; i < j; i++) { 
+        ret = ret + options.fn(context[i]); 
+    } 
+    return ret;
+});

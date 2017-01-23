@@ -19,7 +19,7 @@
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3>{{#each total_branch}}{{total_branch}}{{/each}}</h3>
-                        <p>총 점포수</p>
+                        <p>총 지점수</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-bag"></i>
@@ -44,7 +44,7 @@
                 <!-- small box -->
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3>? <sup style="font-size: 20px">%</sup></h3>
+                        <h3>{{total_edu_progress.completed_rate}} <sup style="font-size: 20px">%</sup></h3>
                         <p>이번 달 전체 교육 이수율</p>
                     </div>
                     <div class="icon">
@@ -62,17 +62,17 @@
                         <h3 class="box-title">이번 달 교육 진척도</h3>
                     </div>
                     <div class="box-body">
-                        {{#for 0 5 1}}
+                        {{#each edu_progress}}
                         <div class="progress-group">
-                            <span class="progress-text">일반상식1 <small>(2017.01.01 ~ 2017.01.01)</small></span>
-                            <span class="progress-number"><b>80%</b>/100%</span>
+                            <span class="progress-text">{{edu_name}} <small>({{ time edu_start_dt }} ~ {{ time edu_end_dt }})</small></span>
+                            <span class="progress-number"><b>{{completed_rate}}%</b>/100%</span>
 
                             <div class="progress progress-sm active">
-                                <div class="progress-bar progress-bar-green progress-bar-striped" style="width: 80%"></div>
+                                <div class="progress-bar progress-bar-green progress-bar-striped" style="width: {{completed_rate}}%"></div>
                             </div>
                         </div>
                         <!-- /.progress-group -->
-                        {{/for}}                            
+                        {{/each}}                            
                     </div>
                 </div>
             </div>
@@ -89,16 +89,11 @@
                                     <i class="fa fa-thumbs-o-up"></i>&nbsp; 상위 10위
                                 </p>
                                 <ol>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
+                                    {{#top 10 branch_progress_top_most}}
+                                    {{#if branch_name}}
+                                    <li>{{branch_name}} ({{completed_rate}}%)</li>
+                                    {{/if}}
+                                    {{/top}}
                                 </ol>
                             </div>
                             <div class="col-md-6 agentBottomRankList">
@@ -106,16 +101,11 @@
                                     <i class="fa fa-thumbs-o-down"></i>&nbsp;하위 10위
                                 </p>
                                 <ol>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
-                                    <li>성동구 (100%)</li>
+                                    {{#top 10 branch_progress_bottom_most}}
+                                    {{#if branch_name}}
+                                    <li>{{branch_name}} ({{completed_rate}}%)</li>
+                                    {{/if}}
+                                    {{/top}}
                                 </ol>
                             </div>
                         </div>                            

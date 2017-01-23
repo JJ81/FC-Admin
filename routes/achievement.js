@@ -40,57 +40,116 @@ router.get('/details', isAuthenticated, function (req, res) {
 	
 	var _training_edu_id = req.query.id;
 	var _edu_id = req.query.edu_id;
+    var _query = null;
 
-	async.series([
-		function (callback) {
-			connection.query(QUERY.ACHIEVEMENT.GetBranchProgress, [
-					req.user.fc_id,
-					req.user.admin_id,
-					_edu_id,
-					_edu_id
-				], 
-				function (err, data) {
-					callback(err, data); // results[0]
-				}
-			);
-		},
-		function (callback) {
-			connection.query(QUERY.ACHIEVEMENT.GetUserProgress, [
-					req.user.fc_id,
-					req.user.admin_id,
-					_edu_id,
-					_edu_id
-				], 
-				function (err, data) {
-					callback(err, data); // results[1]
-				}
-			);
-		},
-		function (callback) {
-			connection.query(QUERY.ACHIEVEMENT.GetEduInfoById, [
-					_edu_id
-				], 
-				function (err, data) {
-					callback(err, data); // results[2]
-				}
-			);			
-		}
-	], function (err, results) {
-		if (err) {
-			console.error(err);
-		} else {
-			console.info(results);
+    if (req.user.role === 'supervisor') {
+        async.series([
+            function (callback) {
+                _query = connection.query(QUERY.ACHIEVEMENT.GetBranchProgress, [
+                        req.user.fc_id,
+                        req.user.admin_id,
+                        _edu_id,
+                        _edu_id
+                    ], 
+                    function (err, data) {
+                        // console.log(_query.sql);
+                        callback(err, data); // results[0]
+                    }
+                );
+            },
+            function (callback) {
+                _query = connection.query(QUERY.ACHIEVEMENT.GetUserProgress, [
+                        req.user.fc_id,
+                        req.user.admin_id,
+                        _edu_id,
+                        _edu_id
+                    ], 
+                    function (err, data) {
+                        // console.log(_query.sql);
+                        callback(err, data); // results[1]
+                    }
+                );
+            },
+            function (callback) {
+                _query = connection.query(QUERY.ACHIEVEMENT.GetEduInfoById, [
+                        _edu_id
+                    ], 
+                    function (err, data) {
+                        // console.log(_query.sql);
+                        callback(err, data); // results[2]
+                    }
+                );			
+            }
+        ], function (err, results) {
+            if (err) {
+                console.error(err);
+            } else {
+                // console.info(results);
 
-			res.render('achievement_details', {
-				current_path: 'AchievementDetails',
-				title: PROJ_TITLE + 'Achievement Details',
-				loggedIn: req.user,
-				branch_progress: results[0],
-				user_progress: results[1],
-				edu_name: results[2][0].name
-			});			
-		}
-	});	
+                res.render('achievement_details', {
+                    current_path: 'AchievementDetails',
+                    title: PROJ_TITLE + 'Achievement Details',
+                    loggedIn: req.user,
+                    branch_progress: results[0],
+                    user_progress: results[1],
+                    edu_name: results[2][0].name
+                });			
+            }
+        });	
+    } 
+    else {
+        async.series([
+            function (callback) {
+                _query = connection.query(QUERY.ACHIEVEMENT.GetBranchProgressAllByEdu, [
+                        req.user.fc_id,
+                        _edu_id,
+                        _edu_id
+                    ], 
+                    function (err, data) {
+                        // console.log(_query.sql);
+                        callback(err, data); // results[0]
+                    }
+                );
+            },
+            function (callback) {
+                _query = connection.query(QUERY.ACHIEVEMENT.GetUserProgressAllByEdu, [
+                        req.user.fc_id,
+                        _edu_id,
+                        _edu_id
+                    ], 
+                    function (err, data) {
+                        // console.log(_query.sql);
+                        callback(err, data); // results[1]
+                    }
+                );
+            },
+            function (callback) {
+                _query = connection.query(QUERY.ACHIEVEMENT.GetEduInfoById, [
+                        _edu_id
+                    ], 
+                    function (err, data) {
+                        // console.log(_query.sql);
+                        callback(err, data); // results[2]
+                    }
+                );			
+            }
+        ], function (err, results) {
+            if (err) {
+                console.error(err);
+            } else {
+                // console.info(results);
+
+                res.render('achievement_details', {
+                    current_path: 'AchievementDetails',
+                    title: PROJ_TITLE + 'Achievement Details',
+                    loggedIn: req.user,
+                    branch_progress: results[0],
+                    user_progress: results[1],
+                    edu_name: results[2][0].name
+                });			
+            }
+        });	        
+    }
 
 });
 

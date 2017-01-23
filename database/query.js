@@ -734,6 +734,95 @@ QUERY.ACHIEVEMENT = {
         "    ON g.`duty_id` = d.`id` " +    
         " GROUP BY g.`user_id` " +
         " ORDER BY `completed_rate` DESC; "    
+
+    // 지점별 이수율 (전체)
+    ,GetBranchProgressAllByEdu:
+        "SELECT g.`branch_id` " +
+        "     , MAX(b.`name`) AS branch_name " +
+        "     , IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate " +
+        "  FROM ( " +
+        "		SELECT @training_user_id := tu.`id` AS training_user_id " +
+        "			 , @course_id := e.`course_id` AS course_id " +
+        "			 , ( " +
+        "				SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) " + 
+        "				  FROM `course_list` AS cl " +
+        "				  LEFT JOIN `log_session_progress` AS up " +
+        "					ON cl.id = up.`course_list_id` " +
+        "				   AND up.`training_user_id` = @training_user_id " +
+        "				   AND up.`end_dt` IS NOT NULL " +
+        "				 WHERE cl.`course_id` = @course_id " +
+        "				) AS completed_rate " + 
+        "			 , u.`branch_id` " +
+        "		  FROM `training_users` AS tu " +
+        "		 INNER JOIN `users` AS u " +
+        "			ON tu.`user_id` = u.`id` " +  
+        "          AND u.`fc_id` = ? " +
+        "          AND u.`active` = 1 " +
+        "		 INNER JOIN `training_edu` AS te " +
+        "			ON tu.`training_edu_id` = te.`id` " +
+        "		   AND te.`edu_id` = ? " +
+        "		 INNER JOIN " + 
+        "			   ( " +
+        "				SELECT e.`id` AS edu_id, cg.`course_id` " +
+        "				  FROM `edu` AS e " +
+        "				 INNER JOIN `course_group` AS cg " +
+        "					ON e.`course_group_id` = cg.`group_id` " +
+        "				 WHERE e.`id` = ? " +
+        "			   ) AS e " +
+        "			ON te.`edu_id` = e.`edu_id` " + 
+        "	  ) AS g " +
+        " INNER JOIN `branch` AS b " +
+        "   ON g.`branch_id` = b.`id` " +
+        " GROUP BY g.`branch_id` " +
+        " ORDER BY `completed_rate` DESC; "
+
+    // 교육생별 이수율 (전체)
+    ,GetUserProgressAllByEdu:        
+        "SELECT MAX(g.`user_name`) AS user_name " +
+        "     , MAX(b.`name`) AS branch_name " +
+        "     , MAX(d.`name`) AS duty_name " +
+        "     , IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate " +
+        "  FROM ( " +
+        "		SELECT tu.`user_id` " +
+        "			 , u.`name` AS user_name " +
+        "			 , @training_user_id := tu.`id` AS training_user_id " +
+        "			 , @course_id := e.`course_id` AS course_id " +
+        "			 , ( " +
+        "				SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) " + 
+        "				  FROM `course_list` AS cl " +
+        "				  LEFT JOIN `log_session_progress` AS up " +
+        "					ON cl.id = up.`course_list_id` " +
+        "				   AND up.`training_user_id` = @training_user_id " +
+        "				   AND up.`end_dt` IS NOT NULL " +
+        "				 WHERE cl.`course_id` = @course_id " +
+        "				) AS completed_rate " +           
+        "			 , u.`branch_id` " +
+        "            , u.`duty_id` " +
+        "		  FROM `training_users` AS tu " +
+        "		 INNER JOIN `users` AS u " +
+        "			ON tu.`user_id` = u.`id` " +   
+        "          AND u.`fc_id` = ? " +
+        "          AND u.`active` = 1 " +
+        "		 INNER JOIN `training_edu` AS te " +
+        "			ON tu.`training_edu_id` = te.`id` " +
+        "		   AND te.`edu_id` = ? " +
+        "		 INNER JOIN  " +
+        "			   ( " +
+        "				SELECT e.`id` AS edu_id, cg.`course_id` " +
+        "				  FROM `edu` AS e " +
+        "				 INNER JOIN `course_group` AS cg " +
+        "					ON e.`course_group_id` = cg.`group_id` " +
+        "				 WHERE e.`id` = ? " +
+        "			   ) AS e " +
+        "			ON te.`edu_id` = e.`edu_id` " + 
+        "	  ) AS g " +
+        "  LEFT JOIN `branch` AS b " +
+        "    ON g.`branch_id` = b.`id` " +
+        "  LEFT JOIN `duty` AS d " +
+        "    ON g.`duty_id` = d.`id` " +    
+        " GROUP BY g.`user_id` " +
+        " ORDER BY `completed_rate` DESC; "            
+
 };
 
 QUERY.DASHBOARD = {
@@ -768,6 +857,133 @@ QUERY.DASHBOARD = {
 		"insert into `point_weight` (`point_complete`,`point_quiz`, `point_final`, " +
 		"`point_reeltime`, `point_speed`, `point_repetition`, `setter_id`) " +
 		"values(?,?,?,?,?,?,?);"
+
+     // 이번 달 전체 교육 이수율
+     ,GetThisMonthProgress:
+       "SELECT IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate " +  
+       "  FROM ( " +
+       "        SELECT @training_user_id := tu.`id` AS training_user_id " +  
+       "             , @course_id := e.`course_id` AS course_id " +
+       "             , ( " +
+       "                SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) " +   
+       "                  FROM `course_list` AS cl " +
+       "                  LEFT JOIN `log_session_progress` AS up " +  
+       "                    ON cl.id = up.`course_list_id` " +
+       "                   AND up.`training_user_id` = @training_user_id " +  
+       "                   AND up.`end_dt` IS NOT NULL " +
+       "                 WHERE cl.`course_id` = @course_id " +  
+       "               ) AS completed_rate " +
+       "             , te.`edu_id` " +
+       "             , e.`edu_name` " +
+       "             , e.`start_dt` " +
+       "             , e.`end_dt` " +
+       "          FROM `training_users` AS tu " +  
+       "         INNER JOIN `users` AS u " +
+       "            ON tu.`user_id` = u.`id` " +    
+       "           AND u.`fc_id` = ? " +
+       "           AND u.`active` = 1 " +
+       "         INNER JOIN `training_edu` AS te " +  
+       "            ON tu.`training_edu_id` = te.`id` " +
+       "         INNER JOIN " +
+       "               ( " +
+       "                SELECT e.`name` AS edu_name " +
+       "                     , e.`id` AS edu_id " +
+       "                     , cg.`course_id` " +
+       "                     , e.`start_dt` " +
+       "                     , e.`end_dt` " +
+       "                  FROM `edu` AS e " +
+       "                 INNER JOIN `course_group` AS cg " +
+       "                    ON e.`course_group_id` = cg.`group_id` " +
+       "                 WHERE DATE_FORMAT(NOW(), '%Y-%m') BETWEEN DATE_FORMAT(e.`start_dt`, '%Y-%m') AND DATE_FORMAT(e.`end_dt`, '%Y-%m') " +
+       "               ) AS e " +
+       "            ON te.`edu_id` = e.`edu_id` " + 
+       "       ) AS g "
+
+     // 이번 달 교육 진척도
+    ,GetThisMonthProgressByEdu:
+       "SELECT g.`edu_id` " +
+       "     , MAX(g.`edu_name`) AS edu_name " +
+       "     , MAX(g.`start_dt`) AS edu_start_dt " +
+       "     , MAX(g.`end_dt`) AS edu_end_dt " +
+       "     , IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate " +  
+       "  FROM ( " +
+       "        SELECT @training_user_id := tu.`id` AS training_user_id " +  
+       "             , @course_id := e.`course_id` AS course_id " +
+       "             , ( " +
+       "                SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) " +   
+       "                  FROM `course_list` AS cl " +
+       "                  LEFT JOIN `log_session_progress` AS up " +  
+       "                    ON cl.id = up.`course_list_id` " +
+       "                   AND up.`training_user_id` = @training_user_id " +  
+       "                   AND up.`end_dt` IS NOT NULL " +
+       "                 WHERE cl.`course_id` = @course_id " +  
+       "               ) AS completed_rate " +
+       "             , te.`edu_id` " +
+       "             , e.`edu_name` " +
+       "             , e.`start_dt` " +
+       "             , e.`end_dt` " +
+       "          FROM `training_users` AS tu " +  
+       "         INNER JOIN `users` AS u " +
+       "            ON tu.`user_id` = u.`id` " +    
+       "           AND u.`fc_id` = ? " +
+       "           AND u.`active` = 1 " +
+       "         INNER JOIN `training_edu` AS te " +  
+       "            ON tu.`training_edu_id` = te.`id` " +
+       "         INNER JOIN " +
+       "               ( " +
+       "                SELECT e.`name` AS edu_name " +
+       "                     , e.`id` AS edu_id " +
+       "                     , cg.`course_id` " +
+       "                     , e.`start_dt` " +
+       "                     , e.`end_dt` " +
+       "                  FROM `edu` AS e " +
+       "                 INNER JOIN `course_group` AS cg " +
+       "                    ON e.`course_group_id` = cg.`group_id` " +
+       "                 WHERE DATE_FORMAT(NOW(), '%Y-%m') BETWEEN DATE_FORMAT(e.`start_dt`, '%Y-%m') AND DATE_FORMAT(e.`end_dt`, '%Y-%m') " +
+       "               ) AS e " +
+       "            ON te.`edu_id` = e.`edu_id` " + 
+       "       ) AS g " +
+       " GROUP BY g.`edu_id` " +
+       " ORDER BY `completed_rate` DESC; "
+
+    // 지점별 이수율 (전체)
+    ,GetBranchProgressAll:
+        "SELECT g.`branch_id` " +
+        "     , MAX(b.`name`) AS branch_name " +
+        "     , IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate " +
+        "  FROM ( " +
+        "		SELECT @training_user_id := tu.`id` AS training_user_id " +
+        "			 , @course_id := e.`course_id` AS course_id " +
+        "			 , ( " +
+        "				SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) " + 
+        "				  FROM `course_list` AS cl " +
+        "				  LEFT JOIN `log_session_progress` AS up " +
+        "					ON cl.id = up.`course_list_id` " +
+        "				   AND up.`training_user_id` = @training_user_id " +
+        "				   AND up.`end_dt` IS NOT NULL " +
+        "				 WHERE cl.`course_id` = @course_id " +
+        "				) AS completed_rate " + 
+        "			 , u.`branch_id` " +
+        "		  FROM `training_users` AS tu " +
+        "		 INNER JOIN `users` AS u " +
+        "			ON tu.`user_id` = u.`id` " +  
+        "          AND u.`fc_id` = ? " +
+        "          AND u.`active` = 1 " +
+        "		 INNER JOIN `training_edu` AS te " +
+        "			ON tu.`training_edu_id` = te.`id` " +
+        "		 INNER JOIN " + 
+        "			   ( " +
+        "				SELECT e.`id` AS edu_id, cg.`course_id` " +
+        "				  FROM `edu` AS e " +
+        "				 INNER JOIN `course_group` AS cg " +
+        "					ON e.`course_group_id` = cg.`group_id` " +
+        "			   ) AS e " +
+        "			ON te.`edu_id` = e.`edu_id` " + 
+        "	  ) AS g " +
+        " INNER JOIN `branch` AS b " +
+        "   ON g.`branch_id` = b.`id` " +
+        " GROUP BY g.`branch_id` " +
+        " ORDER BY `completed_rate` DESC; "   
 };
 
 
