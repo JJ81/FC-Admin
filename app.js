@@ -40,7 +40,10 @@ global.PROJ_TITLE = "Orangenamu, Backoffice ";
 global.AppRoot = process.env.PWD;
 
 app.use(cookieSession({
-  keys: ['FC_Admin']
+    keys: ['FC_Admin'],
+    cookie: {
+        maxAge: 1000 * 60 * 60 // 유효기간 1시간
+    }  
 }));
 
 app.use(flash());

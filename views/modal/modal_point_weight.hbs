@@ -9,44 +9,46 @@
             </div>
             <div class="modal-body">
                 {{#each point_weight}}
-                <h5>출석 및 이수 완료</h5>
+                <h5>교육과정 이수 <small>(환산방법 : 완료한 교육과정 수 X 포인트)</small></h5>
                 <div class="input-group">
-                    <input type="number" class="form-control eduComplete" name="complete" placeholder="(%)" required autocomplete="off" min="0" max="100" value="{{point_complete}}" />
-                    <span class="input-group-addon">%</span>
+                    <input type="number" class="form-control eduComplete" name="complete" placeholder="포인트 입력" required autocomplete="off" min="0" max="100" value="{{point_complete}}" />
+                    <span class="input-group-addon">point</span>
                 </div>
 
-                <h5>퀴즈</h5>
+                <h5>퀴즈 <small>(환산방법 : (맞은 문항 수 ÷ 전체 문항 수) X 100 X 포인트)</small></h5>
                 <div class="input-group">
-                    <input type="number" class="form-control quizComplete" name="quiz" placeholder="(%)" required autocomplete="off" min="0" max="100" value="{{point_quiz}}" />
-                    <span class="input-group-addon">%</span>
+                    <input type="number" class="form-control quizComplete" name="quiz" placeholder="포인트 입력" required autocomplete="off" min="0" max="100" value="{{point_quiz}}" />
+                    <span class="input-group-addon">point</span>
                 </div>
 
-                <h5>최종 테스트</h5>
+                <h5>파이널 테스트 <small>(환산방법 : (맞은 문항 수 ÷ 전체 문항 수) X 100 X 포인트)</small></h5>
                 <div class="input-group">
-                    <input type="number" class="form-control finalComplete" name="final_test" placeholder="(%)" required autocomplete="off" min="0" max="100" value="{{point_final}}" />
-                    <span class="input-group-addon">%</span>
+                    <input type="number" class="form-control finalComplete" name="final_test" placeholder="포인트 입력" required autocomplete="off" min="0" max="100" value="{{point_final}}" />
+                    <span class="input-group-addon">point</span>
                 </div>
 
-                <h5>교육시청시간</h5>
+                <h5>교육 시청시간 <small>(환산방법 : (비디오 시청시간 ÷ 비디오 재생시간) X 100 X 포인트)</small></h5>
                 <div class="input-group">
-                    <input type="number" class="form-control reeltimeComplete" name="reeltime" placeholder="(%)" required autocomplete="off" min="0" max="100" value="{{point_reeltime}}" />
-                    <span class="input-group-addon">%</span>
+                    <input type="number" class="form-control reeltimeComplete" name="reeltime" placeholder="포인트 입력" required autocomplete="off" min="0" max="100" value="{{point_reeltime}}" />
+                    <span class="input-group-addon">point</span>
                 </div>
 
-                <h5>이수 속도</h5>
+                <h5>교육과정 이수 속도 <small>(환산방법 : (1 - 학습일수 ÷ 총 이수기간) X 포인트)</small></h5>
                 <div class="input-group">
-                    <input type="number" class="form-control speedComplete" name="speed" placeholder="(%)" required autocomplete="off" min="0" max="100" value="{{point_speed}}" />
-                    <span class="input-group-addon">%</span>
+                    <input type="number" class="form-control speedComplete" name="speed" placeholder="포인트 입력" required autocomplete="off" min="0" max="100" value="{{point_speed}}" />
+                    <span class="input-group-addon">point</span>
                 </div>
 
-                <h5>반복 학습율</h5>
+                <h5>강의 반복 학습율 <small>(환산방법 : 강의 반복여부 X 포인트)</small></h5>
                 <div class="input-group">
-                    <input type="number" class="form-control repsComplete" name="reps" placeholder="(%)" required autocomplete="off" min="0" max="100" value="{{point_repetition}}" />
-                    <span class="input-group-addon">%</span>
+                    <input type="number" class="form-control " name="reps" placeholder="포인트 입력" required autocomplete="off" min="0" max="100" value="{{point_repetition}}" />
+                    <span class="input-group-addon">point</span>
                 </div>
                 {{/each}}
+                <small class="text-red">* 위 사항은 교육과정 마다 적용됩니다.</small>
+
                 <div class="point_weight_total">
-                  <strong>total</strong> : <span class="total_point"></span>%
+                  <strong>total</strong> : <span class="total_point"></span> point
                 </div>
             </div>
 

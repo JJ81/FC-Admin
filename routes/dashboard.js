@@ -10,8 +10,11 @@ var isAuthenticated = function (req, res, next) {
 };
 require('../commons/helpers');
 const async = require('async');
+var DashboardService = require('../service/DashboardService');
 
 router.get('/', isAuthenticated, function (req, res) {
+
+    var _edu_progress = null;
 
 	async.parallel(
 		[
@@ -100,11 +103,12 @@ router.get('/', isAuthenticated, function (req, res) {
 			function (callback) {
 				connection.query(QUERY.DASHBOARD.GetThisMonthProgressByEdu,
 					[ req.user.fc_id ],
-					function (err, rows) {
+					function (err, rows) {    
+                        _edu_progress = rows;                
                         callback(err, rows);
 				    }
                 );
-			},            
+			},           
 			// 교육 이수율 랭킹 (지점)
             // result[7]
 			function (callback) {
@@ -120,29 +124,32 @@ router.get('/', isAuthenticated, function (req, res) {
 			if(err){
 				console.error(err);
 				throw new Error(err);
-			}else{
-
+			} 
+            else
+            {
                 var branch_progress_bottom_most =
                     result[7].slice(0).sort(function (a, b) {
                         return a.completed_rate - b.completed_rate;
                     });
+                
+                // 이번 달 교육 진척도에 강의별 이수율 추가한다.   
+                DashboardService.getCourseProgress(connection, _edu_progress, function (err, rows) {
 
-                console.log(branch_progress_bottom_most);
-
-				res.render('dashboard', {
-					current_path: 'Dashboard',
-					title: PROJ_TITLE + 'Dashboard',
-					loggedIn: req.user,
-					total_users : result[0],
-					total_branch : result[1],
-					current_edu: result[2],
-					total_edu : result[3],
-					point_weight : result[4],
-                    total_edu_progress : result[5][0],
-                    edu_progress : result[6],
-                    branch_progress_top_most: result[7],
-                    branch_progress_bottom_most: branch_progress_bottom_most,
-				});
+                    res.render('dashboard', {
+                        current_path: 'Dashboard',
+                        title: PROJ_TITLE + 'Dashboard',
+                        loggedIn: req.user,
+                        total_users : result[0],
+                        total_branch : result[1],
+                        current_edu: result[2],
+                        total_edu : result[3],
+                        point_weight : result[4],
+                        total_edu_progress : result[5][0],
+                        edu_progress : result[6],
+                        branch_progress_top_most: result[7],
+                        branch_progress_bottom_most: branch_progress_bottom_most,
+                    });
+                });                  
 			}
 	});
 });

@@ -127,8 +127,8 @@ router.post('/allocation/edu', function (req, res) {
           });
         },
 
-	      // bug 입력 진행이 되지 않는다 이것을 추적할 것 : 원인 진단 -> training_edu id값을 참조하여 training_uesrs에 입력을 해야 하나 참조가 되려면 미리 데이터가 입력되어야 가능하도록 작동중이다
-	      // 그래서 임의로 일단 참조 관계를 끊어놓는다
+        // bug 입력 진행이 되지 않는다 이것을 추적할 것 : 원인 진단 -> training_edu id값을 참조하여 training_uesrs에 입력을 해야 하나 참조가 되려면 미리 데이터가 입력되어야 가능하도록 작동중이다
+        // 그래서 임의로 일단 참조 관계를 끊어놓는다
         // todo 리턴받은 training_edu_id, user_id를 가지고 training_users 테이블에 입력한다. 이 때 손실된 데이터가 생겼을 경우 다시 로그를 남기고 관리자가 알 수 있도록 해야 한다.
         function (user_id, result, callback) {
           UserService.InsertUsersWithTrainingEduId(user_id, result.insertId, function (err, ret) {
@@ -136,8 +136,8 @@ router.post('/allocation/edu', function (req, res) {
               console.error(err);
               callback(err, null);
             }else{
-	            console.log('insert users trainig_users');
-              callback(null, result.insertId);
+                console.log('insert users trainig_users');
+                callback(null, result.insertId);
             }
           });
         },
