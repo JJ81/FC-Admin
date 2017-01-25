@@ -1077,7 +1077,15 @@ QUERY.DASHBOARD = {
         "        ) AS r " +
         " WHERE 1=1 " +
         " GROUP BY r.`user_id` " +
-        " ORDER BY `point_total` DESC "
+        " ORDER BY `point_total` DESC ",
+
+    // 사용자 포인트 상세내역
+    GetUserPointDetails:
+        "SELECT `logs` " + 
+        "  FROM `log_user_point` " + 
+        " WHERE `user_id` = ? " + 
+        "   AND `logs` IS NOT NULL " + 
+        " ORDER BY `created_dt`; ",
 };
 
 

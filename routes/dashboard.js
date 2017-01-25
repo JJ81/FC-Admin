@@ -182,6 +182,43 @@ router.get('/', isAuthenticated, function (req, res) {
 });
 
 /**
+ * 포인트 상세내역 조회
+ */
+router.get('/point/details', isAuthenticated, function (req, res) {
+
+
+
+    var _query = null;
+    _query = connection.query(QUERY.DASHBOARD.GetUserPointDetails, [ req.query.user_id ], function (err, data) {
+        if (err) {
+            // 쿼리 실패
+            res.json({
+                success: false,
+                msg: err
+            });
+        } else {     
+
+            // console.log(_query.sql);
+            // console.log(data);
+
+            var list = [];
+            for (var index = 0; index < data.length; index++) {                
+                list.push(JSON.parse(data[index].logs));                
+            }
+
+            console.log(list);
+
+            // 쿼리 성공
+            res.json({
+                success: true,
+                list: list
+            });      
+        }
+    });
+    
+});
+
+/**
  * 가중치 등록
  */
 router.post('/point/weight/record', isAuthenticated, function (req, res) {
