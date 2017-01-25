@@ -850,9 +850,9 @@ QUERY.DASHBOARD = {
 		"from `point_weight` as pw " +
 		"left join `admin` as a " +
 		"on a.id = pw.setter_id " +
-		"where a.fc_id=? " +
+		"where a.fc_id = ? " +
 		"order by `created_dt` desc " +
-		"limit 1;"
+		"limit 1; "
 	,SetPointWeight :
 		"insert into `point_weight` (`point_complete`,`point_quiz`, `point_final`, " +
 		"`point_reeltime`, `point_speed`, `point_repetition`, `setter_id`) " +
@@ -996,6 +996,11 @@ QUERY.DASHBOARD = {
   	   "		  FROM `user_rating` AS ur " +
  	   "	     WHERE ur.`course_id` = @course_id " +
        "	   ) AS course_rate " +	
+	   "     , ( " +
+	   "        SELECT COUNT(DISTINCT ur.user_id) " +
+  	   "		  FROM `user_rating` AS ur " +
+ 	   "	     WHERE ur.`course_id` = @course_id " +
+       "	   ) AS vote_count " +	       
        "  FROM ( " +
        "        SELECT @training_user_id := tu.`id` AS training_user_id " +  
        "             , @course_id := e.`course_id` AS course_id " +
@@ -1032,7 +1037,47 @@ QUERY.DASHBOARD = {
        "       ) AS g " +
        " GROUP BY g.`course_id` " +
        " ORDER BY `completed_rate` DESC; "         
-        
+    
+    // 포인트 현황
+    ,GetUserPointList:
+        "SELECT r.`user_id` " +
+        "    , MAX(r.`user_name`) AS user_name " +
+        "    , MAX(r.`branch_name`) AS branch_name " +
+        "    , MAX(r.`duty_name`) AS duty_name " +
+        "    , MAX(r.`fc_id`) AS `fc_id` " +
+        "    , SUM( " +
+        "        r.`complete` +  " +
+        "        r.`quiz_correction` +  " +
+        "        r.`final_correction` + " +
+        "        r.`reeltime` + " +
+        "        r.`speed` + " +
+        "        r.`repetition` " +
+        "    ) AS point_total " +     
+        "  FROM ( " +
+        "        SELECT u.`id` AS user_id " +
+        "            , u.`name` AS user_name " +
+        "            , b.`name` AS branch_name " +
+        "            , d.`name` AS duty_name " +
+        "            , u.`fc_id` " +		
+        "            , lup.`training_user_id` " +
+        "            , (lup.`complete` * ?) AS complete " +
+        "            , (lup.`quiz_correction` * ?) AS quiz_correction " +
+        "            , (lup.`final_correction` * ?) AS final_correction " +
+        "            , (lup.`reeltime` * ?) AS reeltime " +
+        "            , (lup.`speed` * ?) AS speed " +
+        "            , (lup.`repetition` * ?) AS repetition " +
+        "          FROM `log_user_point` AS lup " +
+        "         INNER JOIN `users` AS u " +
+        "            ON lup.`user_id` = u.`id` " +
+        "          LEFT JOIN `branch` AS b " +
+        "            ON u.`branch_id` = b.`id` " +
+        "          LEFT JOIN `duty` AS d " +
+        "            ON u.`duty_id` = d.`id` " + 
+        "        AND u.`fc_id` = ? " +
+        "        ) AS r " +
+        " WHERE 1=1 " +
+        " GROUP BY r.`user_id` " +
+        " ORDER BY `point_total` DESC "
 };
 
 

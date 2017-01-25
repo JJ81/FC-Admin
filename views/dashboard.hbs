@@ -136,7 +136,7 @@
                                         <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="{{completed_rate}}" aria-valuemin="0" aria-valuemax="100" style="width: {{completed_rate}}%"></div>
                                     </div>
                                     <div class="star-rating">
-                                        <span class="ratings {{star-rating course_rate}}"></span> ( {{course_rate}} )
+                                        <span class="ratings {{star-rating course_rate}}"></span> ( {{course_rate}}점, {{vote_count}}명 평가 )
                                     </div>
                                 </div>
                                 <!-- // course details -->
@@ -187,19 +187,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#for 0 10 1}}
+                                {{#each point_rank}}
                                 <tr>
-                                    <td class="center">성동구</td>
-                                    <td class="center">점장</td>
-                                    <td class="center">박민규</td>
-                                    <td class="center">1,000</td>
+                                    <td class="center">{{branch_name}}</td>
+                                    <td class="center">{{duty_name}}</td>
+                                    <td class="center">{{user_name}}</td>
+                                    <td class="center">{{ comma-number point_total}}</td>
                                     <td class="center">
                                         <button class="btn btn-sm btn-success">상세보기</button>
                                         <!-- 팝업으로 띄울 것 -->
-                                        <!--이수율 100%, 퀴즈(20문항 중 20문항), 테스트(240문항 중 240문항), 총 비디오 시청 기록 (300분), 이수속도(상위1%), 반복학습빈도(상위1%)-->
+                                        <!-- 이수율 100%, 퀴즈(20문항 중 20문항), 테스트(240문항 중 240문항), 총 비디오 시청 기록 (300분), 이수속도(상위1%), 반복학습빈도(상위1%)-->
                                     </td>
                                 </tr>
-                                {{/for}}
+                                {{/each}}
                             </tbody>
                         </table>
                     </div>
@@ -250,19 +250,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#for 0 10 1}}
+                                {{#each point_rank}}
                                 <tr>
                                     <td class="center">성동구</td>
                                     <td class="center">점장</td>
-                                    <td class="center">박민규</td>
-                                    <td class="center">1,000</td>
+                                    <td class="center">{{user_name}}</td>
+                                    <td class="center">{{ comma-number point_total}}</td>
                                     <td class="center">
                                         <button class="btn btn-sm btn-success">상세보기</button>
                                         <!-- 팝업으로 띄울 것 -->
                                         <!--이수율 100%, 퀴즈(20문항 중 20문항), 테스트(240문항 중 240문항), 총 비디오 시청 기록 (300분), 이수속도(상위1%), 반복학습빈도(상위1%)-->
                                     </td>
                                 </tr>
-                                {{/for}}
+                                {{/each}}
                             </tbody>
                         </table>
                     </div>

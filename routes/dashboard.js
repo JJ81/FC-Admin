@@ -14,9 +14,11 @@ var DashboardService = require('../service/DashboardService');
 
 router.get('/', isAuthenticated, function (req, res) {
 
-    var _edu_progress = null;
+    var _edu_progress = null,
+        _point_weight = null, // 포인트 설정값
+        _query = null;
 
-	async.parallel(
+	async.series(
 		[
             // 총 교육생 수
             // result[0]
@@ -77,13 +79,14 @@ router.get('/', isAuthenticated, function (req, res) {
 			// 포인트 가중치 설정값
             // result[4]
 			function (callback) {
-				connection.query(QUERY.DASHBOARD.GetRecentPointWeight,
+				_query = connection.query(QUERY.DASHBOARD.GetRecentPointWeight,
 					[req.user.fc_id],
 					function (err, rows) {
 						if(err){
 							console.error(err);
 							callback(err, null);
 						}else{
+                            _point_weight = rows[0];
 							callback(null, rows);
 						}
 				});
@@ -118,6 +121,27 @@ router.get('/', isAuthenticated, function (req, res) {
                         callback(err, rows);
 				    }
                 );
+			},           
+			// 포인트 현황
+            // result[8]
+			function (callback) {
+                console.log(_point_weight);
+				_query = connection.query(QUERY.DASHBOARD.GetUserPointList,
+					[ 
+                        _point_weight.point_complete,
+                        _point_weight.point_quiz,
+                        _point_weight.point_final,
+                        _point_weight.point_reeltime,
+                        _point_weight.point_speed,
+                        _point_weight.point_repetition,
+                        req.user.fc_id 
+                    ],
+					function (err, rows) {
+                        console.log(err);
+                        console.log(_query.sql);
+                        callback(err, rows);
+				    }
+                );
 			}
 		],
 		function (err, result){
@@ -135,6 +159,8 @@ router.get('/', isAuthenticated, function (req, res) {
                 // 이번 달 교육 진척도에 강의별 이수율 추가한다.   
                 DashboardService.getCourseProgress(connection, _edu_progress, function (err, rows) {
 
+                    console.log(result[8]);
+
                     res.render('dashboard', {
                         current_path: 'Dashboard',
                         title: PROJ_TITLE + 'Dashboard',
@@ -148,6 +174,7 @@ router.get('/', isAuthenticated, function (req, res) {
                         edu_progress : result[6],
                         branch_progress_top_most: result[7],
                         branch_progress_bottom_most: branch_progress_bottom_most,
+                        point_rank: result[8],
                     });
                 });                  
 			}
