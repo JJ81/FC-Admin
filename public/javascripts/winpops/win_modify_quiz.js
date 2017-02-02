@@ -89,7 +89,7 @@ requirejs([
                 
                 var quiz_list = res.data.quiz_list;
 
-                console.info(quiz_list);
+                // console.info(quiz_list);
 
                 // 퀴즈 서비스를 생성한다.
                 var options = {

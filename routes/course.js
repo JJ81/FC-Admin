@@ -181,7 +181,7 @@ router.get('/details', isAuthenticated, function (req, res) {
             session_list: result[2],
             teacher_info : result[3],
             teacher_list : result[4],
-            teacher_rating : result[5][0],
+            teacher_rating : result[5],
             course_id : _id
         });
       }
@@ -527,7 +527,7 @@ router.get('/quiz', isAuthenticated, function (req, res) {
             console.error(err);
         } else {     
             var quiz_list = CourseService.makeQuizList(data);
-            console.log(quiz_list);
+            // console.log(quiz_list[2]);
 
             // 쿼리 성공
             res.render('winpops/win_show_quiz', {
@@ -537,7 +537,7 @@ router.get('/quiz', isAuthenticated, function (req, res) {
                 loggedIn: req.user,
                 type: _inputs.type,
                 quiz_title: _inputs.title,
-                quiz: CourseService.makeQuizList(data)
+                quiz: quiz_list
             });      
         }
     });
@@ -652,7 +652,9 @@ router.post('/quiz', isAuthenticated, function (req, res) {
 
     var inputs = req.body;
 
-    // console.log(inputs);
+    console.log("------------------------------------");
+    console.log(inputs);
+    console.log("------------------------------------");
     // return res.json({ 
     //     success: true,
     //     result: inputs

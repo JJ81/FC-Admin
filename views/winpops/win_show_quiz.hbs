@@ -28,16 +28,16 @@
                         {{#if (isEquals ../quiz_type 'B')}}                                                    
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" value="">
-                                    {{option}}
+                                    <input type="radio" value="">
+                                    &nbsp;&nbsp;{{option}}
                                 </label>
                             </div> 
                         {{/if}}                                                            
                         {{#if (isEquals ../quiz_type 'C')}}                            
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="radio-group-{{../../quiz_id}}">
-                                    {{option}}
+                                    <input type="checkbox" name="radio-group-{{../../quiz_id}}">
+                                    &nbsp;&nbsp;{{option}}
                                 </label>
                             </div>
                         {{/if}}

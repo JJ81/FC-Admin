@@ -201,7 +201,9 @@
                     <p class="star-rating-area">
                         <div class="star-rating">
                             강사 평점 :
-                            <span class="ratings {{star-rating ../teacher_rating.teacher_rate}}"></span> ( {{ ../teacher_rating.teacher_rate}} )
+                            {{#each ../teacher_rating}}
+                            <span class="ratings {{star-rating rate}}"></span> ( {{ rate }} )
+                            {{/each}}
                         </div>
                     </p>                       
                     <pre class="teacher-desc">{{desc}}</pre>

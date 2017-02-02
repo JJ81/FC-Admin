@@ -129,8 +129,8 @@ requirejs(
          * 
          */
         window.onbeforeunload = function (event) {
-            if (_confirm)
-                return confirm("진행중인 작업이 모두 사라집니다. 계속하시겠습니까?");
+            // if (_confirm)
+            //     return confirm("진행중인 작업이 모두 사라집니다. 계속하시겠습니까?");
         };
 
 	}); // end of func

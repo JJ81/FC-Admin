@@ -96,8 +96,9 @@ define(function(require) {
             extend(_self.options, options);
         },  
         // 랜덤 문자열을 생성한다.
+        // api 명에 특정 문자열이 포함될 경우 (예: create, string ..) 동작하지 않을 수 있다.
         getRandomString: function () {         
-            return axios.get('/api/v1/course/group/id/create');
+            return axios.get('/api/v1/randomkey');
         },
         // 단답형 퀴즈를 생성한다.
         addQuizSingleAnswer: function (data) {
@@ -133,20 +134,35 @@ define(function(require) {
                 var obj = new QuizComponent(options, data);
                 _self.quiz_list.push(obj);
             } else {
-                axios.all([
-                    _self.getRandomString()
-                ])
-                .then(axios.spread(function (res) {
+
+                $.get("/api/v1/randomkey", function ( res ) {
                     data = {
                         quiz_id: null,
                         type: _self.data.type,
                         quiz_type: "B",
                         quiz_type_name: "선택형",
-                        option_group_id: res.data.id
+                        option_group_id: res.id
                     };
+                    console.log(data);
                     var obj = new QuizComponent(options, data);  
-                    _self.quiz_list.push(obj);
-                }));                
+                    _self.quiz_list.push(obj);                    
+                });
+
+                // axios.all([
+                //     _self.getRandomString()
+                // ])
+                // .then(axios.spread(function (res) {
+                //     data = {
+                //         quiz_id: null,
+                //         type: _self.data.type,
+                //         quiz_type: "B",
+                //         quiz_type_name: "선택형",
+                //         option_group_id: res.data.id
+                //     };
+                //     console.log(data);
+                //     var obj = new QuizComponent(options, data);  
+                //     _self.quiz_list.push(obj);
+                // }));                
             }
 
         },
@@ -164,20 +180,35 @@ define(function(require) {
                 var obj = new QuizComponent(options, data);
                 _self.quiz_list.push(obj);
             } else {
-                axios.all([
-                    _self.getRandomString()
-                ])
-                .then(axios.spread(function (res) {
+
+                $.get("/api/v1/randomkey", function ( res ) {
                     data = {
                         quiz_id: null,
                         type: _self.data.type,
                         quiz_type: "C",
                         quiz_type_name: "다답형",
-                        option_group_id: res.data.id
+                        option_group_id: res.id
                     };
-                    var obj = new QuizComponent(options, data);
-                    _self.quiz_list.push(obj);
-                }));                
+                    console.log(data);
+                    var obj = new QuizComponent(options, data);  
+                    _self.quiz_list.push(obj);                    
+                });
+
+                // axios.all([
+                //     _self.getRandomString()
+                // ])
+                // .then(axios.spread(function (res) {
+                //     data = {
+                //         quiz_id: null,
+                //         type: _self.data.type,
+                //         quiz_type: "C",
+                //         quiz_type_name: "다답형",
+                //         option_group_id: res.data.id
+                //     };
+                //     console.log(data);
+                //     var obj = new QuizComponent(options, data);
+                //     _self.quiz_list.push(obj);
+                // }));                
             }             
         },
         // 퀴즈를 삭제한다.

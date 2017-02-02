@@ -18,6 +18,15 @@ router.get('/course/group/id/create', isAuthenticated, function (req, res) {
 });
 
 /**
+ * #이슈 IE 에서 route 경로에 "create" 포함 시 axios 가 정상 동작하지 않는다.
+ */
+router.get('/randomkey', isAuthenticated, function (req, res) {
+	res.json({
+		id : util.publishHashByMD5(new Date())
+	});
+});
+
+/**
  * 퀴즈 정보(옵션포함)를 조회한다.
  * url : /api/v1/quiz
  * @params : quiz_group_id
