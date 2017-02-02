@@ -118,10 +118,12 @@ requirejs(
          * 4. 퀴즈 보기 그룹(quiz_group) 삭제
          */
         function deleteSession(params) {
-            
-            axios.delete('/course/courselist', {
-                params: params
-            })
+
+            // axios({method: 'delete', url: '/course/courselist', data: params});
+            axios.delete('/course/courselist', 
+            {
+                data: params
+            })            
             .then(function (response) {
                 // console.log(response);
                 alert("세션을 삭제하였습니다.");
