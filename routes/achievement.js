@@ -36,11 +36,15 @@ router.get('/', isAuthenticated, function (req, res) {
 	});
 });
 
+/**
+ * 교육진척도 상세화면
+ */
 router.get('/details', isAuthenticated, function (req, res) {
 	
-	var _training_edu_id = req.query.id;
-	var _edu_id = req.query.edu_id;
-    var _query = null;
+	var _training_edu_id = req.query.id,
+	    _edu_id = req.query.edu_id,
+        _point_weight = null,
+        _query = null;
 
     if (req.user.role === 'supervisor') {
         async.series([
@@ -99,6 +103,7 @@ router.get('/details', isAuthenticated, function (req, res) {
     } 
     else {
         async.series([
+            // 지점별 진척도
             function (callback) {
                 _query = connection.query(QUERY.ACHIEVEMENT.GetBranchProgressAllByEdu, [
                         req.user.fc_id,
@@ -111,25 +116,42 @@ router.get('/details', isAuthenticated, function (req, res) {
                     }
                 );
             },
+            // 포인트 설정값 조회
             function (callback) {
-                _query = connection.query(QUERY.ACHIEVEMENT.GetUserProgressAllByEdu, [
+                _query = connection.query(QUERY.DASHBOARD.GetRecentPointWeight,
+                        [ req.user.fc_id ],
+                        function (err, data) {
+                            _point_weight = data[0];
+                            callback(err, data); // results[1]
+                        }
+                );
+            },            
+            // 교육생별 진척도
+            function (callback) {
+                _query = connection.query(QUERY.ACHIEVEMENT.GetUserProgressAllByEdu, 
+                    [   
+                        _point_weight.point_complete,
+                        _point_weight.point_quiz,
+                        _point_weight.point_final,
+                        _point_weight.point_reeltime,
+                        _point_weight.point_speed,
+                        _point_weight.point_repetition,
                         req.user.fc_id,
                         _edu_id,
                         _edu_id
                     ], 
                     function (err, data) {
-                        // console.log(_query.sql);
-                        callback(err, data); // results[1]
+                        callback(err, data); // results[2]
                     }
                 );
             },
+            // 교육정보 조회
             function (callback) {
                 _query = connection.query(QUERY.ACHIEVEMENT.GetEduInfoById, [
                         _edu_id
                     ], 
                     function (err, data) {
-                        // console.log(_query.sql);
-                        callback(err, data); // results[2]
+                        callback(err, data); // results[3]
                     }
                 );			
             }
@@ -144,8 +166,8 @@ router.get('/details', isAuthenticated, function (req, res) {
                     title: PROJ_TITLE + 'Achievement Details',
                     loggedIn: req.user,
                     branch_progress: results[0],
-                    user_progress: results[1],
-                    edu_name: results[2][0].name
+                    user_progress: results[2],
+                    edu_name: results[3][0].name
                 });			
             }
         });	        

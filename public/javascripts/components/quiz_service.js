@@ -6,6 +6,8 @@ define(function(require) {
 
     "use strict";
 
+    require('es6-promise').polyfill(); // https://github.com/stefanpenner/es6-promise 참고
+
     var QuizComponent = require('quiz_component');
     var axios = require('axios');
     var _self = null;

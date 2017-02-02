@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-md-4">
                     <h4>지점별 순위 및 이수율</h4>
-                    <table class="table table-bordered table-striped">
+                    <table id="xltest" class="table table-bordered table-striped">
                         <thead>
                         <tr>
                             <th class="center">순위</th>
@@ -41,38 +41,54 @@
                     </table>
                 </div>
                 <div class="col-md-8">
-                    <h4>개인별 순위 및 이수율</h4>
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                        <tr>
-                            <th class="center">순위</th>
-                            <th class="center">이름</th>
-                            <th class="center">지점</th>
-                            <th class="center">직책</th>
-                            <th class="center">이수율</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {{#if user_progress}}
-                        {{#each user_progress}}
-                        <tr>
-                            <td class="center">{{addOneForIndex @key}}</td>
-                            <td class="center"><a href="#{{user_name}}">{{user_name}}</a></td>
-                            <td class="center">{{branch_name}}</td>
-                            <td class="center">{{duty_name}}</td>
-                            <td class="center text-red">
-                              <strong>{{completed_rate}}</strong> %
-                            </td>
-                        </tr>
-                        {{/each}}
-                        {{else}}
-                        <tr>
-                            <td colspan="5">출력할 데이터가 없습니다.</td>
-                        </tr>
-                        {{/if}}
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">개인별 순위 및 이수율</h3>
+                            <div class="box-tools">
+                                <div class="pull-right">
+                                    <button id="personal-rank-download" class="btn btn-default">
+                                        <i class="fa fa-download"></i>
+                                        엑셀      
+                                    </button>   
+                                </div>                                
+                            </div>
+                        </div>                        
+                        <div class="box-body table-responsive">     
+                            <table id="table-personal-point-rank" class="table no-margin table-bordered table-striped" width="100%">
+                                <thead>
+                                <tr>
+                                    <th class="center">순위</th>
+                                    <th class="center">이름</th>
+                                    <th class="center">지점</th>
+                                    <th class="center">직책</th>
+                                    <th class="center">포인트</th>
+                                    <th class="center">이수율</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#if user_progress}}
+                                {{#each user_progress}}
+                                <tr>
+                                    <td class="center">{{addOneForIndex @key}}</td>
+                                    <td class="center"><a href="#{{user_name}}">{{user_name}}</a></td>
+                                    <td class="center">{{branch_name}}</td>
+                                    <td class="center">{{duty_name}}</td>
+                                    <td class="right">{{comma-number point}}</td>
+                                    <td class="center text-red">
+                                    <strong>{{completed_rate}}</strong> %
+                                    </td>
+                                </tr>
+                                {{/each}}
+                                {{else}}
+                                <tr>
+                                    <td colspan="5">출력할 데이터가 없습니다.</td>
+                                </tr>
+                                {{/if}}
 
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- /.box-body -->

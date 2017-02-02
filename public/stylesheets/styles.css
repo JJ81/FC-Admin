@@ -23,6 +23,9 @@
 .center {
   text-align: center; }
 
+.right {
+  text-align: right; }
+
 .rating {
   direction: rtl;
   font-size: 17px;

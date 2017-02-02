@@ -777,10 +777,20 @@ QUERY.ACHIEVEMENT = {
         " ORDER BY `completed_rate` DESC; "
 
     // 교육생별 이수율 (전체)
-    ,GetUserProgressAllByEdu:        
+    ,GetUserProgressAllByEdu:      
         "SELECT MAX(g.`user_name`) AS user_name " +
         "     , MAX(b.`name`) AS branch_name " +
         "     , MAX(d.`name`) AS duty_name " +
+        "     , ( " +
+        "        SELECT (`complete` * ?) + " +
+        "               (`quiz_correction` * ?) + " +
+        "               (`final_correction` * ?) + " +
+        "               (`reeltime` * ?) + " +
+        "               (`speed` * ?) + " +
+	    "               (`repetition` * ?) " +
+        "          FROM `log_user_point` " +
+        "         WHERE `training_user_id` = g.`training_user_id` " +
+        "       ) AS point " +        
         "     , IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate " +
         "  FROM ( " +
         "		SELECT tu.`user_id` " +
@@ -819,7 +829,7 @@ QUERY.ACHIEVEMENT = {
         "  LEFT JOIN `branch` AS b " +
         "    ON g.`branch_id` = b.`id` " +
         "  LEFT JOIN `duty` AS d " +
-        "    ON g.`duty_id` = d.`id` " +    
+        "    ON g.`duty_id` = d.`id` " +  
         " GROUP BY g.`user_id` " +
         " ORDER BY `completed_rate` DESC; "            
 

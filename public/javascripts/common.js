@@ -4,11 +4,10 @@
 'use strict';
 define(
 	[
-		'jquery',
-		'jquery_datatable',
-		// 'bootstrap_datatable',
-        'responsive_datatable',
-		// ,'axios'
+		'jquery'
+        ,'jquery_datatable'
+		,'bootstrap_datatable'
+        ,'responsive_datatable'
 	],
 	function ($) {
 		// info 공통 로직은 이곳에서 정의한다.
@@ -30,7 +29,7 @@ define(
                         "url": "https://cdn.datatables.net/plug-ins/1.10.13/i18n/Korean.json"
                         // "url": "/datatable.kr.json"
                     },
-                    "order": [[ 0, 'desc' ]],
+                    "order": [[ 0, '' ]],
                 });
             },           
 			createWindowPopup: function(url, title, option) {
