@@ -1,21 +1,60 @@
 'use strict';
 
 requirejs([
-    'jquery'
-], function($) {
+    'jquery',
+    'Vimeo',  
+], function($, Vimeo) {
 
-    var _btn_regist_video = $('#regist-video');
-    var _btn_play_video = $('#play-video');
-    var _confirm = true; // 윈도우 종료 시 창을 닫을지 여부
+    var player = null,
+        player_container = $('#videoplayer'),
+        _btn_regist_video = $('#regist-video'),
+        _btn_play_video = $('#play-video'),
+        _confirm = true; // 윈도우 종료 시 창을 닫을지 여부
+
+		/**
+		 * Player 를 초기화 한다.
+		 */
+		function initPlayer () {
+
+            var video_url = $('#video-code').val(),
+                options = {
+                    url: video_url,
+                    loop: false
+                };
+
+            // console.log(video_url);
+
+            if (player) {
+                player.unload().then(function() {
+                    console.info(player);
+                    player.loadVideo('157991194');               
+                }).catch(function(error) {
+                    console.log('비메오 오류발생!');
+                    console.error(data);
+                });
+            } else {
+                player = new Vimeo('videoplayer', options);
+                player.setVolume(0.5);
+                player.on('error', function (data) {
+                    console.log('비메오 오류발생!');
+                    console.error(data);
+                });
+            } 
+            
+        }
+
 
     $('#video-code').bind('keypress', function (e) {
         var key = e.which || e.keyCode;
         if (key === 13)
             displayVideo();
+            // initPlayer();
+            
     });
     
     _btn_play_video.bind('click', function (e) {        
         displayVideo();
+        // initPlayer();
     });
 
     _btn_regist_video.bind('click', function (e) {
@@ -83,7 +122,7 @@ requirejs([
                 video_player.html('<iframe width="100%" height="600" src="https://www.youtube.com/embed/' + video_code + '"' +
                     'frameborder="0" allowfullscreen></iframe>');
                 break;
-            case 'VIMEO':               
+            case 'VIMEO':
                 video_player.html('<iframe src="https://player.vimeo.com/video/' + video_code + '"?title=0&byline=0&portrait=0" ' +
                     'width="100%" height="600" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
                 break;

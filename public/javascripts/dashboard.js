@@ -17,9 +17,12 @@ requirejs(
 		'jquery_ui',
 		'adminLTE',
 		'fastclick',	
+        'es6-promise',
 	],
 	function ($, axios, Util) {
 
+        require('es6-promise').polyfill(); // https://github.com/stefanpenner/es6-promise 참고
+        
 		// todo 위의 기능중에서 유틸성 기능은 common으로 이동시킨다.
 		// 여기서부터 포인트 환산 모달 컴퍼넌트를 위한 로직
 

@@ -28,6 +28,7 @@ requirejs.config({
         "slimScroll": '/vendor/plugins/slimScroll/jquery.slimscroll.min',
         "bootstrap_datetimepicker": ['/vendor/plugins/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min'],
         "es6-promise": '/vendor/plugins/es6-promise/dist/es6-promise',
+        "Vimeo": '/vendor/plugins/vimeo-player-js/dist/player',
 	},
 	shim : {
 
