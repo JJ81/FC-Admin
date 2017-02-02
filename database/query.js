@@ -267,7 +267,7 @@ QUERY.COURSE = {
     // 퀴즈(선택형, 다답형)를 생성한다.
     ,CreateQuizWithOption:
         "INSERT INTO `quiz` (`type`, `quiz_type`, `question`, `option_id`) " +
-        "VALUES (?,?,?,?) "
+        "VALUES (?,?,?,?) "        
     
     // 퀴즈(선택형, 다답형)를 수정한다.
     ,UpdateQuizWithOption:

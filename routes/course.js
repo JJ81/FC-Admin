@@ -652,14 +652,6 @@ router.post('/quiz', isAuthenticated, function (req, res) {
 
     var inputs = req.body;
 
-    console.log("------------------------------------");
-    console.log(inputs);
-    console.log("------------------------------------");
-    // return res.json({ 
-    //     success: true,
-    //     result: inputs
-    // });
-
     connection.beginTransaction(function(err) {
 
         if (err) { 

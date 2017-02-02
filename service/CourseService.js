@@ -25,7 +25,7 @@ function saveQuizOption (data, callback) {
                     data.id
                 ], 
                 function (err, data) {
-                    console.log(_query.sql);
+                    // console.log(_query.sql);
                     callback(err, data); // results[1]
                 }
             );
@@ -33,7 +33,7 @@ function saveQuizOption (data, callback) {
         // 입력
         _query = 
             CourseService.connection.query(QUERY.COURSE.CreateQuizOption, data, function (err, data) {
-                console.log(_query.sql);
+                // console.log(_query.sql);
                 callback(err, data); // results[1]
             });
     }

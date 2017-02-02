@@ -125,44 +125,31 @@ define(function(require) {
         addQuizMultiOptionWithOneAnswer: function (data) {
 
             var options = {
-                wrapper: _self.options.wrapper,
-                parent: _self,
-                index: data ? data.order : _self.quiz_list.length
-            };       
+                    wrapper: _self.options.wrapper,
+                    parent: _self,
+                    index: data ? data.order : _self.quiz_list.length
+                },
+                obj = null;      
 
             if (data) {
-                var obj = new QuizComponent(options, data);
+                obj = new QuizComponent(options, data);
                 _self.quiz_list.push(obj);
             } else {
-
-                $.get("/api/v1/randomkey", function ( res ) {
+                // axios.all([
+                //     _self.getRandomString()
+                // ])
+                // .then(axios.spread(function (res) {
                     data = {
                         quiz_id: null,
                         type: _self.data.type,
                         quiz_type: "B",
                         quiz_type_name: "선택형",
-                        option_group_id: res.id
+                        option_group_id: _self.createGUID()
                     };
                     console.log(data);
-                    var obj = new QuizComponent(options, data);  
-                    _self.quiz_list.push(obj);                    
-                });
-
-                // axios.all([
-                //     _self.getRandomString()
-                // ])
-                // .then(axios.spread(function (res) {
-                //     data = {
-                //         quiz_id: null,
-                //         type: _self.data.type,
-                //         quiz_type: "B",
-                //         quiz_type_name: "선택형",
-                //         option_group_id: res.data.id
-                //     };
-                //     console.log(data);
-                //     var obj = new QuizComponent(options, data);  
-                //     _self.quiz_list.push(obj);
-                // }));                
+                    obj = new QuizComponent(options, data);  
+                    _self.quiz_list.push(obj);
+                // }));   
             }
 
         },
@@ -170,44 +157,31 @@ define(function(require) {
         addQuizMultiOptionWithMultiAnswer: function (data) {
 
             var options = {
-                wrapper: _self.options.wrapper,                
-                parent: _self,
-                index: data ? data.order : _self.quiz_list.length
-            };
+                    wrapper: _self.options.wrapper,                
+                    parent: _self,
+                    index: data ? data.order : _self.quiz_list.length
+                },
+                obj = null;
 
             if (data) {
                 options.index = data.order;
-                var obj = new QuizComponent(options, data);
+                obj = new QuizComponent(options, data);
                 _self.quiz_list.push(obj);
             } else {
-
-                $.get("/api/v1/randomkey", function ( res ) {
+                // axios.all([
+                //     _self.getRandomString()
+                // ])
+                // .then(axios.spread(function (res) {
                     data = {
                         quiz_id: null,
                         type: _self.data.type,
                         quiz_type: "C",
                         quiz_type_name: "다답형",
-                        option_group_id: res.id
+                        option_group_id: _self.createGUID() //res.data.id
                     };
                     console.log(data);
-                    var obj = new QuizComponent(options, data);  
-                    _self.quiz_list.push(obj);                    
-                });
-
-                // axios.all([
-                //     _self.getRandomString()
-                // ])
-                // .then(axios.spread(function (res) {
-                //     data = {
-                //         quiz_id: null,
-                //         type: _self.data.type,
-                //         quiz_type: "C",
-                //         quiz_type_name: "다답형",
-                //         option_group_id: res.data.id
-                //     };
-                //     console.log(data);
-                //     var obj = new QuizComponent(options, data);
-                //     _self.quiz_list.push(obj);
+                    obj = new QuizComponent(options, data);
+                    _self.quiz_list.push(obj);
                 // }));                
             }             
         },
@@ -377,6 +351,13 @@ define(function(require) {
             var arr = _self.quiz_list;
             arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
             _self.updateQuizIndexes();
+        },
+        // guid 를 생성한다. (용도: 보기그룹아이디)
+        createGUID: function () {
+            function s4() {
+                return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+            }
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
         }
     };    
 

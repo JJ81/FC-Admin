@@ -119,19 +119,18 @@ requirejs(
          */
         function deleteSession(params) {
 
-            axios({method: 'delete', url: '/course/courselist', data: params});
-            // axios.delete('/course/courselist', 
-            // {
-            //     data: params
-            // })            
-            // .then(function (response) {
-            //     // console.log(response);
-            //     alert("세션을 삭제하였습니다.");
-            //     location.reload();
-            // })
-            // .catch(function (error) {
-            //     console.log(error);
-            // });
+            axios.delete('/course/courselist', 
+            {
+                params: params
+            })            
+            .then(function (response) {
+                // console.log(response);
+                alert("세션을 삭제하였습니다.");
+                location.reload();
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         }
 
         /**
