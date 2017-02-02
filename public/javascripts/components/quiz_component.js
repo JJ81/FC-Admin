@@ -94,13 +94,15 @@ define(function(require) {
         init: function () {
             //console.info('initilize');
 
+            // console.log(this.data);
+
             this.create_quiz();
             if (this.data.quiz_id) {
                 this.el.querySelector('#question').value = this.data.question;
 
                 switch (this.data.quiz_type) {
                     case "A": // 단답형
-                        this.el.querySelector('#answer_desc').value = this.data.answer_desc;
+                        this.el.querySelector('#answer_desc').value = this.data.answer;
                         break;
                     case "B": // 선택형 
                     case "C": // 다답형

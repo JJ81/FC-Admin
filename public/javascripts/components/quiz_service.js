@@ -242,6 +242,7 @@ define(function(require) {
         },
         // 세션을 생성/수정 한다.
         saveSession: function () {
+
             console.log('saveSession');
             var title = _self.options.root_wrapper.find('#title').val();
             if (_self.isNew) {

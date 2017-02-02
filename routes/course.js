@@ -774,12 +774,6 @@ router.put('/quiz', isAuthenticated, function (req, res) {
     var inputs = req.body;
     var _query = null;
 
-    // console.log(inputs);
-    // return res.json({ 
-    //     success: true,
-    //     result: inputs
-    // });
-
     connection.beginTransaction(function(err) {
 
         if (err) { 
@@ -971,7 +965,7 @@ router.get('/modify/quiz', isAuthenticated, function (req, res) {
         // results[0]
         function (callback) {
             _query = connection.query(QUERY.COURSE.GetSessionById, [_inputs.course_list_id], function (err, data) {
-                console.log(_query.sql);
+                // console.log(_query.sql);
                 callback(err, data);
             });
         },
@@ -988,7 +982,7 @@ router.get('/modify/quiz', isAuthenticated, function (req, res) {
             if (err) {
                 console.error(err);
             } else {
-                console.log(results[0]);
+                // console.log(results[0]);
                 res.render('winpops/win_modify_quiz', {
                     current_path: 'winpop',
                     module_type: 'modify_quiz', 

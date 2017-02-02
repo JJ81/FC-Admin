@@ -86,8 +86,10 @@ requirejs([
                 getQuizList()
             ])
             .then(axios.spread(function (res) {                
-                // 데이터가 통으로 넘어오기 때문에 퀴즈와 보기를 분리하는 작업을 수행.
+                
                 var quiz_list = res.data.quiz_list;
+
+                console.info(quiz_list);
 
                 // 퀴즈 서비스를 생성한다.
                 var options = {
@@ -152,8 +154,9 @@ requirejs([
          */
         window.onbeforeunload = function (event) {
 
-            if (_confirm)
-                return confirm("진행중인 작업이 모두 사라집니다. 계속하시겠습니까?");
+            // IE 에서 메세지가 두번 뜨는 문제로 주석처리 ()
+            // if (_confirm)
+            //     return confirm("진행중인 작업이 모두 사라집니다. 계속하시겠습니까?");
         };
     }
 );
