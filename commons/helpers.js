@@ -68,6 +68,10 @@ hbs.registerHelper('time', function (date) {
 	return dateFormat(date, "yyyy-mm-dd");
 });
 
+hbs.registerHelper('dateformat', function (date, format) {
+	return dateFormat(date, format);
+});
+
 hbs.registerHelper('comparison', function(value , max){
   return (value < max) ? true: false;
 });

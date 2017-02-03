@@ -22,15 +22,23 @@ define(
 		var validation = {};
 
 		return {
-            initDataTable: function (element) {
-                element.DataTable({
-                    responsive: true,
-                    language: {            
-                        "url": "https://cdn.datatables.net/plug-ins/1.10.13/i18n/Korean.json"
-                        // "url": "/datatable.kr.json"
-                    },
-                    "order": [[ 0, '' ]],
-                });
+            initDataTable: function (element, options) {
+
+                var table = null;
+
+                if (options != null) {
+                    table = element.DataTable(options);
+                } else {
+                    table = element.DataTable({
+                        responsive: true,
+                        language: {            
+                            "url": "https://cdn.datatables.net/plug-ins/1.10.13/i18n/Korean.json"
+                        },
+                        "order": [[ 0, '' ]],
+                    });
+                }
+
+                return table;
             },           
 			createWindowPopup: function(url, title, option) {
 				window.open(url, title, option);

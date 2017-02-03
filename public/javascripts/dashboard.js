@@ -19,17 +19,66 @@ requirejs(
 		'fastclick',	
         'es6-promise',
 	],
-	function ($, axios, Util) {
+	function ($, axios, Util, moment) {
 
         require('es6-promise').polyfill(); // https://github.com/stefanpenner/es6-promise 참고
-        
+
 		// todo 위의 기능중에서 유틸성 기능은 common으로 이동시킨다.
 		// 여기서부터 포인트 환산 모달 컴퍼넌트를 위한 로직
 
         $.widget.bridge('uibutton', $.ui.button);
 
-        // datatable 설정
-        Util.initDataTable($('#table_point'));
+        $(function () {
+
+            // datatable 설정            
+            
+            Util.initDataTable($('#table-point-by-edu'), { 
+                responsive: true,
+                language: { "url": "https://cdn.datatables.net/plug-ins/1.10.13/i18n/Korean.json" },          
+                "columns": [
+                    { "data": "branch_name", className: "center" },
+                    { "data": "duty_name", className: "center" },
+                    { "data": "user_name", className: "center" },
+                    { "data": "period", className: "center" },
+                    { "data": "complete", className: "center" },
+                    { "data": "quiz_correction", className: "center" },
+                    { "data": "final_correction", className: "center" },
+                    { "data": "reeltime", className: "center" },
+                    { "data": "speed", className: "center" },
+                    { "data": "repetition", className: "center" },
+                    { "data": "point_total", className: "right" },
+                ],
+                "order": [[ 10, 'desc' ]],
+            });            
+            Util.initDataTable($('#table_point'), { 
+                responsive: true,
+                language: { "url": "https://cdn.datatables.net/plug-ins/1.10.13/i18n/Korean.json" },                
+            });
+
+        });
+
+        $('#select-point-by-edu').change(function () {
+
+            var edu_id = $(this).val();
+            axios.get('/dashboard/edupoint', {
+                params: {
+                    edu_id: edu_id
+                }
+            })
+            .then(function (response) {
+                var new_data = response.data.data,
+                    table = $('#table-point-by-edu').DataTable();
+                
+                // console.info(new_data);
+
+                table.clear().draw();
+                table.rows.add(new_data); // Add new data
+                table.columns.adjust().draw(); // Redraw the DataTable                
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+        });
 
 		var
 			_total = 0,
@@ -56,7 +105,7 @@ requirejs(
                 }
             })
             .then(function (response) {
-                console.log(response.data.list);
+                // console.log(response.data.list);
 
                 var point_complete = $('.eduComplete').val(),
                     point_speed = $('.speedComplete').val(),

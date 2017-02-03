@@ -42,17 +42,16 @@ passport.use(new LocalStrategy({
       } else {
         if (data.length === 1) {
           if (!bcrypt.compareSync(password, data[0].password)) {
-            console.log('password is not matched.');
             return done(null, false);
           } else {
-            console.log('password is matched.');
             return done(null, {
               'admin_id' : data[0].admin_id,
               'name' : data[0].name,
               'email' : data[0].email,
               'role' : data[0].role,
               'fc_id' : data[0].fc_id,
-              'fc_name' : data[0].fc_name
+              'fc_name' : data[0].fc_name,
+              'curdate' : data[0].curdate
             });
           }
         } else {

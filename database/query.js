@@ -58,11 +58,18 @@ QUERY.ADMIN = {
 
 QUERY.LOGIN = {
   login :
-    "select a.id as admin_id, a.name, a.email, a.password, a.role, f.name as fc_name, f.id as fc_id " +
-    "from `admin` as a " +
-    "left join `fc` as f " +
-    "on f.id = a.fc_id " +
-    "where a.email=?;"
+    "SELECT a.`id` AS admin_id " +
+    "     , a.`name` " +
+    "     , a.`email` " +
+    "     , a.`password` " +
+    "     , a.`role` " +
+    "     , f.`name` AS fc_name " +
+    "     , f.`id` AS fc_id " +
+    "     , CURDATE() AS curdate " +
+    "  FROM `admin` AS a " +
+    "  LEFT JOIN `fc` AS f " +
+    "    ON f.`id` = a.`fc_id` " +
+    " WHERE a.`email` = ?; "
 };
 
 QUERY.EMPLOYEE = {
@@ -955,7 +962,8 @@ QUERY.DASHBOARD = {
        "            ON te.`edu_id` = e.`edu_id` " + 
        "       ) AS g " +
        " GROUP BY g.`fc_id`, g.`edu_id` " +
-       " ORDER BY `completed_rate` DESC; "
+       " ORDER BY `edu_start_dt` ASC, `edu_name` ASC; "
+    //    " ORDER BY `completed_rate` DESC; "
 
     // 지점별 이수율 (전체)
     ,GetBranchProgressAll:
@@ -1087,8 +1095,54 @@ QUERY.DASHBOARD = {
         "        ) AS r " +
         " WHERE 1=1 " +
         " GROUP BY r.`user_id` " +
-        " ORDER BY `point_total` DESC ",
+        " ORDER BY `point_total` DESC "
 
+    // 교육과정별 포인트 현황
+    ,GetUserPointListByEduId:
+        "SELECT r.`training_user_id` " +
+        "     , MAX(r.`logs`) AS logs " +
+        "     , MAX(r.`user_name`) AS user_name " +
+        "     , MAX(r.`branch_name`) AS branch_name " +
+        "     , MAX(r.`duty_name`) AS duty_name " +
+        "     , MAX(r.`fc_id`) AS `fc_id` " +
+        "     , SUM( " +
+        "        r.`complete` +  " +
+        "        r.`quiz_correction` +  " +
+        "        r.`final_correction` + " +
+        "        r.`reeltime` + " +
+        "        r.`speed` + " +
+        "        r.`repetition` " +
+        "       ) AS point_total " +     
+        "  FROM ( " +
+        "        SELECT u.`id` AS user_id " +
+        "             , u.`name` AS user_name " +
+        "             , b.`name` AS branch_name " +
+        "             , d.`name` AS duty_name " +
+        "             , u.`fc_id` " +		
+        "             , lup.`training_user_id` " +
+        "             , (lup.`complete` * ?) AS complete " +
+        "             , (lup.`quiz_correction` * ?) AS quiz_correction " +
+        "             , (lup.`final_correction` * ?) AS final_correction " +
+        "             , (lup.`reeltime` * ?) AS reeltime " +
+        "             , (lup.`speed` * ?) AS speed " +
+        "             , (lup.`repetition` * ?) AS repetition " +
+        "             , lup.`logs` " +
+        "          FROM `log_user_point` AS lup " +
+        "         INNER JOIN `users` AS u " +
+        "            ON lup.`user_id` = u.`id` " +
+        "          LEFT JOIN `branch` AS b " +
+        "            ON u.`branch_id` = b.`id` " +
+        "          LEFT JOIN `duty` AS d " +
+        "            ON u.`duty_id` = d.`id` " +
+        "           AND u.`fc_id` = ? " +
+        "         WHERE 1=1 " +
+        "           AND lup.`edu_id` = ? " +
+        "        ) AS r " +
+        " WHERE 1=1 " +
+        " GROUP BY r.`training_user_id` " +
+        " ORDER BY `point_total` DESC ",   
+    
+    
     // 사용자 포인트 상세내역
     GetUserPointDetails:
         "SELECT `logs` " + 
