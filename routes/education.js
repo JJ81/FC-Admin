@@ -11,6 +11,7 @@ var isAuthenticated = function (req, res, next) {
 require('../commons/helpers');
 const async = require('async');
 const EducationService = require('../service/EducationService');
+const util = require('../util/util');
 
 /**
  * 교육과정괸리 첫페이지
@@ -159,46 +160,58 @@ router.get('/details', isAuthenticated, function (req, res) {
  */
 router.post('/create/edu', isAuthenticated, function (req, res) {
 	
-    var _data = {};
-	_data.group_id = req.body.course_group_id.trim();
-	_data.course_name = req.body.course_name.trim();
-	_data.course_desc = req.body.course_desc.trim();
-	_data.course_list = req.body.course_list;
-	_data.creator_id = req.user.admin_id;
-    _data.start_dt = req.body.start_dt;
-    _data.end_dt = req.body.end_dt;
-
-	console.info(_data);
+    var _inputs = req.body,
+        _course_group_id = null;
 
 	connection.beginTransaction(function () {
 		async.series(
-			[
+			[   
+                // course_group_id 생성
+                function (callback) {
+                    _course_group_id = util.publishHashByMD5(new Date());
+                    console.log(_course_group_id);
+                    callback(null, null);
+                },
+
+                // 교육과정 생성
 				function (callback) {
 					connection.query(QUERY.EDU.InsertEdu, [
-						_data.course_name, _data.course_desc, _data.group_id, _data.creator_id, _data.start_dt, _data.end_dt
+						_inputs.name, 
+                        _inputs.desc, 
+                        _course_group_id, 
+                        req.user.admin_id,
+                        _inputs.start_dt, 
+                        _inputs.end_dt
 					], function (err, result) {
-						if(err){
-							console.error(err);
-							callback(err, null);
-						}else{
-							console.info('check!');
-							console.info(result);
-							callback(null, result);
-						}
+						callback(err, result);
 					});
 				},
 
+                // 강의그룹을 입력/수정한다.
 				function (callback) {
-					EducationService.addCourseList(_data.group_id, _data.course_list,
+
+                    for (var index = 0; index < _inputs.course_group_list.length; index++) {
+                        _inputs.course_group_list[index].course_group_id = _course_group_id;                        
+                    }
+
+					EducationService.InsertOrUpdateCourseGroup(connection, _inputs.course_group_list,
 						function (err, result) {
-							if(err){
-								callback(null, null);
-							}else{
-								console.info(result);
-								callback(null, result);
-							}
-						});
+							callback(err, result);
+						}
+                    );
 				}
+
+				// function (callback) {
+				// 	EducationService.addCourseList(_data.group_id, _data.course_list,
+				// 		function (err, result) {
+				// 			if(err){
+				// 				callback(null, null);
+				// 			}else{
+				// 				console.info(result);
+				// 				callback(null, result);
+				// 			}
+				// 		});
+				// }
 
 			],
 			function (err, result) {

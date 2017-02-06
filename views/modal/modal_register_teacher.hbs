@@ -5,9 +5,10 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">강사등록</h4>
+                <h4 class="modal-title">강사 등록/수정</h4>
             </div>
             <div class="modal-body">
+                <input type="hidden" name="id" />
                 <div class="form-group">
                     <label>강사명</label>
                     <input type="text" class="form-control" name="teacher" placeholder="강사명" required autocomplete="off" />
@@ -24,7 +25,7 @@
                     <h4>현재 강사 목록</h4>
                     <ul>
                         {{#each teacher_list}}
-                        <li>{{name}}</li>
+                        <li class="teacher-list"><a data-id="{{id}}" data-name="{{name}}" data-desc="{{desc}}" href="#">{{name}}</a></li>
                         {{/each}}
                     </ul>
                 </div>
@@ -32,7 +33,11 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
-                <button type="submit" class="btn btn-primary btn-set-agent-password-submit">등록</button>
+
+                <div class="pull-right">
+                    <button type="button" id="clear-input" class="btn btn-default">초기화</button>
+                    <button type="submit" class="btn btn-primary btn-set-agent-password-submit">등록</button>
+                </div>
             </div>
         </div>
         <!-- /.modal-content -->

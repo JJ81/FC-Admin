@@ -29,14 +29,14 @@ requirejs(
 		var _winpop_option = 'scrollbars=yes, toolbar=no, location=no, status=no, menubar=no, ' +
 			'resizable=yes, width=1040, height=760, left=0, top=0';
             
-		var _btn_watch = $('.btn-watch-video');
-		var _btn_solve_quiz = $('.btn-solve-quiz'); // 퀴즈/파이널테스트 보기
-		var _btn_create_video = $('.btn-create-video'); // 비디오 보기
-        var _btn_modify_video = $('.btn-modify-video'); // 비디오 수정
-        var _btn_create_quiz = $('.btn-create-quiz'); // 퀴즈 생성
-        var _btn_create_final = $('.btn-create-final'); // 파이널테스트 생성
-        var _btn_delete_session = $('.btn-delete-session'); // 세션 삭제버튼
-        var _btn_modify_session = $('.btn-modify-session'); // 세션 수정버튼
+		var _btn_watch = $('.btn-watch-video'),
+		    _btn_solve_quiz = $('.btn-solve-quiz'), // 퀴즈/파이널테스트 보기
+		    _btn_create_video = $('.btn-create-video'), // 비디오 보기
+            _btn_modify_video = $('.btn-modify-video'), // 비디오 수정
+            _btn_create_quiz = $('.btn-create-quiz'), // 퀴즈 생성
+            _btn_create_final = $('.btn-create-final'), // 파이널테스트 생성
+            _btn_delete_session = $('.btn-delete-session'), // 세션 삭제버튼
+            _btn_modify_session = $('.btn-modify-session'); // 세션 수정버튼
 
         $(function () {
 

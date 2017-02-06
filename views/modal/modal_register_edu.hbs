@@ -1,6 +1,6 @@
 <!-- Create Employee -->
 <div class="modal" id="registerEdu" role="dialog">
-    <form class="modal-dialog" method="post" action="/education/register" id="frm_register_edu">
+    <form class="modal-dialog" method="post" action="#" id="frm_register_edu">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -9,8 +9,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>강의명</label>
-                    <input type="text" class="form-control course-name" name="course_name" placeholder="강의명" required autocomplete="off" />
+                    <label>교육과정명</label>
+                    <input type="text" class="form-control course-name" name="course_name" placeholder="교육과정명" required autocomplete="off" />
                 </div>
 
                 <div class="row">
@@ -39,15 +39,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label>강의 소개</label>
-                    <textarea class="form-control course-desc" name="course_desc" placeholder="강의소개를 입력하세요."></textarea>
+                    <label>교육과정 소개</label>
+                    <textarea class="form-control course-desc" name="course_desc" placeholder="교육과정 소개를 입력하세요."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>교육에 추가할 강의를 선택하세요.</label>
-                    <select name="teacher_id" class="form-control select-course-list">
+                    <label>교육과정에 추가할 강의를 선택하세요.</label>
+                    <select name="teacher_id" id="select-course-list" class="form-control">
                         {{#each course_list}}
-                        <option value="{{id}}">{{course_name}} <small>({{teacher_name}})</small></option>
+                        <option value="{{course_id}}">{{course_name}} <small>({{teacher_name}})</small></option>
                         {{/each}}
                     </select>
                     <div style="text-align: right;margin-top: 5px;">
@@ -68,7 +68,7 @@
             </div>
         </div>
         <!-- /.modal-content -->
-      <input type="hidden" name="group_id" class="course_group_id" />
+      <input type="hidden" name="group_id" class="course_group_id" value="{{course_group_id}}" />
     </form>
     <!-- /.modal-dialog -->
 </div>

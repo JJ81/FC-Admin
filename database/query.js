@@ -166,16 +166,23 @@ QUERY.COURSE = {
 
   // 강사목록을 조회한다.
   ,GetTeacherList:
-    "select t.id, t.name, t.desc " +
-    "from `teacher` as t " +
-    "left join `admin` as a " +
-    "on a.id = t.creator_id " +
-    "where a.fc_id=?;"
+    "SELECT t.`id`, t.`name`, t.`desc` " +
+    "  FROM `teacher` AS t " +
+    "  LEFT JOIN `admin` AS a " +
+    "    ON a.`id` = t.`creator_id` " +
+    " WHERE a.`fc_id` = ?; "
 
   // 강사를 생성한다.
   ,CreateTeacher:
     "insert into `teacher` (`name`, `desc`, `creator_id`) " +
     "values(?,?,?);"
+  
+  // 강사를 수정한다.
+  ,UpdateTeacher:
+    "UPDATE `teacher` SET " +
+    "       `name` = ? " +
+    "     , `desc` = ? " +
+    " WHERE `id` = ?; "
 
   // 강의를 생성한다.
   ,CreateCourse :
@@ -185,7 +192,7 @@ QUERY.COURSE = {
   // 강의를 수정한다.
   ,UpdateCourse:
     "update `course` set `name`=?, `teacher_id`=?, `desc`=?, `creator_id`=?, `updated_dt`=? " +
-    "where `id`=?;"
+    "where `id`=?; "
   
   // 강의 세션수를 조회한다.
   ,GetSessionCount:

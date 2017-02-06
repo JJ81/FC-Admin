@@ -32,13 +32,13 @@ requirejs(
 		// group_id를 통해서 선택한 강의를 테이블에 저장하고,
 		// course 테이블에 교육명과 교육설명 등을 저정한다
 
-		var btn_create_edu = $('.btn-create-edu');
-		var btn_add_course = $('.btn-add-course-edu');
-		var select_course_list = $('.select-course-list');
-		var course_group_id = $('.course_group_id');
-		var courseIdList = [];
-		var _course_container = $('#draggablePanelList');
-		var _submit = $('.btn-register-course-submit');        
+		var _btn_add_course = $('.btn-add-course-edu'),
+		    _select_course_list = $('#select-course-list'),
+		    _course_group_id = $('.course_group_id'),
+		    _course_container = $('#draggablePanelList'),
+            _btn_create_edu = $('.btn-register-course-submit'),
+            _courseName = $('.course-name'),
+		    _courseDesc = $('.course-desc');          
 
         $(function () {
 
@@ -71,119 +71,164 @@ requirejs(
 
             // datatable 설정
             Util.initDataTable($('#table_education'));
+
+            // jQuery UI sortable 초기화
+            $('#draggablePanelList').sortable({
+                placeholder: "sort-highlight",
+                handle: ".handle",
+                forcePlaceholderSize: true,
+                zIndex: 999999,
+                start: function(e, ui) {
+                    $(this).attr('data-previndex', ui.item.index());
+                },
+                update: function(e, ui) {
+                    var newIndex = ui.item.index();
+                    var oldIndex = $(this).attr('data-previndex');
+                    $(this).removeAttr('data-previndex');
+                    console.log('newIndex : ' + newIndex + ' oldIndex : ' + oldIndex);
+                }
+            });
               
         });
 
-        btn_create_edu.bind('click', function () {
-			var _group_id = null;
-			axios.get('/api/v1/course/group/id/create')
-				.then(function (res) {
-					_group_id = res.data.id;
-					course_group_id.val(_group_id);
-				})
-				.catch(function (err) {
-					console.error(err);
-				});
-		});
+        // 강의 추가
+        _btn_add_course.bind('click', function () {        
+            addCourseGroupItem();
+        });        
 
-		// 강의를 선택할 때마다 하단에 선택한 강의를 추가할 수 있도록 한다
-		btn_add_course.bind('click', function () {
-			var _text = select_course_list.find('option:selected').text().trim();
-			var _id = select_course_list.find('option:selected').val().trim();
-			var elem = '<li class="list-group-item" data-course-id="'+_id+'">';
-			elem += '<div class="course">'+_text+'<a href="#" class="btn-delete-course" onclick="education.removeElement(this);"><i class="fa fa-remove text-red"></i></a></div>';
-			elem += '</li>';
+        // 강의를 그룹에 추가한다.
+        function addCourseGroupItem () {
 
-			if(!checkDuplicateCourseId(_id)){
-				_course_container.append(elem);
-				courseIdList.push(_id);
-			}
-		});
+            var course_id = _select_course_list.find('option:selected').val();
+			var course_name = _select_course_list.find('option:selected').text();
+            var element = "";
 
-		// ref. http://www.bootply.com/dUQiGMggWO
-		var panelList = $('#draggablePanelList');
-		panelList.sortable({
-			handle: '.course',
-			update: function() {
-				courseIdList = reCountCourseList();
-			}
-		});
+            // 강의 중복추가 방지
+            var duplicated_item = $('.list-group-item[data-course-id="' + course_id + '" ]');
+            if (duplicated_item.length) {
+                duplicated_item.show();
+                return false;
+            }
 
+            element += '<li class="list-group-item" data-course-id="' + course_id + '">';
+            element += '    <div class="course">';
+            element += '        <span class="handle ui-sortable-handle">';
+            element += '            <i class="fa fa-ellipsis-v"></i>';
+            element += '            <i class="fa fa-ellipsis-v"></i>';
+            element += '        </span>';                 
+            element += course_name;
+            element += '        <a href="#" class="btn-delete-course">';
+            element += '            <i class="fa fa-remove text-red"></i>';
+            element += '        </a>';
+            element += '    </div>';
+            element += '</li>';
 
-		window.education = {
-			removeElement : function (el) {
-				$(el).parent().parent().remove();
-				courseIdList = reCountCourseList();
+            _course_container.append(element);
+
+        }
+
+        /**
+         * 동적으로 추가된 강의에 이벤트 바인딩
+         */
+        _course_container.on('click', '> li', function (e) {
+            deleteEduCourse($(e.target).parent().parent().parent());
+        });        
+
+        // 강의 삭제
+        $('.btn-delete-course').bind('click', function () {
+            deleteEduCourse($(this).parent().parent());
+        });
+
+        function deleteEduCourse (course) {
+            course.remove();
+        }
+
+        // 강의그룹 데이터를 생성한다.
+        function makeCourseGroupList () {
+
+            var course_group_list = [];
+            var order = 0;
+            var mode = "";
+            var valid_course_count = 0; 
+
+            $('#draggablePanelList').find('li.list-group-item').each(function (index) { 
+                
+                var course_group = {
+                    course_id: $(this).data('course-id'),
+                    order: order
+                };
+
+                if (course_group.id)
+                    if ($(this).is(":visible")) 
+                        course_group.mode = "UPDATE";
+                    else
+                        course_group.mode = "DELETE";
+                else
+                    course_group.mode = "INSERT";
+                
+                course_group_list.push(course_group);
+
+                if (course_group.mode !== "DELETE") {
+                    valid_course_count += 1;
+                    order += 1;
+                }
+
+            });
+
+            return { data: course_group_list, valid_course_count: valid_course_count };
+            
+        }        
+
+        // 교육과정 등록
+        _btn_create_edu.bind('click', function (e) {
+
+            e.preventDefault();
+
+            var modal = $('#frm_register_edu'),
+                edu_name = $('.course-name'),
+                edu_desc = $('.course-desc'),                        
+                course_group_list = makeCourseGroupList();
+
+			if (edu_name.val() === ''){
+				alert('교육과정명을 입력하세요.');
+				edu_name.focus();
 				return false;
 			}
-		};
 
-		// 추가한 강의중에 중복이 있는지 확인을 한다.
-		function checkDuplicateCourseId(id){
-			for(var i= 0,len=courseIdList.length;i<len;i++){
-				if(courseIdList[i] === id){
-					return true;
-				}
-			}
-			return false;
-		}
-
-		// 강의 리스트를 다시 점검한다
-		function reCountCourseList(){
-			var _tmp = [];
-			$('.list-group-item', panelList).each(function(index, elem) {
-				var _id = $(elem).attr('data-course-id');
-				_tmp.push(_id);
-			});
-			return _tmp;
-		}
-
-		var courseName = $('.course-name');
-		var courseDesc = $('.course-desc');
-
-		_submit.bind('click', function (e) {
-			e.preventDefault();
-
-			if(courseName.val() === ''){
-				alert('교육과정명을 입력하세요.');
-				courseName.focus();
-				return;
+			if (edu_desc.val() === ''){
+				alert('교육과정 소개를 입력해주세요.');
+				edu_desc.focus();
+				return false;
 			}
 
-			if(courseDesc.val() === ''){
-				alert('교육과정명 소개를 입력해주세요.');
-				courseDesc.focus();
-				return;
-			}
+            if (!course_group_list.valid_course_count) {
+                alert('강의를 추가해주세요.');
+                return false;
+            }
 
-			if(courseIdList.length <= 0){
-				alert('강의를 추가하세요.');
-				return;
-			}
-            
+            if (!confirm("등록하시겠습니까?"))
+                return false;
+
+            // 저장한다.
 			axios({
 				method : 'post',
 				url: '/education/create/edu',
 				data : {
-					course_group_id : course_group_id.val(),
-					course_name : courseName.val().trim(),
-					course_desc : courseDesc.val().trim(),
-					course_list : courseIdList,
+					name : edu_name.val().trim(),
+					desc : edu_desc.val().trim(),
+					course_group_list : course_group_list.data,
                     start_dt: $('#start_dt').find("input").val() + ' ' + '00:00:00',
                     end_dt: $('#end_dt').find("input").val() + ' ' + '23:59:59'
 				}
 			}).then(function (res){
 				if(res.data.success == true){
-					alert('교육과정을 생성하였습니다.');
+					alert('교육과정을 등록하였습니다.');
 				}else{
 					alert('알 수 없는 오류가 발생했습니다. 잠시 후에 다시 시도해주세요.');
 				}
 
 				window.location.reload();
 			});
-
-		});
-		//window.reCountCourseList = reCountCourseList;
-		//window.courseIdList = courseIdList;
+        });
 
 	}); // end of func

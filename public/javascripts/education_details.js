@@ -149,8 +149,6 @@ requirejs([
 
 				window.location.reload();
 			});
-
-
         });
 
         // 강의그룹 데이터를 생성한다.
@@ -272,7 +270,7 @@ requirejs([
         function changeCourseOrder () {
             
             var promises = [];
-            var items = $('.list-group-item'); //.children().children('a');
+            var items = $('div.list-group-item'); //.children().children('a');
             
             for (var index = 0; index < items.length; index++) {
                 promises.push(makeCourseOrderChangeRequest($(items[index])));
@@ -281,6 +279,7 @@ requirejs([
             axios.all(promises).then(function(results) {
                 results.forEach(function(response) {
                     // console.log(response);
+                    location.reload();
                 });
             });
         }        

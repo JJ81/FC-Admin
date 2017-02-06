@@ -282,7 +282,25 @@ router.post('/create/teacher', isAuthenticated, function (req, res){
   });
 });
 
+/**
+ * 강의/강사등록 상세페이지 > 강사수정
+ */
+router.post('/modify/teacher', isAuthenticated, function (req, res){
+    
+  var _id = req.body.id,
+      _name = req.body.teacher.trim(),
+      _desc = req.body.teacher_desc.trim();
 
+  connection.query(QUERY.COURSE.UpdateTeacher,
+    [ _name, _desc, _id ],
+    function (err, rows) {
+      if(err){
+        console.error(err);
+      }else{
+        res.redirect('/course');
+      }
+  });
+});
 ////////////////////////////////////////////////////////////////////////////////////////// 비디오
 
 /**
