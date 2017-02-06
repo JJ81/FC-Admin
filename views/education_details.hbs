@@ -6,10 +6,18 @@
                     <i class="fa fa-list"></i> &nbsp;
                     목록으로
                 </a>
-                <button id="modify-edu" class="btn btn-warning pull-right btn-sm" data-toggle="modal" data-target="#modifyEdu">
-                    <i class="fa fa-pencil"></i> &nbsp;
-                    수정
-                </button>
+                <div class="pull-right">
+
+                    <button id="modify-edu" class="btn btn-primary" data-toggle="modal" data-target="#modifyEdu">
+                        <i class="fa fa-pencil"></i> &nbsp;
+                        수정
+                    </button>
+
+                    <button id="point-setting" class="btn btn-default" data-toggle="modal" data-target="#pointWeight">
+                        <i class="fa fa-gear"></i>
+                        포인트 설정
+                    </button>                    
+                </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -44,3 +52,4 @@
 <!-- /.row -->
 
 {{>modal_modify_edu}}
+{{>modal_point_weight}}

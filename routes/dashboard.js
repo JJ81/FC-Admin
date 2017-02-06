@@ -12,6 +12,18 @@ require('../commons/helpers');
 const async = require('async');
 var DashboardService = require('../service/DashboardService');
 
+/**
+ * 메인
+ * 1. 총 교육생 수
+ * 2. 총 지점 수
+ * 3. 총 진행중인 교육과정
+ * 4. 총 교육과정
+ * 5. 포인트 가중치 설정값
+ * 6. 이번 달 전체 교육 이수율
+ * 7. 이번 달 교육 진척도
+ * 8. 교육 이수율 랭킹 (지점)
+ * 9. 포인트 현황
+ */
 router.get('/', isAuthenticated, function (req, res) {
 
     var _edu_progress = null,
@@ -79,30 +91,29 @@ router.get('/', isAuthenticated, function (req, res) {
 			// 포인트 가중치 설정값
             // result[4]
 			function (callback) {
-				_query = connection.query(QUERY.DASHBOARD.GetRecentPointWeight,
-					[req.user.fc_id],
-					function (err, rows) {
-						if(err){
-							console.error(err);
-							callback(err, null);
-						}else{
-                            _point_weight = rows[0];
-                            console.log('------------------');
-                            console.log(_point_weight);
+                callback(null, null);
+				// _query = connection.query(QUERY.DASHBOARD.GetRecentPointWeight,
+				// 	[req.user.fc_id],
+				// 	function (err, rows) {
+				// 		if(err){
+				// 			console.error(err);
+				// 			callback(err, null);
+				// 		}else{
+                //             _point_weight = rows[0];
 
-                            if (_point_weight != null)
-							    callback(null, rows);
-                            else 
-                                callback(null, [{
-                                    point_complete: 0,
-                                    point_quiz: 0,
-                                    point_final: 0,
-                                    point_reeltime: 0,
-                                    point_speed: 0,
-                                    point_repetition: 0,
-                                }]);
-						}
-				});
+                //             if (_point_weight != null)
+				// 			    callback(null, rows);
+                //             else 
+                //                 callback(null, [{
+                //                     point_complete: 0,
+                //                     point_quiz: 0,
+                //                     point_final: 0,
+                //                     point_reeltime: 0,
+                //                     point_speed: 0,
+                //                     point_repetition: 0,
+                //                 }]);
+				// 		}
+				// });
 			},
 			// 이번 달 전체 교육 이수율
             // result[5]
@@ -140,26 +151,30 @@ router.get('/', isAuthenticated, function (req, res) {
 			function (callback) {
                 // console.log(_point_weight);
 
-                if  (_point_weight != null) {
+                // if  (_point_weight != null) {
                     _query = connection.query(QUERY.DASHBOARD.GetUserPointList,
                         [ 
-                            _point_weight.point_complete,
-                            _point_weight.point_quiz,
-                            _point_weight.point_final,
-                            _point_weight.point_reeltime,
-                            _point_weight.point_speed,
-                            _point_weight.point_repetition,
-                            req.user.fc_id 
+                            // _point_weight.point_complete,
+                            // _point_weight.point_quiz,
+                            // _point_weight.point_final,
+                            // _point_weight.point_reeltime,
+                            // _point_weight.point_speed,
+                            // _point_weight.point_repetition,
+                            req.user.fc_id,
+                            req.user.fc_id
                         ],
                         function (err, rows) {
+                            console.log('---------------');
+                            console.log(rows);
+                            console.log('---------------');
                             // console.log(err);
                             // console.log(_query.sql);
                             callback(err, rows);
                         }
                     );
-                } else {
-                    callback(null, null);
-                }
+                // } else {
+                //     callback(null, null);
+                // }
 			}
 		],
 		function (err, result){
@@ -205,8 +220,9 @@ router.get('/', isAuthenticated, function (req, res) {
 router.get('/point/details', isAuthenticated, function (req, res) {
 
     var _query = null;
-    _query = connection.query(QUERY.DASHBOARD.GetUserPointDetails, [ req.query.user_id ], function (err, data) {
+    _query = connection.query(QUERY.DASHBOARD.GetUserPointDetails, [ req.user.fc_id, req.query.user_id ], function (err, data) {
         if (err) {
+            console.log(err);
             // 쿼리 실패
             res.json({
                 success: false,
@@ -219,10 +235,20 @@ router.get('/point/details', isAuthenticated, function (req, res) {
 
             var list = [];
             for (var index = 0; index < data.length; index++) {                
-                list.push(JSON.parse(data[index].logs));                
+                var item = JSON.parse(data[index].logs);
+                item.point_complete = data[index].point_complete;
+                item.point_quiz = data[index].point_quiz;
+                item.point_final = data[index].point_final;
+                item.point_reeltime = data[index].point_reeltime;
+                item.point_speed = data[index].point_speed;
+                item.point_repetition = data[index].point_repetition; 
+
+                list.push(item);            
             }
 
-            // console.log(list);
+            console.log('----------------------------');
+            console.log(list);
+            console.log('----------------------------');
 
             // 쿼리 성공
             res.json({
@@ -238,6 +264,7 @@ router.get('/point/details', isAuthenticated, function (req, res) {
  * 가중치 등록
  */
 router.post('/point/weight/record', isAuthenticated, function (req, res) {
+
 	var _eduComplete = req.body.complete;
 	var _quizComplete = req.body.quiz;
 	var _finalComplete = req.body.final_test;
@@ -263,8 +290,6 @@ router.post('/point/weight/record', isAuthenticated, function (req, res) {
 				res.redirect('/dashboard');
 			}
 	});
-
-
 });
 
 /**
@@ -309,12 +334,13 @@ router.get('/edupoint', isAuthenticated, function (req, res) {
                 if  (_point_weight != null) {
                     _query = connection.query(QUERY.DASHBOARD.GetUserPointListByEduId,
                         [ 
-                            _point_weight.point_complete,
-                            _point_weight.point_quiz,
-                            _point_weight.point_final,
-                            _point_weight.point_reeltime,
-                            _point_weight.point_speed,
-                            _point_weight.point_repetition,
+                            // _point_weight.point_complete,
+                            // _point_weight.point_quiz,
+                            // _point_weight.point_final,
+                            // _point_weight.point_reeltime,
+                            // _point_weight.point_speed,
+                            // _point_weight.point_repetition,
+                            req.user.fc_id,
                             req.user.fc_id,
                             _inputs.edu_id
                         ],

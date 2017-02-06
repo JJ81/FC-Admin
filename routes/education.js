@@ -62,34 +62,66 @@ router.get('/', isAuthenticated, function (req, res) {
  */
 router.get('/details', isAuthenticated, function (req, res) {
 
-	// var _course_group_id = req.query.course_group_id;
     var _params = req.query;
 
     async.series([
 
-        // results[0]: 교육과정정보를 조회한다.
+        // 교육과정정보를 조회한다.
+        // results[0]
         function (callback) {
             connection.query(QUERY.EDU.GetEduInfoById, [ _params.id ], function (err, data) {
                 callback(err, data); 
             });
         },
-        // results[1]: 교육과정의 강의목록을 조회한다.
+
+        // 교육과정의 강의목록을 조회한다.
+        // results[1]:
         function (callback) {
             connection.query(QUERY.EDU.GetCourseListByGroupId, [ _params.course_group_id ], function (err, data) {
                 callback(err, data);
             });
         },
-        // results[2]: 전체 강의목록을 조회한다.
+
+        // 전체 강의목록을 조회한다.
+        // results[2]
         function (callback) {
             connection.query(QUERY.EDU.GetCourseList, [ req.user.fc_id ], function (err, data) {
                 callback(err, data);
             });
-        }        
+        },
+
+        // 교육과정 포인트 설정값 조회
+        // result[3]
+        function (callback) {
+            _query = connection.query(QUERY.EDU.GetRecentPointWeight,
+                [ req.user.fc_id, _params.id ],
+                function (err, rows) {
+                    if (err) {
+                        console.error(err);
+                        callback(err, null);
+                    } else {
+                        _point_weight = rows[0];
+
+                        if (_point_weight != null)
+                            callback(null, rows);
+                        else 
+                            callback(null, [{
+                                point_complete: 0,
+                                point_quiz: 0,
+                                point_final: 0,
+                                point_reeltime: 0,
+                                point_speed: 0,
+                                point_repetition: 0,
+                            }]);
+                    }
+                }
+            );
+        },        
     ], function (err, results) {
         if (err) {
             console.error(err);
         } else {
-            console.info(results[0][0]);
+            console.log(results[0][0]);
 
             res.render('education_details', {
                 current_path: 'EducationDetails',
@@ -98,7 +130,8 @@ router.get('/details', isAuthenticated, function (req, res) {
                 loggedIn: req.user,
                 edu: results[0][0],
                 edu_course_list: results[1],
-                course_list: results[2]
+                course_list: results[2],
+                point_weight: results[3],
             });            
         }
     });    
@@ -291,6 +324,44 @@ router.delete('/course', isAuthenticated, function (req, res) {
             res.json({ success: true });
     });
     
+
+});
+
+
+/**
+ * 교육과정별 포인트 설정
+ */
+router.post('/pointweight', isAuthenticated, function (req, res) {
+
+	var _eduComplete = req.body.complete,
+	    _quizComplete = req.body.quiz,
+	    _finalComplete = req.body.final_test,
+	    _reeltimeComplete = req.body.reeltime,
+        _speedComplete = req.body.speed,
+        _repsComplete = req.body.reps,
+        _edu_id = req.body.edu_id,
+        _course_group_id = req.body.course_group_id;
+
+	connection.query(QUERY.EDU.SetPointWeight,
+		[
+			_eduComplete,
+			_quizComplete,
+			_finalComplete,
+			_reeltimeComplete,
+			_speedComplete,
+			_repsComplete,
+			req.user.admin_id,
+            _edu_id,
+            req.user.fc_id
+		],
+		function (err, result){
+			if(err){
+				console.error(err);
+				throw new Error(err);
+			}else{
+				res.redirect('/education/details?id=' + _edu_id + '&course_group_id=' + _course_group_id);
+			}
+	});
 
 });
 

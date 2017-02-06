@@ -1,11 +1,13 @@
 <!-- Create Employee -->
 <div class="modal" id="pointWeight" role="dialog">
-    <form class="modal-dialog" method="post" action="/dashboard/point/weight/record" id="frm_point_weight">
+    <form class="modal-dialog" method="post" action="/education/pointweight" id="frm_point_weight">
+        <input type="hidden" name="edu_id" value="{{edu.id}}" />
+        <input type="hidden" name="course_group_id" value="{{edu.course_group_key}}" />
         <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">포인트 환산 기준(가중치) 설정</h4>
+                <h4 class="modal-title">포인트 설정</h4>
             </div>
             <div class="modal-body">
                 {{#each point_weight}}

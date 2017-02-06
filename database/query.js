@@ -520,6 +520,27 @@ QUERY.EDU = {
     ,DeleteCourseGroupById:
         "DELETE FROM `course_group` " +
         " WHERE `id` = ?; "
+    
+    // 교육과정 포인트 설정 조회
+	,GetRecentPointWeight :
+		"SELECT pw.`point_complete` " +
+        "     , pw.`point_quiz` " +
+        "     , pw.`point_final` " +
+        "     , pw.`point_reeltime` " +
+        "     , pw.`point_speed` " +
+        "     , pw.`point_repetition` " +
+		" FROM `edu_point_weight` AS pw " +
+		" LEFT JOIN `admin` AS a " +
+		"   ON a.`id` = pw.`setter_id` " +
+		"WHERE a.`fc_id` = ? " +
+        "  AND pw.`edu_id` = ? " +
+		"ORDER BY pw.`created_dt` DESC " +
+		"LIMIT 1; "
+
+    // 교육과정 포인트 설정값 입력
+	,SetPointWeight :
+		"INSERT INTO `edu_point_weight` (`point_complete`,`point_quiz`, `point_final`, `point_reeltime`, `point_speed`, `point_repetition`, `setter_id`, `edu_id`, `fc_id`) " +
+		"VALUES (?,?,?,?,?,?,?,?,?); "
 };
 
 QUERY.HISTORY = {
@@ -1078,6 +1099,50 @@ QUERY.DASHBOARD = {
         "            , d.`name` AS duty_name " +
         "            , u.`fc_id` " +		
         "            , lup.`training_user_id` " +
+        "            , (lup.`complete` * epw.`point_complete`) AS complete " +
+        "            , (lup.`quiz_correction` * epw.`point_quiz`) AS quiz_correction " +
+        "            , (lup.`final_correction` * epw.`point_final`) AS final_correction " +
+        "            , (lup.`reeltime` * epw.`point_reeltime`) AS reeltime " +
+        "            , (lup.`speed` * epw.`point_speed`) AS speed " +
+        "            , (lup.`repetition` * epw.`point_repetition`) AS repetition " +
+        "          FROM `log_user_point` AS lup " +
+        "         INNER JOIN `users` AS u " +
+        "            ON lup.`user_id` = u.`id` " +
+        "          LEFT JOIN `branch` AS b " +
+        "            ON u.`branch_id` = b.`id` " +
+        "          LEFT JOIN `duty` AS d " +
+        "            ON u.`duty_id` = d.`id` " + 
+        "          LEFT JOIN `edu_point_weight` AS epw " +
+        "            ON lup.`edu_id` = epw.`edu_id` " +
+        "           AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ? AND `edu_id` = epw.`edu_id`) " +
+        "        AND u.`fc_id` = ? " +
+        "        ) AS r " +
+        " WHERE 1=1 " +
+        " GROUP BY r.`user_id` " +
+        " ORDER BY `point_total` DESC "
+    
+    // 포인트 현황(교육과정별 포인트 지정으로 사용안함)
+    ,GetUserPointList_deprecated:
+        "SELECT r.`user_id` " +
+        "    , MAX(r.`user_name`) AS user_name " +
+        "    , MAX(r.`branch_name`) AS branch_name " +
+        "    , MAX(r.`duty_name`) AS duty_name " +
+        "    , MAX(r.`fc_id`) AS `fc_id` " +
+        "    , SUM( " +
+        "        r.`complete` +  " +
+        "        r.`quiz_correction` +  " +
+        "        r.`final_correction` + " +
+        "        r.`reeltime` + " +
+        "        r.`speed` + " +
+        "        r.`repetition` " +
+        "    ) AS point_total " +     
+        "  FROM ( " +
+        "        SELECT u.`id` AS user_id " +
+        "            , u.`name` AS user_name " +
+        "            , b.`name` AS branch_name " +
+        "            , d.`name` AS duty_name " +
+        "            , u.`fc_id` " +		
+        "            , lup.`training_user_id` " +
         "            , (lup.`complete` * ?) AS complete " +
         "            , (lup.`quiz_correction` * ?) AS quiz_correction " +
         "            , (lup.`final_correction` * ?) AS final_correction " +
@@ -1120,14 +1185,23 @@ QUERY.DASHBOARD = {
         "             , d.`name` AS duty_name " +
         "             , u.`fc_id` " +		
         "             , lup.`training_user_id` " +
-        "             , (lup.`complete` * ?) AS complete " +
-        "             , (lup.`quiz_correction` * ?) AS quiz_correction " +
-        "             , (lup.`final_correction` * ?) AS final_correction " +
-        "             , (lup.`reeltime` * ?) AS reeltime " +
-        "             , (lup.`speed` * ?) AS speed " +
-        "             , (lup.`repetition` * ?) AS repetition " +
+        "             , (lup.`complete` * epw.`point_complete`) AS complete " +
+        "             , (lup.`quiz_correction` * epw.`point_quiz`) AS quiz_correction " +
+        "             , (lup.`final_correction` * epw.`point_final`) AS final_correction " +
+        "             , (lup.`reeltime` * epw.`point_reeltime`) AS reeltime " +
+        "             , (lup.`speed` * epw.`point_speed`) AS speed " +
+        "             , (lup.`repetition` * epw.`point_repetition`) AS repetition " +        
+        // "             , (lup.`complete` * ?) AS complete " +
+        // "             , (lup.`quiz_correction` * ?) AS quiz_correction " +
+        // "             , (lup.`final_correction` * ?) AS final_correction " +
+        // "             , (lup.`reeltime` * ?) AS reeltime " +
+        // "             , (lup.`speed` * ?) AS speed " +
+        // "             , (lup.`repetition` * ?) AS repetition " +
         "             , lup.`logs` " +
         "          FROM `log_user_point` AS lup " +
+        "          LEFT JOIN `edu_point_weight` AS epw " +
+        "            ON lup.`edu_id` = epw.`edu_id` " +
+        "           AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ? AND `edu_id` = epw.`edu_id`) " +        
         "         INNER JOIN `users` AS u " +
         "            ON lup.`user_id` = u.`id` " +
         "          LEFT JOIN `branch` AS b " +
@@ -1146,10 +1220,19 @@ QUERY.DASHBOARD = {
     // 사용자 포인트 상세내역
     GetUserPointDetails:
         "SELECT `logs` " + 
-        "  FROM `log_user_point` " + 
-        " WHERE `user_id` = ? " + 
-        "   AND `logs` IS NOT NULL " + 
-        " ORDER BY `created_dt`; ",
+        "     , epw.`point_complete` " +
+        "     , epw.`point_quiz` " +
+        "     , epw.`point_final` " +
+        "     , epw.`point_reeltime` " +
+        "     , epw.`point_speed` " +
+        "     , epw.`point_repetition` " +
+        "  FROM `log_user_point` AS lup " +        
+        "  LEFT JOIN `edu_point_weight` AS epw " +
+        "    ON lup.`edu_id` = epw.`edu_id` " +
+        "   AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ? AND `edu_id` = epw.`edu_id`) " + 
+        " WHERE lup.`user_id` = ? " + 
+        "   AND lup.`logs` IS NOT NULL " + 
+        " ORDER BY lup.`created_dt`; ",
 };
 
 

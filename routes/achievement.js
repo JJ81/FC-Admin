@@ -118,8 +118,8 @@ router.get('/details', isAuthenticated, function (req, res) {
             },
             // 포인트 설정값 조회
             function (callback) {
-                _query = connection.query(QUERY.DASHBOARD.GetRecentPointWeight,
-                        [ req.user.fc_id ],
+                _query = connection.query(QUERY.EDU.GetRecentPointWeight,
+                        [ req.user.fc_id, _edu_id ],
                         function (err, data) {
                             _point_weight = data[0];
                             callback(err, data); // results[1]
