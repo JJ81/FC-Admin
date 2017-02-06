@@ -29,6 +29,10 @@ requirejs.config({
         "bootstrap_datetimepicker": ['/vendor/plugins/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min'],
         "es6-promise": '/vendor/plugins/es6-promise/dist/es6-promise',
         "Vimeo": '/vendor/plugins/vimeo-player-js/dist/player',
+        "jszip": '/vendor/plugins/jszip/dist/jszip',
+        "buttons_html5": '/vendor/plugins/datatables/buttons.html5.min',
+        "buttons_datatable": '/vendor/plugins/datatables/dataTables.buttons.min',
+
 	},
 	shim : {
 

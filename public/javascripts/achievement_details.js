@@ -4,13 +4,16 @@
 'use strict';
 requirejs(
 	[
-		 'jquery'
-		,'bootstrap'
-        ,'jquery_datatable'
-		,'bootstrap_datatable'
-        ,'responsive_datatable'
-		,'adminLTE'
-        ,'common'
+        'jquery',
+		'bootstrap',
+        'jquery_datatable',
+		'bootstrap_datatable',
+        'responsive_datatable',
+        'jszip',
+        'buttons_html5',
+        'buttons_datatable',
+		'adminLTE',
+        'common',
 	],
 	function ($) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
@@ -45,10 +48,10 @@ requirejs(
                 responsive: true,
                 language: { "url": "https://cdn.datatables.net/plug-ins/1.10.13/i18n/Korean.json" },
                 "order": [[ 0, 'asc' ]],
-                // dom: 'Bfrtip',
-                // buttons: [
-                //     'excel'
-                // ]
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel'
+                ]
             }); 
         });
         

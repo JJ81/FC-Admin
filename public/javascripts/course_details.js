@@ -5,26 +5,26 @@
 'use strict';
 requirejs(
 	[
-		'jquery'
-        ,'axios'
-		,'common'
-		,'moment'
-		,'excellentExport'
-		,'bootstrap'
-		,'jquery_datatable'
-		,'bootstrap_datatable'
-		,'select2'
-		,'daterangepicker'
-		,'jquery_ui'
-		,'adminLTE'
-		,'fastclick'
-        ,'es6-promise'
+		'jquery',
+        'axios',
+		'common',
+		'moment',
+		'excellentExport',
+		'bootstrap',
+		'jquery_datatable',
+		'bootstrap_datatable',
+		'select2',
+		'daterangepicker',
+		'jquery_ui',
+		'adminLTE',
+		'fastclick',
+        'es6-promise',
 	],
 	function ($, axios, Util) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
-
-        require('es6-promise').polyfill(); // https://github.com/stefanpenner/es6-promise 참고
+        // https://github.com/stefanpenner/es6-promise 참고
+        require('es6-promise').polyfill(); 
 
 		var _winpop_option = 'scrollbars=yes, toolbar=no, location=no, status=no, menubar=no, ' +
 			'resizable=yes, width=1040, height=760, left=0, top=0';

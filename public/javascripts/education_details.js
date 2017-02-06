@@ -10,10 +10,13 @@ requirejs([
         'bootstrap',
         'bootstrap_datetimepicker',
         'adminLTE',
+        'es6-promise',
 	],
 	function ($, axios, moment) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
 		$.widget.bridge('uibutton', $.ui.button);
+        // https://github.com/stefanpenner/es6-promise 참고
+        require('es6-promise').polyfill();         
 
         var _btn_modify_edu = $('.btn-modify-edu'), // 교육과정 수정버튼
             _btn_add_course_edu = $('#btn-add-course-edu'), //강의추가 버튼
