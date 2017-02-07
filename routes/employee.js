@@ -51,7 +51,6 @@ router.get('/', isAuthenticated, function (req, res) {
   });
 });
 
-
 /**
  * 유저 생성
  */
@@ -90,7 +89,6 @@ router.post('/create', isAuthenticated, function (req, res) {
     });
   }
 });
-
 
 /**
  * 유저 수정
@@ -132,7 +130,6 @@ router.post('/modify', isAuthenticated, function (req, res) {
     });
   }
 });
-
 
 /**
  * 지점 생성
@@ -201,6 +198,5 @@ router.post('/password/reset', function (req, res) {
     });
   }
 });
-
 
 module.exports = router;

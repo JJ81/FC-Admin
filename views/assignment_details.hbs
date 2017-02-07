@@ -6,10 +6,24 @@
                     <i class="fa fa-list"></i> &nbsp;
                     목록으로
                 </a>
-                <button class="btn btn-primary pull-right btn-assign-education" data-toggle="modal" data-target="#allocationEdu">
-                    <i class="fa fa-calendar-minus-o"></i> &nbsp;
-                    교육배정
-                </button>
+
+                <div class="pull-right">
+                    <button class="btn btn-primary btn-assign-education" data-toggle="modal" data-target="#allocationEdu">
+                        <i class="fa fa-calendar-minus-o"></i> &nbsp;
+                        교육과정 배정
+                    </button>
+                    
+                    {{#each detail}}
+                    <button id="delete-assignment" type="button" class="btn btn-danger"
+                        data-id="{{id}}"
+                        data-group-id="{{group_id}}"
+                    >
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                        교육생 그룹 삭제
+                    </button>
+                    {{/each}}
+                </div>
+                
                 <!--교육 대상자 리스트를 보여준다.<br />-->
                 <!--교육 배정을 할 수 있다. <br />-->
             </div>
@@ -47,15 +61,6 @@
                     </tr>
                     {{/each}}
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <th class="center">지점</th>
-                        <th class="center">직책</th>
-                        <th class="center">이름</th>
-                        <th class="center">전화번호</th>
-                        <th class="center">이메일</th>
-                    </tr>
-                    </tfoot>
                 </table>
             </div>
             <!-- /.box-body -->

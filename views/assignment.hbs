@@ -1,16 +1,17 @@
 <div class="row home_section">
     <div class="col-xs-12">
+        
         <div class="box">
             <div class="box-header with-border">
                 <div class="pull-right">
                     <button class="btn btn-primary" data-toggle="modal" data-target="#uploadFile">
-                        <i class="fa fa-upload"></i> &nbsp;
-                        교육배정자 업로드
+                        <i class="fa fa-pencil-square-o"></i> &nbsp;
+                        교육생 그룹 생성
                     </button>
-                    <a href="/static/uploads/excel/sample_group.xlsx" class="btn btn-default">
+                    <!--<a href="/static/uploads/excel/sample_group.xlsx" class="btn btn-default">
                         <i class="fa fa-download"></i> &nbsp;
                         양식
-                    </a>    
+                    </a>-->
                 </div>            
             </div>
             <div class="box-body table-responsive">
@@ -18,7 +19,7 @@
                     <thead>
                     <tr>
                         <th class="center">생성일</th>
-                        <th class="center">교육대상명</th>
+                        <th class="center">교육생 그룹명</th>
                         <th class="center">생성자</th>
                         <th class="center">설명</th>
                         <!--<th class="center">Action</th>-->
@@ -45,4 +46,4 @@
 </div>
 <!-- /.row -->
 
-{{>modal_upload_excel_register}}
+{{> modal_upload_excel_register}}

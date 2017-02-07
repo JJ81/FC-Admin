@@ -4,119 +4,81 @@
 'use strict';
 requirejs(
 	[
-		// 'jquery'
-		// ,'moment'
-		// ,'excellentExport'
-        'common',
-		// ,'bootstrap'
-		// ,'jquery_datatable'
-		// ,'bootstrap_datatable'
-		// ,'select2'
-		// ,'daterangepicker'
-		// ,'jquery_ui'
-		// ,'adminLTE'
-		// ,'fastclick'		
+        'common',		
 	],
 	function (Util) {
-		// avoid to confliction between jquery tooltip and bootstrap tooltip
-		// $.widget.bridge('uibutton', $.ui.button);
 
-        Util.initDataTable($('#table_assignment'));
+        var _table_check_all = $('#check-all'),
+            _table_assingment = Util.initDataTable($('#table_assignment')),
+            _table_employee = Util.initDataTable($('#table_employee'), { 
+                "lengthMenu": [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "전체"] ],
+                "columnDefs": [
+                    { orderable: false, targets: [0] }
+                ],            
+            }),
+            _btn_submit = $('.btn-submit'),
+            _form = $('#frm_upload_file'); 
+                
+        _table_check_all.bind('click', function () {
+            $(':checkbox', _table_employee.rows().nodes()).prop('checked', this.checked);
+        });
         
-		// var table_assignment =
-		// 	$('#table_assignment').DataTable({
-        //         responsive: true,
-        //         language: {            
-        //             "url": "https://cdn.datatables.net/plug-ins/1.10.13/i18n/Korean.json"
-        //             // "url": "/datatable.kr.json"
-        //         },
-        //         'order': [[ 1, 'desc' ]],
-		// 	});
+        _btn_submit.bind('click', function (e) {
 
+            e.preventDefault();
+            
+            // validation check1
+            if ($("input[name='group_name']" ).val() === '') {
+                alert("그룹명을 입력하세요.");
+                $( "input[name='group_name']" ).focus();
+                return false;
+            } 
 
-		//// Download csv
-		//$('.btn_download_csv_home').bind('click', function (){
-		//	return excellentCsv.csv(this, 'table_home', ',');
-		//});
-		//
-		//// set table func.
-		//var table_home =
-		//$('#table_home').DataTable({
-		//	"paging": true,
-		//	"lengthChange": true,
-		//	"searching": true,
-		//	"ordering": true,
-		//	"info": true,
-		//	"autoWidth": true,
-		//	"processing": true
-		//});
-		//
-		//table_home
-		//	.column( '0:visible' )
-		//	.order( 'desc' )
-		//	.draw();
-		//
-		//// select box
-		//// $(".select2").select2();
-		//
-		//// datepicker
-		//$('#daterange-btn').daterangepicker({
-		//	ranges: {
-		//		'Today': [moment(), moment()],
-		//		'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-		//		'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-		//		'Last 30 Days': [moment().subtract(30, 'days'), moment()],
-		//		'This Month': [moment().startOf('month'), moment().endOf('month')],
-		//		'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-		//	},
-		//	startDate: moment().subtract(30, 'days'),
-		//	endDate: moment()
-		//},
-		//function (start, end) {
-		//	//$('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-		//	$('#daterange-btn span').html(start.format('YYYY.M.D') + ' - ' + end.format('YYYY.M.D'));
-		//});
-		//
-		//// Implement with datatables's API
-		//$('.realSelectBox').bind('change', function () {
-		//	var _self = $(this);
-		//	var val = _self.val();
-		//	if(_self.val() === 'Any Type'){
-		//		val = '';
-		//	}
-		//	table_home.columns( 1 ).search(val).draw();
-		//});
-		//
-		//
-		//// Filtering with date
-		//$('.daterangepicker .ranges li, .daterangepicker .applyBtn').bind('click', function () {
-		//	if($(this).text().trim() === 'Custom Range'){
-		//		return;
-		//	}
-		//
-		//	setTimeout(function () {
-		//		var date = $('.filter_date').text();
-		//
-		//		date = date.split('-');
-		//		console.info(date);
-		//
-		//		$('#startDate').val(date[0].trim());
-		//		$('#endDate').val(date[1].trim());
-		//
-		//		$('.filterWithDate').submit();
-		//
-		//	}, 100);
-		//});
-		//
-		//// daterangepicker의 액션을 제어하기 귀찮아서 액티브를 제거한다.
-		//
-		//$('#daterange-btn').bind('click', function () {
-		//	$('.daterangepicker .ranges li').removeClass('active');
-		//	$('.daterangepicker .ranges').bind('mouseover', function () {
-		//		$('.daterangepicker .ranges li').removeClass('active');
-		//	})
-		//});
+            // validation check2
+            if ($("textarea[name='group_desc']" ).val() === '') {
+                alert("그룹 설명을 입력하세요.");
+                $( "textarea[name='group_desc']" ).focus();
+                return false;
+            }             
 
+            var current_tab_id = $("ul.nav li.active").children().attr('id'),
+                data = null;      
 
+            $("input[name='upload_type']").val(current_tab_id);
 
+            switch (current_tab_id) {
+                case "employee": // 등록된 직원
+                    data = $(':checkbox:checked', _table_employee.rows({filter: 'applied'}).nodes()).map(function () {                        
+                        return $(this).data('id');
+                    }).get().join(", ");
+
+                    // validation check3
+                    if (!data) {
+                        alert("직원을 선택하세요.");
+                        return false;
+                    }
+
+                    console.log(data);
+                    $("input[name='upload_employee_ids']").val(data);
+                                           
+                    break;
+
+                case "excel": // 파일업로드
+
+                    // validation check3
+                    if( document.getElementById("UploadExcelFile").files.length == 0 ){
+                        $('#UploadExcelFile').focus();
+                        alert("파일을 선택하세요.");
+                        return false;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+            _form.submit();
+
+        }); 
+        
 	}); // end of func

@@ -482,7 +482,7 @@ QUERY.EDU = {
         "DELETE FROM `course_group` WHERE `id` = ?; "        
 
 	,GetUserDataByPhone :
-		"select id from `users` " +
+		"select `id` from `users` " +
 		"where `phone` in (?);"
 	,InsertIntoLogGroupUser :
 		"insert into `log_group_user` (`user_id`, `group_id`) " +
@@ -1240,6 +1240,15 @@ QUERY.DASHBOARD = {
         " WHERE lup.`user_id` = ? " + 
         "   AND lup.`logs` IS NOT NULL " + 
         " ORDER BY lup.`created_dt`; ",
+};
+
+QUERY.ASSIGNMENT = {
+
+    DeleteLogBindUserById: 
+        "DELETE FROM `log_bind_users` WHERE `id` = ?; ",
+
+    DeleteLogGroupUserByGroupId: 
+        "DELETE FROM `log_group_user` WHERE `group_id` = ?; ",        
 };
 
 
