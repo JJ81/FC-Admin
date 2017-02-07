@@ -4,24 +4,24 @@
 'use strict';
 requirejs(
 	[
-		'jquery'
-		,'moment'
-		,'excellentExport'
-        ,'common'
-		,'bootstrap'
-		,'jquery_datatable'
-		,'bootstrap_datatable'
-		,'select2'
-		,'daterangepicker'
-		,'jquery_ui'
-		,'adminLTE'
-		,'fastclick'		
+		// 'jquery'
+		// ,'moment'
+		// ,'excellentExport'
+        'common',
+		// ,'bootstrap'
+		// ,'jquery_datatable'
+		// ,'bootstrap_datatable'
+		// ,'select2'
+		// ,'daterangepicker'
+		// ,'jquery_ui'
+		// ,'adminLTE'
+		// ,'fastclick'		
 	],
-	function ($, moment, excellentCsv, Util) {
+	function (Util) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
-		$.widget.bridge('uibutton', $.ui.button);
+		// $.widget.bridge('uibutton', $.ui.button);
 
-		$(".select2").select2();
+		// $(".select2").select2();
 
 		//// Download csv
 		//$('.btn_download_csv_home').bind('click', function (){

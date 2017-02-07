@@ -4,22 +4,22 @@
 'use strict';
 requirejs(
 	[
-		'jquery'
-        ,'common'
-		,'bootstrap'
-        ,'jquery_datatable',
-		,'bootstrap_datatable',
-        ,'responsive_datatable',  
-		,'select2'
-		,'daterangepicker'
-		,'jquery_ui'
-		,'adminLTE'
-		,'fastclick'		
+		// 'jquery'
+        'common'
+		// ,'bootstrap'
+        // ,'jquery_datatable',
+		// ,'bootstrap_datatable',
+        // ,'responsive_datatable',  
+		// ,'select2'
+		// ,'daterangepicker'
+		// ,'jquery_ui'
+		// ,'adminLTE'
+		// ,'fastclick'		
 	],
-	function ($, Util) {
+	function (Util) {
 
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
-		$.widget.bridge('uibutton', $.ui.button);
+		// $.widget.bridge('uibutton', $.ui.button);
         // datatable 설정
         Util.initDataTable($('#table_achievement'));
 

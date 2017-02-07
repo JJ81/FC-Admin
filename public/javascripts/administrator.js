@@ -3,23 +3,23 @@
  */
 'use strict';
 requirejs([
-		'jquery',
-		'axios',
+		// 'jquery',
+		// 'axios',
         'common',
-		'moment',
-		'excellentExport',
-		'bootstrap',
-		'jquery_datatable',
-		'bootstrap_datatable',
+		// 'moment',
+		// 'excellentExport',
+		// 'bootstrap',
+		// 'jquery_datatable',
+		// 'bootstrap_datatable',
 		// 'select2',
 		// 'daterangepicker',
-		'jquery_ui',
-		'adminLTE',
-		'fastclick',
+		// 'jquery_ui',
+		// 'adminLTE',
+		// 'fastclick',
 	],
-	function ($, axios, Util) {
+	function (Util) {
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
-		$.widget.bridge('uibutton', $.ui.button);
+		// $.widget.bridge('uibutton', $.ui.button);
 
         // datatable 설정
         Util.initDataTable($('#table_admin'));        

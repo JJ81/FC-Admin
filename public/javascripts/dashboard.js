@@ -4,30 +4,30 @@
 'use strict';
 requirejs(
 	[
-		'jquery',
-        'axios',
+		// 'jquery',
+        // 'axios',
         'common',
-		'moment',
-		'excellentExport',
-		'bootstrap',
-		'jquery_datatable',
-		'bootstrap_datatable',
-		'select2',
-		'daterangepicker',
-		'jquery_ui',
-		'adminLTE',
-		'fastclick',	
-        'es6-promise',
+		// 'moment',
+		// 'excellentExport',
+		// 'bootstrap',
+		// 'jquery_datatable',
+		// 'bootstrap_datatable',
+		// 'select2',
+		// 'daterangepicker',
+		// 'jquery_ui',
+		// 'adminLTE',
+		// 'fastclick',	
+        // 'es6-promise',
 	],
-	function ($, axios, Util, moment) {
+	function (Util) {
 
         // https://github.com/stefanpenner/es6-promise 참고
-        require('es6-promise').polyfill();
+        // require('es6-promise').polyfill();
 
 		// todo 위의 기능중에서 유틸성 기능은 common으로 이동시킨다.
 		// 여기서부터 포인트 환산 모달 컴퍼넌트를 위한 로직
 
-        $.widget.bridge('uibutton', $.ui.button);
+        // $.widget.bridge('uibutton', $.ui.button);
 
         $(function () {
 
@@ -57,7 +57,7 @@ requirejs(
             Util.initDataTable($('#table_point'), { 
                 responsive: true,
                 language: { "url": "https://cdn.datatables.net/plug-ins/1.10.13/i18n/Korean.json" },    
-                "order": [[ 3, 'desc' ]],            
+                "order": [[ 3, 'desc' ]],                             
             });
 
         });

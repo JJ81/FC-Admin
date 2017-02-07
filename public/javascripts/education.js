@@ -6,29 +6,29 @@
 'use strict';
 requirejs(
 	[
-		'jquery',
-		'axios',		
-        'moment',
+		// 'jquery',
+		// 'axios',		
+        // 'moment',
         'common',
-		'bootstrap',        
-        'bootstrap_datetimepicker',
-		'jquery_ui',
-		'excellentExport',
-		'bootstrap',
-		'jquery_datatable',
-		'bootstrap_datatable',
-        'responsive_datatable',  
-		'select2',
-		'adminLTE',
-		'fastclick',		
-        'es6-promise',
+		// 'bootstrap',        
+        // 'bootstrap_datetimepicker',
+		// 'jquery_ui',
+		// 'excellentExport',
+		// 'bootstrap',
+		// 'jquery_datatable',
+		// 'bootstrap_datatable',
+        // 'responsive_datatable',  
+		// 'select2',
+		// 'adminLTE',
+		// 'fastclick',		
+        // 'es6-promise',
 	],
-	function ($, axios, moment, Util) {
+	function (Util) {
 
 		// avoid to confliction between jquery tooltip and bootstrap tooltip
-		$.widget.bridge('uibutton', $.ui.button);
+		// $.widget.bridge('uibutton', $.ui.button);
         // https://github.com/stefanpenner/es6-promise 참고
-        require('es6-promise').polyfill();        
+        // require('es6-promise').polyfill();        
 
 		// todo 교육과정 생성하기를 눌렀을 경우 group_id를 발급받아서 input에 저장한다.
 		// 선택한 강의에 대해서 강의 번호를 배열에 담아 놓고 서버로 전달한다
@@ -41,7 +41,7 @@ requirejs(
 		    _course_container = $('#draggablePanelList'),
             _btn_create_edu = $('.btn-register-course-submit'),
             _courseName = $('.course-name'),
-		    _courseDesc = $('.course-desc');          
+		    _courseDesc = $('.course-desc');
 
         $(function () {
 
