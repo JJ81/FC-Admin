@@ -49,12 +49,10 @@ define(
             initDataTable: function (element, options) {
 
                 var table = null,
-                    _options = null;
+                    _options = {};
 
                 if (options == null) {
-                    _options.order = {
-                        "order": [[ 0, '' ]],
-                    };
+                    _options.order = [[ 0, '' ]];
                 } else {
                     _options = options;
                 }
@@ -99,15 +97,9 @@ define(
                         extend: "excel",
                         className: "btn-sm btn-default"
                     }                    
-                ];
+                ];            
 
-            // table.buttons().container()
-            //         .appendTo( '#table_education_wrapper .col-sm-6:eq(0)' );                
-
-                table = element.DataTable(_options);
-                
-                // table.buttons().container()
-                //     .appendTo( $('div#table_education_filter', table.table().container()) );                 
+                table = element.DataTable(_options);                 
 
                 return table;
             },           
