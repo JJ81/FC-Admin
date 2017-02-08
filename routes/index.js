@@ -12,6 +12,7 @@ var bcrypt = require('bcrypt');
 const QUERY = require('../database/query');
 
 const formidable = require('formidable');
+const Excel = require('exceljs');
 const convertExcel = require('excel-as-json').processFile;
 const UTIL = require('../util/util');
 const RegisterUserService = require('../service/RegisterUserService');
@@ -144,7 +145,7 @@ router.post('/admin/password/reset', isAuthenticated, function (req, res) {
 });
 
 // 엑셀 파일 업로드하기
-router.post('/upload/excel/create/employee', isAuthenticated, function (req, res, next) {
+router.post('/upload/excel/create/employee_x', isAuthenticated, function (req, res, next) {
   var _file_path = null;
   var form = new formidable.IncomingForm({
     encoding: 'utf-8',
@@ -215,6 +216,59 @@ router.post('/upload/excel/create/employee', isAuthenticated, function (req, res
         res.redirect('/employee');
       }
   });
+});
+
+/**
+ * 직원목록 엑셀 업로드
+ */
+router.post('/upload/excel/create/employee', isAuthenticated, function (req, res, next) {
+    
+    var _file_path = null,
+        _form = new formidable.IncomingForm({
+            encoding: 'utf-8',
+            keepExtensions: true,
+            multiples: false,
+            uploadDir: __dirname + '/../public/uploads/excel'
+        });
+
+    async.waterfall([
+        // formidable parse
+        function (callback){
+            form.parse(req, function (err, fields, files) {
+                callback(err, files.file.path);
+            });
+        },
+        // 엑셀파일을 읽어들인다.
+        function (file_path, callback) {
+            _file_path = file_path;
+            convertExcel(_file_path, undefined, false, function (err, data) {
+                callback(err, data);
+            });
+        },
+        // 엑셀데이터를 검사한다.
+        function (excel_data, callback ){
+            console.log(excel_data);
+        },
+        // function (){},
+    ], function (err, results) {
+        if (err) {
+            console.log(err);
+            return res.json({
+                success: false,
+                msg: err
+            });
+        } else {
+            res.redirect('/employee');
+        }
+    });
+
+    form.parse(req, function (err, fields, files) {
+        if (err) {
+            callback(err, null);
+        throw new Error('upload error occurred.');
+        }        
+    });
+
 });
 
 const UserService = require('../service/UserService');

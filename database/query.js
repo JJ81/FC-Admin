@@ -519,7 +519,17 @@ QUERY.EDU = {
 	,InsertTrainingEdu :
         "insert into `training_edu` (`edu_id`, `assigner`) " +
         "values(?,?);"
+    
+    // training_users 입력
     ,InsertUserIdInTrainingUsers :
+        "INSERT INTO `training_users` (`user_id`, `training_edu_id`) " +
+        "SELECT lgu.`user_id`, ? AS `training_edu_id` " +
+        "  FROM `log_bind_users` AS lbu " +
+        " INNER JOIN `log_group_user` AS lgu " +
+        "    ON lbu.`group_id` = lgu.`group_id` " +
+        " WHERE lbu.`id` = ?; "
+
+    ,InsertUserIdInTrainingUsers_bak :
         "insert into `training_users` (`user_id`, `training_edu_id`) " +
         "values(?,?);"
     
@@ -561,8 +571,8 @@ QUERY.HISTORY = {
 		"where a.fc_id=? " +
 		"order by te.created_dt desc;"
 	,InsertIntoLogAssignEdu :
-		"insert into `log_assign_edu` (`training_edu_id`, `target_users_id`) " +
-		"values(?,?);"
+		"insert into `log_assign_edu` (`training_edu_id`, `target_users_id`, `creator_id`) " +
+		"values(?,?,?);"
 
     // 진척도관리
 	,GetAssignEduHistory :

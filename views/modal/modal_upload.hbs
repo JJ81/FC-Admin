@@ -11,7 +11,15 @@
 
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="exampleInputFile">직원 정보가 있는 엑셀 파일을 업로드해주세요.</label>
+                    <a href="/uploads/excel/sample.xlsx" class="btn btn-default">
+                        <i class="fa fa-download"></i> &nbsp;
+                        양식 다운로드
+                    </a>                                                    
+                </div>                
+                <div class="form-group">
+                    <label for="exampleInputFile">직원 정보가 있는 엑셀 파일을 업로드해주세요. <br />
+                        <small class="text-red">(엑셀파일만 가능합니다. 휴대폰 또는 이메일 중복, 공란이 있을 경우 입력되지 않습니다.)</small>
+                    </label><br /><br />
                     <input type="file" name="file" id="exampleInputFile" required />
                 </div>
             </div>

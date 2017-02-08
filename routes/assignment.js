@@ -112,8 +112,36 @@ router.get('/details', isAuthenticated, function (req, res) {
 
 const UserService = require('../service/UserService');
 
-// 특정 그룹에 교육을 배정한다.
+/**
+ * 특정 교육생그룹에 교육과정을 배정한다.
+ */
 router.post('/allocation/edu', function (req, res) {
+
+    var _data = {
+        edu_id: req.body.edu_list,
+        log_bind_user_id: req.body.bind_group_id,
+        user: req.user
+    };
+
+    // console.log(req.body);
+
+    AssignmentService.allocate(connection, _data, function (err, data) {
+        if (err) {
+            console.log(err);
+            res.json({
+                success: false,
+                msg: err
+            });
+        } else {
+            res.redirect('/assignment');            
+        }
+    });
+
+});
+
+// 특정 그룹에 교육을 배정한다. (Deprecated)
+router.post('/allocation/edu_x', function (req, res) {
+
   var _group_id = req.body.group_id; // 교육 대상자 그룹 아이디
   var _edu_id = req.body.edu_list; // 교육 아이디
   var _bind_user_id = req.body.bind_group_id;

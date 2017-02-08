@@ -17,8 +17,8 @@ requirejs(
         });
 
 		btnAssignEducation.bind('click', function () {
-			$('#allocationEdu .user_group_id').val($('.description .group_id').val());
-			$('#allocationEdu .bind_group_id').val($('.description .bind_group_id').val());
+			$('#allocationEdu .user_group_id').val($('.description.group_id').val());
+			$('#allocationEdu .bind_group_id').val($('.description.bind_group_id').val());
 		});
 
         btnDeleteAssignment.bind('click', function () {

@@ -167,4 +167,73 @@ AssignmentService.create = function (_connection, _data, _callback) {
     });
 };
 
+/**
+ * 교육생그룹에 교육과정을 할당한다.
+ */
+AssignmentService.allocate = function (_connection, _data, _callback) {
+
+    var _edu_id = _data.edu_id,
+        _log_bind_user_id = _data.log_bind_user_id,
+        _user = _data.user,
+        _training_edu_id = null;
+
+    _connection.beginTransaction(function(err) {
+
+        // 트렌젝션 오류 발생
+        if (err) 
+            res.json({ success: false, msg: err });
+
+        // async.series 쿼리 시작
+        async.series([
+            // training_edu 입력
+            function (callback) {
+                _connection.query(QUERY.EDU.InsertTrainingEdu, 
+                [ _edu_id, _user.admin_id ], 
+                function (err, data) {
+                    if (!err)
+                        _training_edu_id = data.insertId;
+
+                    callback(err, data);
+                });
+            },
+            // training_user 입력
+            function (callback) {
+                _connection.query(QUERY.EDU.InsertUserIdInTrainingUsers, 
+                [ _training_edu_id, _log_bind_user_id ], 
+                function (err, data) {
+                    callback(err, data);
+                });
+            },
+            // log_assign_edu 입력
+            function (callback) {
+                _connection.query(QUERY.HISTORY.InsertIntoLogAssignEdu, 
+                [ _training_edu_id, _log_bind_user_id, _user.admin_id ], 
+                function (err, data) {
+                    callback(err, data);
+                });
+            }            
+        ], function (err, results) {
+            if (err) {
+                // 쿼리 오류 발생
+                return _connection.rollback(function() {
+                    _callback(err, null);
+                    return;
+                });
+            } else {
+                _connection.commit(function(err) {
+                    // 커밋 오류 발생
+                    if (err) {
+                        return _connection.rollback(function() {
+                            _callback(err, null);
+                            return;
+                        });
+                    }
+
+                    _callback(null, null);
+                });
+            }
+        });  
+    });
+};
+
 module.exports = AssignmentService;
