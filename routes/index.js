@@ -17,6 +17,7 @@ const convertExcel = require('excel-as-json').processFile;
 const UTIL = require('../util/util');
 const RegisterUserService = require('../service/RegisterUserService');
 const async = require('async');
+const fs = require('fs');
 
 passport.serializeUser(function (user, done) {
   done(null, user);
@@ -231,14 +232,14 @@ router.post('/upload/excel/create/employee', isAuthenticated, function (req, res
             keepExtensions: true,
             multiples: false,
             uploadDir: __dirname + '/../public/uploads/excel'
-        }),
-        _error_excel_data = []; // 오류로 인해 입력하지 않은 엑셀 데이터
+        });
 
     async.waterfall([
         // 폼 데이터를 formidable 로 피싱한다.
         function (callback){
             _form.parse(req, function (err, fields, files) {
-                callback(err, files.file.path);
+                _file_path = files.file.path;
+                callback(err, _file_path);
             });
         },
         // 엑셀파일을 읽어들인다.
@@ -280,6 +281,7 @@ router.post('/upload/excel/create/employee', isAuthenticated, function (req, res
                                     if (loop_data[key] === '') {
                                         loop_data['error'] = true;
                                         loop_data['error_msg'].push("필수입력값 누락");
+                                        break;
                                     }
                                 }
                             }
@@ -322,7 +324,7 @@ router.post('/upload/excel/create/employee', isAuthenticated, function (req, res
                         for (index2 = 0, len2 = excel_data_2.length; index2 < len2; index2++) {
                             if (data[index].phone === excel_data_2[index2].phone) {
                                 excel_data_2[index2]['error'] = true;
-                                excel_data_2[index2]['error_msg'].push("휴대폰번호 중복");                      
+                                excel_data_2[index2]['error_msg'].push("휴대폰번호 중복");                    
                             }
                         }
                     }    
@@ -350,7 +352,7 @@ router.post('/upload/excel/create/employee', isAuthenticated, function (req, res
                         for (index2 = 0, len2 = excel_data_3.length; index2 < len2; index2++) {
                             if (data[index].email === excel_data_3[index2].email) {
                                 excel_data_3[index2]['error'] = true;
-                                excel_data_3[index2]['error_msg'].push("이메일 중복");                            
+                                excel_data_3[index2]['error_msg'].push("이메일 중복");                      
                             }
                         }
                     }    
@@ -367,8 +369,75 @@ router.post('/upload/excel/create/employee', isAuthenticated, function (req, res
             };
 
             UserService.createUserByExcel(connection, data, function (err, data) {
-                callback(err, null);
+                callback(err, excel_data_4);
             });
+        },
+        // 엑셀파일을 삭제한다.
+        function (excel_data_5, callback) {
+            UTIL.deleteFile(_file_path, function (err, data) {
+                if (err) {
+                    console.error(err);
+                    callback(err, null);
+                } else {
+                    console.log("deleted file : " + _file_path);
+                    callback(null, excel_data_5);
+                }
+            });
+        },
+        // 오류가 있는 엑셀 데이터를 내보내기 한다.
+        function (excel_data_6, callback) {
+
+            if (excel_data_6.length > 0) {
+                var row = null,
+                    len = 0, index = 0,
+                    write_excel = __dirname + '/../public/uploads/excel/regist_employee.xlsx', //쓰기에 사용할 엑셀파일
+                    output_excel = __dirname + '/../public/uploads/excel/fail_upload.xlsx'; //내보내기에 사용할 엑셀파일
+
+                UTIL.FileExists(write_excel, function (err, data) {
+                    if (err) callback(err, null);
+                });
+
+                var wb = new Excel.Workbook(),
+                    excel_row = null,
+                    error_row_count = 0;
+
+                wb.xlsx.readFile(write_excel)
+                .then(function() {
+                    var ws = wb.getWorksheet(1);
+                    for (index = 0, len = excel_data_6.length; index < len; index++) {
+                        
+                        row = excel_data_6[index];
+
+                        if (row.error) {
+                            error_row_count++;
+                            excel_row = ws.getRow(index + 2);
+                            excel_row.getCell(1).value = row.branch;
+                            excel_row.getCell(2).value = row.duty;
+                            excel_row.getCell(3).value = row.name;
+                            excel_row.getCell(4).value = row.phone;
+                            excel_row.getCell(5).value = row.email;
+                            excel_row.getCell(6).value = row.error_msg.join(',');
+                            excel_row.commit();
+                        }                 
+                    }        
+
+                    var excel_col = ws.getColumn(6);   
+                    excel_col.width = 50;
+                       
+                })
+                .then(function() {
+                    return wb.xlsx.writeFile(output_excel);
+                })
+                .then(function() {
+                    // 오류가 있을 경우 해당 데이터를 내보내기 한다.
+                    if (error_row_count > 0)
+                        return res.download(output_excel);
+                    callback(null, null);
+                });
+            } else {
+                callback(null, null);
+            }
+         
         },
         // function (){},
         // function (){},
@@ -376,7 +445,7 @@ router.post('/upload/excel/create/employee', isAuthenticated, function (req, res
         if (err) {
             return res.json({
                 success: false,
-                msg: _error_excel_data
+                msg: err
             });
         } else {
             // console.log(results);

@@ -29,10 +29,18 @@ util.deleteFile = function (_path, cb) {
       console.error(err);
       cb(err, null);
     }else{
-      console.log('deleted file');
       cb(null, true);
     }
   });
+};
+
+/**
+ * 파일 존재유무를 반환한다.
+ */
+util.FileExists = function (_file_path, _callback) {
+    fs.stat(_file_path, function(err, stat) {
+        _callback(err, null);
+    });  
 };
 
 util.publishHashByMD5 = function (value) {
