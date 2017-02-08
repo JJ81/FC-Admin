@@ -74,7 +74,9 @@ router.get('/login', function (req, res) {
   if(_hostname.indexOf('clipplr') != -1){
     _logo = 'Clipplr';
   }
-  // console.info('!!! ' + _hostname);
+
+  console.info(_hostname);
+  console.info(_hostname.split('.')[1]);
 
   if (req.user == null) {
     res.render('login', {
