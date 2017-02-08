@@ -124,9 +124,12 @@ requirejs(
                 params: params
             })            
             .then(function (response) {
-                // console.log(response);
-                alert("세션을 삭제하였습니다.");
-                location.reload();
+                if (!response.data.success) {
+                    alert("진행한 이력이 있어 세션을 삭제하지 못했습니다. 관리자에게 문의해주시기 바랍니다.");
+                } else {
+                    alert("세션을 삭제하였습니다.");
+                    location.reload();
+                }
             })
             .catch(function (error) {
                 console.log(error);

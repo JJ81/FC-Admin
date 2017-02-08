@@ -210,7 +210,7 @@ router.post('/upload', isAuthenticated, function (req, res) {
         encoding: 'utf-8',
         keepExtensions: true, 
         multiples: false,
-        uploadDir: AppRoot + '/public/uploads/excel'
+        uploadDir: __dirname + '/../public/uploads/excel'  //AppRoot + '/public/uploads/excel'
     }); 
     
     form.on('error', function (err) {

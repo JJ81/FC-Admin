@@ -1187,6 +1187,7 @@ router.delete('/courselist', isAuthenticated, function (req, res) {
             ], 
             function (err, results) {
                 if (err) {
+                    console.log(err);
                     // 쿼리 오류
                     return connection.rollback(function() {
                         res.json({
