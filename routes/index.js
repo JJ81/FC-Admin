@@ -68,25 +68,25 @@ router.get('/', isAuthenticated, function (req, res) {
 });
 
 router.get('/login', function (req, res) {
-  // todo get Hostname
-  var _hostname = req.headers.host;
-  var _logo = null;
-  if(_hostname.indexOf('clipplr') != -1){
-    _logo = 'Clipplr';
-  }
+  
+    var _host_name = req.headers.host,
+        _logo_name = null;
 
-  console.info(_hostname);
-  console.info(_hostname.split('.')[1]);
+    _logo_name = _host_name.split('.')[1];    
+    _logo_name = _logo_name === undefined ? 'Orangenamu' : _logo_name;
 
-  if (req.user == null) {
-    res.render('login', {
-      current_path: 'Login',
-      title: _logo + ', Login',
-      logo : _logo
-    });
-  } else {
-    res.redirect('/dashboard');
-  }
+//   console.info(_hostname);
+//   console.info(_hostname.split('.')[1]);
+
+    if (req.user == null) {
+        res.render('login', {
+            current_path: 'Login',
+            title: _logo_name + ', Login',
+            logo : _logo_name
+        });
+    } else {
+        res.redirect('/dashboard');
+    }
 });
 
 router.post('/login',
