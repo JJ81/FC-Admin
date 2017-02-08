@@ -180,8 +180,7 @@ AssignmentService.allocate = function (_connection, _data, _callback) {
     _connection.beginTransaction(function(err) {
 
         // 트렌젝션 오류 발생
-        if (err) 
-            res.json({ success: false, msg: err });
+        if (err) _callback(err, null);
 
         // async.series 쿼리 시작
         async.series([

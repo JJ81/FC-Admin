@@ -76,16 +76,34 @@ QUERY.EMPLOYEE = {
   GetBranch :
     "select b.id, b.name from `branch` as b " +
     "where b.fc_id=? and b.active=true;"
+  
+  // 지점명으로 지점을 검색한다.
+  ,GetBranchByName :
+    "SELECT b.`id`, b.`name` " +
+    "  FROM `branch` AS b " +
+    " WHERE b.`fc_id` = ? " +
+    "   AND b.`active` = true " +
+    "   AND b.`name` = ?; "
+
   ,GetDuty:
     "select d.id, d.name from `duty` as d " +
     "where d.fc_id=? and d.active=true;"
+
+  // 직책명으로 직책을 검색한다.
+  ,GetDutyByName :
+    "SELECT b.`id`, b.`name` " +
+    "  FROM `duty` AS b " +
+    " WHERE b.`fc_id` = ? " +
+    "   AND b.`active` = true " +
+    "   AND b.`name` = ?; "
+
   ,CreateEmployee :
     "insert into `users` (`name`, `password`, `email`, `phone`, `fc_id`, `duty_id`, `branch_id`) " +
-    "values(?,?,?,?,?,?,?);"
+    "values(?,?,?,?,?,?,?); "
   ,CreateBranch :
-    "insert into `branch` (`name`, `fc_id`) values(?,?);"
+    "INSERT IGNORE `branch` (`name`, `fc_id`) VALUES (?,?);"    
   ,CreateDuty :
-    "insert into `duty` (`name`, `fc_id`) values(?,?);"
+    "INSERT IGNORE `duty` (`name`, `fc_id`) VALUES(?,?);"
   ,GetEmployeeList:
     "select u.id as id, u.name as name, u.phone as phone, u.email as email, b.name as branch, d.name as duty, b.id as branch_id, d.id as duty_id " +
     "from `users` as u " +
@@ -480,10 +498,19 @@ QUERY.EDU = {
     // 강의그룹을 삭제한다.
     ,DeleteCourseGroup:
         "DELETE FROM `course_group` WHERE `id` = ?; "        
-
+    
+    // 휴대폰번호를 통해 사용자 정보를 조회한다.
 	,GetUserDataByPhone :
-		"select `id` from `users` " +
-		"where `phone` in (?);"
+		"SELECT `id`, `phone` " +
+        "  FROM `users` " +
+		" WHERE `phone` IN (?); "
+
+    // 이메일을 통해 사용자 정보를 조회한다.
+	,GetUserDataByEmail :
+		"SELECT `id`, `email` " +
+        "  FROM `users` " +
+		" WHERE `email` IN (?); "    
+
 	,InsertIntoLogGroupUser :
 		"insert into `log_group_user` (`user_id`, `group_id`) " +
 		"values(?,?);"
@@ -1125,6 +1152,7 @@ QUERY.DASHBOARD = {
         "          FROM `log_user_point` AS lup " +
         "         INNER JOIN `users` AS u " +
         "            ON lup.`user_id` = u.`id` " +
+        "           AND u.`fc_id` = ? " +
         "          LEFT JOIN `branch` AS b " +
         "            ON u.`branch_id` = b.`id` " +
         "          LEFT JOIN `duty` AS d " +
@@ -1132,7 +1160,6 @@ QUERY.DASHBOARD = {
         "          LEFT JOIN `edu_point_weight` AS epw " +
         "            ON lup.`edu_id` = epw.`edu_id` " +
         "           AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ? AND `edu_id` = epw.`edu_id`) " +
-        "        AND u.`fc_id` = ? " +
         "        ) AS r " +
         " WHERE 1=1 " +
         " GROUP BY r.`user_id` " +

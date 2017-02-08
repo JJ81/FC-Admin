@@ -5,6 +5,8 @@ const mysql_dbc = require('../commons/db_conn')();
 const connection = mysql_dbc.init();
 const UserService = {};
 const QUERY = require('../database/query');
+const async = require('async');
+var bcrypt = require('bcrypt');
 
 /**
  * 차례대로 핸드폰 정보만 모두 추출하여 배열에 넣고 한번의 조회를 통하여 얻은 데이터를
@@ -147,6 +149,128 @@ UserService.InsertUsersWithTrainingEduId = function (user_id, training_edu_id, c
 	});
 };
 
+/**
+ * 엑셀업로드로 직원을 생성한다.
+ */
+UserService.createUserByExcel = function (_connection, _data, _callback) {
 
+    var _count = 0,
+        _excel_data = _data.excel_data,
+        _user = _data.user;
+
+    // console.log(_data.excel_data);
+    // _callback(null, null);
+    // return;
+
+    _connection.beginTransaction(function(err) {
+
+        // 트렌젝션 오류 발생
+        if (err) _callback(err, null);
+
+        async.whilst(
+            function() { return _count < _excel_data.length; },
+            function(callback) {
+
+                // console.log(_excel_data[_count].name + " 입력 중..");
+
+                // 오류가 있는 엑셀 데이터는 레코드 자체를 미입력   
+                if (_excel_data[_count].error) {
+                    _count++;
+                    callback(null, null);
+                } else {
+
+                    UserService.createBranchOrSelect(_connection, _excel_data[_count].branch, _user.fc_id, function (err, branch_id) {
+                        UserService.createDutyOrSelect(_connection, _excel_data[_count].duty, _user.fc_id, function (err, duty_id) {
+                            // console.log(branch_id);
+                            // console.log(duty_id);
+                            var query = _connection.query(QUERY.EMPLOYEE.CreateEmployee, 
+                                [ 
+                                    _excel_data[_count].name,
+                                    bcrypt.hashSync(_excel_data[_count].phone.slice(-4), 10), // 휴대폰번호 뒤 4자리를 초기 비밀번호로 한다.
+                                    _excel_data[_count].email,
+                                    _excel_data[_count].phone,
+                                    _user.fc_id,
+                                    duty_id,
+                                    branch_id
+                                ],
+                                function (err, data) {
+                                    console.log(query.sql);
+                                    if (err) console.log(err);
+                                    // 다음 엑셀 데이터를 읽기 위해 카운터를 증가시킨다.
+                                    _count++;                                    
+                                    callback(err, null);
+                                }
+                            );                        
+                        }); 
+                    }); 
+
+                }
+            },
+            // async.whilst 의 최종 callback
+            function (err, data) {
+                if (err) {
+                    console.error(err);
+                    return _connection.rollback(function() {
+                        _callback(err, null);
+                        return;
+                    });     
+                } else {
+                    _connection.commit(function(err) {
+                        if (err) {
+                            return _connection.rollback(function() {
+                                _callback(err, null);
+                                return;
+                            });
+                        } else {
+                            console.log('commit success!');
+                            _callback(null, null);
+                        }
+                    });                    
+                }
+            }
+
+        );           
+
+    });    
+};
+
+UserService.createBranchOrSelect = function (_connection, _branch, _fc_id, _callback) {
+    // console.log('branch select or insert ..');
+    _connection.query(QUERY.EMPLOYEE.CreateBranch,
+    [ _branch, _fc_id ],
+    function (err, data) {
+        if (err) console.log(err);
+        if (data.insertId) {
+            _callback(err, data.insertId);
+        } else {
+            // 이미 존재하는 지점일 경우 기존 지점 ID 를 조회한다.
+            _connection.query(QUERY.EMPLOYEE.GetBranchByName, 
+            [ _fc_id, _branch ], 
+            function (err, data) {
+                _callback(err, data[0].id);
+            });
+        }                                
+    });
+
+};
+
+UserService.createDutyOrSelect = function (_connection, _duty, _fc_id, _callback) {
+    // console.log('duty select or insert ..');    
+    _connection.query(QUERY.EMPLOYEE.CreateDuty, 
+    [ _duty, _fc_id ], 
+    function (err, data) {
+        if (err) console.log(err);
+        if (data.insertId) {
+            _callback(err, data.insertId);
+        } else {
+            // 이미 존재하는 직책일 경우 기존 직책 ID 를 조회한다.
+            _connection.query(QUERY.EMPLOYEE.GetDutyByName, 
+            [ _fc_id, _duty ], 
+            function (err, data) {
+                _callback(err, data[0].id);
+            });
+        }
+    });
+};
 
 module.exports = UserService;

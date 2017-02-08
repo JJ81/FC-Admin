@@ -81,7 +81,7 @@ router.get('/login', function (req, res) {
     if (req.user == null) {
         res.render('login', {
             current_path: 'Login',
-            title: _logo_name + ', Login',
+            title: _logo_name + ', 로그인',
             logo : _logo_name
         });
     } else {
@@ -231,44 +231,157 @@ router.post('/upload/excel/create/employee', isAuthenticated, function (req, res
             keepExtensions: true,
             multiples: false,
             uploadDir: __dirname + '/../public/uploads/excel'
-        });
+        }),
+        _error_excel_data = []; // 오류로 인해 입력하지 않은 엑셀 데이터
 
     async.waterfall([
-        // formidable parse
+        // 폼 데이터를 formidable 로 피싱한다.
         function (callback){
-            form.parse(req, function (err, fields, files) {
+            _form.parse(req, function (err, fields, files) {
                 callback(err, files.file.path);
             });
         },
         // 엑셀파일을 읽어들인다.
+        // convertExcel 사용 시 Google excel 을 정상적으로 읽지 못하여, exceljs 로 변경
         function (file_path, callback) {
-            _file_path = file_path;
-            convertExcel(_file_path, undefined, false, function (err, data) {
-                callback(err, data);
+            // console.log("excel 체크 중.. 1");
+
+            var wb = new Excel.Workbook(),
+                result = [];
+
+            wb.xlsx.readFile(file_path)
+                .then(function() {
+
+                    var ws = wb.getWorksheet(1),
+                        loop_index = 0,
+                        loop_data = 0;
+
+                    ws.eachRow({ includeEmpty: false }, function(row, rowNumber) {
+
+                        if (rowNumber >= 2) {
+
+                            result.push({
+                                row: rowNumber,
+                                branch: row.values[1] == undefined ? "" : UTIL.replaceEmptySpace(row.values[1]),
+                                duty: row.values[2] == undefined ? "" : UTIL.replaceEmptySpace(row.values[2]),
+                                name: row.values[3] == undefined ? "" : UTIL.replaceEmptySpace(row.values[3]),
+                                phone: UTIL.getDigitOnly(row.values[4] == undefined ? "" : UTIL.replaceEmptySpace(row.values[4])),
+                                email: row.values[5] == undefined ? "" : UTIL.replaceEmptySpace(row.values[5]),
+                                error: false,
+                                error_msg: []
+                            });
+
+                            loop_index = rowNumber - 2;
+                            loop_data = result[loop_index];
+
+                            // 필수입력값 체크
+                            for (var key in loop_data) {
+                                if (loop_data.hasOwnProperty(key) && key !== 'error' && key != 'error_msg') {
+                                    if (loop_data[key] === '') {
+                                        loop_data['error'] = true;
+                                        loop_data['error_msg'].push("필수입력값 누락");
+                                    }
+                                }
+                            }
+
+                            // 잘못된 이메일 형식
+                            if (!UTIL.isValidEmail(loop_data.email)) {
+                                loop_data['error'] = true;
+                                loop_data['error_msg'].push("잘못된 이메일 형식");
+                            }
+
+                            // 잘못된 휴대폰번호 형식
+                            if (!UTIL.isValidPhone(loop_data.phone)) {
+                                loop_data['error'] = true;
+                                loop_data['error_msg'].push("잘못된 휴대폰번호 형식");
+                            }  
+
+                        }
+                    });
+
+                    callback(null, result);
+                }
+            );
+        },
+        // 엑셀데이터 2차 검증 (휴대폰번호)
+        function (excel_data_2, callback ) {
+            // console.log("excel 체크 중.. 2");
+            var phone = [],
+                row = null,
+                len = 0, len2 = 0,
+                index = 0, index2 = 0;
+
+            for (index = 0, len = excel_data_2.length; index < len; index++) {
+                row = excel_data_2[index];
+                phone[index] = row.phone;
+            }
+
+            connection.query(QUERY.EDU.GetUserDataByPhone, [ phone ], function (err, data) {
+                if (data.length > 0) {
+                    for (index = 0, len = data.length; index < len; index++) {
+                        for (index2 = 0, len2 = excel_data_2.length; index2 < len2; index2++) {
+                            if (data[index].phone === excel_data_2[index2].phone) {
+                                excel_data_2[index2]['error'] = true;
+                                excel_data_2[index2]['error_msg'].push("휴대폰번호 중복");                      
+                            }
+                        }
+                    }    
+                }
+
+                callback(null, excel_data_2);
+            });
+        }, 
+        // 엑셀데이터 3차 검증 (이메일)
+        function (excel_data_3, callback ){
+            // console.log("excel 체크 중.. 3");
+            var email = [],
+                row = null,
+                len = 0, len2 = 0,
+                index = 0, index2 = 0;
+
+            for (index = 0, len = excel_data_3.length; index < len; index++) {
+                row = excel_data_3[index];
+                email[index] = row.email;
+            }
+
+            connection.query(QUERY.EDU.GetUserDataByEmail, [ email ], function (err, data) {
+                if (data.length > 0) {
+                    for (index = 0, len = data.length; index < len; index++) {
+                        for (index2 = 0, len2 = excel_data_3.length; index2 < len2; index2++) {
+                            if (data[index].email === excel_data_3[index2].email) {
+                                excel_data_3[index2]['error'] = true;
+                                excel_data_3[index2]['error_msg'].push("이메일 중복");                            
+                            }
+                        }
+                    }    
+                }
+
+                callback(null, excel_data_3);
             });
         },
-        // 엑셀데이터를 검사한다.
-        function (excel_data, callback ){
-            console.log(excel_data);
+        // DB 입력
+        function (excel_data_4, callback) {
+            var data = {
+                excel_data: excel_data_4,
+                user: req.user
+            };
+
+            UserService.createUserByExcel(connection, data, function (err, data) {
+                callback(err, null);
+            });
         },
+        // function (){},
         // function (){},
     ], function (err, results) {
         if (err) {
-            console.log(err);
             return res.json({
                 success: false,
-                msg: err
+                msg: _error_excel_data
             });
         } else {
+            // console.log(results);
             res.redirect('/employee');
         }
-    });
-
-    form.parse(req, function (err, fields, files) {
-        if (err) {
-            callback(err, null);
-        throw new Error('upload error occurred.');
-        }        
     });
 
 });
