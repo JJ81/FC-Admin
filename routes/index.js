@@ -75,6 +75,7 @@ router.get('/login', function (req, res) {
 
     _logo_name = _host_name.split('.')[1];    
     _logo_name = _logo_name === undefined ? 'Orangenamu' : _logo_name;
+    global.PROJ_TITLE = _logo_name;
 
 //   console.info(_hostname);
 //   console.info(_hostname.split('.')[1]);
@@ -82,7 +83,7 @@ router.get('/login', function (req, res) {
     if (req.user == null) {
         res.render('login', {
             current_path: 'Login',
-            title: _logo_name + ', 로그인',
+            title: global.PROJ_TITLE,
             logo : _logo_name
         });
     } else {
