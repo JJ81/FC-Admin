@@ -83,7 +83,7 @@ router.get('/login', function (req, res) {
     if (req.user == null) {
         res.render('login', {
             current_path: 'Login',
-            title: global.PROJ_TITLE,
+            title: global.PROJ_TITLE + 'Login',
             logo : _logo_name
         });
     } else {
