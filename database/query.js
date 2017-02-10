@@ -112,18 +112,27 @@ QUERY.EMPLOYEE = {
 
   ,ModifyDuty :
     "UPDATE `duty` SET `name` = ? WHERE `id` = ?; "
-
+  
+  // 직원목록 조회
   ,GetEmployeeList:
-    "select u.id as id, u.name as name, u.phone as phone, u.email as email, b.name as branch, d.name as duty, b.id as branch_id, d.id as duty_id " +
-    "from `users` as u " +
-    "left join `fc` as f " +
-    "on f.id = u.fc_id " +
-    "left join `branch` as b " +
-    "on b.id = u.branch_id " +
-    "left join `duty` as d " +
-    "on d.id = u.duty_id " +
-    "where u.fc_id=? and u.active=true " +
-    "order by u.id desc;"
+    "SELECT u.`id` AS id " +
+    "     , u.`name` AS name " +
+    "     , u.`phone` AS phone " +
+    "     , b.`name` AS branch " +
+    "     , d.`name` AS duty " +
+    "     , b.`id` AS branch_id " +
+    "     , d.`id` AS duty_id " +
+    "  FROM `users` AS u " +
+    "  LEFT JOIN `fc` AS f " +
+    "    ON f.`id` = u.`fc_id` " +
+    "  LEFT JOIN `branch` AS b " +
+    "    ON b.`id` = u.`branch_id` " +
+    "  LEFT JOIN `duty` AS d " +
+    "    ON d.`id` = u.`duty_id` " +
+    " WHERE u.`fc_id` = ? " +
+    "   AND u.`active` = true " +
+    " ORDER BY `branch`, d.`order`, u.`name`; "
+
   ,ResetPassword:
     "update `users` set password=? " +
     "where `id`=? and name=?;"

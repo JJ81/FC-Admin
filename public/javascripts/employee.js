@@ -9,7 +9,10 @@ requirejs(
 	function (Util) {
 
 		// datatable 설정
-		var table_employee = Util.initDataTable($('#table_employee'), 
+        var table_branch = Util.initDataTable($('#table-branch'), {
+            buttons: []
+        }),
+		    table_employee = Util.initDataTable($('#table_employee'), 
             {
              buttons: 
                 [

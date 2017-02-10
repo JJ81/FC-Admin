@@ -15,11 +15,27 @@
                 </div>
 
                 <div class="form-group">
-                    <ul>
+                    <table id="table-dutyrs" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>지점명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each duty}}
+                            <tr>
+                                <td class="duty-list">
+                                    <a data-id="{{id}}" data-name="{{name}}" href="#">{{name}}</a></li>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>                    
+                    <!--<ul>
                         {{#each duty}}
                         <li class="duty-list"><a data-id="{{id}}" data-name="{{name}}" href="#">{{name}}</a></li>
                         {{/each}}
-                    </ul>
+                    </ul>-->
                 </div>
             </div>
 

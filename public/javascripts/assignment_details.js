@@ -34,9 +34,13 @@ requirejs(
             axios.delete('/assignment', {
                 params: params
             })
-            .then(function (response) {
-                alert("교육생 그룹을 삭제하였습니다.");
-                location.href = "/assignment";
+            .then(function (res) {
+                if (!res.data.success) {
+                    alert("배정된 교육과정이 있어 삭제하지 못했습니다. 관리자에게 문의해주세요.");                    
+                } else {
+                    alert("교육생 그룹을 삭제하였습니다.");
+                    location.href = "/assignment";
+                }                
             })
             .catch(function (error) {
                 console.log(error);

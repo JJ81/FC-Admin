@@ -287,7 +287,7 @@ router.post('/upload', isAuthenticated, function (req, res) {
                                 var phone = [];
                                 ws.eachRow({ includeEmpty: false }, function(row, rowNumber) {
                                     row.eachCell(function(cell, colNumber) {
-                                        if (rowNumber >= 3 && colNumber === 2) {
+                                        if (rowNumber >= 2 && colNumber === 2) {
                                             phone.push(cell.value);
                                         }
                                         console.log('Row ' + rowNumber + ', Cell ' + colNumber + ' = ' + cell.value);
@@ -343,7 +343,7 @@ router.post('/upload', isAuthenticated, function (req, res) {
 /**
  * 교육생그룹 삭제
  */
-router.delete('/', isAuthenticated, function (req, res) {
+router.delete('/', isAuthenticated, function (req, res, next) {
 
     var _params = req.query;
 
@@ -379,29 +379,30 @@ router.delete('/', isAuthenticated, function (req, res) {
         ], function (err, results) {
             if (err) {
 
-            // 쿼리 오류 발생
-            return connection.rollback(function() {
-                res.json({
-                    success: false,
-                    msg: err
-                });
-            });
-            } else {
-            connection.commit(function(err) {
-                // 커밋 오류 발생
-                if (err) {
+                // 쿼리 오류 발생
                 return connection.rollback(function() {
-                    res.json({
+                    return res.json({
                         success: false,
                         msg: err
                     });
                 });
+            } else {
+            connection.commit(function(err) {
+                // 커밋 오류 발생
+                if (err) {
+                    return connection.rollback(function() {
+                        return res.json({
+                            success: false,
+                            msg: err
+                        });
+                    });
                 }
 
                 // 커밋 성공
                 res.json({
                     success: true
                 });
+
             });
             }
         });  

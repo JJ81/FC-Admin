@@ -157,18 +157,26 @@ router.post('/modify', isAuthenticated, function (req, res, next) {
 /**
  * 지점 생성
  */
-router.post('/create/branch', function (req, res) {
+router.post('/create/branch', function (req, res, next) {
   var _name = req.body.name.trim();
 
   if(_name === null || _name === ''){
-    res.redirect('/process?url=employee&msg=error');
+    // res.redirect('/process?url=employee&msg=error');
+    return next({
+        status: 500,
+        message: "필수입력값 누락"
+    });     
   }else{
     // todo 동일한 fc에서의 지점이 중복인지 여부를 검사해야 한다
     connection.query(QUERY.EMPLOYEE.CreateBranch,
       [_name, req.user.fc_id], function (err, result) {
-        if(err){
-          console.error(err);
-        }else{
+        if (err) {
+            console.error(err);
+            return next({
+                status: 500,
+                message: "중복되는 지점명입니다."
+            });
+        } else {
           res.redirect('/employee');
         }
       });
@@ -178,17 +186,25 @@ router.post('/create/branch', function (req, res) {
 /**
  * 지점 수정하기
  */
-router.post('/modify/branch', function (req, res) {
+router.post('/modify/branch', function (req, res, next) {
 
   var _name = req.body.name.trim();
 
   if(_name === null || _name === ''){
-    res.redirect('/process?url=employee&msg=error');
+    // res.redirect('/process?url=employee&msg=error');
+    return next({
+        status: 500,
+        message: "필수입력값 누락"
+    });    
   } else {
     connection.query(QUERY.EMPLOYEE.ModifyBranch,
       [ _name, req.body.id], function (err, result) {
-        if(err){
-          console.error(err);
+        if (err) {
+            console.error(err);
+            return next({
+                status: 500,
+                message: "중복되는 지점명입니다."
+            });              
         }else{
           res.redirect('/employee');
         }
@@ -199,18 +215,26 @@ router.post('/modify/branch', function (req, res) {
 /**
  * 직책 생성
  */
-router.post('/create/duty', function (req, res) {
+router.post('/create/duty', function (req, res, next) {
   var _name = req.body.name.trim();
 
   if(_name === null || _name === ''){
-    res.redirect('/process?url=employee&msg=error');
+    // res.redirect('/process?url=employee&msg=error');
+    return next({
+        status: 500,
+        message: "필수입력값 누락"
+    });   
   }else{
     // todo 동일한 fc에서의 직책이 중복인지 여부를 검사해야 한다
     connection.query(QUERY.EMPLOYEE.CreateDuty,
       [ _name, req.user.fc_id], function (err, result) {
-        if(err){
-          console.error(err);
-        }else{
+        if (err) {
+            console.error(err);
+            return next({
+                status: 500,
+                message: "중복되는 직책명입니다."
+            });
+        } else {
           res.redirect('/employee');
         }
       });
@@ -220,18 +244,26 @@ router.post('/create/duty', function (req, res) {
 /**
  * 직책 수정하기
  */
-router.post('/modify/duty', function (req, res) {
+router.post('/modify/duty', function (req, res, next) {
 
   var _name = req.body.name.trim();
 
   if(_name === null || _name === ''){
-    res.redirect('/process?url=employee&msg=error');
+    // res.redirect('/process?url=employee&msg=error');
+    return next({
+        status: 500,
+        message: "필수입력값 누락"
+    });    
   } else {
     // todo 동일한 fc에서의 지점이 중복인지 여부를 검사해야 한다
     connection.query(QUERY.EMPLOYEE.ModifyDuty,
       [ _name, req.body.id], function (err, result) {
-        if(err){
-          console.error(err);
+        if (err) {
+            console.error(err);
+            return next({
+                status: 500,
+                message: "중복되는 직책명입니다."
+            });          
         }else{
           res.redirect('/employee');
         }
