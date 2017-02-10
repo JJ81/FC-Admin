@@ -190,6 +190,8 @@ router.post('/modify/branch', function (req, res, next) {
 
   var _name = req.body.name.trim();
 
+  console.log(req.body);
+
   if(_name === null || _name === ''){
     // res.redirect('/process?url=employee&msg=error');
     return next({

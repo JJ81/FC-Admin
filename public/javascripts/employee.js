@@ -10,8 +10,8 @@ requirejs(
 
 		// datatable 설정
         var table_branch = Util.initDataTable($('#table-branch'), {
-            buttons: []
-        }),
+                buttons: []
+            }),
 		    table_employee = Util.initDataTable($('#table_employee'), 
             {
              buttons: 
@@ -65,8 +65,9 @@ requirejs(
 		});
 
         // 지점 ..등록모드에서 수정모드로 변경
-        _branches.bind('click', function(e) {
-
+        // 2nd 페이지에서 이벤트 안먹히는 증상 (http://stackoverflow.com/questions/25414778/jquery-onclick-not-working-in-datatables-2nd-page-or-rows-past-11)
+        $('#table-branch').on('click', '.branch-list-item', function(e) {
+        // _branches.bind('click', function(e) {
             e.preventDefault();
 
             $(".branch-input > input[name='id']").val($(this).data('id'));
