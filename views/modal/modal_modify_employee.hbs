@@ -15,7 +15,7 @@
 
                 <div class="form-group">
                     <label>지점</label>
-                    <select class="form-control" name="branch" id="select_branch">
+                    <select class="form-control select2" id="select_branch" name="branch" style="width: 100%;">
                         {{#each branch}}
                         <option value="{{id}}">{{name}}</option>
                         {{/each}}
@@ -24,7 +24,7 @@
 
                 <div class="form-group">
                     <label>직책</label>
-                    <select class="form-control" name="duty" id="select_duty">
+                    <select class="form-control " name="duty" id="select_duty">
                         {{#each duty}}
                         <option value="{{id}}">{{name}}</option>
                         {{/each}}

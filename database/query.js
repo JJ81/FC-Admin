@@ -118,6 +118,7 @@ QUERY.EMPLOYEE = {
     "SELECT u.`id` AS id " +
     "     , u.`name` AS name " +
     "     , u.`phone` AS phone " +
+    "     , u.`email` AS email " +
     "     , b.`name` AS branch " +
     "     , d.`name` AS duty " +
     "     , b.`id` AS branch_id " +

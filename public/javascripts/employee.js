@@ -8,6 +8,11 @@ requirejs(
 	],
 	function (Util) {
 
+        $(function () {
+            $('#createEmployee #select_branch').select2();
+            $('#modifyEmployee #select_branch').select2();
+        });
+
 		// datatable 설정
         var table_branch = Util.initDataTable($('#table-branch'), {
                 buttons: []
@@ -60,7 +65,8 @@ requirejs(
 			_target.find('#tel').val(_phone);
 			_target.find('#email').val(_email);
 			_target.find('.employee_id').val(_user_id);
-			_target.find('#select_branch').val(_branch);
+			// _target.find('#select_branch').val(_branch);
+            _target.find('#select_branch').val(_branch).trigger("change"); // select2 의 선택방식은 다르다.
 			_target.find('#select_duty').val(_duty);
 		});
 
