@@ -4,35 +4,20 @@
 'use strict';
 requirejs(
 	[
-		// 'jquery'
-		// ,'moment'
-		// ,'excellentExport'
         'common',
-		// ,'bootstrap'
-		// ,'jquery_datatable'
-		// ,'bootstrap_datatable'
-		// ,'select2'
-		// ,'daterangepicker'
-		// ,'jquery_ui'
-		// ,'adminLTE'
-		// ,'fastclick'		
 	],
 	function (Util) {
-		// avoid to confliction between jquery tooltip and bootstrap tooltip
-		// $.widget.bridge('uibutton', $.ui.button);
-
-		// $(".select2").select2();
-
-		//// Download csv
-		//$('.btn_download_csv_home').bind('click', function (){
-		//	return excellentCsv.csv(this, 'table_home', ',');
-		//});
-		//
-
 
 		// datatable 설정
-		var table_employee =
-        Util.initDataTable($('#table_employee'));
+		var table_employee = Util.initDataTable($('#table_employee')),        
+            _branches = $('.branch-list > a'),            
+            _btn_branch_clear_inputs = $('.branch-right-buttons > #clear-input'),
+            _btn_branch_save = $('.branch-right-buttons > .btn-submit'),
+            _form_branch = $('#frm_create_branch'),
+            _duties = $('.duty-list > a'),
+            _btn_duty_clear_inputs = $('duty-right-buttons > #clear-input'),            
+            _btn_duty_save = $('.duty-right-buttons > .btn-submit'),            
+            _form_duty = $('#frm_create_duty');        
 
 
 		// 직원정보 수정 페이지
@@ -54,76 +39,54 @@ requirejs(
 			_target.find('#select_duty').val(_duty);
 		});
 
+        // 지점 ..등록모드에서 수정모드로 변경
+        _branches.bind('click', function(e) {
 
+            e.preventDefault();
 
+            console.log($(this).data('id'));
 
-		//
-		//table_home
-		//	.column( '0:visible' )
-		//	.order( 'desc' )
-		//	.draw();
-		//
-		//// select box
-		//// $(".select2").select2();
-		//
-		//// datepicker
-		//$('#daterange-btn').daterangepicker({
-		//	ranges: {
-		//		'Today': [moment(), moment()],
-		//		'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-		//		'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-		//		'Last 30 Days': [moment().subtract(30, 'days'), moment()],
-		//		'This Month': [moment().startOf('month'), moment().endOf('month')],
-		//		'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-		//	},
-		//	startDate: moment().subtract(30, 'days'),
-		//	endDate: moment()
-		//},
-		//function (start, end) {
-		//	//$('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-		//	$('#daterange-btn span').html(start.format('YYYY.M.D') + ' - ' + end.format('YYYY.M.D'));
-		//});
-		//
-		//// Implement with datatables's API
-		//$('.realSelectBox').bind('change', function () {
-		//	var _self = $(this);
-		//	var val = _self.val();
-		//	if(_self.val() === 'Any Type'){
-		//		val = '';
-		//	}
-		//	table_home.columns( 1 ).search(val).draw();
-		//});
-		//
-		//
-		//// Filtering with date
-		//$('.daterangepicker .ranges li, .daterangepicker .applyBtn').bind('click', function () {
-		//	if($(this).text().trim() === 'Custom Range'){
-		//		return;
-		//	}
-		//
-		//	setTimeout(function () {
-		//		var date = $('.filter_date').text();
-		//
-		//		date = date.split('-');
-		//		console.info(date);
-		//
-		//		$('#startDate').val(date[0].trim());
-		//		$('#endDate').val(date[1].trim());
-		//
-		//		$('.filterWithDate').submit();
-		//
-		//	}, 100);
-		//});
-		//
-		//// daterangepicker의 액션을 제어하기 귀찮아서 액티브를 제거한다.
-		//
-		//$('#daterange-btn').bind('click', function () {
-		//	$('.daterangepicker .ranges li').removeClass('active');
-		//	$('.daterangepicker .ranges').bind('mouseover', function () {
-		//		$('.daterangepicker .ranges li').removeClass('active');
-		//	})
-		//});
+            $(".branch-input > input[name='id']").val($(this).data('id'));
+            $(".branch-input > input[name='name']").val($(this).data('name'));
 
+            _form_branch.attr('action', '/course/modify/branch');
+            _btn_branch_save.html('수정');
+            
+        });
 
+        // 지점 .. 수정모드에서 등록모드로 변경
+        _btn_branch_clear_inputs.bind('click', function () {
+            
+            $("input[name='id'").val('');
+            $("input[name='branch'").val('');
+
+            _form_branch.attr('action', '/course/create/branch');
+            _btn_branch_save.html('등록');
+
+        });    
+
+        // 직책 ..등록모드에서 수정모드로 변경
+        _duties.bind('click', function(e) {
+
+            e.preventDefault();
+
+            $("input[name='id'").val($(this).data('id'));
+            $("input[name='duty'").val($(this).data('name'));
+
+            _form_duty.attr('action', '/course/modify/duty');
+            _btn_duty_save.html('수정');
+            
+        });
+
+        // 직책 .. 수정모드에서 등록모드로 변경
+        _btn_duty_clear_inputs.bind('click', function () {
+            
+            $("input[name='id'").val('');
+            $("input[name='duty'").val('');
+
+            _form_duty.attr('action', '/course/create/duty');
+            _btn_duty_save.html('등록');
+
+        });          
 
 	}); // end of func

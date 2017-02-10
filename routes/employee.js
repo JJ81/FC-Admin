@@ -54,7 +54,7 @@ router.get('/', isAuthenticated, function (req, res) {
 /**
  * 유저 생성
  */
-router.post('/create', isAuthenticated, function (req, res) {
+router.post('/create', isAuthenticated, function (req, res, next) {
   var _data = {
     name : req.body.name.trim(),
     branch_id : req.body.branch.trim(), // id
@@ -66,10 +66,12 @@ router.post('/create', isAuthenticated, function (req, res) {
     fc_id : req.user.fc_id // id
   };
 
-  if(_data.pass !== _data.re_pass || !UTIL.checkOnlyDigit(_data.tel)
-    || !UTIL.isValidEmail(_data.email) || !UTIL.checkPasswordSize(_data.pass, 4)){
+  if (_data.pass !== _data.re_pass || 
+     !UTIL.checkOnlyDigit(_data.tel) || 
+     !UTIL.isValidEmail(_data.email) || 
+     !UTIL.checkPasswordSize(_data.pass, 4)) {
     res.redirect('/process?url=employee&msg=error');
-  }else{
+  } else {
     _data.pass = bcrypt.hashSync(_data.pass, 10);
 
     connection.query(QUERY.EMPLOYEE.CreateEmployee, [
@@ -83,6 +85,12 @@ router.post('/create', isAuthenticated, function (req, res) {
     ], function (err, result){
       if(err){
         console.error(err);
+        // res.redirect('/process?url=employee&msg=error');
+        if (err) 
+            return next({
+                status: 500,
+                message: "중복된 휴대폰번호 또는 이메일이 존재합니다."
+            });
       }else{
         res.redirect('/employee');
       }
@@ -109,8 +117,7 @@ router.post('/modify', isAuthenticated, function (req, res) {
     || _data.branch_id === '' || _data.duty_id === ''
   ){
     res.redirect('/process?url=employee&msg=error');
-  }else{
-
+  } else {
 
     connection.query(QUERY.EMPLOYEE.ModifyEmployee, [
       _data.name,

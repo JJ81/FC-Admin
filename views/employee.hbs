@@ -9,94 +9,20 @@
                     <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#" data-toggle="modal" data-target="#createBranch">지점등록</a></li>
-                        <li><a href="#" data-toggle="modal" data-target="#createDuty">직책등록</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#createBranch">지점 등록</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#createDuty">직책 등록</a></li>
                         <li class="divider"></li>
                         <li><a href="#" data-toggle="modal" data-target="#uploadFile">직원등록(엑셀)</a></li>                        
                         <!--<li><a href="#" data-toggle="modal" data-target="#uploadFile">직원 등록 양식(.xls)</a></li>-->
                     </ul>
                 </div>
-                <!--<div class="btn-area-employee">-->
-                    <!--<button class="btn btn-default" data-toggle="modal" data-target="#createBranch">
-                        <i class="fa fa-cloud-upload"></i>&nbsp;
-                        지점등록
-                    </button>
-                    <button class="btn btn-default" data-toggle="modal" data-target="#createDuty" style="margin-right: 10px;">
-                        <i class="fa fa-cloud-upload"></i>&nbsp;
-                        직책등록
-                    </button>
-                    <button type="submit" class="btn btn-default" data-toggle="modal" data-target="#uploadFile">
-                        <i class="fa fa-cloud-upload"></i>&nbsp;
-                        직원등록(.xls)
-                    </button>
-                    <a href="/uploads/excel/sample.xlsx" class="btn btn-default">
-                        <i class="fa fa-file-excel-o"></i>&nbsp;
-                        직원 등록 양식(.xls)
-                    </a>-->
 
-                    <div class="pull-right">
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#createEmployee">
-                            <i class="fa fa-pencil-square-o"></i>
-                            직원등록
-                        </button>                    
-                    </div>
-                    
-                <!--</div>-->
-
-                <!-- 조건 검색 -->
-                <!--<form class="form-group" method="post" action="/employee">-->
-                    <!--<div class="col-md-2">
-                        <div class="form-group">
-                            <label>지점선택</label>
-                            <select class="form-control select2 select-branch" multiple="multiple" data-placeholder="지점 선택" style="width: 100%;">
-                                <option value="0">전체</option>
-                                {{#each branch}}
-                                <option value="{{id}}">{{name}} <small>({{id}})</small></option>
-                                {{/each}}
-                            </select>
-                            <input type="hidden" name="branch" />
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>직책선택</label>
-                            <select class="form-control select2 select-duty" multiple="multiple" data-placeholder="지점 선택" style="width: 100%;">
-                                <option value="0">전체</option>
-                                {{#each duty}}
-                                <option value="{{id}}">{{name}} <small>({{id}})</small></option>
-                                {{/each}}
-                            </select>
-                            <input type="hidden" name="duty" />
-                        </div>
-                    </div>-->
-                    <!--<div class="col-md-8">
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label for="employee_name">이름</label>
-                                <input type="text" class="form-control" id="employee_name" placeholder="이름" />
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label for="employee_tel">전화번호</label>
-                                <input type="text" class="form-control" id="employee_tel" placeholder="전화번호" />
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label for="employee_email">이메일</label>
-                                <input type="text" class="form-control" id="employee_email" placeholder="이메일" />
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <button type="submit" class="btn btn-primary btn-employee-search" style="margin-right: 5px;">
-                                <i class="fa fa-search"></i> &nbsp;
-                                검색
-                            </button>
-                            <a href="/employee" class="btn btn-default btn-employee-clear">초기화</a>
-                        </div>                        
-                    </div>-->
-                <!--</form>-->
+                <div class="pull-right">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#createEmployee">
+                        <i class="fa fa-pencil-square-o"></i>
+                        직원등록
+                    </button>                    
+                </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive">
