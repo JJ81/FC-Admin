@@ -3,11 +3,20 @@
 <!--<h2>{{error.status}}</h2>-->
 <!--<pre>{{error.stack}}</pre>-->
 
-<div class="error-page">
+<!--<div class="error-page">
     <h2 class="headline text-red">{{error.status}}</h2>
 
     <div class="error-content">
         <h4><i class="fa fa-warning text-red"></i> {{message}}</h4>
     </div>
     <button type="button" class="btn btn-primary" onclick="window.history.go(-1); return false;">돌아가기</button>
+</div>-->
+
+<br><br>
+<div class="alert alert-danger alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" onclick="window.history.go(-1); return false;">&times;</button>
+    <h4><i class="icon fa fa-ban"></i> {{error.status}}</h4>
+    <p>
+        {{error.message}}
+    </p>
 </div>

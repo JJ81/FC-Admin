@@ -37,22 +37,22 @@ requirejs(
             _btn_branch_save = $('.branch-right-buttons > .btn-submit'),
             _form_branch = $('#frm_create_branch'),
             _duties = $('.duty-list > a'),
-            _btn_duty_clear_inputs = $('duty-right-buttons > #clear-input'),            
+            _btn_duty_clear_inputs = $('.duty-right-buttons > #clear-input'),
             _btn_duty_save = $('.duty-right-buttons > .btn-submit'),            
-            _form_duty = $('#frm_create_duty');        
+            _form_duty = $('#frm_create_duty');
 
 
 		// 직원정보 수정 페이지
 		$('.btn-modify-userinfo').bind('click', function () {
-			var _self = $(this);
-			var _name = _self.attr('data-user-name');
-			var _branch = _self.attr('data-user-branch');
-			var _duty = _self.attr('data-user-duty');
-			var _phone = _self.attr('data-user-phone');
-			var _email = _self.attr('data-user-email');
-			var _user_id = _self.attr('data-user-id');
+			var _self = $(this),
+                _name = _self.attr('data-user-name'),
+                _branch = _self.attr('data-user-branch'),
+                _duty = _self.attr('data-user-duty'),
+                _phone = _self.attr('data-user-phone'),
+                _email = _self.attr('data-user-email'),
+                _user_id = _self.attr('data-user-id'),
+                _target = $('#frm_modify_employee');
 
-			var _target = $('#frm_modify_employee');
 			_target.find('#name').val(_name);
 			_target.find('#tel').val(_phone);
 			_target.find('#email').val(_email);
@@ -69,7 +69,7 @@ requirejs(
             $(".branch-input > input[name='id']").val($(this).data('id'));
             $(".branch-input > input[name='name']").val($(this).data('name'));
 
-            _form_branch.attr('action', '/course/modify/branch');
+            _form_branch.attr('action', '/employee/modify/branch');
             _btn_branch_save.html('수정');
             
         });
@@ -77,10 +77,10 @@ requirejs(
         // 지점 .. 수정모드에서 등록모드로 변경
         _btn_branch_clear_inputs.bind('click', function () {
             
-            $("input[name='id'").val('');
-            $("input[name='branch'").val('');
+            $(".branch-input > input[name='id']").val('');
+            $(".branch-input > input[name='name']").val('');
 
-            _form_branch.attr('action', '/course/create/branch');
+            _form_branch.attr('action', '/employee/create/branch');
             _btn_branch_save.html('등록');
 
         });    
@@ -90,10 +90,10 @@ requirejs(
 
             e.preventDefault();
 
-            $("input[name='id'").val($(this).data('id'));
-            $("input[name='duty'").val($(this).data('name'));
+            $(".duty-input > input[name='id'").val($(this).data('id'));
+            $(".duty-input > input[name='name']").val($(this).data('name'));
 
-            _form_duty.attr('action', '/course/modify/duty');
+            _form_duty.attr('action', '/employee/modify/duty');
             _btn_duty_save.html('수정');
             
         });
@@ -101,10 +101,10 @@ requirejs(
         // 직책 .. 수정모드에서 등록모드로 변경
         _btn_duty_clear_inputs.bind('click', function () {
             
-            $("input[name='id'").val('');
-            $("input[name='duty'").val('');
+            $(".duty-input > input[name='id']").val('');
+            $(".duty-input > input[name='name']").val('');
 
-            _form_duty.attr('action', '/course/create/duty');
+            _form_duty.attr('action', '/employee/create/duty');
             _btn_duty_save.html('등록');
 
         });          

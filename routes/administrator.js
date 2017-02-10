@@ -76,7 +76,7 @@ router.get('/branch/:admin_id', isAuthenticated, function (req, res) {
 /**
  * 정보 입력
  */
-router.post('/register', isAuthenticated, function (req, res) {
+router.post('/register', isAuthenticated, function (req, res, next) {
 	var _data = {};
 	_data.name = req.body.name.trim();
 	_data.email = req.body.email.trim();
@@ -94,7 +94,11 @@ router.post('/register', isAuthenticated, function (req, res) {
 		!util.checkPasswordSize(_data.pass, 4)
 	)
 	{
-		res.redirect('/process?url=administrator&msg=error');
+		// res.redirect('/process?url=administrator&msg=error');
+        return next({
+            status: 500,
+            message: "잘못된 형식의 이메일이 존재합니다."
+        });  
 	}else{
 		connection.query(QUERY.ADMIN.CreateAdmin,
 			[
@@ -106,8 +110,12 @@ router.post('/register', isAuthenticated, function (req, res) {
 			],
 			function (err, result) {
 				if(err){
-					console.error(err);
-					res.redirect('/process?url=administrator&msg=error');
+					// console.error(err);
+					// res.redirect('/process?url=administrator&msg=error');
+                    return next({
+                        status: 500,
+                        message: "중복된 이메일이 존재합니다."
+                    });                      
 				}else{
 					res.redirect('/administrator');
 				}
@@ -118,7 +126,7 @@ router.post('/register', isAuthenticated, function (req, res) {
 /**
  * 정보 수정
  */
-router.post('/modify', isAuthenticated, function (req, res) {
+router.post('/modify', isAuthenticated, function (req, res, next) {
 	var _data = {};
     _data.id = req.body.employee_id;
 	_data.name = req.body.name.trim();
@@ -130,7 +138,11 @@ router.post('/modify', isAuthenticated, function (req, res) {
 		!util.isValidEmail(_data.email)
 	)
 	{
-		res.redirect('/process?url=administrator&msg=error');
+		// res.redirect('/process?url=administrator&msg=error');
+        return next({
+            status: 500,
+            message: "잘못된 형식의 이메일이 존재합니다."
+        });        
 	}else{
 		connection.query(QUERY.ADMIN.ModifyAdmin,
 			[
@@ -140,8 +152,13 @@ router.post('/modify', isAuthenticated, function (req, res) {
 			],
 			function (err, result) {
 				if(err){
-					console.error(err);
-					res.redirect('/process?url=administrator&msg=error');
+					// console.error(err);
+					// res.redirect('/process?url=administrator&msg=error');
+                    return next({
+                        status: 500,
+                        message: "중복된 이메일이 존재합니다."
+                    });
+
 				}else{
 					res.redirect('/administrator');
 				}

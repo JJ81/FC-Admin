@@ -67,10 +67,14 @@ router.post('/create', isAuthenticated, function (req, res, next) {
   };
 
   if (_data.pass !== _data.re_pass || 
-     !UTIL.checkOnlyDigit(_data.tel) || 
+     !UTIL.isValidPhone(_data.tel) ||
      !UTIL.isValidEmail(_data.email) || 
      !UTIL.checkPasswordSize(_data.pass, 4)) {
-    res.redirect('/process?url=employee&msg=error');
+    // res.redirect('/process?url=employee&msg=error');
+    return next({
+        status: 500,
+        message: "잘못된 형식의 휴대폰번호 또는 이메일이 존재합니다."
+    });
   } else {
     _data.pass = bcrypt.hashSync(_data.pass, 10);
 
@@ -84,7 +88,7 @@ router.post('/create', isAuthenticated, function (req, res, next) {
       _data.branch_id
     ], function (err, result){
       if(err){
-        console.error(err);
+        // console.error(err);
         // res.redirect('/process?url=employee&msg=error');
         if (err) 
             return next({
@@ -101,7 +105,8 @@ router.post('/create', isAuthenticated, function (req, res, next) {
 /**
  * 유저 수정
  */
-router.post('/modify', isAuthenticated, function (req, res) {
+router.post('/modify', isAuthenticated, function (req, res, next) {
+  
   var _data = {
     user_id : req.body.employee_id,
     name : req.body.name.trim(),
@@ -112,11 +117,18 @@ router.post('/modify', isAuthenticated, function (req, res) {
     fc_id : req.user.fc_id // id
   };
 
-  if(!UTIL.checkOnlyDigit(_data.tel)
-    || !UTIL.isValidEmail(_data.email)
-    || _data.branch_id === '' || _data.duty_id === ''
-  ){
-    res.redirect('/process?url=employee&msg=error');
+  console.log(_data);
+
+  if (!UTIL.isValidPhone(_data.tel) ||
+     !UTIL.isValidEmail(_data.email) ||
+     _data.branch_id === '' || 
+     _data.duty_id === ''
+  ) {
+    // res.redirect('/process?url=employee&msg=error');
+    return next({
+        status: 500,
+        message: "잘못된 형식의 휴대폰번호 또는 이메일이 존재합니다."
+    });    
   } else {
 
     connection.query(QUERY.EMPLOYEE.ModifyEmployee, [
@@ -125,13 +137,17 @@ router.post('/modify', isAuthenticated, function (req, res) {
       _data.tel,
       _data.branch_id,
       _data.duty_id,
-      _data.fc_id,
       _data.user_id,
       _data.fc_id
     ], function (err, result){
       if(err){
         console.error(err);
-      }else{
+        if (err) 
+            return next({
+                status: 500,
+                message: "중복된 휴대폰번호 또는 이메일이 존재합니다."
+            });        
+      } else {
         res.redirect('/employee');
       }
     });
@@ -160,6 +176,27 @@ router.post('/create/branch', function (req, res) {
 });
 
 /**
+ * 지점 수정하기
+ */
+router.post('/modify/branch', function (req, res) {
+
+  var _name = req.body.name.trim();
+
+  if(_name === null || _name === ''){
+    res.redirect('/process?url=employee&msg=error');
+  } else {
+    connection.query(QUERY.EMPLOYEE.ModifyBranch,
+      [ _name, req.body.id], function (err, result) {
+        if(err){
+          console.error(err);
+        }else{
+          res.redirect('/employee');
+        }
+      });
+  }
+});
+
+/**
  * 직책 생성
  */
 router.post('/create/duty', function (req, res) {
@@ -170,7 +207,29 @@ router.post('/create/duty', function (req, res) {
   }else{
     // todo 동일한 fc에서의 직책이 중복인지 여부를 검사해야 한다
     connection.query(QUERY.EMPLOYEE.CreateDuty,
-      [_name, req.user.fc_id], function (err, result) {
+      [ _name, req.user.fc_id], function (err, result) {
+        if(err){
+          console.error(err);
+        }else{
+          res.redirect('/employee');
+        }
+      });
+  }
+});
+
+/**
+ * 직책 수정하기
+ */
+router.post('/modify/duty', function (req, res) {
+
+  var _name = req.body.name.trim();
+
+  if(_name === null || _name === ''){
+    res.redirect('/process?url=employee&msg=error');
+  } else {
+    // todo 동일한 fc에서의 지점이 중복인지 여부를 검사해야 한다
+    connection.query(QUERY.EMPLOYEE.ModifyDuty,
+      [ _name, req.body.id], function (err, result) {
         if(err){
           console.error(err);
         }else{

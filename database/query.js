@@ -100,10 +100,19 @@ QUERY.EMPLOYEE = {
   ,CreateEmployee :
     "insert into `users` (`name`, `password`, `email`, `phone`, `fc_id`, `duty_id`, `branch_id`) " +
     "values(?,?,?,?,?,?,?); "
+
   ,CreateBranch :
-    "INSERT IGNORE `branch` (`name`, `fc_id`) VALUES (?,?);"    
+    "INSERT IGNORE `branch` (`name`, `fc_id`) VALUES (?,?);"
+
+  ,ModifyBranch :
+    "UPDATE `branch` SET `name` = ? WHERE `id` = ?; "    
+
   ,CreateDuty :
     "INSERT IGNORE `duty` (`name`, `fc_id`) VALUES(?,?);"
+
+  ,ModifyDuty :
+    "UPDATE `duty` SET `name` = ? WHERE `id` = ?; "
+
   ,GetEmployeeList:
     "select u.id as id, u.name as name, u.phone as phone, u.email as email, b.name as branch, d.name as duty, b.id as branch_id, d.id as duty_id " +
     "from `users` as u " +
@@ -118,10 +127,17 @@ QUERY.EMPLOYEE = {
   ,ResetPassword:
     "update `users` set password=? " +
     "where `id`=? and name=?;"
+
+  // 직원정보를 수정한다.
   ,ModifyEmployee :
-    "update `users` " +
-    "set name=?, email=?, phone=?, branch_id=?, duty_id=? " +
-    "where id=? and fc_id=?;"
+    "UPDATE `users` SET " +
+    "       `name` = ? " +
+    "     , `email` = ? " + 
+    "     , `phone` = ? " +
+    "     , `branch_id` = ? " +
+    "     , `duty_id` = ? " +
+    " WHERE `id` = ? " +
+    "   AND `fc_id` = ?; "
 };
 
 QUERY.COURSE = {
