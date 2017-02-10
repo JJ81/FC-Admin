@@ -34,9 +34,7 @@ requirejs(
             // datatable 설정            
             
             // 교육과정별 포인트 현황
-            Util.initDataTable($('#table-point-by-edu'), { 
-                responsive: true,
-                language: { "url": "https://cdn.datatables.net/plug-ins/1.10.13/i18n/Korean.json" },          
+            Util.initDataTable($('#table-point-by-edu'), {          
                 "columns": [
                     { "data": "branch_name", className: "center" },
                     { "data": "duty_name", className: "center" },
@@ -54,10 +52,26 @@ requirejs(
             });            
 
             // 누적 포인트 현황
-            Util.initDataTable($('#table_point'), { 
-                responsive: true,
-                language: { "url": "https://cdn.datatables.net/plug-ins/1.10.13/i18n/Korean.json" },    
-                "order": [[ 3, 'desc' ]],                             
+            Util.initDataTable($('#table_point'), {    
+                "order": [[ 3, 'desc' ]],
+                buttons: [
+                            {
+                                text: '<i class="fa fa-copy"></i> 복사',
+                                extend: "copy",
+                                className: "btn-sm btn-default",
+                                exportOptions: {
+                                    columns: [ 0, 1, 2, 3 ]
+                                }
+                            },                            
+                            {
+                                text: '<i class="fa fa-download"></i> 엑셀',
+                                extend: "excel",
+                                className: "btn-sm btn-default",
+                                exportOptions: {
+                                    columns: [ 0, 1, 2, 3 ]
+                                }
+                            }                    
+                        ]                                           
             });
 
         });

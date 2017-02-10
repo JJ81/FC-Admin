@@ -3,26 +3,33 @@
  */
 'use strict';
 requirejs([
-		// 'jquery',
-		// 'axios',
         'common',
-		// 'moment',
-		// 'excellentExport',
-		// 'bootstrap',
-		// 'jquery_datatable',
-		// 'bootstrap_datatable',
-		// 'select2',
-		// 'daterangepicker',
-		// 'jquery_ui',
-		// 'adminLTE',
-		// 'fastclick',
 	],
 	function (Util) {
-		// avoid to confliction between jquery tooltip and bootstrap tooltip
-		// $.widget.bridge('uibutton', $.ui.button);
 
         // datatable 설정
-        Util.initDataTable($('#table_admin'));        
+        Util.initDataTable($('#table_admin'),
+            {
+             buttons: 
+                [
+                    {
+                        text: '<i class="fa fa-copy"></i> 복사',
+                        extend: "copy",
+                        className: "btn-sm btn-default",
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3 ]
+                        }
+                    },                            
+                    {
+                        text: '<i class="fa fa-download"></i> 엑셀',
+                        extend: "excel",
+                        className: "btn-sm btn-default",
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3 ]
+                        }
+                    }                    
+                ]
+            });   
 
 		var select_branch_list = $('.select_branch_list');
 		var branchIdList = [];		        

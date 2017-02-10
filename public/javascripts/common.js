@@ -86,18 +86,21 @@ define(
                     "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
                     "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>";
-                _options.buttons = [
-                   {
-                        text: '<i class="fa fa-copy"></i> 복사',
-                        extend: "copy",
-                        className: "btn-sm btn-default"
-                    },                            
-                    {
-                        text: '<i class="fa fa-download"></i> 엑셀',
-                        extend: "excel",
-                        className: "btn-sm btn-default"
-                    }                    
-                ];            
+
+                if (_options.buttons == null) {
+                    _options.buttons = [
+                        {
+                            text: '<i class="fa fa-copy"></i> 복사',
+                            extend: "copy",
+                            className: "btn-sm btn-default"
+                        },                            
+                        {
+                            text: '<i class="fa fa-download"></i> 엑셀',
+                            extend: "excel",
+                            className: "btn-sm btn-default",
+                        }                    
+                    ];    
+                }        
 
                 table = element.DataTable(_options);                 
 

@@ -9,8 +9,30 @@ requirejs(
 	function (Util) {
 
 		// datatable 설정
-		var table_employee = Util.initDataTable($('#table_employee')),        
-            _branches = $('.branch-list > a'),            
+		var table_employee = Util.initDataTable($('#table_employee'), 
+            {
+             buttons: 
+                [
+                    {
+                        text: '<i class="fa fa-copy"></i> 복사',
+                        extend: "copy",
+                        className: "btn-sm btn-default",
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4 ]
+                        }
+                    },                            
+                    {
+                        text: '<i class="fa fa-download"></i> 엑셀',
+                        extend: "excel",
+                        className: "btn-sm btn-default",
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4 ]
+                        }
+                    }                    
+                ]
+            });
+
+        var _branches = $('.branch-list > a'),            
             _btn_branch_clear_inputs = $('.branch-right-buttons > #clear-input'),
             _btn_branch_save = $('.branch-right-buttons > .btn-submit'),
             _form_branch = $('#frm_create_branch'),
@@ -43,8 +65,6 @@ requirejs(
         _branches.bind('click', function(e) {
 
             e.preventDefault();
-
-            console.log($(this).data('id'));
 
             $(".branch-input > input[name='id']").val($(this).data('id'));
             $(".branch-input > input[name='name']").val($(this).data('name'));
