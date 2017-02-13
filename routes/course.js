@@ -151,12 +151,13 @@ router.get('/details', isAuthenticated, function (req, res) {
         connection.query(QUERY.COURSE.GetStarRatingByTeacherId,
             [ _teacher_id ],
             function (err, rows) {
+                // callback(err, rows);
                 if (err) {
                     console.error(err);
                     callback(err, null);
                 } else {
                     if (rows.length === 0 || rows === null) {
-                        callback(null, [{course_id : _id ,rate : 0}]);
+                        callback(null, [{ teacher_rate : 0 }]);
                     } else {
                         callback(null, rows);
                     }
