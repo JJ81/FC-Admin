@@ -227,17 +227,17 @@ requirejs(
                     return_url: "http://admin-clipplr.orangenamu.net/api/v1/sms/callback",
                     sms_contents: "교육과정이 배정되었습니다."                    
                 },                
-                // headers: { 
-                //     Accept : "application/x-www-form-urlencoded; charset=euc-kr",
-                //     "Content-Type": "application/x-www-form-urlencoded; charset=EUC-KR"
-                // },   
+                headers: { 
+                    Accept : "application/x-www-form-urlencoded; charset=euc-kr",
+                    "Content-Type": "application/x-www-form-urlencoded; charset=EUC-KR"
+                },   
                 // beforeSend: function(xhr){
                 //     xhr.setRequestHeader('Access-Control-Allow-origin', 'true');
                 // },              
-                beforeSend: function(xhr){
+                // beforeSend: function(xhr){
                     // xhr.setRequestHeader('Access-Control-Allow-origin', 'true');
-                    xhr.setRequestHeader('Content-Type', 'euc-kr');
-                },
+                    // xhr.setRequestHeader('Content-Type', 'euc-kr');
+                // },
                 // contentType: "application/x-www-form-urlencoded; charset=EUC-KR",
                 // beforeSend: function(jqXHR) {
                 //     jqXHR.overrideMimeType('application/x-www-form-urlencoded; charset=euc-kr');
