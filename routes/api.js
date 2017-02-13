@@ -10,6 +10,8 @@ const isAuthenticated = function (req, res, next) {
 };
 const util = require('../util/util');
 var CourseService = require('../service/CourseService');
+const queryString = require('query-string');
+var MessageService = require('../service/MessageService');
 
 router.get('/course/group/id/create', isAuthenticated, function (req, res) {
 	res.json({
@@ -62,6 +64,13 @@ router.get('/sms/callback', function (req, res) {
     console.log("------------------");
     console.log(req);
     console.log("------------------");
+});
+
+router.get('/test', function(req, res) {
+
+    MessageService.send('교육과정이 배정되었습니다.', function (err, data) {
+        // console.log(err);
+    });
 });
 
 module.exports = router;
