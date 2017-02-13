@@ -29,7 +29,7 @@
                     </span>
 
                     <div class="course-desc-preview">
-                        <h4>강의 설명</h4>
+                        <br>
                         <span>{{{desc}}}</span> <!-- 강의 설명 부분에 개행 처리가 들어가지 않았다. -->
                     </div>
                 </div>
@@ -208,7 +208,11 @@
                             <!--{{/each}}-->
                         </div>
                     </p>                       
-                    <pre class="teacher-desc">{{desc}}</pre>
+                    
+                    <!--<pre class="teacher-desc">{{desc}}</pre>-->
+                    <div class="teacher-desc">
+                        {{{desc}}}
+                    </div>
                     {{/each}}
                 {{else}}
                     등록된 강사 정보가 없습니다.

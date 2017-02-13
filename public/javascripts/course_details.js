@@ -42,9 +42,9 @@ requirejs(
                 }
             });
 
-            tinymce.init({
-                selector: '.course-desc'
-            });            
+            // tinymce.init({
+            //     selector: '.course-desc'
+            // });            
 
         });
 

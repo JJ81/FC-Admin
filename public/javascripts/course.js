@@ -9,9 +9,9 @@ requirejs(
 	function (Util) {
 
         $(function() {
-            tinymce.init({
-                selector: '.course-desc'
-            });
+            // tinymce.init({
+            //     selector: 'textarea'
+            // });
         });
 
         Util.initDataTable($('#table_course'));
@@ -39,7 +39,8 @@ requirejs(
 
             $("input[name='id'").val($(this).data('id'));
             $("input[name='teacher'").val($(this).data('name'));
-            $("textarea[name='teacher_desc'").val($(this).data('desc'));
+            // $("textarea[name='teacher_desc'").val($(this).data('desc'));
+            tinymce.get('teacher_desc').setContent($(this).data('desc'));
 
             _form_teacher.attr('action', '/course/modify/teacher');
             _btn_teacher_save.html('수정');
