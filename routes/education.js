@@ -45,7 +45,7 @@ router.get('/', isAuthenticated, function (req, res) {
 			if(err){
 				console.error(err);
 			}else{
-
+                console.log(result[0]);
 				res.render('education', {
 					current_path: 'Education',
                     menu_group: 'education',

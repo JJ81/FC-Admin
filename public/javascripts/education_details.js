@@ -3,20 +3,9 @@
  */
 'use strict';
 requirejs([
-		'jquery',
-        'axios',
-        'moment',
-        'jquery_ui',
-        'bootstrap',
-        'bootstrap_datetimepicker',
-        'adminLTE',
-        'es6-promise',
+        'common'
 	],
-	function ($, axios, moment) {
-		// avoid to confliction between jquery tooltip and bootstrap tooltip
-		$.widget.bridge('uibutton', $.ui.button);
-        // https://github.com/stefanpenner/es6-promise 참고
-        require('es6-promise').polyfill();         
+	function (Util) {   
 
         var _btn_modify_edu = $('.btn-modify-edu'), // 교육과정 수정버튼
             _btn_add_course_edu = $('#btn-add-course-edu'), //강의추가 버튼
@@ -39,22 +28,22 @@ requirejs([
         $(function () {
 
             // jQuery UI sortable 초기화
-            $('.list-group').sortable({
-                placeholder: "sort-highlight",
-                handle: ".handle",
-                forcePlaceholderSize: true,
-                zIndex: 999999,
-                start: function(e, ui) {
-                    $(this).attr('data-previndex', ui.item.index());
-                },
-                update: function(e, ui) {
-                    var newIndex = ui.item.index();
-                    var oldIndex = $(this).attr('data-previndex');
-                    $(this).removeAttr('data-previndex');
-                    // console.log('newIndex : ' + newIndex + ' oldIndex : ' + oldIndex);                    
-                    changeCourseOrder();
-                }
-            });
+            // $('.list-group').sortable({
+            //     placeholder: "sort-highlight",
+            //     handle: ".handle",
+            //     forcePlaceholderSize: true,
+            //     zIndex: 999999,
+            //     start: function(e, ui) {
+            //         $(this).attr('data-previndex', ui.item.index());
+            //     },
+            //     update: function(e, ui) {
+            //         var newIndex = ui.item.index();
+            //         var oldIndex = $(this).attr('data-previndex');
+            //         $(this).removeAttr('data-previndex');
+            //         console.log('newIndex : ' + newIndex + ' oldIndex : ' + oldIndex);                    
+            //         changeCourseOrder();
+            //     }
+            // });
 
             // jQuery UI sortable 초기화
             $('#draggablePanelList').sortable({
@@ -100,6 +89,10 @@ requirejs([
                 $('#start_dt').data("DateTimePicker").maxDate(e.date);
             });
 
+            tinymce.init({
+                selector: '.course-desc'
+            });
+
         });
 
         // 교육과정 수정
@@ -108,8 +101,9 @@ requirejs([
             var button = $(this);
             var modal = $('#frm_modify_edu');
             var edu_name = $('.course-name');
-            var edu_desc = $('.course-desc');                        
-            var course_group_list = makeCourseGroupList();
+            var edu_desc = tinymce.activeEditor.getContent(); //$('.course-desc');                  
+            var course_group_list = makeCourseGroupList();    
+  
 
 			if (edu_name.val() === ''){
 				alert('교육과정명을 입력하세요.');
@@ -117,7 +111,8 @@ requirejs([
 				return false;
 			}
 
-			if (edu_desc.val() === ''){
+            console.log(edu_desc);
+			if (edu_desc === ''){
 				alert('교육과정 소개를 입력해주세요.');
 				edu_desc.focus();
 				return false;
@@ -129,8 +124,8 @@ requirejs([
             }
 
             if (!confirm("수정하시겠습니까?"))
-                return false;
-
+                return false;       
+            
             // 저장한다.
 			axios({
 				method : 'put',
@@ -138,7 +133,8 @@ requirejs([
 				data : {
                     id: $('#edu_id').val(),
 					name : edu_name.val().trim(),
-					desc : edu_desc.val().trim(),
+					desc : edu_desc,
+                    // desc : edu_desc.val().trim(),
 					course_group_list : course_group_list.data,
                     start_dt: $('#start_dt').find("input").val() + ' ' + '00:00:00',
                     end_dt: $('#end_dt').find("input").val() + ' ' + '23:59:59'

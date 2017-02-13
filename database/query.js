@@ -416,6 +416,7 @@ QUERY.EDU = {
 	GetList : 
         "SELECT e.`id` AS education_id " +
         "     , e.`name` " +   
+        "     , e.`desc` " +   
         "     , e.`created_dt` " +   
         "     , e.`start_dt` " +   
         "     , e.`end_dt` " +   

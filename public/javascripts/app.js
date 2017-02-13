@@ -7,13 +7,14 @@ requirejs.config({
 		"jquery" : ['/vendor/plugins/jQuery/jquery-2.2.3.min'],
 		"jquery_ui" : '/vendor/plugins/jQueryUI/jquery-ui.min',
 		"bootstrap" : ['/vendor/bootstrap/js/bootstrap.min'],
-        
+        // <!-- datatable
         "jszip": '/vendor/plugins/jszip/dist/jszip',
         "datatables.net": '/vendor/plugins/datatables.net/js/jquery.dataTables',
         "datatables.net-bs": '/vendor/plugins/datatables.net-bs/js/dataTables.bootstrap',
         "datatables.net-buttons": '/vendor/plugins/datatables.net-buttons/js/dataTables.buttons',
         "datatables.net-responsive": '/vendor/plugins/datatables.net-responsive/js/dataTables.responsive',
-        
+        // -->
+
 		"moment" : '/vendor/plugins/moment/moment.2.11.2.min',
         "moment_ko" : '/vendor/plugins/moment/locale/kr',
 		"daterangepicker" : '/vendor/plugins/daterangepicker/daterangepicker',
@@ -33,7 +34,7 @@ requirejs.config({
         "bootstrap_datetimepicker": ['/vendor/plugins/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min'],
         "es6-promise": '/vendor/plugins/es6-promise/dist/es6-promise',
         "Vimeo": '/vendor/plugins/vimeo-player-js/dist/player',
-
+        "tinymce": '/vendor/plugins/tinymce/tinymce.min',
 	},
 	shim : {
 

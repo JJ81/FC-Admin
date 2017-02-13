@@ -15,6 +15,7 @@ var assignment_history = require('./routes/assignment_history');
 var course = require('./routes/course');
 var achievement = require('./routes/achievement');
 var administrator = require('./routes/administrator');
+var documentation = require('./routes/documentation');
 const api = require('./routes/api');
 
 /*routes*/
@@ -66,6 +67,7 @@ app.use('/assignment_history', assignment_history);
 app.use('/course', course);
 app.use('/achievement', achievement);
 app.use('/administrator', administrator);
+app.use('/documentation', documentation);
 app.use('/api/v1', api);
 
 // catch 404 and forward to error handler

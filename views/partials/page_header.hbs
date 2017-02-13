@@ -25,6 +25,8 @@
             교육 진척도
         {{else if (isEquals current_path 'Administrator') }}
             관리자
+        {{else if (isEquals current_path 'Documentation') }}
+            도움말            
         {{/if}}
     </h1>
     <ol class="breadcrumb">
@@ -54,6 +56,8 @@
                 교육 진척도
             {{else if (isEquals current_path 'Administrator') }}
                 관리자
+            {{else if (isEquals current_path 'Documentation') }}
+                도움말                
             {{/if}}
         </li>
     </ol>

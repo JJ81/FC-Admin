@@ -1,6 +1,7 @@
 <div class="row home_section">
     <div class="col-xs-12">
-        <div class="box">
+        
+        <div class="box box-primary">
             <div class="box-header with-border">
                 <a href="/education" class="btn btn-default">
                     <i class="fa fa-list"></i> &nbsp;
@@ -21,8 +22,15 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+                <div class="course-info">
+                    <h2 class="course-title">{{edu.name}}</h2>
+                    <div class="course-desc-preview">
+                        <h4>교육과정 설명</h4>
+                        <span>{{{edu.desc}}}</span> <!-- 강의 설명 부분에 개행 처리가 들어가지 않았다. -->
+                    </div>
+                </div>
 
-                <div class="list-group">
+                <!--<div class="list-group">
                     {{#each edu_course_list}}                    
                     <div class="list-group-item list-group-item-action"
                         data-course-group-id="{{course_group_id}}"
@@ -41,10 +49,36 @@
                         <strong>강사명 : {{teacher_name}}</strong>
                     </div>
                     {{/each}}
+                </div>-->
+
             </div>
+            
             <!-- /.box-body -->
         </div>
         <!-- /.box -->
+        <div class="list-group">
+            {{#each edu_course_list}}
+            <div class="box list-group-item"
+                data-course-group-id="{{course_group_id}}"
+                data-course-group-key="{{course_group_key}}" 
+            >
+                <div class="box-header with-border handle ui-sortable-handle">
+                    <h3 class="box-title">{{course_name}}</h3>
+                    <div class="box-tools pull-right">                        
+                        <a href="/course/details?id={{course_id}}" class="btn btn-default btn-sm">자세히</a>                        
+                    </div>                    
+                </div>
+                <div class="box-body">
+                    <strong>강사명 : {{teacher_name}}</strong><br>
+                    <span>
+                        {{{course_desc}}}
+                    </span>
+                </div>
+                <div class="box-footer"></div>
+            </div>
+            {{/each}}
+        </div>
+
     </div>
     <!-- /.col -->
     

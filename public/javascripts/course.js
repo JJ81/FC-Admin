@@ -8,6 +8,12 @@ requirejs(
 	],
 	function (Util) {
 
+        $(function() {
+            tinymce.init({
+                selector: '.course-desc'
+            });
+        });
+
         Util.initDataTable($('#table_course'));
 
         var _teachers = $('.teacher-list > a'),

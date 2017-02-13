@@ -28,7 +28,8 @@
     "morgan": "~1.6.1",
     "path": "^0.12.7",
     "randomstring": "^1.1.5",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "tinymce": "^4.5.3"
   },
   "devDependencies": {
     "bcrypt": "^0.8.7",
