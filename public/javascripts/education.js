@@ -9,7 +9,7 @@ requirejs(
         'common',
 	],
 	function (Util) {
-        
+
 		var _btn_add_course = $('.btn-add-course-edu'),
 		    _select_course_list = $('#select-course-list'),
 		    _course_group_id = $('.course_group_id'),
@@ -168,7 +168,7 @@ requirejs(
 
             var modal = $('#frm_register_edu'),
                 edu_name = $('.course-name'),
-                edu_desc = $('.course-desc'),                        
+                edu_desc = tinymce.activeEditor.getContent(), //$('.course-desc');                 
                 course_group_list = makeCourseGroupList();
 
 			if (edu_name.val() === ''){
@@ -177,7 +177,7 @@ requirejs(
 				return false;
 			}
 
-			if (edu_desc.val() === ''){
+			if (edu_desc === ''){
 				alert('교육과정 소개를 입력해주세요.');
 				edu_desc.focus();
 				return false;
@@ -197,7 +197,7 @@ requirejs(
 				url: '/education/create/edu',
 				data : {
 					name : edu_name.val().trim(),
-					desc : edu_desc.val().trim(),
+					desc : edu_desc, //edu_desc.val().trim(),
 					course_group_list : course_group_list.data,
                     start_dt: $('#start_dt').find("input").val() + ' ' + '00:00:00',
                     end_dt: $('#end_dt').find("input").val() + ' ' + '23:59:59'

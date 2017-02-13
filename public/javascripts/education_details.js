@@ -111,7 +111,7 @@ requirejs([
 				return false;
 			}
 
-            console.log(edu_desc);
+            // console.log(edu_desc);
 			if (edu_desc === ''){
 				alert('교육과정 소개를 입력해주세요.');
 				edu_desc.focus();
