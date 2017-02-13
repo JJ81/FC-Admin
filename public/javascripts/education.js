@@ -214,12 +214,12 @@ requirejs(
 			});
         });
 
-        // ('#submit1').on('click', function(e) {
-        //     e.preventDefault();
-        //     document.charset = "euc-kr";
-        //     $('#form1').submit();
-        //     document.charset = "utf-8";
-        // });
+        ('#submit1').on('click', function(e) {
+            e.preventDefault();
+            document.charset = "euc-kr";
+            $('#form1').submit();
+            document.charset = "utf-8";
+        });
         
         _btn_send_sms.bind('click', function() {
             // $.ajaxSetup({ contentType: "application/json; charset=euc-kr", });

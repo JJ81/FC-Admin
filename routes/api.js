@@ -69,7 +69,9 @@ router.get('/sms/callback', function (req, res) {
 router.get('/test', function(req, res) {
 
     MessageService.send('교육과정이 배정되었습니다.', function (err, data) {
-        // console.log(err);
+        return res.json({
+            success: true
+        });
     });
 });
 
