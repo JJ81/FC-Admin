@@ -57,4 +57,11 @@ router.get('/quizlist', isAuthenticated, function (req, res) {
 
 });
 
+// url : /api/v1/sms/callback
+router.get('/sms/callback', function (req, res) {
+    console.log("------------------");
+    console.log(req);
+    console.log("------------------");
+});
+
 module.exports = router;

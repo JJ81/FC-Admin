@@ -16,7 +16,8 @@ requirejs(
 		    _course_container = $('#draggablePanelList'),
             _btn_create_edu = $('.btn-register-course-submit'),
             _courseName = $('.course-name'),
-		    _courseDesc = $('.course-desc');
+		    _courseDesc = $('.course-desc'),
+            _btn_send_sms = $('.btn-send-sms'); // SMS 전송 테스트
 
         $(function () {
 
@@ -211,6 +212,43 @@ requirejs(
 
 				window.location.reload();
 			});
+        });
+
+        _btn_send_sms.bind('click', function() {
+            // $.ajaxSetup({ contentType: "application/json; charset=euc-kr", });
+            $.ajax({
+                type: "POST",
+                url: "http://biz.xonda.net/biz/biz_newV2/SMSASP_WEBV4_s.asp",
+                data: {
+                    biz_id: "molla4455",
+                    smskey: "9407AC67-074A-4F0F-9104-53A4AA053F9B",
+                    send_number: "01020091407",
+                    receive_number: "01020091407",
+                    return_url: "http://admin-clipplr.orangenamu.net/api/v1/sms/callback",
+                    sms_contents: "교육과정이 배정되었습니다."                    
+                },                
+                // headers: { 
+                //     Accept : "application/x-www-form-urlencoded; charset=euc-kr",
+                //     "Content-Type": "application/x-www-form-urlencoded; charset=EUC-KR"
+                // },   
+                // beforeSend: function(xhr){
+                //     xhr.setRequestHeader('Access-Control-Allow-origin', 'true');
+                // },              
+                beforeSend: function(xhr){
+                    // xhr.setRequestHeader('Access-Control-Allow-origin', 'true');
+                    xhr.setRequestHeader('Content-Type', 'euc-kr');
+                },
+                // contentType: "application/x-www-form-urlencoded; charset=EUC-KR",
+                // beforeSend: function(jqXHR) {
+                //     jqXHR.overrideMimeType('application/x-www-form-urlencoded; charset=euc-kr');
+                // },
+                success: function(data) {
+                    alert(data);
+                },
+                error: function (xhr, status) {
+                    console.log(xhr.responseText);
+                }
+            });
         });
 
 	}); // end of func
