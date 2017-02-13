@@ -255,7 +255,7 @@ router.put('/modify/edu', isAuthenticated, function (req, res) {
                 // 교육과정을 수정한다.
 				function (callback) {
 					connection.query(QUERY.EDU.UpdateEdu, [
-						_inputs.name, 
+						_inputs.namrse, 
                         _inputs.desc,  
                         _inputs.start_dt, 
                         _inputs.end_dt,
