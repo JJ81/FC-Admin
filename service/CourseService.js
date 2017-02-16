@@ -1,9 +1,37 @@
-/**
- * Created by yijaejun on 03/01/2017.
- */
 var QUERY = require('../database/query');
 var async = require('async');
+const pool = require('../commons/db_conn_pool');
 var CourseService = {};
+
+/**
+ * 강의를 비활성화 한다.
+ * _id: course 테이블의 id
+ */
+CourseService.deactivateById = function (_id, _callback) {
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+    connection.query(QUERY.COURSE.DisableCourseById, [_id], function (err, data) {
+      connection.release();
+      if (err) throw err;
+      _callback(err, null);
+    });
+  });
+};
+
+/**
+ * 강사를 비활성화 한다.
+ * _id: teacher 테이블의 id
+ */
+CourseService.deactivateTeacherById = function (_id, _callback) {
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+    connection.query(QUERY.COURSE.DisableTeacherById, [_id], function (err, data) {
+      connection.release();
+      if (err) throw err;
+      _callback(err, null);
+    });
+  });
+};
 
 /**
  * 퀴즈 보기를 입력/수정을 수행하는 내부함수

@@ -2,121 +2,162 @@
  * Created by yijaejun on 30/11/2016.
  */
 'use strict';
-requirejs(
-	[
-        'common',
-	],
-	function (Util) {
+require(
+  [
+    'common'
+  ],
+function (Util) {
+  $(function () {
+    $('#createEmployee #select_branch').select2();
+    $('#modifyEmployee #select_branch').select2();
+  });
 
-        $(function () {
-            $('#createEmployee #select_branch').select2();
-            $('#modifyEmployee #select_branch').select2();
-        });
+  // datatable 설정
+  var tableBranch = Util.initDataTable($('#table-branch'), {
+    buttons: []
+  });
+  var tableEmployee = Util.initDataTable($('#table-employee'), {
+    buttons:
+    [
+      {
+        text: '<i class="fa fa-copy"></i> 복사',
+        extend: 'copy',
+        className: 'btn-sm btn-default',
+        exportOptions: {
+          columns: [ 0, 1, 2, 3, 4 ]
+        }
+      },
+      {
+        text: '<i class="fa fa-download"></i> 엑셀',
+        extend: 'excel',
+        className: 'btn-sm btn-default',
+        exportOptions: {
+          columns: [ 0, 1, 2, 3, 4 ]
+        }
+      }
+    ]
+  });
+  // var branchList = $('.branch-list > a');
+  var btnBranchClearInputs = $('.branch-right-buttons > #clear-input');
+  var btnBranchSave = $('.branch-right-buttons > .btn-submit');
+  var formBranch = $('#frm_create_branch');
+  var btnDeleteBranch = $('#btnDisableBranch');
+  var dutyList = $('.duty-list > a');
+  var btnDutyClearInputs = $('.duty-right-buttons > #clear-input');
+  var btnDutySave = $('.duty-right-buttons > .btn-submit');
+  var formDuty = $('#frm_create_duty');
+  var btnDeleteDuty = $('#btnDisableDuty');
 
-		// datatable 설정
-        var table_branch = Util.initDataTable($('#table-branch'), {
-                buttons: []
-            }),
-		    table_employee = Util.initDataTable($('#table_employee'), 
-            {
-             buttons: 
-                [
-                    {
-                        text: '<i class="fa fa-copy"></i> 복사',
-                        extend: "copy",
-                        className: "btn-sm btn-default",
-                        exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4 ]
-                        }
-                    },                            
-                    {
-                        text: '<i class="fa fa-download"></i> 엑셀',
-                        extend: "excel",
-                        className: "btn-sm btn-default",
-                        exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4 ]
-                        }
-                    }                    
-                ]
-            });
+  // 직원정보 수정 페이지
+  $('.btn-modify-userinfo').bind('click', function () {
+    var _self = $(this);
+    var _name = _self.attr('data-user-name');
+    var _branch = _self.attr('data-user-branch');
+    var _duty = _self.attr('data-user-duty');
+    var _phone = _self.attr('data-user-phone');
+    var _email = _self.attr('data-user-email');
+    var _userid = _self.attr('data-user-id');
+    var _target = $('#frm_modify_employee');
 
-        var _branches = $('.branch-list > a'),            
-            _btn_branch_clear_inputs = $('.branch-right-buttons > #clear-input'),
-            _btn_branch_save = $('.branch-right-buttons > .btn-submit'),
-            _form_branch = $('#frm_create_branch'),
-            _duties = $('.duty-list > a'),
-            _btn_duty_clear_inputs = $('.duty-right-buttons > #clear-input'),
-            _btn_duty_save = $('.duty-right-buttons > .btn-submit'),            
-            _form_duty = $('#frm_create_duty');
+    _target.find('#name').val(_name);
+    _target.find('#tel').val(_phone);
+    _target.find('#email').val(_email);
+    _target.find('.employee_id').val(_userid);
+    _target.find('#select_branch').val(_branch).trigger('change'); // select2 의 선택방식은 다르다.
+    _target.find('#select_duty').val(_duty);
+  });
 
+  // 지점 ..등록모드에서 수정모드로 변경
+  // 2nd 페이지에서 이벤트 안먹히는 증상 (http://stackoverflow.com/questions/25414778/jquery-onclick-not-working-in-datatables-2nd-page-or-rows-past-11)
+  $('#table-branch').on('click', '.branch-list-item', function (e) {
+    e.preventDefault();
+    $(".branch-input > input[name='id']").val($(this).data('id'));
+    $(".branch-input > input[name='name']").val($(this).data('name'));
+    formBranch.attr('action', '/employee/modify/branch');
+    btnBranchSave.html('수정');
+    btnDeleteBranch.prop('disabled', false);
+  });
 
-		// 직원정보 수정 페이지
-		$('.btn-modify-userinfo').bind('click', function () {
-			var _self = $(this),
-                _name = _self.attr('data-user-name'),
-                _branch = _self.attr('data-user-branch'),
-                _duty = _self.attr('data-user-duty'),
-                _phone = _self.attr('data-user-phone'),
-                _email = _self.attr('data-user-email'),
-                _user_id = _self.attr('data-user-id'),
-                _target = $('#frm_modify_employee');
+  // 지점 .. 수정모드에서 등록모드로 변경
+  btnBranchClearInputs.bind('click', function () {
+    $(".branch-input > input[name='id']").val('');
+    $(".branch-input > input[name='name']").val('');
+    formBranch.attr('action', '/employee/create/branch');
+    btnBranchSave.html('등록');
+    btnDeleteBranch.prop('disabled', true);
+  });
 
-			_target.find('#name').val(_name);
-			_target.find('#tel').val(_phone);
-			_target.find('#email').val(_email);
-			_target.find('.employee_id').val(_user_id);
-			// _target.find('#select_branch').val(_branch);
-            _target.find('#select_branch').val(_branch).trigger("change"); // select2 의 선택방식은 다르다.
-			_target.find('#select_duty').val(_duty);
-		});
+  // 직책 ..등록모드에서 수정모드로 변경
+  dutyList.bind('click', function (e) {
+    e.preventDefault();
+    $(".duty-input > input[name='id'").val($(this).data('id'));
+    $(".duty-input > input[name='name']").val($(this).data('name'));
+    formDuty.attr('action', '/employee/modify/duty');
+    btnDutySave.html('수정');
+    btnDeleteDuty.prop('disabled', false);
+  });
 
-        // 지점 ..등록모드에서 수정모드로 변경
-        // 2nd 페이지에서 이벤트 안먹히는 증상 (http://stackoverflow.com/questions/25414778/jquery-onclick-not-working-in-datatables-2nd-page-or-rows-past-11)
-        $('#table-branch').on('click', '.branch-list-item', function(e) {
-        // _branches.bind('click', function(e) {
-            e.preventDefault();
+  // 직책 .. 수정모드에서 등록모드로 변경
+  btnDutyClearInputs.bind('click', function () {
+    $(".duty-input > input[name='id']").val('');
+    $(".duty-input > input[name='name']").val('');
 
-            $(".branch-input > input[name='id']").val($(this).data('id'));
-            $(".branch-input > input[name='name']").val($(this).data('name'));
+    formDuty.attr('action', '/employee/create/duty');
+    btnDutySave.html('등록');
+    btnDeleteDuty.prop('disabled', true);
+  });
 
-            _form_branch.attr('action', '/employee/modify/branch');
-            _btn_branch_save.html('수정');
-            
-        });
+  // 지점 삭제하기
+  btnDeleteBranch.bind('click', function () {
+    if (!confirm("삭제 시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?")) {
+      return false;
+    }
 
-        // 지점 .. 수정모드에서 등록모드로 변경
-        _btn_branch_clear_inputs.bind('click', function () {
-            
-            $(".branch-input > input[name='id']").val('');
-            $(".branch-input > input[name='name']").val('');
+    var params = {
+      id: $(".branch-input > input[name='id'").val()
+    };
 
-            _form_branch.attr('action', '/employee/create/branch');
-            _btn_branch_save.html('등록');
+    axios.delete('/employee/branch',
+      {
+        params: params
+      })
+      .then(function (response) {
+        if (!response.data.success) {
+          alert("지점을 삭제하지 못했습니다.");
+        } else {
+          alert("지점을 삭제하였습니다.");
+        }
+        location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  });
 
-        });    
+  // 직책 삭제하기
+  btnDeleteDuty.bind('click', function () {
+    if (!confirm("삭제 시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?")) {
+      return false;
+    }
 
-        // 직책 ..등록모드에서 수정모드로 변경
-        _duties.bind('click', function(e) {
+    var params = {
+      id: $(".duty-input > input[name='id'").val()
+    };
 
-            e.preventDefault();
-
-            $(".duty-input > input[name='id'").val($(this).data('id'));
-            $(".duty-input > input[name='name']").val($(this).data('name'));
-
-            _form_duty.attr('action', '/employee/modify/duty');
-            _btn_duty_save.html('수정');
-            
-        });
-
-        // 직책 .. 수정모드에서 등록모드로 변경
-        _btn_duty_clear_inputs.bind('click', function () {
-            
-            $(".duty-input > input[name='id']").val('');
-            $(".duty-input > input[name='name']").val('');
-
-            _form_duty.attr('action', '/employee/create/duty');
-            _btn_duty_save.html('등록');
-
-        });          
-
-	}); // end of func
+    axios.delete('/employee/duty',
+      {
+        params: params
+      })
+      .then(function (response) {
+        if (!response.data.success) {
+          alert("직책을 삭제하지 못했습니다.");
+        } else {
+          alert("직책을 삭제하였습니다.");
+        }
+        location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  });  
+});

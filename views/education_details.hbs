@@ -1,6 +1,5 @@
 <div class="row home_section">
     <div class="col-xs-12">
-        
         <div class="box box-primary">
             <div class="box-header with-border">
                 <a href="/education" class="btn btn-default">
@@ -14,46 +13,29 @@
                         수정
                     </button>
 
+                    <button class="btn btn-danger" id="btnDeleteEducation" data-edu-id="{{edu.id}}">
+                        <i class="fa fa-times"></i> &nbsp;
+                        삭제
+                    </button>
+
                     <button id="point-setting" class="btn btn-default" data-toggle="modal" data-target="#pointWeight">
                         <i class="fa fa-gear"></i>
                         포인트 설정
-                    </button>                    
+                    </button>
                 </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
                 <div class="course-info">
-                    <h2 class="course-title">{{edu.name}}</h2>
-                    <div class="course-desc-preview">
-                        <!--<h4>교육과정 설명</h4>-->
-                        <br>
-                        <span>{{{edu.desc}}}</span> <!-- 강의 설명 부분에 개행 처리가 들어가지 않았다. -->
-                    </div>
+                    <h4 class="course-title">
+                      <strong>{{edu.name}}</strong>
+                    </h4>
+                    <p>
+                      {{{edu.desc}}}
+                    </p>
                 </div>
-
-                <!--<div class="list-group">
-                    {{#each edu_course_list}}                    
-                    <div class="list-group-item list-group-item-action"
-                        data-course-group-id="{{course_group_id}}"
-                        data-course-group-key="{{course_group_key}}"
-                    >  
-                        <h4 class="list-group-item-heading">                            
-                            <span class="handle ui-sortable-handle">
-                                <i class="fa fa-ellipsis-v"></i>
-                                <i class="fa fa-ellipsis-v"></i>
-                            </span> 
-                            {{course_name}}
-                        </h4>
-                        <p class="list-group-item-text">
-                          <pre>{{course_desc}}</pre>
-                        </p>
-                        <strong>강사명 : {{teacher_name}}</strong>
-                    </div>
-                    {{/each}}
-                </div>-->
-
             </div>
-            
+
             <!-- /.box-body -->
         </div>
         <!-- /.box -->

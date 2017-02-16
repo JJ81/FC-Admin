@@ -45,7 +45,7 @@
 
                 <div class="form-group">
                     <label>교육과정 소개</label>
-                    <textarea class="form-control course-desc" name="course_desc" placeholder="교육과정 소개를 입력하세요.">{{edu.desc}}</textarea>
+                    <textarea class="form-control course-desc editor" name="course_desc" placeholder="교육과정 소개를 입력하세요.">{{edu.desc}}</textarea>
                 </div>
 
                 <div class="form-group">
@@ -58,7 +58,6 @@
                     <div style="text-align: right;margin-top: 5px;">
                         <button type="button" id="btn-add-course-edu" class="btn btn-default">추가</button>
                     </div>
-                    
                 </div>
 
                 <hr />
@@ -72,7 +71,7 @@
                             <span class="handle ui-sortable-handle">
                                 <i class="fa fa-ellipsis-v"></i>
                                 <i class="fa fa-ellipsis-v"></i>
-                            </span>                             
+                            </span>
                             {{course_name}}
                             <a href="#" class="btn-delete-course">
                                 <i class="fa fa-remove text-red"></i>

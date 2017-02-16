@@ -7,6 +7,37 @@ const UserService = {};
 const QUERY = require('../database/query');
 const async = require('async');
 var bcrypt = require('bcrypt');
+const pool = require('../commons/db_conn_pool');
+
+/**
+ * 지점을 비활성화 한다.
+ * _id: branch 테이블의 id
+ */
+UserService.deactivateBranchById = function (_id, _callback) {
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+    connection.query(QUERY.EMPLOYEE.DisableBranchById, [_id], function (err, data) {
+      connection.release();
+      if (err) throw err;
+      _callback(err, null);
+    });
+  });
+};
+
+/**
+ * 직책을 비활성화 한다.
+ * _id: duty 테이블의 id
+ */
+UserService.deactivateDutyById = function (_id, _callback) {
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+    connection.query(QUERY.EMPLOYEE.DisableDutyById, [_id], function (err, data) {
+      connection.release();
+      if (err) throw err;
+      _callback(err, null);
+    });
+  });
+};
 
 /**
  * 차례대로 핸드폰 정보만 모두 추출하여 배열에 넣고 한번의 조회를 통하여 얻은 데이터를
@@ -56,7 +87,6 @@ UserService.extractUserIdFromList = function (list, cb) {
 		}
 	});
 };
-
 
 /**
  * user_id 배열을 받아서 돌면서 db에 insert를 수행
@@ -197,12 +227,12 @@ UserService.createUserByExcel = function (_connection, _data, _callback) {
                                     console.log(query.sql);
                                     if (err) console.log(err);
                                     // 다음 엑셀 데이터를 읽기 위해 카운터를 증가시킨다.
-                                    _count++;                                    
+                                    _count++;
                                     callback(err, null);
                                 }
-                            );                        
-                        }); 
-                    }); 
+                            );
+                        });
+                    });
 
                 }
             },
@@ -213,7 +243,7 @@ UserService.createUserByExcel = function (_connection, _data, _callback) {
                     return _connection.rollback(function() {
                         _callback(err, null);
                         return;
-                    });     
+                    });
                 } else {
                     _connection.commit(function(err) {
                         if (err) {
@@ -225,13 +255,11 @@ UserService.createUserByExcel = function (_connection, _data, _callback) {
                             console.log('commit success!');
                             _callback(null, null);
                         }
-                    });                    
+                    });
                 }
             }
-
-        );           
-
-    });    
+        );
+    });
 };
 
 UserService.createBranchOrSelect = function (_connection, _branch, _fc_id, _callback) {

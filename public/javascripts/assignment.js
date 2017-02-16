@@ -1,84 +1,75 @@
 /**
  * Created by yijaejun on 30/11/2016.
  */
-'use strict';
-requirejs(
-	[
-        'common',		
-	],
-	function (Util) {
+'use strict'
+require(
+  [
+    'jquery',
+    'common'
+  ],
+  function ($, Util) {
+    var tableCheckAll = $('#check-all')
+    // var tableAssignment = Util.initDataTable($('#table_assignment'))
+    var tableEmployee = Util.initDataTable($('#table_employee'), {
+      'lengthMenu': [ [5, 10, 25, 50, -1], [5, 10, 25, 50, '전체'] ],
+      'columnDefs': [
+        { orderable: false, targets: [0] }
+      ]})
+    var btnSubmit = $('.btn-submit')
+    var formUpload = $('#frm_upload_file')
 
-        var _table_check_all = $('#check-all'),
-            _table_assingment = Util.initDataTable($('#table_assignment')),
-            _table_employee = Util.initDataTable($('#table_employee'), { 
-                "lengthMenu": [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "전체"] ],
-                "columnDefs": [
-                    { orderable: false, targets: [0] }
-                ],            
-            }),
-            _btn_submit = $('.btn-submit'),
-            _form = $('#frm_upload_file'); 
-                
-        _table_check_all.bind('click', function () {
-            $(':checkbox', _table_employee.rows().nodes()).prop('checked', this.checked);
-        });
-        
-        _btn_submit.bind('click', function (e) {
+    tableCheckAll.bind('click', function () {
+      $(':checkbox', tableEmployee.rows().nodes()).prop('checked', this.checked)
+    })
 
-            e.preventDefault();
-            
-            // validation check1
-            if ($("input[name='group_name']" ).val() === '') {
-                alert("그룹명을 입력하세요.");
-                $( "input[name='group_name']" ).focus();
-                return false;
-            } 
+    btnSubmit.bind('click', function (e) {
+      e.preventDefault()
 
-            // validation check2
-            if ($("textarea[name='group_desc']" ).val() === '') {
-                alert("그룹 설명을 입력하세요.");
-                $( "textarea[name='group_desc']" ).focus();
-                return false;
-            }             
+      if ($("input[name='group_name']").val() === '') {
+        alert('그룹명을 입력하세요.')
+        $("input[name='group_name']").focus()
+        return false
+      }
 
-            var current_tab_id = $("ul.nav li.active").children().attr('id'),
-                data = null;      
+      // validation check2
+      if ($("textarea[name='group_desc']").val() === '') {
+        alert('그룹 설명을 입력하세요.')
+        $("textarea[name='group_desc']").focus()
+        return false
+      }
 
-            $("input[name='upload_type']").val(current_tab_id);
+      var currentTabId = $('ul.nav li.active').children().attr('id')
+      var data = null
 
-            switch (current_tab_id) {
-                case "employee": // 등록된 직원
-                    data = $(':checkbox:checked', _table_employee.rows({filter: 'applied'}).nodes()).map(function () {                        
-                        return $(this).data('id');
-                    }).get().join(", ");
+      $("input[name='upload_type']").val(currentTabId)
 
-                    // validation check3
-                    if (!data) {
-                        alert("직원을 선택하세요.");
-                        return false;
-                    }
+      switch (currentTabId) {
+        case 'employee': // 등록된 직원
+          data = $(':checkbox:checked', tableEmployee.rows({filter: 'applied'}).nodes()).map(function () {
+            return $(this).data('id')
+          }).get().join(', ')
 
-                    console.log(data);
-                    $("input[name='upload_employee_ids']").val(data);
-                                           
-                    break;
+          // validation check3
+          if (!data) {
+            alert('직원을 선택하세요.')
+            return false
+          }
 
-                case "excel": // 파일업로드
+          $("input[name='upload_employee_ids']").val(data)
+          break;
 
-                    // validation check3
-                    if( document.getElementById("UploadExcelFile").files.length == 0 ){
-                        $('#UploadExcelFile').focus();
-                        alert("파일을 선택하세요.");
-                        return false;
-                    }
-                    break;
+        case 'excel': // 파일업로드
+          if (document.getElementById('UploadExcelFile').files.length === 0) {
+            $('#UploadExcelFile').focus()
+            alert('일을 선택하세요.')
+            return false
+          }
+          break;
 
-                default:
-                    break;
-            }
+        default:
+          break;
+      }
 
-            _form.submit();
-
-        }); 
-        
-	}); // end of func
+      formUpload.submit()
+    })
+  })

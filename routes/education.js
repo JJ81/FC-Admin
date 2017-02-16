@@ -133,26 +133,9 @@ router.get('/details', isAuthenticated, function (req, res) {
                 edu_course_list: results[1],
                 course_list: results[2],
                 point_weight: results[3],
-            });            
+            });
         }
-    });    
-        
-	
-    // connection.query(QUERY.EDU.GetCourseListByGroupId,
-	// 	[_course_group_id],
-	// 	function (err, rows) {
-	// 		if(err){
-	// 			console.error(err);
-	// 		}else{
-    //             console.log(rows);
-	// 			res.render('education_details', {
-	// 				current_path: 'EducationDetails',
-	// 				title: PROJ_TITLE + 'Education Details',
-	// 				loggedIn: req.user,
-	// 				list: rows
-	// 			});
-	// 		}
-	// });
+    });
 });
 
 /**
@@ -241,13 +224,8 @@ router.post('/create/edu', isAuthenticated, function (req, res) {
  * 교육과정을 수정한다.
  */
 router.put('/modify/edu', isAuthenticated, function (req, res) {
-	
-    var _inputs = req.body;
 
-    // console.log (_inputs);
-    // return res.json({
-    //     success: true
-    // });
+  var _inputs = req.body;
 
 	connection.beginTransaction(function () {
 		async.series(
@@ -255,11 +233,11 @@ router.put('/modify/edu', isAuthenticated, function (req, res) {
                 // 교육과정을 수정한다.
 				function (callback) {
 					connection.query(QUERY.EDU.UpdateEdu, [
-						_inputs.namrse, 
-                        _inputs.desc,  
-                        _inputs.start_dt, 
-                        _inputs.end_dt,
-                        _inputs.id
+            _inputs.name,
+            _inputs.desc,
+            _inputs.start_dt,
+            _inputs.end_dt,
+            _inputs.id
 					], function (err, result) {
                         callback(err, result);
 					});
@@ -325,19 +303,16 @@ router.put('/coursegroup', isAuthenticated, function (req, res) {
  * 강의를 그룹에서 삭제한다.
  */
 router.delete('/course', isAuthenticated, function (req, res) {
-
-    var _params = req.query;
-    var _query = null;
-
-    _query = connection.query(QUERY.EDU.DeleteCourseGroupById, [_params.course_group_id], function (err, data) {
-        console.log(_query.sql);
-        if (err) 
-            res.json({ success: false, msg: err }); 
-        else 
-            res.json({ success: true });
-    });
-    
-
+  var _params = req.query;
+  var _query = null;
+  _query = connection.query(QUERY.EDU.DeleteCourseGroupById, [_params.course_group_id], function (err, data) {
+      console.log(_query.sql);
+      if (err) {
+        res.json({ success: false, msg: err });
+      } else {
+        res.json({ success: true });
+      }
+  });
 });
 
 
@@ -376,6 +351,22 @@ router.post('/pointweight', isAuthenticated, function (req, res) {
 			}
 	});
 
+});
+
+/** 교육과정 비활성화 */
+router.delete('/deactivate', isAuthenticated, function (req, res, next) {
+  EducationService.deactivateById(req.query.edu_id, function (err, data) {
+    if (err) {
+      return res.json({
+        success: false,
+        msg: err
+      });
+    }
+
+    return res.json({
+      success: true
+    });
+  });
 });
 
 module.exports = router;

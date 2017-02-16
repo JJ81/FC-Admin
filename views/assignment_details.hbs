@@ -12,7 +12,7 @@
                         <i class="fa fa-calendar-minus-o"></i> &nbsp;
                         교육과정 배정
                     </button>
-                    
+
                     {{#each detail}}
                     <button id="delete-assignment" type="button" class="btn btn-danger"
                         data-id="{{id}}"
@@ -23,20 +23,21 @@
                     </button>
                     {{/each}}
                 </div>
-                
+
                 <!--교육 대상자 리스트를 보여준다.<br />-->
                 <!--교육 배정을 할 수 있다. <br />-->
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive margin">
 
-                <h3 class="box-title">
-                   {{#each detail}}
-                       {{title}}
-                       <input type="hidden" class="description group_id" value="{{group_id}}" />
-                       <input type="hidden" class="description bind_group_id" value="{{id}}" />
-                   {{/each}}
-                </h3>
+                <h4 class="box-title">
+                {{#each detail}}
+                  <strong>{{title}}</strong><br><br>
+                </h4>
+                <p>{{desc}}</p>
+                <input type="hidden" class="description group_id" value="{{group_id}}" />
+                <input type="hidden" class="description bind_group_id" value="{{id}}" />
+                {{/each}}
 
                 <hr />
 

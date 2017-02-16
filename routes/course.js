@@ -4,58 +4,65 @@ var mysql_dbc = require('../commons/db_conn')();
 var connection = mysql_dbc.init();
 var QUERY = require('../database/query');
 var isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated())
+  if (req.isAuthenticated()) {
     return next();
+  }
   res.redirect('/login');
 };
 require('../commons/helpers');
 var async = require('async');
-var UTIL = require('../util/util');
+// var UTIL = require('../util/util');
 var CourseService = require('../service/CourseService');
+const pool = require('../commons/db_conn_pool');
 
 /**
  * 강의/강사등록 첫 페이지
  */
 router.get('/', isAuthenticated, function (req, res) {
 
-  async.series(
-    [
-      function (callback) {
-        connection.query(QUERY.COURSE.GetCourseList,
-          [req.user.fc_id], function (err, rows) {
-            if(err){
-              console.error(err);
-              callback(err, null);
-            }else{
-              callback(null, rows);
-            }
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+    async.series(
+      [
+        function (callback) {
+          connection.query(QUERY.COURSE.GetCourseList,
+            [req.user.fc_id], function (err, rows) {
+              console.log(rows);
+              if (err) {
+                console.error(err);
+                callback(err, null);
+              } else {
+                callback(null, rows);
+              }
+            });
+        },
+        function (callback) {
+          connection.query(QUERY.COURSE.GetTeacherList,
+            [req.user.fc_id],
+            function (err, rows) {
+              if (err) {
+                console.error(err);
+                callback(err, null);
+              } else {
+                callback(null, rows);
+              }
+            });
+        }
+      ],
+      function (err, result) {
+        connection.release();
+        if (err) {
+          console.error(err);
+        } else {
+          res.render('course', {
+            current_path: 'Course',
+            title: PROJ_TITLE + 'Course',
+            loggedIn: req.user,
+            list: result[0],
+            teacher_list: result[1]
           });
-      },
-      function (callback){
-        connection.query(QUERY.COURSE.GetTeacherList,
-          [req.user.fc_id],
-          function (err, rows) {
-            if(err){
-              console.error(err);
-              callback(err, null);
-            }else{
-              callback(null, rows);
-            }
-          });
-      }
-    ],
-    function (err, result){
-      if(err){
-        console.error(err);
-      }else{
-        res.render('course', {
-          current_path: 'Course',
-          title: PROJ_TITLE + 'Course',
-          loggedIn: req.user,
-          list : result[0],
-          teacher_list : result[1]
-        });
-      }
+        }
+    });
   });
 });
 
@@ -63,129 +70,134 @@ router.get('/', isAuthenticated, function (req, res) {
  * 강의/강사등록 상세페이지
  */
 router.get('/details', isAuthenticated, function (req, res) {
-
   var _id = req.query.id;
   var _teacher_id = null;
 
-  async.series([
-    // 강의정보를 조회한다.
-    // result[0]
-    function(callback){
-        connection.query(QUERY.COURSE.GetCourseListById,
-            [req.user.fc_id, _id], 
-            function (err, rows) {
-                if(err){
-                    callback(err, null);
-                    // todo 쿼리에 문제가 일어난 것이므로 500 페이지로 이동시킨다.
-                }else{
-                    callback(null, rows);
-                }
-            });
-    },
-    // 강의평가 정보를 조회한다.
-    // result[1]
-    function (callback) {
-        connection.query(QUERY.COURSE.GetStarRatingByCourseId,
-            [_id],
-            function (err, rows) {
-                if (err) {
-                    console.error(err);
-                    callback(err, null);
-                } else {
-                    if (rows.length === 0 || rows === null) {
-                        callback(null, [{course_id : _id ,rate : 0}]);
-                    } else {
-                        callback(null, rows);
-                    }
-                }
-        });
-    },
-    // 강의 세션목록을 조회한다.
-    // result[2]
-    function (callback) {
-        connection.query(QUERY.COURSE.GetSessionListByCourseId,
-            [_id],
-            function (err, rows) {
-            if(err){
-                console.error(err);
-                callback(err, null);
-            }else{
-                callback(null, rows);
-            }
-        });
-    },
-    // 강사 정보를 조회한다.
-    // result[3]
-    function (callback) {
-        connection.query(QUERY.COURSE.GetTeacherInfoByCourseId,
-            [_id],
-            function (err, rows) {                
-                if(err){
-                    console.error(err);
-                    callback(err, null);
-                }else{
-                    _teacher_id = rows[0].teacher_id;
-                    callback(null, rows);
-                }
-            }
-        );
-    },
-    // 강사 목록을 조회한다.
-    // result[4]
-    function (callback){
-        connection.query(QUERY.COURSE.GetTeacherList,
-            [req.user.fc_id],
-            function (err, rows) {
-                if(err){
-                    console.error(err);
-                    callback(err, null);
-                }else{
-                    callback(null, rows);
-                }
-            }
-        );
-    },
-    // 강사평가 정보를 조회한다.
-    // result[5]
-    function (callback) {
-        connection.query(QUERY.COURSE.GetStarRatingByTeacherId,
-            [ _teacher_id ],
-            function (err, rows) {
-                // callback(err, rows);
-                if (err) {
-                    console.error(err);
-                    callback(err, null);
-                } else {
-                    if (rows.length === 0 || rows === null) {
-                        callback(null, [{ teacher_rate : 0 }]);
-                    } else {
-                        callback(null, rows);
-                    }
-                }
-            }
-        );
-    }],    
-    // out
-    function (err, result) {
-      if(err){
-        console.error(err);
-      }else{
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+    async.series([
+      // 강의정보를 조회한다.
+      // result[0]
+      function(callback){
+          connection.query(QUERY.COURSE.GetCourseListById,
+              [req.user.fc_id, _id], 
+              function (err, rows) {
+                  if(err){
+                      callback(err, null);
+                      // todo 쿼리에 문제가 일어난 것이므로 500 페이지로 이동시킨다.
+                  }else{
+                      callback(null, rows);
+                  }
+              });
+      },
+      // 강의평가 정보를 조회한다.
+      // result[1]
+      function (callback) {
+          connection.query(QUERY.COURSE.GetStarRatingByCourseId,
+              [_id],
+              function (err, rows) {
+                  if (err) {
+                      console.error(err);
+                      callback(err, null);
+                  } else {
+                      if (rows.length === 0 || rows === null) {
+                          callback(null, [{course_id : _id ,rate : 0}]);
+                      } else {
+                          callback(null, rows);
+                      }
+                  }
+          });
+      },
+      // 강의 세션목록을 조회한다.
+      // result[2]
+      function (callback) {
+          connection.query(QUERY.COURSE.GetSessionListByCourseId,
+              [_id],
+              function (err, rows) {
+              if(err){
+                  console.error(err);
+                  callback(err, null);
+              }else{
+                  callback(null, rows);
+              }
+          });
+      },
+      // 강사 정보를 조회한다.
+      // result[3]
+      function (callback) {
+          connection.query(QUERY.COURSE.GetTeacherInfoByCourseId,
+              [_id],
+              function (err, rows) {
+                  if(err){
+                      console.error(err);
+                      callback(err, null);
+                  }else{
+                      _teacher_id = rows[0].teacher_id;
+                      callback(null, rows);
+                  }
+              }
+          );
+      },
+      // 강사 목록을 조회한다.
+      // result[4]
+      function (callback){
+          connection.query(QUERY.COURSE.GetTeacherList,
+              [req.user.fc_id],
+              function (err, rows) {
+                  if(err){
+                      console.error(err);
+                      callback(err, null);
+                  }else{
+                      callback(null, rows);
+                  }
+              }
+          );
+      },
+      // 강사평가 정보를 조회한다.
+      // result[5]
+      function (callback) {
+          connection.query(QUERY.COURSE.GetStarRatingByTeacherId,
+              [ _teacher_id ],
+              function (err, rows) {
+                  // callback(err, rows);
+                  if (err) {
+                      console.error(err);
+                      callback(err, null);
+                  } else {
+                      if (rows.length === 0 || rows === null) {
+                          callback(null, [{ teacher_rate : 0 }]);
+                      } else {
+                          callback(null, rows);
+                      }
+                  }
+              }
+          );
+      }],
+      // out
+      function (err, result) {
+        connection.release();
 
-        console.log(result);
+        if (err) {
+          console.error(err);
+        } else {
 
-        res.render('course_details', {
-            current_path: 'CourseDetails',
-            title: PROJ_TITLE + 'Course Details',
-            loggedIn: req.user,
-            list : result[0],
-            rating: result[1],
-            session_list: result[2],
-            teacher_info : result[3],
-            teacher_list : result[4],
-            teacher_rating : result[5],
-            course_id : _id
-        });
-      }
+          console.log(result);
+
+          res.render('course_details', {
+              current_path: 'CourseDetails',
+              title: PROJ_TITLE + 'Course Details',
+              loggedIn: req.user,
+              list : result[0],
+              rating: result[1],
+              session_list: result[2],
+              teacher_info : result[3],
+              teacher_list : result[4],
+              teacher_rating : result[5],
+              course_id : _id
+          });
+        }
+    });
+
   });
 });
 
@@ -265,6 +277,23 @@ router.post('/modify', isAuthenticated, function (req, res) {
   });
 });
 
+/** 강의 비활성화 */
+router.delete('/deactivate', isAuthenticated, function (req, res, next) {
+  CourseService.deactivateById(req.query.course_id, function (err, data) {
+    if (err) {
+      return res.json({
+        success: false,
+        msg: err
+      });
+    }
+
+    return res.json({
+      success: true
+    });
+  });
+});
+////////////////////////////////////////////////////////////////////////////////////////// 강의
+
 /**
  * 강의/강사등록 상세페이지 > 강사등록
  */
@@ -280,6 +309,22 @@ router.post('/create/teacher', isAuthenticated, function (req, res){
       }else{
         res.redirect('/course');
       }
+  });
+});
+
+/** 교육과정 비활성화 */
+router.delete('/teacher', isAuthenticated, function (req, res, next) {
+  CourseService.deactivateTeacherById(req.query.id, function (err, data) {
+    if (err) {
+      return res.json({
+        success: false,
+        msg: err
+      });
+    }
+
+    return res.json({
+      success: true
+    });
   });
 });
 
@@ -348,7 +393,7 @@ router.get('/create/video', isAuthenticated, function (req, res) {
 /**
  * 비디오 등록하기
  */
-router.post('/create/video', isAuthenticated, function(req, res){
+router.post('/create/video', isAuthenticated, function (req, res) {
 
 	/**
 	 * video table에 name, type, url, admin을 먼저 입력하고
@@ -660,7 +705,6 @@ router.post('/quiz/courselist', isAuthenticated, function (req, res) {
 
 /**
  * 강의/강사등록 상세페이지 > 퀴즈 생성 팝업 > 퀴즈 그룹 등록
- * 
  * 진행순서
  * 1. 퀴즈 (quiz)를 생성.
  * 2. 퀴즈 그룹 (quiz_group)을 생생.
@@ -961,7 +1005,6 @@ router.delete('/quiz', isAuthenticated, function (req, res) {
     
 });
 
-
 /**
  * 퀴즈/파이널테스트 수정페이지를 보여준다.
  * @req.query
@@ -1008,7 +1051,6 @@ router.get('/modify/quiz', isAuthenticated, function (req, res) {
     });
 
 });
-
 
 /**
  * 퀴즈 보기를 개별삭제한다.

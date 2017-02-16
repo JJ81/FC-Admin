@@ -1,11 +1,23 @@
 /**
  * Created by yijaejun on 03/01/2017.
  */
-const mysql_dbc = require('../commons/db_conn')();
-const connection = mysql_dbc.init();
+// const mysql_dbc = require('../commons/db_conn')();
+// const connection = mysql_dbc.init();
+const pool = require('../commons/db_conn_pool');
 const QUERY = require('../database/query');
 var async = require('async');
-EducationService = {};
+var EducationService = {};
+
+EducationService.deactivateById = function (_id, _callback) {
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+    connection.query(QUERY.EDU.DisableEduById, [_id], function (err, data) {
+      connection.release();
+      if (err) throw err;
+      _callback(err, null);
+    });
+  });
+};
 
 /**
  * todo

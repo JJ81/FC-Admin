@@ -2,61 +2,67 @@
  * Created by yijaejun on 30/11/2016.
  */
 'use strict';
-requirejs(
-	[
-        'common',
-	],
-	function (Util) {
+require(
+  [
+    'common'
+  ],
+function (Util) {
+  var teacherList = $('.teacher-list > a');
+  var btnTeacherClearInputs = $('.teacher-right-buttons > #clear-input');
+  var btnTeacherSave = $('.teacher-right-buttons > .btn-submit');
+  var btnTeacherDisable = $('#btnDisableTeacher');
+  var formTeacher = $('#frm_create_teacher');
 
-        $(function() {
-            // tinymce.init({
-            //     selector: 'textarea'
-            // });
-        });
+  $(function () {
+    Util.initDataTable($('#table_course'));
+  });
 
-        Util.initDataTable($('#table_course'));
+    // 강사 ..등록모드에서 수정모드로 변경
+  teacherList.bind('click', function (e) {
+    e.preventDefault();
 
-        var _teachers = $('.teacher-list > a'),
-            _branches = $('.branch-list > a'),
-            _duties = $('.duty-list > a'),
+    $("input[name='id'").val($(this).data('id'));
+    $("input[name='teacher'").val($(this).data('name'));
+    $("textarea[name='teacher_desc'").val($(this).data('desc'));
 
-            _btn_teacher_clear_inputs = $('.teacher-right-buttons > #clear-input'),
-            _btn_branch_clear_inputs = $('.branch-right-buttons > #clear-input'),
-            _btn_duty_clear_inputs = $('duty-right-buttons > #clear-input'),
+    formTeacher.attr('action', '/course/modify/teacher');
+    btnTeacherSave.html('수정');
+    btnTeacherDisable.prop('disabled', false);
+  });
 
-            _btn_teacher_save = $('.teacher-right-buttons > .btn-submit'),
-            _btn_branch_save = $('.branch-right-buttons > .btn-submit'),
-            _btn_duty_save = $('.duty-right-buttons > .btn-submit'),
+  // 강사 ..수정모드에서 등록모드로 변경
+  btnTeacherClearInputs.bind('click', function () {
+    $("input[name='id'").val('');
+    $("input[name='teacher'").val('');
+    $("textarea[name='teacher_desc'").val('');
 
-            _form_teacher = $('#frm_create_teacher'),
-            _form_branch = $('#frm_create_branch'),
-            _form_duty = $('#frm_create_duty');
-        
-        // 강사 ..등록모드에서 수정모드로 변경
-        _teachers.bind('click', function(e) {
+    formTeacher.attr('action', '/course/create/teacher');
+    btnTeacherSave.html('등록');
+    btnTeacherDisable.prop('disabled', true);
+  });
 
-            e.preventDefault();
+  btnTeacherDisable.bind('click', function () {
+    if (!confirm("강사를 삭제하시겠습니까?")) {
+      return false;
+    }
 
-            $("input[name='id'").val($(this).data('id'));
-            $("input[name='teacher'").val($(this).data('name'));
-            // $("textarea[name='teacher_desc'").val($(this).data('desc'));
-            tinymce.get('teacher_desc').setContent($(this).data('desc'));
+    var params = {
+      id: $("input[name='id'").val()
+    };
 
-            _form_teacher.attr('action', '/course/modify/teacher');
-            _btn_teacher_save.html('수정');
-            
-        });
-
-        // 강사 ..수정모드에서 등록모드로 변경
-        _btn_teacher_clear_inputs.bind('click', function () {
-            
-            $("input[name='id'").val('');
-            $("input[name='teacher'").val('');
-            $("textarea[name='teacher_desc'").val('');
-
-            _form_teacher.attr('action', '/course/create/teacher');
-            _btn_teacher_save.html('등록');
-
-        });           
-
-	}); // end of func
+    axios.delete('/course/teacher', {
+      params: params
+    })
+    .then(function (res) {
+      if (!res.data.success) {
+        alert("강사를 삭제하지 못했습니다. 관리자에게 문의하세요.");
+      } else {
+        alert('강사를 삭제하였습니다.');
+      }
+      location.reload();
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  });
+});

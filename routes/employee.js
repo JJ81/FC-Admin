@@ -9,7 +9,7 @@ var isAuthenticated = function (req, res, next) {
   res.redirect('/login');
 };
 require('../commons/helpers');
-
+var UserService = require('../service/UserService');
 var UTIL = require('../util/util');
 var bcrypt = require('bcrypt');
 var async = require('async');
@@ -297,6 +297,38 @@ router.post('/password/reset', function (req, res) {
         }
     });
   }
+});
+
+/** 지점 비활성화 */
+router.delete('/branch', isAuthenticated, function (req, res, next) {
+  UserService.deactivateBranchById(req.query.id, function (err, data) {
+    if (err) {
+      return res.json({
+        success: false,
+        msg: err
+      });
+    }
+
+    return res.json({
+      success: true
+    });
+  });
+});
+
+/** 직책 비활성화 */
+router.delete('/duty', isAuthenticated, function (req, res, next) {
+  UserService.deactivateDutyById(req.query.id, function (err, data) {
+    if (err) {
+      return res.json({
+        success: false,
+        msg: err
+      });
+    }
+
+    return res.json({
+      success: true
+    });
+  });
 });
 
 module.exports = router;
