@@ -4,8 +4,7 @@ var mysql_dbc = require('../commons/db_conn')();
 var connection = mysql_dbc.init();
 var QUERY = require('../database/query');
 var isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated())
-    return next();
+  if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 };
 require('../commons/helpers');
@@ -22,7 +21,6 @@ const pool = require('../commons/db_conn_pool');
 const path = require('path');
 
 router.get('/', isAuthenticated, function (req, res) {
-
   pool.getConnection(function (err, connInPool) {
     if (err) throw err;
     async.series([
@@ -93,7 +91,7 @@ router.get('/details', isAuthenticated, function (req, res) {
           });
         },
         function (callback) {
-          connInPool.query(QUERY.EDU.GetList,[req.user.fc_id], function (err, rows) {
+          connInPool.query(QUERY.EDU.GetList, [req.user.fc_id], function (err, rows) {
             if (err) {
               console.error(err);
               callback(err, null);
@@ -120,7 +118,7 @@ router.get('/details', isAuthenticated, function (req, res) {
             edu_list: result[2]
           });
         }
-    });
+      });
   });
 });
 
@@ -130,30 +128,27 @@ const UserService = require('../service/UserService');
  * 특정 교육생그룹에 교육과정을 배정한다.
  */
 router.post('/allocation/edu', function (req, res) {
+  var requestData = {
+    edu_id: req.body.edu_list,
+    log_bind_user_id: req.body.bind_group_id,
+    user: req.user
+  };
 
-    var requestData = {
-      edu_id: req.body.edu_list,
-      log_bind_user_id: req.body.bind_group_id,
-      user: req.user
-    };
-
-    AssignmentService.allocate(connection, requestData, function (err, data) {
-        if (err) {
-            console.log(err);
-            res.json({
-                success: false,
-                msg: err
-            });
-        } else {
-            res.redirect('/assignment');            
-        }
-    });
-
+  AssignmentService.allocate(connection, requestData, function (err, data) {
+    if (err) {
+      console.log(err);
+      res.json({
+        success: false,
+        msg: err
+      });
+    } else {
+      res.redirect('/assignment');
+    }
+  });
 });
 
 // 특정 그룹에 교육을 배정한다. (Deprecated)
 router.post('/allocation/edu_x', function (req, res) {
-
   var groupId = req.body.group_id; // 교육 대상자 그룹 아이디
   var eduId = req.body.edu_list; // 교육 아이디
   var bindUserId = req.body.bind_group_id;
@@ -200,8 +195,8 @@ router.post('/allocation/edu_x', function (req, res) {
               console.error(err);
               callback(err, null);
             } else {
-                console.log('insert users trainig_users');
-                callback(null, result.insertId);
+              console.log('insert users trainig_users');
+              callback(null, result.insertId);
             }
           });
         },
@@ -219,7 +214,7 @@ router.post('/allocation/edu_x', function (req, res) {
 	              console.log('log_assign_edu');
                 callback(null, ret);
               }
-          });
+            });
         }
       ],
 
@@ -229,13 +224,12 @@ router.post('/allocation/edu_x', function (req, res) {
           connection.rollback();
           throw new Error(err);
         } else {
-          //connection.rollback();
+          // connection.rollback();
           connection.commit();
           res.redirect('/assignment');
         }
-    });
+      });
   }); // transaction
-
 });
 
 /**
@@ -245,7 +239,6 @@ router.post('/allocation/edu_x', function (req, res) {
  * 2. excel : 엑셀 업로드를 이용하여 생성
  */
 router.post('/upload', isAuthenticated, function (req, res) {
-
   var incomingForm = new formidable.IncomingForm({
     encoding: 'utf-8',
     keepExtensions: true,
@@ -267,82 +260,78 @@ router.post('/upload', isAuthenticated, function (req, res) {
     var requestData = {
       admin_id: req.user.admin_id,
       upload_type: fields.upload_type,
-      upload_employee_ids: JSON.parse("[" + fields.upload_employee_ids + "]"),
+      upload_employee_ids: JSON.parse('[' + fields.upload_employee_ids + ']'),
       group_name: fields.group_name,
-      group_desc: fields.group_desc,
+      group_desc: fields.group_desc
     };
 
-      async.series([
-          // 엑셀 데이터를 읽어들인다.
-          function (callback) {
-              switch (uploadType) {
-                  case 'excel_bak':            
-                      convertExcel(filePath, undefined, false, function (err, data) {
-                          requestData.excel = data;
-                          callback(err, data);
-                      });
-                      break;
+    async.series([
+      // 엑셀 데이터를 읽어들인다.
+      function (callback) {
+        switch (uploadType) {
+        case 'excel_bak':
+          convertExcel(filePath, undefined, false, function (err, data) {
+            requestData.excel = data;
+            callback(err, data);
+          });
+          break;
 
-                  case 'excel':
-                      var wb = new Excel.Workbook();
-                      wb.xlsx.readFile(filePath)
-                          .then(function() {
-
-                              var ws = wb.getWorksheet(1);
-                              var phone = [];
-                              ws.eachRow({ includeEmpty: false }, function(row, rowNumber) {
-                                  row.eachCell(function(cell, colNumber) {
-                                      if (rowNumber >= 2 && colNumber === 2) {
-                                          phone.push(cell.value);
-                                      }
-                                      console.log('Row ' + rowNumber + ', Cell ' + colNumber + ' = ' + cell.value);
-                                  });
-                              });   
-                              requestData.excel = phone;         
-                              callback(null, requestData);            
-                          }
-                      );
-                      break;
-                  
-                  case 'employee':
-                      callback(null, null);
-                      break;
-              
-                  default:
-                      break;
-              }
-          },
-          // 교육배정 그룹을 생성한다.
-          function (callback) {
-              AssignmentService.create(connection, requestData, function (err, result) {
-                  callback(err, result);
+        case 'excel':
+          var wb = new Excel.Workbook();
+          wb.xlsx.readFile(filePath)
+          .then(function () {
+            var ws = wb.getWorksheet(1);
+            var phone = [];
+            ws.eachRow({ includeEmpty: false }, function (row, rowNumber) {
+              row.eachCell(function (cell, colNumber) {
+                if (rowNumber >= 2 && colNumber === 2) {
+                  phone.push(cell.value);
+                }
+                console.log('Row ' + rowNumber + ', Cell ' + colNumber + ' = ' + cell.value);
               });
-          },
+            });
+            requestData.excel = phone;
+            callback(null, requestData);
+          });
+          break;
+
+        case 'employee':
+          callback(null, null);
+          break;
+
+        default:
+          break;
+        }
+      },
+          // 교육배정 그룹을 생성한다.
+      function (callback) {
+        AssignmentService.create(connection, requestData, function (err, result) {
+          callback(err, result);
+        });
+      },
           // 엑셀파일을 삭제한다.
-          function (callback) {
-              if (requestData.upload_type === 'excel') {
-                  Util.deleteFile(filePath, function (err, result) {
-                      if (err) {
-                          console.error(err);
-                          callback(err, null);
-                      } else {
-                          callback(null, result);
-                      }
-                  }); 
-              } else {
-                  callback(null, null);
-              }
-          }
-      ], function (err, results) {
-          if (err) {
+      function (callback) {
+        if (requestData.upload_type === 'excel') {
+          Util.deleteFile(filePath, function (err, result) {
+            if (err) {
               console.error(err);
-              throw new Error('err');
-          }
-          res.redirect('/assignment');
-      });
-
+              callback(err, null);
+            } else {
+              callback(null, result);
+            }
+          });
+        } else {
+          callback(null, null);
+        }
+      }
+    ], function (err, results) {
+      if (err) {
+        console.error(err);
+        throw new Error('err');
+      }
+      res.redirect('/assignment');
+    });
   });
-
 });
 
 /**
@@ -377,10 +366,10 @@ router.delete('/', isAuthenticated, function (req, res, next) {
         if (err) {
           // 쿼리 오류 발생
           return connInPool.rollback(function () {
-              return res.json({
-                  success: false,
-                  msg: err
-              });
+            return res.json({
+              success: false,
+              msg: err
+            });
           });
         } else {
           connInPool.commit(function (err) {

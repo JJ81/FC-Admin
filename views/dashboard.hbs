@@ -72,9 +72,20 @@
                             </div>
                         </div>
                         <!-- /.progress-group -->
-                        {{/each}}                            
+                        {{/each}}
                     </div>
                 </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- // 기간별 교육과정 진척도 -->
+
+        <!-- 교육과정별 달성율 및 평가 -->
+        <div class="box blind">
+            <div class="box-header with-border">
+                <h3 class="box-title">각 교육과정의 강의별 이수율 및 평가</h3>
             </div>
             <!-- 교육이수율 점포별 순위 -->
             <div class="col-lg-6">
@@ -108,16 +119,13 @@
                                     {{/top}}
                                 </ol>
                             </div>
-                        </div>                            
-                    </div>                        
+                        </div>
+                    </div>
                 </div>
-            </div>    
+            </div>
         </div>
 
         <div class="row">
-
-            
-
             <!-- 교육과정별 강의 이수율 -->
             <div class="col-lg-12">
                 <div class="box">
@@ -166,7 +174,7 @@
                         <li class="active">
                             <a href="#point-edu" data-toggle="tab">{{ dateformat loggedIn.curdate 'm'}}월 교육과정</a>
                         </li>
-                        <li class="pull-left header"> 
+                        <li class="pull-left header">
                             포인트 현황
                         </li>
                         <!--<li class="pull-left">
@@ -187,8 +195,8 @@
                                         {{#each edu_progress}}
                                             <option value="{{edu_id}}">{{edu_name}}</option>
                                         {{/each}}
-                                        </select>                              
-                                    </div>                                    
+                                        </select>
+                                    </div>
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body table-responsive">
@@ -226,7 +234,6 @@
                         <div class="tab-pane" id="point-stack" style="position: relative;">
                             <div class="box box-solid">
                                 <div class="box-header">
-   
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body table-responsive">
@@ -248,10 +255,10 @@
                                                 <td class="center">{{user_name}}</td>
                                                 <td class="right">{{comma-number point_total}}</td>
                                                 <td class="center">
-                                                    <a class="btn btn-sm btn-success" 
-                                                        data-toggle="modal" 
+                                                    <a class="btn btn-sm btn-success"
+                                                        data-toggle="modal"
                                                         data-user-id="{{user_id}}"
-                                                        data-target='#modal-point-details'>상세보기                                            
+                                                        data-target='#modal-point-details'>상세보기
                                                     </a>
                                                     <!--<button class="btn btn-sm btn-success">상세보기</button>-->
                                                     <!-- 팝업으로 띄울 것 -->
@@ -270,7 +277,7 @@
                                         <!--<li><a href="#">&raquo;</a></li>-->
                                     <!--</ul>-->
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                     </div>
                 </div>
