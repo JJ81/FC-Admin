@@ -35,7 +35,7 @@ function (Util) {
               $(this).removeAttr('data-previndex');
               console.log('newIndex : ' + newIndex + ' oldIndex : ' + oldIndex);
           }
-      });            
+      });
 
       // DateTimePicker 설정
       var start_dt = moment().format();
@@ -54,7 +54,7 @@ function (Util) {
           format: 'YYYY-MM-DD',
           useCurrent: false,
           showTodayButton: true
-      });            
+      });
 
       // 날짜가 서로 겹치지 않도록 설정한다.
       $("#start_dt").on("dp.change", function (e) {

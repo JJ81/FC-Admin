@@ -1,31 +1,28 @@
-/**
- * Created by yijaejun on 30/11/2016.
- * TODO
- * locale 적용이 안되는 문제. (관련항목 : moment_ko) 
- */
-'use strict'
-requirejs(['common'],
 
+'use strict';
+requirejs([
+  'common'
+],
 function (Util) {
-  var btnAddCourse = $('.btn-add-course-edu')
-  var selectCourseList = $('#select-course-list')
-  var courseContainer = $('#draggablePanelList')
-  var btnCreateEdu = $('.btn-register-course-submit')
+  var btnAddCourse = $('.btn-add-course-edu');
+  var selectCourseList = $('#select-course-list');
+  var courseContainer = $('#draggablePanelList');
+  var btnCreateEdu = $('.btn-register-course-submit');
 
   $(function () {
     // DateTimePicker 설정
-    var startDt = moment().format()
-    var endDt = moment().add(6, 'days')
+    var startDt = moment().format();
+    var endDt = moment().add(6, 'days');
 
     // 교육 시작일자
-    $('#startDt').datetimepicker({
+    $('#start_dt').datetimepicker({
       defaultDate: startDt,
       format: 'YYYY-MM-DD',
       showTodayButton: true
     })
 
     // 교육 종료일자
-    $('#endDt').datetimepicker({
+    $('#end_dt').datetimepicker({
       defaultDate: endDt,
       format: 'YYYY-MM-DD',
       useCurrent: false,
@@ -33,11 +30,11 @@ function (Util) {
     })
 
     // 날짜가 서로 겹치지 않도록 설정한다.
-    $("#startDt").on("dp.change", function (e) {
-      $('#endDt').data("DateTimePicker").minDate(e.date)
+    $("#start_dt").on("dp.change", function (e) {
+      $('#end_dt').data("DateTimePicker").minDate(e.date)
     })
-    $("#endDt").on("dp.change", function (e) {
-      $('#startDt').data("DateTimePicker").maxDate(e.date)
+    $("#end_dt").on("dp.change", function (e) {
+      $('#start_dt').data("DateTimePicker").maxDate(e.date)
     });
 
     // datatable 설정
@@ -187,8 +184,8 @@ function (Util) {
 					name : edu_name.val().trim(),
 					desc : edu_desc, //edu_desc.val().trim(),
 					course_group_list : course_group_list.data,
-          startDt: $('#startDt').find("input").val() + ' ' + '00:00:00',
-          endDt: $('#endDt').find("input").val() + ' ' + '23:59:59'
+          startDt: $('#start_dt').find("input").val() + ' ' + '00:00:00',
+          endDt: $('#end_dt').find("input").val() + ' ' + '23:59:59'
 				}
 			}).then(function (res){
 				if(res.data.success == true){

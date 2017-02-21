@@ -221,24 +221,24 @@ QUERY.COURSE = {
 
   // 강사를 생성한다.
   CreateTeacher:
-    'INSERT INTO `teacher` (`name`, desc, `creator_id`) ' +
+    'INSERT INTO `teacher` (`name`, `desc`, `creator_id`) ' +
     'VALUES(?,?,?); ',
 
   // 강사를 수정한다.
   UpdateTeacher:
     'UPDATE `teacher` SET ' +
     '       `name` = ? ' +
-    '     , desc = ? ' +
+    '     , `desc` = ? ' +
     ' WHERE `id` = ?; ',
 
   // 강의를 생성한다.
   CreateCourse:
-    'INSERT INTO `course` (`name`, `teacher_id`, desc, `creator_id`) ' +
+    'INSERT INTO `course` (`name`, `teacher_id`, `desc`, `creator_id`) ' +
     'VALUES (?,?,?,?); ',
 
   // 강의를 수정한다.
   UpdateCourse:
-    'UPDATE `course` SET `name` = ?, `teacher_id` = ?, desc = ?, `creator_id` = ?, `updated_dt` = ? ' +
+    'UPDATE `course` SET `name` = ?, `teacher_id` = ?, `desc` = ?, `creator_id` = ?, `updated_dt` = ? ' +
     'WHERE `id` = ?; ',
 
   // 강의 세션수를 조회한다.
@@ -470,7 +470,7 @@ QUERY.EDU = {
 
   // 교육과정의 강의를 조회한다. (deprecated)
   GetCourseListByGroupId_bak:
-    'SELECT c.`id`, c.`name` AS name, c.desc, t.`name` AS teacher ' +
+    'SELECT c.`id`, c.`name` AS name, c.`desc`, t.`name` AS teacher ' +
     '  FROM `course` AS c ' +
     '  LEFT JOIN `teacher` AS t ' +
     '    ON c.teacher_id = t.id ' +
@@ -498,14 +498,14 @@ QUERY.EDU = {
 
   // 교육과정을 생성한다.
   InsertEdu:
-    'INSERT INTO `edu` (`name`, desc, `course_group_id`, `creator_id`, `start_dt`, `end_dt`) ' +
+    'INSERT INTO `edu` (`name`, `desc`, `course_group_id`, `creator_id`, `start_dt`, `end_dt`) ' +
     'VALUES(?,?,?,?,?,?); ',
 
   // 교육과정을 수정한다.
   UpdateEdu:
     'UPDATE `edu` SET ' +
     '       `name` = ? ' +
-    '     , desc = ? ' +
+    '     , `desc` = ? ' +
     '     , `updated_dt` = NOW() ' +
     '     , `start_dt` = ? ' +
     '     , `end_dt` = ? ' +
@@ -541,11 +541,11 @@ QUERY.EDU = {
     'VALUES(?,?); ',
 
   InsertIntoLogBindUser:
-    'INSERT INTO `log_bind_users` (`title`,desc,`creator_id`, `group_id`) ' +
+    'INSERT INTO `log_bind_users` (`title`,`desc`,`creator_id`, `group_id`) ' +
     'VALUES(?,?,?,?); ',
 
   GetCustomUserList:
-    'SELECT lbu.`id`, lbu.`title`, lbu.desc, a.`name` AS creator, lbu.`created_dt`, lbu.`group_id` ' +
+    'SELECT lbu.`id`, lbu.`title`, lbu.`desc`, a.`name` AS creator, lbu.`created_dt`, lbu.`group_id` ' +
     '  FROM `log_bind_users` AS lbu ' +
     '  LEFT JOIN `admin` AS a ' +
     '    ON a.`id` = lbu.`creator_id` ' +
@@ -554,7 +554,7 @@ QUERY.EDU = {
     ' ORDER BY lbu.`created_dt` DESC, lbu.`id` DESC; ',
 
   GetAssignmentDataById:
-    'SELECT lbu.`id`, lbu.`title`, lbu.desc, lbu.`group_id`, lbu.`created_dt`, a.`name` AS creator ' +
+    'SELECT lbu.`id`, lbu.`title`, lbu.`desc`, lbu.`group_id`, lbu.`created_dt`, a.`name` AS creator ' +
     '  FROM `log_bind_users` AS lbu ' +
     '  LEFT JOIN `admin` AS a ' +
     '    ON a.`id` = lbu.`creator_id` ' +
