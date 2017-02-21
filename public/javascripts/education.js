@@ -4,7 +4,7 @@
  * locale 적용이 안되는 문제. (관련항목 : moment_ko) 
  */
 'use strict'
-require(['common'],
+requirejs(['common'],
 
 function (Util) {
   var btnAddCourse = $('.btn-add-course-edu')

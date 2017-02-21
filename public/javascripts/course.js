@@ -2,7 +2,7 @@
  * Created by yijaejun on 30/11/2016.
  */
 'use strict';
-require(
+requirejs(
   [
     'common'
   ],

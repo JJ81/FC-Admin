@@ -1,13 +1,12 @@
 /**
  * Created by yijaejun on 30/11/2016.
  */
-'use strict'
-require(
+'use strict';
+requirejs(
   [
-    'jquery',
     'common'
   ],
-  function ($, Util) {
+  function (Util) {
     var tableCheckAll = $('#check-all')
     // var tableAssignment = Util.initDataTable($('#table_assignment'))
     var tableEmployee = Util.initDataTable($('#table_employee'), {
