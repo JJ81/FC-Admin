@@ -12,8 +12,7 @@
                         <li><a href="#" data-toggle="modal" data-target="#createBranch">지점 등록</a></li>
                         <li><a href="#" data-toggle="modal" data-target="#createDuty">직책 등록</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" data-toggle="modal" data-target="#uploadFile">직원등록(엑셀)</a></li>                        
-                        <!--<li><a href="#" data-toggle="modal" data-target="#uploadFile">직원 등록 양식(.xls)</a></li>-->
+                        <li><a href="#" data-toggle="modal" data-target="#uploadFile">직원등록(엑셀)</a></li>
                     </ul>
                 </div>
 
@@ -75,6 +74,7 @@
                                     <!--<li><a href="#">삭제</a></li>-->
                                 </ul>
                             </div>
+                            <button type="button" class="btn btn-danger btn-sm btn-delete-employee" data-user-id="{{id}}">삭제</button>
                         </td>
                     </tr>
                     {{/each}}

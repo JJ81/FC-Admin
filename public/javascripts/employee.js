@@ -12,10 +12,10 @@ function (Util) {
   });
 
   // datatable 설정
-  var tableBranch = Util.initDataTable($('#table-branch'), {
+  Util.initDataTable($('#table-branch'), {
     buttons: []
   });
-  var tableEmployee = Util.initDataTable($('#table-employee'), {
+  Util.initDataTable($('#table-employee'), {
     buttons:
     [
       {
@@ -36,7 +36,7 @@ function (Util) {
       }
     ]
   });
-  // var branchList = $('.branch-list > a');
+
   var btnBranchClearInputs = $('.branch-right-buttons > #clear-input');
   var btnBranchSave = $('.branch-right-buttons > .btn-submit');
   var formBranch = $('#frm_create_branch');
@@ -70,8 +70,8 @@ function (Util) {
   // 2nd 페이지에서 이벤트 안먹히는 증상 (http://stackoverflow.com/questions/25414778/jquery-onclick-not-working-in-datatables-2nd-page-or-rows-past-11)
   $('#table-branch').on('click', '.branch-list-item', function (e) {
     e.preventDefault();
-    $(".branch-input > input[name='id']").val($(this).data('id'));
-    $(".branch-input > input[name='name']").val($(this).data('name'));
+    $('.branch-input > input[name=\'id\']').val($(this).data('id'));
+    $('.branch-input > input[name=\'name\']').val($(this).data('name'));
     formBranch.attr('action', '/employee/modify/branch');
     btnBranchSave.html('수정');
     btnDeleteBranch.prop('disabled', false);
@@ -79,8 +79,8 @@ function (Util) {
 
   // 지점 .. 수정모드에서 등록모드로 변경
   btnBranchClearInputs.bind('click', function () {
-    $(".branch-input > input[name='id']").val('');
-    $(".branch-input > input[name='name']").val('');
+    $('.branch-input > input[name=\'id\']').val('');
+    $('.branch-input > input[name=\'name\']').val('');
     formBranch.attr('action', '/employee/create/branch');
     btnBranchSave.html('등록');
     btnDeleteBranch.prop('disabled', true);
@@ -89,8 +89,8 @@ function (Util) {
   // 직책 ..등록모드에서 수정모드로 변경
   dutyList.bind('click', function (e) {
     e.preventDefault();
-    $(".duty-input > input[name='id'").val($(this).data('id'));
-    $(".duty-input > input[name='name']").val($(this).data('name'));
+    $('.duty-input > input[name=\'id\'').val($(this).data('id'));
+    $('.duty-input > input[name=\'name\']').val($(this).data('name'));
     formDuty.attr('action', '/employee/modify/duty');
     btnDutySave.html('수정');
     btnDeleteDuty.prop('disabled', false);
@@ -98,22 +98,49 @@ function (Util) {
 
   // 직책 .. 수정모드에서 등록모드로 변경
   btnDutyClearInputs.bind('click', function () {
-    $(".duty-input > input[name='id']").val('');
-    $(".duty-input > input[name='name']").val('');
+    $('.duty-input > input[name=\'id\']').val('');
+    $('.duty-input > input[name=\'name\']').val('');
 
     formDuty.attr('action', '/employee/create/duty');
     btnDutySave.html('등록');
     btnDeleteDuty.prop('disabled', true);
   });
 
-  // 지점 삭제하기
-  btnDeleteBranch.bind('click', function () {
-    if (!confirm("삭제 시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?")) {
+  // 직원 삭제하기
+  $('#table-employee').on('click', '.btn-delete-employee', function () {
+    if (!confirm('삭제 시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?')) {
       return false;
     }
 
     var params = {
-      id: $(".branch-input > input[name='id'").val()
+      id: $(this).data('user-id')
+    };
+
+    axios.delete('/employee',
+      {
+        params: params
+      })
+      .then(function (response) {
+        if (!response.data.success) {
+          alert('직원을 삭제하지 못했습니다.');
+        } else {
+          alert('직원을 삭제하였습니다.');
+        }
+        location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  });
+
+  // 지점 삭제하기
+  btnDeleteBranch.bind('click', function () {
+    if (!confirm('삭제 시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?')) {
+      return false;
+    }
+
+    var params = {
+      id: $('.branch-input > input[name=\'id\'').val()
     };
 
     axios.delete('/employee/branch',
@@ -122,9 +149,9 @@ function (Util) {
       })
       .then(function (response) {
         if (!response.data.success) {
-          alert("지점을 삭제하지 못했습니다.");
+          alert('지점을 삭제하지 못했습니다.');
         } else {
-          alert("지점을 삭제하였습니다.");
+          alert('지점을 삭제하였습니다.');
         }
         location.reload();
       })
@@ -135,12 +162,12 @@ function (Util) {
 
   // 직책 삭제하기
   btnDeleteDuty.bind('click', function () {
-    if (!confirm("삭제 시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?")) {
+    if (!confirm('삭제 시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?')) {
       return false;
     }
 
     var params = {
-      id: $(".duty-input > input[name='id'").val()
+      id: $('.duty-input > input[name=\'id\'').val()
     };
 
     axios.delete('/employee/duty',
@@ -149,14 +176,14 @@ function (Util) {
       })
       .then(function (response) {
         if (!response.data.success) {
-          alert("직책을 삭제하지 못했습니다.");
+          alert('직책을 삭제하지 못했습니다.');
         } else {
-          alert("직책을 삭제하였습니다.");
+          alert('직책을 삭제하였습니다.');
         }
         location.reload();
       })
       .catch(function (error) {
         console.log(error);
       });
-  });  
+  });
 });

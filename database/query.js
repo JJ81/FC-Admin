@@ -6,9 +6,11 @@ QUERY.ADMIN = {
     'WHERE `id` = ? and name= ?; ',
 
   GetList:
-    'SELECT * FROM `admin` ' +
-    'WHERE fc_id= ? ' +
-    'ORDER BY `id` ASC; ',
+    'SELECT * ' +
+    '  FROM `admin` ' +
+    ' WHERE `fc_id` = ? ' +
+    '   AND `active` = 1 ' +
+    ' ORDER BY `id` ASC; ',
 
   GetAdminBranch:
     'SELECT b.`id`, b.`name` ' +
@@ -39,7 +41,11 @@ QUERY.ADMIN = {
     'INSERT IGNORE `admin_branch` (`admin_id`, `branch_id`) VALUES ?; ',
 
   DeleteAdminBranch:
-    'DELETE FROM `admin_branch` WHERE `admin_id` = ?; '
+    'DELETE FROM `admin_branch` WHERE `admin_id` = ?; ',
+
+  // 관리자를 비활성화 한다.
+  DisableAdminById:
+    'UPDATE `admin` SET `active` = 0 WHERE `id` = ?; '
 };
 
 QUERY.LOGIN = {
@@ -73,6 +79,10 @@ QUERY.EMPLOYEE = {
     ' WHERE b.`fc_id` = ? ' +
     '   AND b.`active` = true ' +
     '   AND b.`name` = ?; ',
+
+  // 지점을 비활성화 한다.
+  DisableEmployeeById:
+    'UPDATE `users` SET `active` = 0 WHERE `id` = ?; ',
 
   // 지점을 비활성화 한다.
   DisableBranchById:
@@ -898,7 +908,7 @@ QUERY.ACHIEVEMENT = {
         '               (`final_correction` * ?) + ' +
         '               (`reeltime` * ?) + ' +
         '               (`speed` * ?) + ' +
-      '               (`repetition` * ?) ' +
+        '               (`repetition` * ?) ' +
         '          FROM `log_user_point` ' +
         '         WHERE `training_user_id` = g.`training_user_id` ' +
         '       ) AS point ' +

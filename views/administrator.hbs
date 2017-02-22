@@ -52,7 +52,7 @@
                                    data-user-id="{{id}}"
                                    data-user-role="{{role}}"
                                    data-toggle="modal"
-                                   data-target="#setAdminRole"    
+                                   data-target="#setAdminRole"
                                    class="btn-modify-role">권한수정</a></li>
                             <li><a href="#"
                                    data-user-id="{{id}}"
@@ -67,11 +67,11 @@
                                    data-toggle="modal"
                                    data-target="#assignBranch"
                                    class="btn-add-branch">지점배정</a>
-                            </li>                            
+                            </li>
                             {{/if}}
-                            <!--<li><a href="#" class="btn-suspend">정지</a></li>-->
                           </ul>
                         </div>
+                        <button type="button" class="btn btn-danger btn-sm btn-delete-admin" data-user-id="{{id}}">삭제</button>
                         {{/ifCond}}
                       </td>
                     </tr>

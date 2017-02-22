@@ -4,8 +4,7 @@ var mysql_dbc = require('../commons/db_conn')();
 var connection = mysql_dbc.init();
 var QUERY = require('../database/query');
 var isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated())
-    return next();
+  if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 };
 require('../commons/helpers');
@@ -15,37 +14,35 @@ var bcrypt = require('bcrypt');
 var async = require('async');
 
 router.get('/', isAuthenticated, function (req, res) {
-
   async.series([
     function (callback) {
       connection.query(QUERY.EMPLOYEE.GetEmployeeList, [req.user.fc_id], function (err, employee) {
         callback(err, employee);
-      })
+      });
     },
     function (callback) {
       connection.query(QUERY.EMPLOYEE.GetBranch, [req.user.fc_id], function (err, branch) {
         callback(err, branch);
-      })
+      });
     },
     function (callback) {
       connection.query(QUERY.EMPLOYEE.GetDuty, [req.user.fc_id], function (err, duty) {
         callback(err, duty);
-      })
+      });
     }
-  ],function (err, results){
-    if(err){
+  ], function (err, results) {
+    if (err) {
       console.error(err);
-    }else{
-
-      //console.info(results);
+    } else {
+      // console.info(results);
 
       res.render('employee', {
         current_path: 'Employee',
         title: PROJ_TITLE + 'Employee',
         loggedIn: req.user,
-        list : results[0],
-        branch : results[1],
-        duty : results[2]
+        list: results[0],
+        branch: results[1],
+        duty: results[2]
       });
     }
   });
@@ -56,24 +53,24 @@ router.get('/', isAuthenticated, function (req, res) {
  */
 router.post('/create', isAuthenticated, function (req, res, next) {
   var _data = {
-    name : req.body.name.trim(),
-    branch_id : req.body.branch.trim(), // id
-    duty_id : req.body.duty.trim(), // id
-    tel : req.body.tel.trim(),
-    email : req.body.email.trim(),
+    name: req.body.name.trim(),
+    branch_id: req.body.branch.trim(), // id
+    duty_id: req.body.duty.trim(), // id
+    tel: req.body.tel.trim(),
+    email: req.body.email.trim(),
     pass: req.body.pass.trim(),
-    re_pass : req.body.re_pass.trim(),
-    fc_id : req.user.fc_id // id
+    re_pass: req.body.re_pass.trim(),
+    fc_id: req.user.fc_id // id
   };
 
-  if (_data.pass !== _data.re_pass || 
+  if (_data.pass !== _data.re_pass ||
      !UTIL.isValidPhone(_data.tel) ||
-     !UTIL.isValidEmail(_data.email) || 
+     !UTIL.isValidEmail(_data.email) ||
      !UTIL.checkPasswordSize(_data.pass, 4)) {
     // res.redirect('/process?url=employee&msg=error');
     return next({
-        status: 500,
-        message: "잘못된 형식의 휴대폰번호 또는 이메일이 존재합니다."
+      status: 500,
+      message: '잘못된 형식의 휴대폰번호 또는 이메일이 존재합니다.'
     });
   } else {
     _data.pass = bcrypt.hashSync(_data.pass, 10);
@@ -86,16 +83,17 @@ router.post('/create', isAuthenticated, function (req, res, next) {
       _data.fc_id,
       _data.duty_id,
       _data.branch_id
-    ], function (err, result){
-      if(err){
+    ], function (err, result) {
+      if (err) {
         // console.error(err);
         // res.redirect('/process?url=employee&msg=error');
-        if (err) 
-            return next({
-                status: 500,
-                message: "중복된 휴대폰번호 또는 이메일이 존재합니다."
-            });
-      }else{
+        if (err) {
+          return next({
+   status: 500,
+   message: '중복된 휴대폰번호 또는 이메일이 존재합니다.'
+ });
+        }
+      } else {
         res.redirect('/employee');
       }
     });
@@ -106,31 +104,29 @@ router.post('/create', isAuthenticated, function (req, res, next) {
  * 유저 수정
  */
 router.post('/modify', isAuthenticated, function (req, res, next) {
-  
   var _data = {
-    user_id : req.body.employee_id,
-    name : req.body.name.trim(),
-    branch_id : req.body.branch.trim(), // id
-    duty_id : req.body.duty.trim(), // id
-    tel : req.body.tel.trim(),
-    email : req.body.email.trim(),
-    fc_id : req.user.fc_id // id
+    user_id: req.body.employee_id,
+    name: req.body.name.trim(),
+    branch_id: req.body.branch.trim(), // id
+    duty_id: req.body.duty.trim(), // id
+    tel: req.body.tel.trim(),
+    email: req.body.email.trim(),
+    fc_id: req.user.fc_id // id
   };
 
   console.log(_data);
 
   if (!UTIL.isValidPhone(_data.tel) ||
      !UTIL.isValidEmail(_data.email) ||
-     _data.branch_id === '' || 
+     _data.branch_id === '' ||
      _data.duty_id === ''
   ) {
     // res.redirect('/process?url=employee&msg=error');
     return next({
-        status: 500,
-        message: "잘못된 형식의 휴대폰번호 또는 이메일이 존재합니다."
-    });    
+      status: 500,
+      message: '잘못된 형식의 휴대폰번호 또는 이메일이 존재합니다.'
+    });
   } else {
-
     connection.query(QUERY.EMPLOYEE.ModifyEmployee, [
       _data.name,
       _data.email,
@@ -139,14 +135,15 @@ router.post('/modify', isAuthenticated, function (req, res, next) {
       _data.duty_id,
       _data.user_id,
       _data.fc_id
-    ], function (err, result){
-      if(err){
+    ], function (err, result) {
+      if (err) {
         console.error(err);
-        if (err) 
-            return next({
-                status: 500,
-                message: "중복된 휴대폰번호 또는 이메일이 존재합니다."
-            });        
+        if (err) {
+          return next({
+            status: 500,
+            message: '중복된 휴대폰번호 또는 이메일이 존재합니다.'
+          });
+        }
       } else {
         res.redirect('/employee');
       }
@@ -160,22 +157,22 @@ router.post('/modify', isAuthenticated, function (req, res, next) {
 router.post('/create/branch', function (req, res, next) {
   var _name = req.body.name.trim();
 
-  if(_name === null || _name === ''){
+  if (_name === null || _name === '') {
     // res.redirect('/process?url=employee&msg=error');
     return next({
-        status: 500,
-        message: "필수입력값 누락"
-    });     
-  }else{
+      status: 500,
+      message: '필수입력값 누락'
+    });
+  } else {
     // todo 동일한 fc에서의 지점이 중복인지 여부를 검사해야 한다
     connection.query(QUERY.EMPLOYEE.CreateBranch,
       [_name, req.user.fc_id], function (err, result) {
         if (err) {
-            console.error(err);
-            return next({
-                status: 500,
-                message: "중복되는 지점명입니다."
-            });
+          console.error(err);
+          return next({
+            status: 500,
+            message: '중복되는 지점명입니다.'
+          });
         } else {
           res.redirect('/employee');
         }
@@ -187,27 +184,26 @@ router.post('/create/branch', function (req, res, next) {
  * 지점 수정하기
  */
 router.post('/modify/branch', function (req, res, next) {
-
   var _name = req.body.name.trim();
 
   console.log(req.body);
 
-  if(_name === null || _name === ''){
+  if (_name === null || _name === '') {
     // res.redirect('/process?url=employee&msg=error');
     return next({
-        status: 500,
-        message: "필수입력값 누락"
-    });    
+      status: 500,
+      message: '필수입력값 누락'
+    });
   } else {
     connection.query(QUERY.EMPLOYEE.ModifyBranch,
       [ _name, req.body.id], function (err, result) {
         if (err) {
-            console.error(err);
-            return next({
-                status: 500,
-                message: "중복되는 지점명입니다."
-            });              
-        }else{
+          console.error(err);
+          return next({
+            status: 500,
+            message: '중복되는 지점명입니다.'
+          });
+        } else {
           res.redirect('/employee');
         }
       });
@@ -220,22 +216,22 @@ router.post('/modify/branch', function (req, res, next) {
 router.post('/create/duty', function (req, res, next) {
   var _name = req.body.name.trim();
 
-  if(_name === null || _name === ''){
+  if (_name === null || _name === '') {
     // res.redirect('/process?url=employee&msg=error');
     return next({
-        status: 500,
-        message: "필수입력값 누락"
-    });   
-  }else{
+      status: 500,
+      message: '필수입력값 누락'
+    });
+  } else {
     // todo 동일한 fc에서의 직책이 중복인지 여부를 검사해야 한다
     connection.query(QUERY.EMPLOYEE.CreateDuty,
       [ _name, req.user.fc_id], function (err, result) {
         if (err) {
-            console.error(err);
-            return next({
-                status: 500,
-                message: "중복되는 직책명입니다."
-            });
+          console.error(err);
+          return next({
+            status: 500,
+            message: '중복되는 직책명입니다.'
+          });
         } else {
           res.redirect('/employee');
         }
@@ -247,26 +243,25 @@ router.post('/create/duty', function (req, res, next) {
  * 직책 수정하기
  */
 router.post('/modify/duty', function (req, res, next) {
-
   var _name = req.body.name.trim();
 
-  if(_name === null || _name === ''){
+  if (_name === null || _name === '') {
     // res.redirect('/process?url=employee&msg=error');
     return next({
-        status: 500,
-        message: "필수입력값 누락"
-    });    
+      status: 500,
+      message: '필수입력값 누락'
+    });
   } else {
     // todo 동일한 fc에서의 지점이 중복인지 여부를 검사해야 한다
     connection.query(QUERY.EMPLOYEE.ModifyDuty,
       [ _name, req.body.id], function (err, result) {
         if (err) {
-            console.error(err);
-            return next({
-                status: 500,
-                message: "중복되는 직책명입니다."
-            });          
-        }else{
+          console.error(err);
+          return next({
+            status: 500,
+            message: '중복되는 직책명입니다.'
+          });
+        } else {
           res.redirect('/employee');
         }
       });
@@ -284,19 +279,35 @@ router.post('/password/reset', function (req, res) {
 
   console.info(req.originalUrl);
 
-  if(_pass !== _repass || _user_id === '' || _name === ''){
+  if (_pass !== _repass || _user_id === '' || _name === '') {
     res.redirect('/process?url=employee&msg=error');
-  }else{
+  } else {
     connection.query(QUERY.EMPLOYEE.ResetPassword,
       [bcrypt.hashSync(_pass, 10), _user_id, _name],
       function (err, result) {
-        if(err){
+        if (err) {
           console.error(err);
-        }else{
+        } else {
           res.redirect('/employee');
         }
-    });
+      });
   }
+});
+
+/** 직원 비활성화 */
+router.delete('/', isAuthenticated, function (req, res, next) {
+  UserService.deactivateEmployeeById(req.query.id, function (err, data) {
+    if (err) {
+      return res.json({
+        success: false,
+        msg: err
+      });
+    }
+
+    return res.json({
+      success: true
+    });
+  });
 });
 
 /** 지점 비활성화 */

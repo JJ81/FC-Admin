@@ -39,21 +39,21 @@ router.get('/', isAuthenticated, function (req, res) {
         });
       }
     ],
-		function (err, result) {
-  if (err) {
-    console.error(err);
-  } else {
-    console.log(result[0]);
-    res.render('education', {
-      current_path: 'Education',
-      menu_group: 'education',
-      title: PROJ_TITLE + 'Education',
-      loggedIn: req.user,
-      list: result[0],
-      course_list: result[1]
-    });
-  }
-});
+  function (err, result) {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log(result[0]);
+      res.render('education', {
+        current_path: 'Education',
+        menu_group: 'education',
+        title: PROJ_TITLE + 'Education',
+        loggedIn: req.user,
+        list: result[0],
+        course_list: result[1]
+      });
+    }
+  });
 });
 
 /**
@@ -138,8 +138,8 @@ router.get('/details', isAuthenticated, function (req, res) {
  * 교육과정을 등록한다.
  */
 router.post('/create/edu', isAuthenticated, function (req, res) {
-  var _inputs = req.body,
-    _course_group_id = null;
+  var _inputs = req.body;
+  var _course_group_id = null;
 
   connection.beginTransaction(function () {
     async.series(
