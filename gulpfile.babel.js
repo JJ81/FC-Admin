@@ -14,14 +14,14 @@ const DIR = {
 };
 
 const SRC = {
-  JS: DIR.SRC + '/javascripts/*.js',
+  JS: DIR.SRC + '/javascripts/**/*.js',
   CSS: DIR.SRC + '/stylesheets/*.css',
   HTML: DIR.SRC + '/*.html',
   IMAGES: DIR.SRC + '/images/*'
 };
 
 const DEST = {
-  JS: DIR.DEST + '/javascripts',
+  JS: DIR.DEST + '/javascripts/',
   CSS: DIR.DEST + '/stylesheets',
   HTML: DIR.DEST + '/',
   IMAGES: DIR.DEST + '/images',
@@ -29,7 +29,7 @@ const DEST = {
 };
 
 gulp.task('js', () => {
-  return gulp.src(SRC.JS)
+  return gulp.src(SRC.JS, { base: './public/javascripts' })
           .pipe(uglify())
           .pipe(gulp.dest(DEST.JS));
 });

@@ -1,0 +1,1 @@
+"use strict";requirejs(["jquery"],function(c){var i=c("#check-quiz"),n=c(".answer");c(function(){}),i.bind("click",function(){n.show()})});
