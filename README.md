@@ -1,29 +1,96 @@
+[참고](https://velopert.com/1344)
 
-###JIRA URL 
-https://holdemclubtv.atlassian.net/
+sudo npm install -g gulp
+sudo npm install -g graceful-fs lodash
 
-###Issue ID 
-FC-124, 126, 127
+npm install -save-dev gulp gulp-util
+npm install --save-dev babel-core babel-preset-es2015
+npm install --save-dev gulp-uglify gulp-clean-css gulp-htmlmin gulp-imagemin del
 
-###Tags
-교육과정등록
+**.babelrc 생성**
+```javascript
+{
+  "presets": ["es2015"]
+}
+```
 
-###Description
-FC-124
-1. 전월대비 교육 이수율 -> 2. 이달의 교육 이수율 (이달의 전체 교육 이수율의 평균)
-2. 기간별 교육진척도 -> 이달의 교육과정별 이수율
-3. 점포별 교육 이수율
-(2, 3 번이 디자인상으로 구분되어 보여질 것)
-4. 기간별 교육생 포인트
-   - 날짜검색
-   - 엑셀다운로드
+**gulpfile.babel.js 작성**
+```javascript
+'use strict';
 
-FC-126
-- 개인별 포인트 표시
-- 엑셀 다운로드
+import gulp from 'gulp';
+import gutil from 'gulp-util';
+import uglify from 'gulp-uglify';
+import cleanCSS from 'gulp-clean-css';
+import htmlmin from 'gulp-htmlmin';
+import imagemin from 'gulp-imagemin';
+import del from 'del';
 
-FC-127
-- 표등 어색한 부분 수정할 것
+const DIR = {
+    SRC: 'public',
+    DEST: 'dist'
+};
 
-FC-136
-- IE 에서 퀴즈등록 안되는 문제
+const SRC = {
+    JS: DIR.SRC + '/javascripts/*.js',
+    CSS: DIR.SRC + '/stylesheets/*.css',
+    HTML: DIR.SRC + '/*.html',
+    IMAGES: DIR.SRC + '/images/*'
+};
+
+const DEST = {
+    JS: DIR.DEST + '/javascripts',
+    CSS: DIR.DEST + '/stylesheets',
+    HTML: DIR.DEST + '/',
+    IMAGES: DIR.DEST + '/images'
+};
+
+gulp.task('js', () => {
+    return gulp.src(SRC.JS)
+           .pipe(uglify())
+           .pipe(gulp.dest(DEST.JS));
+});
+
+gulp.task('css', () => {
+    return gulp.src(SRC.CSS)
+           .pipe(cleanCSS({compatibility: 'ie8'}))
+           .pipe(gulp.dest(DEST.CSS));
+});
+
+gulp.task('html', () => {
+    return gulp.src(SRC.HTML)
+          .pipe(htmlmin({collapseWhitespace: true}))
+          .pipe(gulp.dest(DEST.HTML))
+});
+
+gulp.task('images', () => {
+    return gulp.src(SRC.IMAGES)
+           .pipe(imagemin())
+           .pipe(gulp.dest(DEST.IMAGES));
+});
+
+gulp.task('clean', () => {
+    return del.sync([DIR.DEST]);
+});
+
+gulp.task('watch', () => {
+    let watcher = {
+        js: gulp.watch(SRC.JS, ['js']),
+        css: gulp.watch(SRC.CSS, ['css']),
+        html: gulp.watch(SRC.HTML, ['html']),
+        images: gulp.watch(SRC.IMAGES, ['images'])
+    };
+
+    let notify = (event) => {
+        gutil.log('File', gutil.colors.yellow(event.path), 'was', gutil.colors.magenta(event.type));
+    };
+
+    for(let key in watcher) {
+        watcher[key].on('change', notify);
+    }
+});
+
+gulp.task('default', ['clean', 'js', 'css', 'html', 'images', 'watch'], () => {
+    gutil.log('Gulp is running');
+});
+```

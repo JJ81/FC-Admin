@@ -4,22 +4,19 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/vendor/font-awesome-4.7.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/vendor/ionicons-2.0.1/css/ionicons.min.css" />
-    <link rel="stylesheet" href="/vendor/dist/css/AdminLTE.min.css" />
-    <link rel="stylesheet" href="/vendor/dist/css/skins/skin-green-light.min.css">
-    <!--<link rel="stylesheet" href="/vendor/dist/css/skins/_all-skins.min.css" />-->
-    <link rel="stylesheet" href="/vendor/plugins/datepicker/datepicker3.css" />
-    <link rel="stylesheet" href="/vendor/plugins/daterangepicker/daterangepicker.css" />
-    <link rel="stylesheet" href="/vendor/plugins/select2/select2.min.css" />
-    <link rel="stylesheet" href="/vendor/plugins/datatables.net-bs/css/dataTables.bootstrap.css" />
-    <link rel="stylesheet" href="/vendor/plugins/datatables.net-buttons-bs/css/buttons.bootstrap.css" />
-    <link rel="stylesheet" href="/vendor/plugins/datatables.net-responsive-bs/css/responsive.bootstrap.css" />
-    <!--<link rel="stylesheet" href="/vendor/plugins/datatables.net./extensions/Responsive/css/dataTables.responsive.css" />-->
-    <link rel="stylesheet" href="/vendor/plugins/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />    
-    <link rel='stylesheet' href="/stylesheets/styles.css" />
-    
+    <link rel="stylesheet" href="/static/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css" />
+    <link rel="stylesheet" href="/static/stylesheets/ionicons.min.css" />
+    <link rel="stylesheet" href="/static/stylesheets/AdminLTE.min.css" />
+    <link rel="stylesheet" href="/static/stylesheets/skin-green-light.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/datepicker3.css" />
+    <link rel="stylesheet" href="/static/stylesheets/daterangepicker.css" />
+    <link rel="stylesheet" href="/static/stylesheets/select2.min.css" />
+    <link rel="stylesheet" href="/static/stylesheets/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/stylesheets/buttons.bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/stylesheets/responsive.bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/stylesheets/bootstrap-datetimepicker.min.css" />
+    <link rel='stylesheet' href="/static/stylesheets/styles.css" />
 
     <title>{{title}}</title>
 </head>
@@ -27,7 +24,7 @@
 <body class="hold-transition skin-green-light sidebar-mini {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
     {{#if (isEquals current_path 'Login')}}
     {{{body}}}
-    {{else if (isEquals current_path 'winpop')}}    
+    {{else if (isEquals current_path 'winpop')}}
     {{{body}}}
     {{else}}
     <div class="wrapper">
@@ -44,7 +41,6 @@
 
     <script src="/vendor/plugins/requirejs/require.2.3.2.js"></script>
     <script src="/javascripts/app.js"></script>
-    
 
     {{#if (isEquals current_path 'Login')}}<script src="/static/javascripts/login.js"></script>{{/if}}
     {{#if (isEquals current_path 'Dashboard')}}<script src="/static/javascripts/dashboard.js"></script>{{/if}}
@@ -58,8 +54,7 @@
     {{#if (isEquals current_path 'Achievement')}}<script src="/static/javascripts/achievement.js"></script>{{/if}}
     {{#if (isEquals current_path 'AchievementDetails')}}<script src="/static/javascripts/achievement_details.js"></script>{{/if}}
     {{#if (isEquals current_path 'CourseDetails')}}<script src="/static/javascripts/course_details.js"></script>{{/if}}
-    {{#if (isEquals current_path 'Administrator')}}<script src="/static/javascripts/administrator.js"></script>{{/if}}    
-    
+    {{#if (isEquals current_path 'Administrator')}}<script src="/static/javascripts/administrator.js"></script>{{/if}}
     {{#if (isEquals module_type 'create_video')}}<script src="/static/javascripts/winpops/win_create_video.js"></script>{{/if}}
     {{#if (isEquals module_type 'modify_video')}}<script src="/static/javascripts/winpops/win_modify_video.js"></script>{{/if}}
     {{#if (isEquals module_type 'create_quiz')}}<script src="/static/javascripts/winpops/win_create_quiz.js"></script>{{/if}}

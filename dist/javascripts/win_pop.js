@@ -1,0 +1,1 @@
+"use strict";requirejs(["jquery","common"],function(e,r){});

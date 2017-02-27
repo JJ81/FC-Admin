@@ -1,0 +1,1 @@
+"use strict";requirejs(["common"],function(n){$(function(){n.initDataTable($("#table-personal-point-rank"),{order:[[0,"asc"]]})})});

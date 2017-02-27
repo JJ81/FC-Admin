@@ -31,7 +31,7 @@ app.set('view engine', 'hbs');
 hbs.registerPartials(path.join(__dirname, '/views/partials'));
 hbs.registerPartials(path.join(__dirname, '/views/modal'));
 
-app.use('/static', express.static(path.join(__dirname, '/public')));
+app.use('/static', express.static(path.join(__dirname, '/dist')));
 
 // todo favicon 설정할 것
 // uncomment after placing your favicon in /public
@@ -100,6 +100,5 @@ app.use(function (err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;

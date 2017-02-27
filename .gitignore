@@ -2,3 +2,4 @@
 node_modules/
 docs/
 secret/
+npm-debug.log

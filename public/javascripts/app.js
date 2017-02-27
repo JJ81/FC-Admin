@@ -2,6 +2,7 @@
  * Created by yijaejun on 01/12/2016.
  */
 'use strict';
+
 requirejs.config({
   paths: {
     'jquery': ['/vendor/plugins/jQuery/jquery-2.2.3.min'],
@@ -75,3 +76,4 @@ requirejs.config({
     }
   }
 });
+

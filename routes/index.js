@@ -42,22 +42,22 @@ passport.use(new LocalStrategy({
       return done(null, false);
     } else {
       if (data.length === 1) {
-          if (!bcrypt.compareSync(password, data[0].password)) {
-            return done(null, false);
-          } else {
-            return done(null, {
-              'admin_id': data[0].admin_id,
-              'name': data[0].name,
-              'email': data[0].email,
-              'role': data[0].role,
-              'fc_id': data[0].fc_id,
-              'fc_name': data[0].fc_name,
-              'curdate': data[0].curdate
-            });
-          }
-        } else {
+        if (!bcrypt.compareSync(password, data[0].password)) {
           return done(null, false);
+        } else {
+          return done(null, {
+            'admin_id': data[0].admin_id,
+            'name': data[0].name,
+            'email': data[0].email,
+            'role': data[0].role,
+            'fc_id': data[0].fc_id,
+            'fc_name': data[0].fc_name,
+            'curdate': data[0].curdate
+          });
         }
+      } else {
+        return done(null, false);
+      }
     }
   });
 }
@@ -266,12 +266,12 @@ router.post('/upload/excel/create/employee', isAuthenticated, function (req, res
                             // 필수입력값 체크
                       for (var key in loop_data) {
                         if (loop_data.hasOwnProperty(key) && key !== 'error' && key != 'error_msg') {
-                            if (loop_data[key] === '') {
-                                loop_data['error'] = true;
-                                loop_data['error_msg'].push('필수입력값 누락');
-                                break;
-                              }
-                          }
+                          if (loop_data[key] === '') {
+                              loop_data['error'] = true;
+                              loop_data['error_msg'].push('필수입력값 누락');
+                              break;
+                            }
+                        }
                       }
 
                             // 잘못된 이메일 형식
@@ -307,15 +307,15 @@ router.post('/upload/excel/create/employee', isAuthenticated, function (req, res
 
       connection.query(QUERY.EDU.GetUserDataByPhone, [ phone ], function (err, data) {
         if (data.length > 0) {
-            for (index = 0, len = data.length; index < len; index++) {
-                for (index2 = 0, len2 = excel_data_2.length; index2 < len2; index2++) {
-                    if (data[index].phone === excel_data_2[index2].phone) {
-                        excel_data_2[index2]['error'] = true;
-                        excel_data_2[index2]['error_msg'].push('휴대폰번호 중복');
-                      }
-                  }
-              }
-          }
+          for (index = 0, len = data.length; index < len; index++) {
+              for (index2 = 0, len2 = excel_data_2.length; index2 < len2; index2++) {
+                  if (data[index].phone === excel_data_2[index2].phone) {
+                      excel_data_2[index2]['error'] = true;
+                      excel_data_2[index2]['error_msg'].push('휴대폰번호 중복');
+                    }
+                }
+            }
+        }
 
         callback(null, excel_data_2);
       });
@@ -335,15 +335,15 @@ router.post('/upload/excel/create/employee', isAuthenticated, function (req, res
 
       connection.query(QUERY.EDU.GetUserDataByEmail, [ email ], function (err, data) {
         if (data.length > 0) {
-            for (index = 0, len = data.length; index < len; index++) {
-                for (index2 = 0, len2 = excel_data_3.length; index2 < len2; index2++) {
-                    if (data[index].email === excel_data_3[index2].email) {
-                        excel_data_3[index2]['error'] = true;
-                        excel_data_3[index2]['error_msg'].push('이메일 중복');
-                      }
-                  }
-              }
-          }
+          for (index = 0, len = data.length; index < len; index++) {
+              for (index2 = 0, len2 = excel_data_3.length; index2 < len2; index2++) {
+                  if (data[index].email === excel_data_3[index2].email) {
+                      excel_data_3[index2]['error'] = true;
+                      excel_data_3[index2]['error_msg'].push('이메일 중복');
+                    }
+                }
+            }
+        }
 
         callback(null, excel_data_3);
       });
@@ -363,29 +363,29 @@ router.post('/upload/excel/create/employee', isAuthenticated, function (req, res
     function (excel_data_5, callback) {
       UTIL.deleteFile(_file_path, function (err, data) {
         if (err) {
-            console.error(err);
-            callback(err, null);
-          } else {
-            console.log('deleted file : ' + _file_path);
-            callback(null, excel_data_5);
-          }
+          console.error(err);
+          callback(err, null);
+        } else {
+          console.log('deleted file : ' + _file_path);
+          callback(null, excel_data_5);
+        }
       });
     },
         // 오류가 있는 엑셀 데이터를 내보내기 한다.
     function (excel_data_6, callback) {
       if (excel_data_6.length > 0) {
         var row = null,
-            len = 0, index = 0,
-            write_excel = __dirname + '/../public/uploads/excel/regist_employee.xlsx', // 쓰기에 사용할 엑셀파일
-            output_excel = __dirname + '/../public/uploads/excel/fail_upload.xlsx'; // 내보내기에 사용할 엑셀파일
+          len = 0, index = 0,
+          write_excel = __dirname + '/../public/uploads/excel/regist_employee.xlsx', // 쓰기에 사용할 엑셀파일
+          output_excel = __dirname + '/../public/uploads/excel/fail_upload.xlsx'; // 내보내기에 사용할 엑셀파일
 
         UTIL.FileExists(write_excel, function (err, data) {
-            if (err) callback(err, null);
-          });
+          if (err) callback(err, null);
+        });
 
         var wb = new Excel.Workbook(),
-            excel_row = null,
-            error_row_count = 0;
+          excel_row = null,
+          error_row_count = 0;
 
         wb.xlsx.readFile(write_excel)
                 .then(function () {
@@ -486,16 +486,16 @@ router.post('/upload/excel/register/employee', isAuthenticated, function (req, r
           if (err) {
             // 에러가 발생할 경우 500페이지로 리턴처리한다.
             // todo 여기서는 어떤 처리가 이루어질 것인지 확인하는 작업이 필요하다
-             console.error(err);
-             callback(err, null);
-             throw new Error(err);
-           } else {
-             console.log('excel');
-             console.info(data);
+            console.error(err);
+            callback(err, null);
+            throw new Error(err);
+          } else {
+            console.log('excel');
+            console.info(data);
 
             // 가져온 데이터를 기반으로 디비를 조회하여 user_id를 모두 추출해야 한다.
-             UserService.extractUserIdFromList(data, function (err, result) {
-              if (err) {
+            UserService.extractUserIdFromList(data, function (err, result) {
+               if (err) {
                 callback(err, null);
                 throw new Error(err);
               } else {
@@ -504,9 +504,9 @@ router.post('/upload/excel/register/employee', isAuthenticated, function (req, r
                 _data.user_group = result;
                 callback(null, result);
               }
-            });
+             });
             // callback(null, data);
-           }
+          }
         });
       },
 
@@ -516,10 +516,10 @@ router.post('/upload/excel/register/employee', isAuthenticated, function (req, r
         UserService.insertUserDataInGroupUser(_data.user_group, _data.group_id, function (err, result) {
           if (err) {
             // callback(err, null);
-             console.error(err);
-           } else {
-             callback(null, result);
-           }
+            console.error(err);
+          } else {
+            callback(null, result);
+          }
         });
       },
 
@@ -546,11 +546,11 @@ router.post('/upload/excel/register/employee', isAuthenticated, function (req, r
       function (callback) {
         UTIL.deleteFile(_file_path, function (err, result) {
           if (err) {
-             console.error(err);
-             callback(err, null);
-           } else {
-             callback(null, result);
-           }
+            console.error(err);
+            callback(err, null);
+          } else {
+            callback(null, result);
+          }
         });
       }
     ],

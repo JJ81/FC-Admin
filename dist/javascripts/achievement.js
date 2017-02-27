@@ -1,0 +1,1 @@
+"use strict";requirejs(["common"],function(e){e.initDataTable($("#table_achievement"))});
