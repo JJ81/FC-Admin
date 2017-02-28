@@ -1,7 +1,6 @@
 'use strict';
 
 requirejs.config({
-  // baseUrl: '/static',
   paths: {
     'jquery': ['/static/vendor/jquery-2.2.3.min'],
     'jquery-private': ['/static/vendor/jquery-private'],

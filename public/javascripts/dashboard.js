@@ -25,7 +25,7 @@ function (Util) {
       ],
       'order': [[ 10, 'desc' ]]
     });
-            // 누적 포인트 현황
+    // 누적 포인트 현황
     Util.initDataTable($('#table_point'), {
       'order': [[ 3, 'desc' ]],
       buttons: [
@@ -51,21 +51,19 @@ function (Util) {
 
   // 교육과정 선택 변경
   $('#select-point-by-edu').change(function () {
-    var edu_id = $(this).val();
+    var eduId = $(this).val();
 
     axios.get('/dashboard/edupoint', {
       params: {
-        edu_id: edu_id
+        edu_id: eduId
       }
     })
     .then(function (response) {
-      var new_data = response.data.data;
+      var newData = response.data.data;
       var table = $('#table-point-by-edu').DataTable();
 
-        // console.info(new_data);
-
       table.clear().draw();
-      table.rows.add(new_data); // Add new data
+      table.rows.add(newData); // Add new data
       table.columns.adjust().draw(); // Redraw the DataTable
     })
     .catch(function (error) {
@@ -73,23 +71,10 @@ function (Util) {
     });
   });
 
-  var
-    _total = 0,
-    frm_point_weight = $('#frm_point_weight'),
-    pointWeightForm = $('#pointWeight'),
-    eduComplete = $('.eduComplete'),
-    quizComplete = $('.quizComplete'),
-    finalComplete = $('.finalComplete'),
-    reeltimeComplete = $('.reeltimeComplete'),
-    speedComplete = $('.speedComplete'),
-    repsComplete = $('.repsComplete'),
-    totalPoint = $('.total_point'),
-    btnRegisterPointWeight = $('.btn-register-point-weight');
-
-        /**
-         * 포인트 상세내역 모달창
-         *
-         */
+  /**
+   * 포인트 상세내역 모달창
+   *
+   */
   $('#modal-point-details').on('show.bs.modal', function (e) {
     axios.get('/dashboard/point/details', {
       params: {
@@ -97,18 +82,9 @@ function (Util) {
       }
     })
     .then(function (response) {
-        // console.log(response.data.list);
-
-        // var point_complete = $('.eduComplete').val(),
-        //     point_speed = $('.speedComplete').val(),
-        //     point_reeltime = $('.reeltimeComplete').val(),
-        //     point_quiz = $('.quizComplete').val(),
-        //     point_final = $('.finalComplete').val(),
-        //     point_repeat = $('.repeat').val();
-
       $('#table_point_details > tbody ').html('');
-
-      var list = response.data.list, element = '';
+      var list = response.data.list;
+      var element = '';
       for (var index = 0; index < list.length; index++) {
         element = '<tr>';
         element += '<td>' + list[index].edu_name + '</td>';
