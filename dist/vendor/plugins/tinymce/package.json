@@ -1,0 +1,85 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "tinymce",
+        "scope": null,
+        "escapedName": "tinymce",
+        "name": "tinymce",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/parkseokje/FC-backoffice"
+    ]
+  ],
+  "_from": "tinymce@latest",
+  "_id": "tinymce@4.5.3",
+  "_inCache": true,
+  "_location": "/tinymce",
+  "_nodeVersion": "7.2.1",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/tinymce-4.5.3.tgz_1485961520319_0.8871647722553462"
+  },
+  "_npmUser": {
+    "name": "ephox",
+    "email": "is-accounts@ephox.com"
+  },
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "tinymce",
+    "scope": null,
+    "escapedName": "tinymce",
+    "name": "tinymce",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/tinymce/-/tinymce-4.5.3.tgz",
+  "_shasum": "1c9210e15d0575ff12eb941a87e6efff39824bd1",
+  "_shrinkwrap": null,
+  "_spec": "tinymce",
+  "_where": "/Users/parkseokje/FC-backoffice",
+  "bugs": {
+    "url": "http://www.tinymce.com/develop/bugtracker.php"
+  },
+  "dependencies": {},
+  "description": "Web based JavaScript HTML WYSIWYG editor control.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "1c9210e15d0575ff12eb941a87e6efff39824bd1",
+    "tarball": "https://registry.npmjs.org/tinymce/-/tinymce-4.5.3.tgz"
+  },
+  "keywords": [
+    "editor",
+    "wysiwyg",
+    "tinymce",
+    "richtext",
+    "javascript",
+    "html"
+  ],
+  "license": "LGPL-2.1",
+  "main": "tinymce.js",
+  "maintainers": [
+    {
+      "name": "ephox",
+      "email": "is-accounts@ephox.com"
+    },
+    {
+      "name": "spocke",
+      "email": "spocke@moxiecode.com"
+    }
+  ],
+  "name": "tinymce",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {},
+  "version": "4.5.3"
+}

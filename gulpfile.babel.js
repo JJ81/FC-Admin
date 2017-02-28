@@ -15,13 +15,17 @@ const DIR = {
 
 const SRC = {
   JS: DIR.SRC + '/javascripts/**/*.js',
+  VENDOR: DIR.SRC + '/vendor/**/*.*',
+  UPLOADS: DIR.SRC + '/uploads/**/*.*',
   CSS: DIR.SRC + '/stylesheets/*.css',
   HTML: DIR.SRC + '/*.html',
   IMAGES: DIR.SRC + '/images/*'
 };
 
 const DEST = {
-  JS: DIR.DEST + '/javascripts/',
+  JS: DIR.DEST + '/javascripts',
+  VENDOR: DIR.DEST + '/vendor',
+  UPLOADS: DIR.DEST + '/uploads',
   CSS: DIR.DEST + '/stylesheets',
   HTML: DIR.DEST + '/',
   IMAGES: DIR.DEST + '/images',
@@ -32,6 +36,16 @@ gulp.task('js', () => {
   return gulp.src(SRC.JS, { base: './public/javascripts' })
           .pipe(uglify())
           .pipe(gulp.dest(DEST.JS));
+});
+
+gulp.task('vendor', () => {
+  return gulp.src(SRC.VENDOR, { base: './public/vendor' })
+          .pipe(gulp.dest(DEST.VENDOR));
+});
+
+gulp.task('uploads', () => {
+  return gulp.src(SRC.UPLOADS, { base: './public/uploads' })
+          .pipe(gulp.dest(DEST.UPLOADS));
 });
 
 gulp.task('copy-font', () => {
@@ -101,6 +115,6 @@ gulp.task('watch', () => {
   }
 });
 
-gulp.task('default', ['clean', 'js', 'copy-font', 'copy-css', 'css', 'html', 'images'], () => {
+gulp.task('default', ['clean', 'js', 'vendor', 'uploads', 'copy-font', 'copy-css', 'css', 'html', 'images'], () => {
   gutil.log('Gulp is running');
 });
