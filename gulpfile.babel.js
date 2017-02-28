@@ -69,9 +69,8 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'plugins/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
     DIR.SRC + '/vendor/' + 'plugins/es6-promise/dist/es6-promise.min.js',
     DIR.SRC + '/vendor/' + 'plugins/vimeo-player-js/dist/player.min.js'
-    // DIR.SRC + '/vendor/' + 'plugins/tinymce/tinymce.min.js'
   ])
-  // .pipe(uglify())
+  .pipe(uglify())
   .pipe(gulp.dest(DEST.VENDOR));
 });
 
