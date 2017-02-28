@@ -1,7 +1,7 @@
 
 'use strict';
 
-requirejs(['common' ],
+requirejs([ 'common' ],
 function (Util) {
   $(function () {
     Util.initDataTable($('#table-personal-point-rank'), {

@@ -15,11 +15,11 @@ define(
     'datatables.net',
     'datatables.net-bs',
     // 'datatables.net-buttons',
-    '../vendor/plugins/datatables.net-buttons-bs/js/buttons.bootstrap',
-    '../vendor/plugins/datatables.net-buttons/js/buttons.html5',
-    '../vendor/plugins/datatables.net-buttons/js/buttons.print',
+    'buttons.bootstrap',
+    'buttons.html5',
+    'buttons.print',
     'datatables.net-responsive',
-    '../vendor/plugins/datatables.net-responsive-bs/js/responsive.bootstrap',
+    'responsive.bootstrap',
     'select2',
     'adminLTE',
     'fastclick',
@@ -44,7 +44,7 @@ function ($, jszip, axios, moment) {
   });
 
   tinymce.init({
-          // selector: 'textarea',
+    // selector: 'textarea',
     mode: 'specific_textareas',
     editor_selector: 'editor',
     // theme: 'simple',

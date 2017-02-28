@@ -1,1 +1,1 @@
-"use strict";requirejs(["jquery"],function(c){var i=c("#check-quiz"),n=c(".answer");c(function(){}),i.bind("click",function(){n.show()})});
+"use strict";requirejs(["common"],function(c){var i=$("#check-quiz"),n=$(".answer");i.bind("click",function(){n.show()})});

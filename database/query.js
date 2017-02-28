@@ -316,7 +316,7 @@ QUERY.COURSE = {
 
     // 퀴즈/파이널테스트 세션을 생생헌다.
   InsertIntoCourseListForQuiz:
-    'INSERT IGNORE INTO `course_list` (`course_id`, `type`, `title`, `quiz_group_id`, `order`) ' +
+    'INSERT IGNORE `course_list` (`course_id`, `type`, `title`, `quiz_group_id`, `order`) ' +
     'VALUES (?,?,?,?,?); ',
 
     // 퀴즈 그룹을 생생헌다.

@@ -261,8 +261,8 @@
 		
 			return rows.flatten().toArray();
 		};
-		
-		
+
+
 		/**
 		 * This function will make DataTables recalculate the column sizes, based on the data
 		 * contained in the table and the sizes applied to the columns (in the DOM, CSS or

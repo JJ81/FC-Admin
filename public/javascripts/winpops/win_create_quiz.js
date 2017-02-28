@@ -1,14 +1,15 @@
 'use strict';
 requirejs(
   [
-    'jquery',
-    'axios',
-    'jquery_ui',
-    'bootstrap',
-    'slimScroll',
+    // 'jquery',
+    // 'axios',
+    // 'jquery_ui',
+    // 'bootstrap',
+    // 'slimScroll',
+    'common',
     'quiz_service'
   ],
-function ($, axios) {
+function (Util) {
   var QuizService = require('quiz_service');
 
   // avoid to confliction between jquery tooltip and bootstrap tooltip
@@ -50,7 +51,7 @@ function ($, axios) {
       };
 
       var data = {
-        courseId: $('input[name=course_id]').val(),
+        course_id: $('input[name=course_id]').val(),
         course_list_id: null,
         quiz_group_id: res1.data.id,
         quiz_list: null,
