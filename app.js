@@ -4,6 +4,7 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var helmet = require('helmet');
 
 /* routes */
 var routes = require('./routes/index'); // all about login
@@ -39,6 +40,12 @@ app.use('/static', express.static(path.join(__dirname, '/dist')));
 
 global.PROJ_TITLE = 'Orangenamu, Backoffice ';
 global.AppRoot = process.env.PWD;
+
+app.use(helmet.xssFilter());
+app.use(helmet.noCache());
+app.use(helmet.noSniff());
+app.use(helmet.frameguard());
+app.use(helmet.hidePoweredBy());
 
 app.use(cookieSession({
   keys: ['FC_Admin'],

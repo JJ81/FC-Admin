@@ -1,5 +1,4 @@
 'use strict';
-
 requirejs.config({
   paths: {
     'jquery': ['/static/vendor/jquery-2.2.3.min'],
