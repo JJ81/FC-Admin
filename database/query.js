@@ -57,6 +57,9 @@ QUERY.LOGIN = {
     '     , a.`role` ' +
     '     , f.`name` AS fc_name ' +
     '     , f.`id` AS fc_id ' +
+    '     , f.`theme-bg` AS fc_theme ' +
+    '     , f.`tile-bg` AS fc_tile_theme ' +
+    '     , f.`progress-bar-bg` AS fc_progress_bar_theme ' +
     '     , CURDATE() AS curdate ' +
     '  FROM `admin` AS a ' +
     '  LEFT JOIN `fc` AS f ' +

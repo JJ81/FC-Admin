@@ -4,8 +4,7 @@ var router = express.Router();
 // var connection = mysql_dbc.init();
 var QUERY = require('../database/query');
 var isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated())
-    return next();
+  if (req.isAuthenticated())    { return next(); }
   res.redirect('/login');
 };
 require('../commons/helpers');
@@ -26,12 +25,11 @@ const pool = require('../commons/db_conn_pool');
  * 9. 포인트 현황
  */
 router.get('/', isAuthenticated, function (req, res) {
+  var eduProgress = null;
+  var pointWeight = null;
+  var query = null;
 
-    var eduProgress = null;
-    var pointWeight = null;
-    var query = null;
-
-  pool.getConnection(function(err, connection) {
+  pool.getConnection(function (err, connection) {
     if (err) throw err;
 
     async.series(
@@ -48,21 +46,21 @@ router.get('/', isAuthenticated, function (req, res) {
               } else {
                 callback(null, rows);
               }
-          });
+            });
         },
         // 총 지점 수
         // result[1]
         function (callback) {
           connection.query(QUERY.DASHBOARD.GetBranchCount,
             [req.user.fc_id],
-            function (err, rows){
+            function (err, rows) {
               if (err) {
                 console.error(err);
                 callback(err, null);
               } else {
                 callback(null, rows);
               }
-          });
+            });
         },
         // 총 진행중인 교육과정
         // result[2]
@@ -70,32 +68,32 @@ router.get('/', isAuthenticated, function (req, res) {
           connection.query(QUERY.DASHBOARD.GetCurrentEduCount,
             [req.user.fc_id],
             function (err, rows) {
-              if(err){
+              if (err) {
                 console.error(err);
                 callback(err, null);
-              }else{
+              } else {
                 callback(null, rows);
               }
-          });
+            });
         },
         // 총 교육과정
         // result[3]
-        function (callback){
+        function (callback) {
           connection.query(QUERY.DASHBOARD.GetTotalEduCount,
             [req.user.fc_id],
             function (err, rows) {
-              if(err){
+              if (err) {
                 console.error(err);
                 callback(err, null);
-              }else{
+              } else {
                 callback(null, rows);
               }
-          });
+            });
         },
         // 포인트 가중치 설정값
         // result[4]
         function (callback) {
-            callback(null, null);
+          callback(null, null);
         },
         // 이번 달 전체 교육 이수율
         // result[5]
@@ -142,8 +140,7 @@ router.get('/', isAuthenticated, function (req, res) {
           );
         }
       ],
-      function (err, result){
-
+      function (err, result) {
         connection.release();
 
         if (err) {
@@ -179,7 +176,7 @@ router.get('/', isAuthenticated, function (req, res) {
             });
           });
         }
-    });
+      });
   });
 });
 
@@ -187,21 +184,20 @@ router.get('/', isAuthenticated, function (req, res) {
  * 포인트 상세내역 조회
  */
 router.get('/point/details', isAuthenticated, function (req, res) {
+  var query = null;
 
-    var query = null;
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
 
-    pool.getConnection(function (err, connection) {
-      if (err) throw err;
-
-      query = connection.query(QUERY.DASHBOARD.GetUserPointDetails, [ req.user.fc_id, req.query.user_id ], function (err, data) {
+    query = connection.query(QUERY.DASHBOARD.GetUserPointDetails, [ req.user.fc_id, req.query.user_id ], function (err, data) {
         connection.release();
 
         if (err) {
-            console.log(err);
-            res.json({
-                success: false,
-                msg: err
-            });
+          console.log(err);
+          res.json({
+            success: false,
+            msg: err
+          });
         } else {
           var list = [];
           for (var index = 0; index < data.length; index++) {
@@ -221,46 +217,44 @@ router.get('/point/details', isAuthenticated, function (req, res) {
           });
         }
       });
-    });
+  });
 });
 
 /**
  * 가중치 등록
  */
 router.post('/point/weight/record', isAuthenticated, function (req, res) {
+  var _eduComplete = req.body.complete;
+  var _quizComplete = req.body.quiz;
+  var _finalComplete = req.body.final_test;
+  var _reeltimeComplete = req.body.reeltime;
+  var _speedComplete = req.body.speed;
+  var _repsComplete = req.body.reps;
 
-	var _eduComplete = req.body.complete;
-	var _quizComplete = req.body.quiz;
-	var _finalComplete = req.body.final_test;
-	var _reeltimeComplete = req.body.reeltime;
-	var _speedComplete = req.body.speed;
-	var _repsComplete = req.body.reps;
-
-	connection.query(QUERY.DASHBOARD.SetPointWeight,
-		[
-			_eduComplete,
-			_quizComplete,
-			_finalComplete,
-			_reeltimeComplete,
-			_speedComplete,
-			_repsComplete,
-			req.user.admin_id
-		],
-		function (err, result){
-			if(err){
-				console.error(err);
-				throw new Error(err);
-			}else{
-				res.redirect('/dashboard');
-			}
-	});
+  connection.query(QUERY.DASHBOARD.SetPointWeight,
+    [
+      _eduComplete,
+      _quizComplete,
+      _finalComplete,
+      _reeltimeComplete,
+      _speedComplete,
+      _repsComplete,
+      req.user.admin_id
+    ],
+		function (err, result) {
+  if (err) {
+    console.error(err);
+    throw new Error(err);
+  } else {
+    res.redirect('/dashboard');
+  }
+});
 });
 
 /**
  * 교육과정별 포인트 현황을 반환한다.
  */
 router.get('/edupoint', isAuthenticated, function (req, res) {
-
   var _inputs = req.query;
   var query = null;
   var pointWeight = null;
@@ -289,36 +283,36 @@ router.get('/edupoint', isAuthenticated, function (req, res) {
                     point_final: 0,
                     point_reeltime: 0,
                     point_speed: 0,
-                    point_repetition: 0,
+                    point_repetition: 0
                   }]);
                 }
               }
-          });
+            });
         },
         // 교육과정별 포인트 현황
         function (callback) {
-          if  (pointWeight != null) {
+          if (pointWeight != null) {
             query = connection.query(QUERY.DASHBOARD.GetUserPointListByEduId,
-                [
-                  req.user.fc_id,
-                  req.user.fc_id,
-                  _inputs.edu_id
-                ],
+              [
+                req.user.fc_id,
+                req.user.fc_id,
+                _inputs.edu_id
+              ],
                 function (err, rows) {
-                    if (err) console.log(err);
+                  if (err) console.log(err);
                     // console.log(query.sql);
                     // console.log(rows);
 
-                    for (var index = 0; index < rows.length; index++) {
-                      var logs = JSON.parse(rows[index].logs);
-                      rows[index].period = logs.edu_start_dt + ' ~ ' + logs.edu_end_dt;
-                      rows[index].complete = logs.complete.complete_course_count + ' / ' + logs.complete.total_course_count;
-                      rows[index].quiz_correction = logs.quiz_correction.correct_count + ' / ' + logs.quiz_correction.total_count;
-                      rows[index].final_correction = logs.final_correction.correct_count + ' / ' + logs.final_correction.total_count;
-                      rows[index].reeltime = logs.reeltime.played_seconds + ' / ' + logs.reeltime.duration;
-                      rows[index].speed = logs.speed.user_period + ' / ' + logs.speed.edu_period;
-                      rows[index].repetition = logs.repetition.value == 1 ? '예' : '아니오';
-                    }
+                  for (var index = 0; index < rows.length; index++) {
+                    var logs = JSON.parse(rows[index].logs);
+                    rows[index].period = logs.edu_start_dt + ' ~ ' + logs.edu_end_dt;
+                    rows[index].complete = logs.complete.complete_course_count + ' / ' + logs.complete.total_course_count;
+                    rows[index].quiz_correction = logs.quiz_correction.correct_count + ' / ' + logs.quiz_correction.total_count;
+                    rows[index].final_correction = logs.final_correction.correct_count + ' / ' + logs.final_correction.total_count;
+                    rows[index].reeltime = logs.reeltime.played_seconds + ' / ' + logs.reeltime.duration;
+                    rows[index].speed = logs.speed.user_period + ' / ' + logs.speed.edu_period;
+                    rows[index].repetition = logs.repetition.value == 1 ? '예' : '아니오';
+                  }
                   callback(err, rows);
                 }
             );
@@ -340,9 +334,8 @@ router.get('/edupoint', isAuthenticated, function (req, res) {
             data: results[1]
           });
         }
-    });
+      });
   });
-
 });
 
 module.exports = router;

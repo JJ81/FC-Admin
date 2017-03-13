@@ -4,7 +4,8 @@
         <div class="row">
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
-                <div class="small-box bg-yellow">
+                <!--<div class="small-box bg-gray">-->
+                <div class="small-box {{#if loggedIn.fc_tile_theme}}bg-{{loggedIn.fc_tile_theme}}{{else}}bg-gray{{/if}}">
                     <div class="inner">
                       <h3>{{#each total_users}}{{total_users}}{{/each}}</h3>
                         <p>총 교육생수</p>
@@ -16,7 +17,7 @@
             </div>
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
-                <div class="small-box bg-aqua">
+                <div class="small-box {{#if loggedIn.fc_tile_theme}}bg-{{loggedIn.fc_tile_theme}}{{else}}bg-gray{{/if}}">
                     <div class="inner">
                         <h3>{{#each total_branch}}{{total_branch}}{{/each}}</h3>
                         <p>총 지점수</p>
@@ -28,7 +29,7 @@
             </div>
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
-                <div class="small-box bg-red">
+                <div class="small-box {{#if loggedIn.fc_tile_theme}}bg-{{loggedIn.fc_tile_theme}}{{else}}bg-gray{{/if}}">
                     <div class="inner">
                         <h3>
                           {{#each current_edu}}{{current_edu}}{{/each}} / {{#each total_edu}}{{total_edu}}{{/each}}
@@ -42,7 +43,7 @@
             </div>
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
-                <div class="small-box bg-green">
+                <div class="small-box {{#if loggedIn.fc_tile_theme}}bg-{{loggedIn.fc_tile_theme}}{{else}}bg-gray{{/if}}">
                     <div class="inner">
                         <h3>{{total_edu_progress.completed_rate}} <sup style="font-size: 20px">%</sup></h3>
                         <p>{{ dateformat loggedIn.curdate 'm'}}월 교육과정 이수율</p>
@@ -68,7 +69,7 @@
                             <span class="progress-number"><b>{{completed_rate}}%</b></span>
 
                             <div class="progress progress-sm active">
-                                <div class="progress-bar progress-bar-green progress-bar-striped" style="width: {{completed_rate}}%"></div>
+                                <div class="progress-bar {{#if ../loggedIn.fc_pgbar_theme}}progress-bar-{{../../loggedIn.fc_pgbar_theme}}{{else}}progress-bar-green{{/if}} progress-bar-striped" style="width: {{completed_rate}}%"></div>
                             </div>
                         </div>
                         <!-- /.progress-group -->
@@ -137,7 +138,7 @@
                                 <div class="progress-course-detail">
                                     <h4 class="course-name">{{course_name}}</h4>
                                     <div class="progress progress-sm active">
-                                        <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="{{completed_rate}}" aria-valuemin="0" aria-valuemax="100" style="width: {{completed_rate}}%"></div>
+                                        <div class="progress-bar {{#if ../../loggedIn.fc_pgbar_theme}}progress-bar-{{../../../loggedIn.fc_pgbar_theme}}{{else}}progress-bar-green{{/if}} progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="{{completed_rate}}" aria-valuemin="0" aria-valuemax="100" style="width: {{completed_rate}}%"></div>
                                     </div>
                                     <div class="star-rating">
                                         <span class="ratings {{star-rating course_rate}}"></span> ( {{course_rate}}점, {{vote_count}}명 평가 )
