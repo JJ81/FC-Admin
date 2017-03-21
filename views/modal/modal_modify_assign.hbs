@@ -1,0 +1,57 @@
+<!-- Create Employee -->
+<div class="modal" id="modifyAssignment" role="dialog">
+    <form class="modal-dialog" method="post" action="/assignment/modify" id="frm_allocation_edu">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">교육 배정 수정</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <h4 id="eduName"></h4>
+                    <!--<select name="edu_list" class="form-control">
+                        {{#each edu_list}}
+                        <option value="{{education_id}}">{{name}} <small>(강사 : {{creator}})</small></option>
+                        {{/each}}
+                    </select>-->
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="start_dt">시작일 :</label>
+                            <div class="input-group date" id="start_dt">
+                                <input type="text" name="start_dt" class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-sm-6'>
+                        <div class="form-group">
+                            <label for="end_dt">종료일 :</label>
+                            <div class="input-group date" id="end_dt">
+                                <input type="text" name="end_dt" class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+                <button type="submit" class="btn btn-warning btn-set-agent-password-submit">수정</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+        <input type="hidden" name="bind_group_id" class="bind_group_id" />
+        <input type="hidden" name="group_id" class="user_group_id" />        
+        <input type="hidden" name="log_assign_edu_id" id="log_assign_edu_id" />
+    </form>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
