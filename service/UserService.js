@@ -6,7 +6,7 @@ const connection = mysql_dbc.init();
 const UserService = {};
 const QUERY = require('../database/query');
 const async = require('async');
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const pool = require('../commons/db_conn_pool');
 
 /**

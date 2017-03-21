@@ -71,43 +71,43 @@
                     <!--강의에 속한 세션 항목 나열과 선택시 볼 수 있어야 한다.-->
                     {{#if session_list}}
                         {{#each session_list}}
-                            <ul class="session-list">  
+                            <ul class="session-list">
                             {{#if (isEquals type 'QUIZ')}}
-                                <li>              
+                                <li>
                                     <span class="handle ui-sortable-handle">
                                         <i class="fa fa-ellipsis-v"></i>
                                         <i class="fa fa-ellipsis-v"></i>
-                                    </span>                                                        
+                                    </span>
                                     <a href="#quiz" class="btn-solve-quiz"
-                                        data-quiz-group="{{quiz_group_id}}" 
-                                        data-type="QUIZ" 
+                                        data-quiz-group="{{quiz_group_id}}"
+                                        data-type="QUIZ"
                                         data-title="{{title}}"
-                                        data-order="{{order}}" 
+                                        data-order="{{order}}"
                                         data-id="{{id}}"
                                     >
                                         <i class="fa fa-quora"></i> &nbsp;
                                         {{title}}
                                     </a>
-                                    <span class="pull-right" 
-                                        data-course-id="{{course_id}}" 
-                                        data-course-list-id="{{id}}" 
+                                    <span class="pull-right"
+                                        data-course-id="{{course_id}}"
+                                        data-course-list-id="{{id}}"
                                         data-type="{{type}}"
                                     >
-                                        <a href="#view" class="btn btn-sm btn-session-detail text-green btn-solve-quiz" 
-                                            data-quiz-group="{{quiz_group_id}}" 
-                                            data-type="QUIZ" 
+                                        <a href="#view" class="btn btn-sm btn-session-detail text-green btn-solve-quiz"
+                                            data-quiz-group="{{quiz_group_id}}"
+                                            data-type="QUIZ"
                                             data-title="{{title}}">
                                             <i class="fa fa-eye"></i>
                                             보기
                                         </a>
-                                        <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-quiz" 
-                                            data-id="{{id}}" 
+                                        <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-quiz"
+                                            data-id="{{id}}"
                                             data-quiz-group="{{quiz_group_id}}"
                                         >
                                             <i class="fa fa-pencil"></i> &nbsp; 수정
                                         </a>
-                                        <a href="#delete" class="btn btn-sm text-red btn-delete-session btn-delete-session" 
-                                            data-id="{{id}}" 
+                                        <a href="#delete" class="btn btn-sm text-red btn-delete-session btn-delete-session"
+                                            data-id="{{id}}"
                                             data-quiz-group="{{quiz_group_id}}"
                                         >
                                             <i class="fa fa-eraser"></i> &nbsp; 삭제
@@ -119,11 +119,11 @@
                                     <span class="handle ui-sortable-handle">
                                         <i class="fa fa-ellipsis-v"></i>
                                         <i class="fa fa-ellipsis-v"></i>
-                                    </span>                                            
+                                    </span>
                                     <a href="#video" class="btn-watch-video"
-                                        data-video-id="{{video_id}}" 
-                                        data-order="{{order}}" 
-                                        data-title="{{title}}" 
+                                        data-video-id="{{video_id}}"
+                                        data-order="{{order}}"
+                                        data-title="{{title}}"
                                         data-id="{{id}}"
                                     >
                                         <i class="fa fa-file-video-o"></i> &nbsp;
@@ -147,32 +147,32 @@
                                     <span class="handle ui-sortable-handle">
                                         <i class="fa fa-ellipsis-v"></i>
                                         <i class="fa fa-ellipsis-v"></i>
-                                    </span>                                            
+                                    </span>
                                     <a href="#final" class="btn-solve-quiz"
-                                        data-quiz-group="{{quiz_group_id}}" 
-                                        data-type="{{type}}" 
-                                        data-title="{{title}}" 
-                                        data-order="{{order}}" 
+                                        data-quiz-group="{{quiz_group_id}}"
+                                        data-type="{{type}}"
+                                        data-title="{{title}}"
+                                        data-order="{{order}}"
                                         data-id="{{id}}"
                                     >
                                         <i class="fa fa-sticky-note"></i> &nbsp;
                                         {{title}}
                                     </a>
-                                    <span class="pull-right" 
-                                        data-course-id="{{course_id}}" 
-                                        data-course-list-id="{{id}}" 
+                                    <span class="pull-right"
+                                        data-course-id="{{course_id}}"
+                                        data-course-list-id="{{id}}"
                                         data-type="{{type}}"
                                     >
-                                        <a href="#view" class="btn btn-sm btn-session-detail text-green btn-solve-quiz" 
-                                            data-quiz-group="{{quiz_group_id}}" 
-                                            data-type="{{type}}" 
+                                        <a href="#view" class="btn btn-sm btn-session-detail text-green btn-solve-quiz"
+                                            data-quiz-group="{{quiz_group_id}}"
+                                            data-type="{{type}}"
                                             data-title="{{title}}"
                                         >
                                             <i class="fa fa-eye"></i>
                                             보기
                                         </a>
-                                        <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-quiz" 
-                                            data-id="{{id}}" 
+                                        <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-quiz"
+                                            data-id="{{id}}"
                                             data-quiz-group="{{quiz_group_id}}"
                                         >
                                             <i class="fa fa-pencil"></i> &nbsp; 수정
@@ -195,12 +195,12 @@
             <div class="box-footer"></div>
         </div>
         <!-- /.box -->
-                
+
         <div class="box">
             <div class="box-header with-border">
                 <h3>
-                    강사 정보            
-                </h3>  
+                    강사 정보
+                </h3>
             </div>
             <div class="box-body">
                 {{#if teacher_info}}
@@ -213,8 +213,8 @@
                             <span class="ratings {{star-rating teacher_rate}}"></span> ( {{ teacher_rate }} )
                             <!--{{/each}}-->
                         </div>
-                    </p>                       
-                    
+                    </p>
+
                     <!--<pre class="teacher-desc">{{desc}}</pre>-->
                     <div class="teacher-desc">
                         {{{desc}}}

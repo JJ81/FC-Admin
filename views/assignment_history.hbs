@@ -19,13 +19,19 @@
                     {{#each list}}
                         <tr>
                             <td class="center">{{time created_dt}}</td>
-                            <td class="">{{name}}</td>
                             <td class="">
-                                {{#if (isEmpty target)}}
-                                    -
-                                {{else}}
-                                    {{target}}
-                                {{/if}}
+                              <a href="/education/details?id={{edu_id}}&course_group_id={{course_group_id}}">
+                              {{name}}
+                              </a>
+                            </td>
+                            <td class="">
+                              <a href="/assignment/details?id={{logBindUserId}}&group_id={{logBindUserGroupId}}">
+                              {{#if (isEmpty target)}}
+                                  -
+                              {{else}}
+                                  {{target}}
+                              {{/if}}
+                              </a>
                             </td>
                             <td class="center">{{time start_dt}}</td>
                             <td class="center">{{time end_dt}}</td>

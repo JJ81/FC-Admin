@@ -142,6 +142,32 @@ function ($, jszip, axios, moment) {
     },
     createWindowPopup: function (url, title, option) {
       window.open(url, title, option);
+    },
+    initDateTimePicker: function (start, end) {
+      var startDt = moment().format();
+      var endDt = moment().add(6, 'days');
+      // 시작일자
+      start.datetimepicker({
+        defaultDate: startDt,
+        format: 'YYYY-MM-DD',
+        showTodayButton: true
+      });
+
+      // 종료일자
+      end.datetimepicker({
+        defaultDate: endDt,
+        format: 'YYYY-MM-DD',
+        useCurrent: false,
+        showTodayButton: true
+      });
+
+      // 날짜가 서로 겹치지 않도록 설정한다.
+      start.on('dp.change', function (e) {
+        end.data('DateTimePicker').minDate(e.date);
+      });
+      end.on('dp.change', function (e) {
+        start.data('DateTimePicker').maxDate(e.date);
+      });
     }
   };
 }); // end of func

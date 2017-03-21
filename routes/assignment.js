@@ -1,49 +1,50 @@
-var express = require('express');
-var router = express.Router();
-var mysql_dbc = require('../commons/db_conn')();
-var connection = mysql_dbc.init();
-var QUERY = require('../database/query');
-var isAuthenticated = function (req, res, next) {
+const express = require('express');
+const router = express.Router();
+const mysql_dbc = require('../commons/db_conn')();
+const connection = mysql_dbc.init();
+const QUERY = require('../database/query');
+const isAuthenticated = function (req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 };
 require('../commons/helpers');
-var async = require('async');
-var fs = require('fs');
+const async = require('async');
+const fs = require('fs');
 
-var formidable = require('formidable');
-var util = require('util');
-var Excel = require('exceljs');
-var convertExcel = require('excel-as-json').processFile;
-var AssignmentService = require('../service/AssignmentService');
-var Util = require('../util/util');
+const formidable = require('formidable');
+const util = require('util');
+const Excel = require('exceljs');
+const convertExcel = require('excel-as-json').processFile;
+const AssignmentService = require('../service/AssignmentService');
+const Util = require('../util/util');
 const pool = require('../commons/db_conn_pool');
 const path = require('path');
+const UserService = require('../service/UserService');
 
-router.get('/', isAuthenticated, function (req, res) {
-  pool.getConnection(function (err, connInPool) {
+router.get('/', isAuthenticated, (req, res) => {
+  pool.getConnection((err, connInPool) => {
     if (err) throw err;
     async.series([
       // 교육대상 그룹
       // results[0]
-      function (callback) {
+      (callback) => {
         connInPool.query(QUERY.EDU.GetCustomUserList,
-        [req.user.fc_id],
-        function (err, data) {
-          callback(err, data);
-        });
+          [req.user.fc_id],
+          (err, data) => {
+            callback(err, data);
+          });
       },
       // 직원 리스트
       // results[1]
-      function (callback) {
+      (callback) => {
         connInPool.query(QUERY.EMPLOYEE.GetEmployeeList,
-        [req.user.fc_id],
-        function (err, data) {
-          callback(err, data);
-        });
+          [req.user.fc_id],
+          (err, data) => {
+            callback(err, data);
+          });
       }
     ],
-    function (err, results) {
+    (err, results) => {
       connInPool.release();
       if (err) {
         console.error(err);
@@ -61,17 +62,18 @@ router.get('/', isAuthenticated, function (req, res) {
   });
 });
 
-router.get('/details', isAuthenticated, function (req, res) {
-  var _id = req.query.id;
+router.get('/details', isAuthenticated, (req, res) => {
+  var logBindUserId = req.query.id;
   var _group = req.query.group_id;
 
-  pool.getConnection(function (err, connInPool) {
+  pool.getConnection((err, connInPool) => {
     if (err) throw err;
 
     async.series(
       [
-        function (callback) {
-          connInPool.query(QUERY.EDU.GetAssignmentDataById, [_id], function (err, rows) {
+        (callback) => {
+          // 교육배정 내역
+          connInPool.query(QUERY.EDU.GetAssignmentDataById, [logBindUserId], (err, rows) => {
             if (err) {
               console.error(err);
               callback(err, null);
@@ -80,8 +82,9 @@ router.get('/details', isAuthenticated, function (req, res) {
             }
           });
         },
-        function (callback) {
-          connInPool.query(QUERY.EDU.GetUserListByGroupId, [_group], function (err, rows) {
+        (callback) => {
+          // 교육배정자 목록
+          connInPool.query(QUERY.EDU.GetUserListByGroupId, [_group], (err, rows) => {
             if (err) {
               console.error(err);
               callback(err, null);
@@ -90,8 +93,9 @@ router.get('/details', isAuthenticated, function (req, res) {
             }
           });
         },
-        function (callback) {
-          connInPool.query(QUERY.EDU.GetList, [req.user.fc_id], function (err, rows) {
+        (callback) => {
+          // 교육과정 리스트
+          connInPool.query(QUERY.EDU.GetList, [req.user.fc_id], (err, rows) => {
             if (err) {
               console.error(err);
               callback(err, null);
@@ -99,9 +103,22 @@ router.get('/details', isAuthenticated, function (req, res) {
               callback(null, rows);
             }
           });
+        },
+        (callback) => {
+          // 교육배정이력
+          connInPool.query(QUERY.HISTORY.GetAssignEduHistoryById,
+            [req.user.fc_id, logBindUserId],
+            (err, rows) => {
+              if (err) {
+                console.error(err);
+                callback(err, null);
+              } else {
+                callback(null, rows);
+              }
+            });
         }
       ],
-      function (err, result) {
+      (err, result) => {
         connInPool.release();
 
         if (err) {
@@ -115,26 +132,54 @@ router.get('/details', isAuthenticated, function (req, res) {
             loggedIn: req.user,
             detail: result[0],
             detail_list: result[1],
-            edu_list: result[2]
+            edu_list: result[2],
+            assignmentHistory: result[3]
           });
         }
       });
   });
 });
 
-const UserService = require('../service/UserService');
-
 /**
  * 특정 교육생그룹에 교육과정을 배정한다.
  */
-router.post('/allocation/edu', function (req, res) {
-  var requestData = {
+router.post('/allocation/edu', (req, res) => {
+  const requestData = {
     edu_id: req.body.edu_list,
     log_bind_user_id: req.body.bind_group_id,
+    log_bind_user_group_id: req.body.group_id,
+    start_dt: req.body.start_dt,
+    end_dt: req.body.end_dt,
     user: req.user
   };
 
-  AssignmentService.allocate(connection, requestData, function (err, data) {
+  pool.getConnection((err, connInPool) => {
+    if (err) throw err;
+    // 교육과정 배정을 위한 서비스 호출
+    AssignmentService.allocate(connInPool, requestData, (err, data) => {
+      connInPool.release();
+      if (err) {
+        console.log(err);
+        res.json({
+          success: false,
+          msg: err
+        });
+      } else {
+        res.redirect('/assignment/details?id=' + requestData.log_bind_user_id + '&group_id=' + requestData.log_bind_user_group_id);
+      }
+    });
+  });
+});
+
+router.post('/modify', (req, res, next) => {
+  const requestData = {
+    log_bind_user_id: req.body.bind_group_id,
+    log_bind_user_group_id: req.body.group_id,
+    log_assign_edu_id: req.body.log_assign_edu_id,
+    start_dt: req.body.start_dt,
+    end_dt: req.body.end_dt
+  };
+  AssignmentService.modifyLogAssignEdu(requestData, (err, data) => {
     if (err) {
       console.log(err);
       res.json({
@@ -142,7 +187,7 @@ router.post('/allocation/edu', function (req, res) {
         msg: err
       });
     } else {
-      res.redirect('/assignment');
+      res.redirect('/assignment/details?id=' + requestData.log_bind_user_id + '&group_id=' + requestData.log_bind_user_group_id);
     }
   });
 });

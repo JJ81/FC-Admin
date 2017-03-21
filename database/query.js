@@ -647,12 +647,18 @@ QUERY.HISTORY = {
     ' ORDER BY te.`created_dt` DESC;',
 
   InsertIntoLogAssignEdu:
-    'INSERT INTO `log_assign_edu` (`training_edu_id`, `target_users_id`, `creator_id`) ' +
-    'VALUES(?,?,?); ',
+    'INSERT INTO `log_assign_edu` (`training_edu_id`, `target_users_id`, `creator_id`, `start_dt`, `end_dt`) ' +
+    'VALUES(?,?,?,?,?); ',
 
-  // 진척도관리
+  // 교육과정 배정 정보
   GetAssignEduHistory:
-    'SELECT e.`id` AS edu_id, te.`id`, e.`name`, te.`created_dt`, e.`start_dt`, e.`end_dt`, a.`name` AS admin, lbu.`title` AS target ' +
+    'SELECT e.`id` AS edu_id, te.`id`, e.`name`, te.`created_dt` ' +
+    // '     , e.`start_dt`, e.`end_dt` ' +
+    '     , lae.`start_dt` ' +
+    '     , lae.`end_dt` ' +
+    '     , e.`course_group_id` ' +
+    '     , a.`name` AS admin, lbu.`title` AS target ' +
+    '     , lbu.`id` AS logBindUserId, lbu.`group_id` AS logBindUserGroupId ' +
     '  FROM `training_edu` AS te ' +
     ' INNER JOIN `admin` AS a ' +
     '    ON a.`id` = te.`assigner` ' +
@@ -663,6 +669,30 @@ QUERY.HISTORY = {
     '    ON lae.`training_edu_id` = te.`id` ' +
     '  LEFT JOIN `log_bind_users` AS lbu ' +
     '    ON lbu.`id` = lae.`target_users_id` ' +
+    ' ORDER BY te.`created_dt` DESC; ',
+
+  // 진척도관리
+  GetAssignEduHistoryById:
+    'SELECT e.`id` AS edu_id, te.`id`, e.`name`, te.`created_dt` ' +
+    '     , lae.`start_dt` ' +
+    '     , lae.`end_dt` ' +
+    '     , e.`course_group_id` ' +
+    // '     , e.`start_dt` ' +
+    // '     , e.`end_dt` ' +
+    '     , a.`name` AS admin, lbu.`title` AS target ' +
+    '     , lae.`id` AS logAssignEduId ' +
+    '  FROM `training_edu` AS te ' +
+    ' INNER JOIN `admin` AS a ' +
+    '    ON a.`id` = te.`assigner` ' +
+    '   and a.`fc_id` = ? ' +
+    '  LEFT JOIN `edu` AS e ' +
+    '    ON e.`id` = te.`edu_id` ' +
+    ' INNER JOIN `log_assign_edu` AS lae ' +
+    '    ON lae.`training_edu_id` = te.`id` ' +
+    '   AND lae.`active` = 1 ' +
+    ' INNER JOIN `log_bind_users` AS lbu ' +
+    '    ON lbu.`id` = lae.`target_users_id` ' +
+    '   AND lbu.`id` = ? ' +
     ' ORDER BY te.`created_dt` DESC; ',
 
   // 진척도관리(슈퍼바이저)
@@ -966,19 +996,39 @@ QUERY.DASHBOARD = {
   GetBranchCount:
     'SELECT count(*) total_branch FROM `branch` ' +
     'WHERE fc_id= ?;',
+
+  // 진행중인 교육과정 수
   GetCurrentEduCount:
-    'SELECT count(*) AS current_edu FROM `training_edu` AS te ' +
-    'LEFT JOIN `edu` AS e ' +
-    'ON e.id = te.edu_id ' +
-    'LEFT JOIN `admin` AS a ' +
-    'ON a.id = e.creator_id ' +
-    'WHERE start_dt <= now() and end_dt >= now() ' +
-    'and a.fc_id= ?;',
+    'SELECT COUNT(DISTINCT e.`id`) AS current_edu ' +
+    '  FROM `training_edu` AS te ' +
+    ' INNER JOIN `log_assign_edu` AS lae ' +
+    '    ON lae.`training_edu_id` = te.`id` ' +
+    ' INNER JOIN `edu` AS e ' +
+    '    ON e.id = te.edu_id ' +
+    '   AND e.`active` = 1 ' +
+    ' INNER JOIN `admin` AS a ' +
+    '    ON a.`id` = e.`creator_id` ' +
+    ' WHERE lae.`start_dt` <= now() ' +
+    '   AND lae.`end_dt` >= now() ' +
+    '   AND a.fc_id = ?; ',
+
+  GetCurrentEduCount_deprecated:
+    'SELECT count(*) AS current_edu ' +
+    '  FROM `training_edu` AS te ' +
+    '  LEFT JOIN `edu` AS e ' +
+    '    ON e.id = te.edu_id ' +
+    '  LEFT JOIN `admin` AS a ' +
+    '   ON a.`id` = e.`creator_id` ' +
+    ' WHERE e.`start_dt` <= now() ' +
+    '   AND e.`end_dt` >= now() ' +
+    '   AND a.fc_id= ?; ',
+
   GetTotalEduCount:
     'SELECT count(*) AS total_edu FROM `edu` AS e ' +
     'LEFT JOIN `admin` AS a ' +
     'ON a.id = e.creator_id ' +
     'WHERE fc_id= ?;',
+
   GetRecentPointWeight:
     'SELECT pw.point_complete, pw.point_quiz, pw.point_final, pw.point_reeltime, pw.point_speed, pw.point_repetition ' +
     'FROM `point_weight` AS pw ' +
@@ -987,6 +1037,7 @@ QUERY.DASHBOARD = {
     'WHERE a.fc_id = ? ' +
     'ORDER BY `created_dt` DESC ' +
     'limit 1; ',
+
   SetPointWeight:
     'INSERT INTO `point_weight` (`point_complete`,`point_quiz`, `point_final`, ' +
     '`point_reeltime`, `point_speed`, `point_repetition`, `setter_id`) ' +
@@ -1018,6 +1069,9 @@ QUERY.DASHBOARD = {
     '           AND u.`active` = 1 ' +
     '         INNER JOIN `training_edu` AS te ' +
     '            ON tu.`training_edu_id` = te.`id` ' +
+    '         INNER JOIN `log_assign_edu` AS lae ' +
+    '            ON lae.`training_edu_id` = te.`id` ' +
+    '           AND DATE_FORMAT(NOW(), \'%Y-%m\') BETWEEN DATE_FORMAT(lae.`start_dt`, \'%Y-%m\') AND DATE_FORMAT(lae.`end_dt`, \'%Y-%m\') ' +
     '         INNER JOIN ' +
     '               ( ' +
     '                SELECT e.`name` AS edu_name ' +
@@ -1028,7 +1082,7 @@ QUERY.DASHBOARD = {
     '                  FROM `edu` AS e ' +
     '                 INNER JOIN `course_group` AS cg ' +
     '                    ON e.`course_group_id` = cg.`group_id` ' +
-    '                 WHERE DATE_FORMAT(NOW(), \'%Y-%m\') BETWEEN DATE_FORMAT(e.`start_dt`, \'%Y-%m\') AND DATE_FORMAT(e.`end_dt`, \'%Y-%m\') ' +
+    // '                 WHERE DATE_FORMAT(NOW(), \'%Y-%m\') BETWEEN DATE_FORMAT(e.`start_dt`, \'%Y-%m\') AND DATE_FORMAT(e.`end_dt`, \'%Y-%m\') ' +
     '               ) AS e ' +
     '            ON te.`edu_id` = e.`edu_id` ' +
     '       ) AS g ',
@@ -1054,8 +1108,10 @@ QUERY.DASHBOARD = {
        '               ) AS completed_rate ' +
        '             , te.`edu_id` ' +
        '             , e.`edu_name` ' +
-       '             , e.`start_dt` ' +
-       '             , e.`end_dt` ' +
+       '             , lae.`start_dt` ' +
+       '             , lae.`end_dt` ' +
+      //  '             , e.`start_dt` ' +
+      //  '             , e.`end_dt` ' +
        '             , u.`fc_id` ' +
        '          FROM `training_users` AS tu ' +
        '         INNER JOIN `users` AS u ' +
@@ -1064,6 +1120,9 @@ QUERY.DASHBOARD = {
        '           AND u.`active` = 1 ' +
        '         INNER JOIN `training_edu` AS te ' +
        '            ON tu.`training_edu_id` = te.`id` ' +
+       '         INNER JOIN `log_assign_edu` AS lae ' +
+       '            ON lae.`training_edu_id` = te.`id` ' +
+       '           AND DATE_FORMAT(NOW(), \'%Y-%m\') BETWEEN DATE_FORMAT(lae.`start_dt`, \'%Y-%m\') AND DATE_FORMAT(lae.`end_dt`, \'%Y-%m\') ' +
        '         INNER JOIN ' +
        '               ( ' +
        '                SELECT e.`name` AS edu_name ' +
@@ -1074,7 +1133,7 @@ QUERY.DASHBOARD = {
        '                  FROM `edu` AS e ' +
        '                 INNER JOIN `course_group` AS cg ' +
        '                    ON e.`course_group_id` = cg.`group_id` ' +
-       '                 WHERE DATE_FORMAT(NOW(), \'%Y-%m\') BETWEEN DATE_FORMAT(e.`start_dt`, \'%Y-%m\') AND DATE_FORMAT(e.`end_dt`, \'%Y-%m\') ' +
+      //  '                 WHERE DATE_FORMAT(NOW(), \'%Y-%m\') BETWEEN DATE_FORMAT(e.`start_dt`, \'%Y-%m\') AND DATE_FORMAT(e.`end_dt`, \'%Y-%m\') ' +
        '               ) AS e ' +
        '            ON te.`edu_id` = e.`edu_id` ' +
        '       ) AS g ' +
@@ -1334,6 +1393,12 @@ QUERY.ASSIGNMENT = {
 
   DisableLogBindUserById:
     'UPDATE `log_bind_users` SET `active` = 0 WHERE `id` = ?; ',
+
+  DisableLogAssignEduById:
+    'UPDATE `log_assign_edu` SET `active` = 0 WHERE `id` = ?; ',
+
+  UpdateLogAssignEduById:
+    'UPDATE `log_assign_edu` SET `start_dt` = ?, `end_dt` = ? WHERE `id` = ?; ',
 
   DeleteLogBindUserById:
     'DELETE FROM `log_bind_users` WHERE `id` = ?; ',
