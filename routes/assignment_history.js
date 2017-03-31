@@ -1,8 +1,11 @@
-var express = require('express');
-var router = express.Router();
-var QUERY = require('../database/query');
-var isAuthenticated = function (req, res, next) {
+const express = require('express');
+const router = express.Router();
+const QUERY = require('../database/query');
+const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
+    if (req.user.role === 'supervisor') {
+      return res.redirect('achievement');
+    }
     return next();
   }
   res.redirect('/login');

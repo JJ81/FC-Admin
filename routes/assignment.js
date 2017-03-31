@@ -3,8 +3,13 @@ const router = express.Router();
 const mysql_dbc = require('../commons/db_conn')();
 const connection = mysql_dbc.init();
 const QUERY = require('../database/query');
-const isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
+const isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    if (req.user.role === 'supervisor') {
+      return res.redirect('achievement');
+    }
+    return next();
+  }
   res.redirect('/login');
 };
 require('../commons/helpers');
@@ -193,17 +198,17 @@ router.post('/modify', (req, res, next) => {
 });
 
 // 특정 그룹에 교육을 배정한다. (Deprecated)
-router.post('/allocation/edu_x', function (req, res) {
-  var groupId = req.body.group_id; // 교육 대상자 그룹 아이디
-  var eduId = req.body.edu_list; // 교육 아이디
-  var bindUserId = req.body.bind_group_id;
+router.post('/allocation/edu_x', (req, res) => {
+  const groupId = req.body.group_id; // 교육 대상자 그룹 아이디
+  const eduId = req.body.edu_list; // 교육 아이디
+  const bindUserId = req.body.bind_group_id;
 
-  connection.beginTransaction(function () {
+  connection.beginTransaction(() => {
     async.waterfall(
       [
         // todo group_id를 통해서 유저 배열을 들고 온다.
-        function (callback) {
-          UserService.extractUserIdByGroupId(groupId, function (err, result) {
+        (callback) => {
+          UserService.extractUserIdByGroupId(groupId, (err, result) => {
             if (err) {
               callback(err, null);
               console.error(err);
@@ -214,18 +219,16 @@ router.post('/allocation/edu_x', function (req, res) {
             }
           });
         },
-
         // todo  training_edu 테이블에 입력 edu_id
-        function (user_id, callback) {
-          connection.query(QUERY.EDU.InsertTrainingEdu, [eduId, req.user.admin_id], function (err, result) {
+        (user_id, callback) => {
+          connection.query(QUERY.EDU.InsertTrainingEdu, [eduId, req.user.admin_id], (err, result) => {
             if (err) {
               callback(err, null);
               throw new Error(err);
             } else {
               console.info('extract training_edu_id');
               console.info(result);
-	            console.info(result.insertId);
-
+              console.info(result.insertId);
               callback(null, user_id, result);
             }
           });
@@ -234,8 +237,8 @@ router.post('/allocation/edu_x', function (req, res) {
         // bug 입력 진행이 되지 않는다 이것을 추적할 것 : 원인 진단 -> training_edu id값을 참조하여 training_uesrs에 입력을 해야 하나 참조가 되려면 미리 데이터가 입력되어야 가능하도록 작동중이다
         // 그래서 임의로 일단 참조 관계를 끊어놓는다
         // todo 리턴받은 training_edu_id, user_id를 가지고 training_users 테이블에 입력한다. 이 때 손실된 데이터가 생겼을 경우 다시 로그를 남기고 관리자가 알 수 있도록 해야 한다.
-        function (user_id, result, callback) {
-          UserService.InsertUsersWithTrainingEduId(user_id, result.insertId, function (err, ret) {
+        (user_id, result, callback) => {
+          UserService.InsertUsersWithTrainingEduId(user_id, result.insertId, (err, ret) => {
             if (err) {
               console.error(err);
               callback(err, null);
@@ -245,25 +248,24 @@ router.post('/allocation/edu_x', function (req, res) {
             }
           });
         },
-
         // todo log_assign_edu 테이블에 log_bind_edu id와 training_edu id를 입력한다.
-        function (training_edu_id, callback) {
+        (training_edu_id, callback) => {
           // bindUserId
           connection.query(QUERY.HISTORY.InsertIntoLogAssignEdu,
             [training_edu_id, bindUserId],
-            function (err, ret) {
+            (err, ret) => {
               if (err) {
                 console.error(err);
                 callback(err, null);
               } else {
-	              console.log('log_assign_edu');
+                console.log('log_assign_edu');
                 callback(null, ret);
               }
-            });
+            }
+          );
         }
       ],
-
-      function (err, result) {
+      (err, result) => {
         if (err) {
           console.error(err);
           connection.rollback();
@@ -283,8 +285,8 @@ router.post('/allocation/edu_x', function (req, res) {
  * 1. employee : 직원목록을 이용하여 생성
  * 2. excel : 엑셀 업로드를 이용하여 생성
  */
-router.post('/upload', isAuthenticated, function (req, res) {
-  var incomingForm = new formidable.IncomingForm({
+router.post('/upload', isAuthenticated, (req, res) => {
+  const incomingForm = new formidable.IncomingForm({
     encoding: 'utf-8',
     keepExtensions: true,
     multiples: false,
@@ -299,10 +301,11 @@ router.post('/upload', isAuthenticated, function (req, res) {
     }
   });
 
-  incomingForm.parse(req, function (err, fields, files) {
-    var uploadType = fields.upload_type;
-    var filePath = files['file-excel'].path;
-    var requestData = {
+  incomingForm.parse(req, (err, fields, files) => {
+    if (err) throw err;
+    const uploadType = fields.upload_type;
+    const filePath = files['file-excel'].path;
+    let requestData = {
       admin_id: req.user.admin_id,
       upload_type: fields.upload_type,
       upload_employee_ids: JSON.parse('[' + fields.upload_employee_ids + ']'),
@@ -310,84 +313,87 @@ router.post('/upload', isAuthenticated, function (req, res) {
       group_desc: fields.group_desc
     };
 
-    async.series([
+    async.series(
+      [
       // 엑셀 데이터를 읽어들인다.
-      function (callback) {
-        switch (uploadType) {
-        case 'excel_bak':
-          convertExcel(filePath, undefined, false, function (err, data) {
-            requestData.excel = data;
-            callback(err, data);
-          });
-          break;
-
-        case 'excel':
-          var wb = new Excel.Workbook();
-          wb.xlsx.readFile(filePath)
-          .then(function () {
-            var ws = wb.getWorksheet(1);
-            var phone = [];
-            ws.eachRow({ includeEmpty: false }, function (row, rowNumber) {
-              row.eachCell(function (cell, colNumber) {
-                if (rowNumber >= 2 && colNumber === 2) {
-                  phone.push(cell.value);
-                }
-                console.log('Row ' + rowNumber + ', Cell ' + colNumber + ' = ' + cell.value);
-              });
+        (callback) => {
+          switch (uploadType) {
+          case 'excel_bak':
+            convertExcel(filePath, undefined, false, (err, data) => {
+              requestData.excel = data;
+              callback(err, data);
             });
-            requestData.excel = phone;
-            callback(null, requestData);
-          });
-          break;
+            break;
 
-        case 'employee':
-          callback(null, null);
-          break;
+          case 'excel':
+            const wb = new Excel.Workbook();
+            wb.xlsx.readFile(filePath)
+            .then(() => {
+              let ws = wb.getWorksheet(1);
+              let phone = [];
+              ws.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+                row.eachCell((cell, colNumber) => {
+                  if (rowNumber >= 2 && colNumber === 2) {
+                    phone.push(cell.value);
+                  }
+                  console.log('Row ' + rowNumber + ', Cell ' + colNumber + ' = ' + cell.value);
+                });
+              });
+              requestData.excel = phone;
+              callback(null, requestData);
+            });
+            break;
 
-        default:
-          break;
-        }
-      },
-          // 교육배정 그룹을 생성한다.
-      function (callback) {
-        AssignmentService.create(connection, requestData, function (err, result) {
-          callback(err, result);
-        });
-      },
-          // 엑셀파일을 삭제한다.
-      function (callback) {
-        if (requestData.upload_type === 'excel') {
-          Util.deleteFile(filePath, function (err, result) {
-            if (err) {
-              console.error(err);
-              callback(err, null);
-            } else {
-              callback(null, result);
-            }
+          case 'employee':
+            callback(null, null);
+            break;
+
+          default:
+            break;
+          }
+        },
+        // 교육배정 그룹을 생성한다.
+        (callback) => {
+          AssignmentService.create(connection, requestData, (err, result) => {
+            callback(err, result);
           });
-        } else {
-          callback(null, null);
+        },
+        // 엑셀파일을 삭제한다.
+        (callback) => {
+          if (requestData.upload_type === 'excel') {
+            Util.deleteFile(filePath, (err, result) => {
+              if (err) {
+                console.error(err);
+                callback(err, null);
+              } else {
+                callback(null, result);
+              }
+            });
+          } else {
+            callback(null, null);
+          }
         }
+      ],
+      (err, results) => {
+        if (err) {
+          console.error(err);
+          throw new Error('err');
+        }
+        res.redirect('/assignment');
       }
-    ], function (err, results) {
-      if (err) {
-        console.error(err);
-        throw new Error('err');
-      }
-      res.redirect('/assignment');
-    });
+    );
   });
 });
 
 /**
  * 교육생그룹 삭제
  */
-router.delete('/', isAuthenticated, function (req, res, next) {
-  var queryParams = req.query;
+router.delete('/', isAuthenticated, (req, res, next) => {
+  const queryParams = req.query;
 
-  pool.getConnection(function (err, connInPool) {
+  pool.getConnection((err, connInPool) => {
     if (err) throw err;
-    connInPool.beginTransaction(function (err) {
+    connInPool.beginTransaction((err) => {
       // 트렌젝션 오류 발생
       if (err) {
         res.json({
@@ -395,46 +401,47 @@ router.delete('/', isAuthenticated, function (req, res, next) {
           msg: err
         });
       }
-      async.series([
-        // log_bind_users 삭제
-        function (callback) {
-          connInPool.query(QUERY.ASSIGNMENT.DisableLogBindUserById,
-            [ queryParams.id ],
-            function (err, data) {
-              callback(err, data);
-            }
-          );
-        }
-      ],
-      function (err, results) {
-        connInPool.release();
-        if (err) {
-          // 쿼리 오류 발생
-          return connInPool.rollback(function () {
-            return res.json({
-              success: false,
-              msg: err
-            });
-          });
-        } else {
-          connInPool.commit(function (err) {
-            // 커밋 오류 발생
-            if (err) {
-              return connInPool.rollback(function () {
-                return res.json({
-                  success: false,
-                  msg: err
-                });
+      async.series(
+        [
+          // log_bind_users 삭제
+          (callback) => {
+            connInPool.query(QUERY.ASSIGNMENT.DisableLogBindUserById,
+              [ queryParams.id ],
+              function (err, data) {
+                callback(err, data);
+              }
+            );
+          }
+        ],
+        (err, results) => {
+          connInPool.release();
+          if (err) {
+            // 쿼리 오류 발생
+            return connInPool.rollback(() => {
+              return res.json({
+                success: false,
+                msg: err
               });
-            }
-
-            // 커밋 성공
-            res.json({
-              success: true
             });
-          });
+          } else {
+            connInPool.commit((err) => {
+              // 커밋 오류 발생
+              if (err) {
+                return connInPool.rollback(() => {
+                  return res.json({
+                    success: false,
+                    msg: err
+                  });
+                });
+              }
+              // 커밋 성공
+              res.json({
+                success: true
+              });
+            });
+          }
         }
-      });
+      );
     });
   });
 });

@@ -1,48 +1,45 @@
 <header class="main-header">
-    <!-- Logo -->
-    <a href="/dashboard" class="logo">
-        <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini">
-            <!-- todo 각 FC마다의 로고가 출력될 수 있도록 할 것 (50*50) -->
-            <b>{{loggedIn.fc_name}}</b>
-        </span>
-        <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg">
-            <b>{{loggedIn.fc_name}}</b>
-            <!--<b>Orangenamu</b> System-->
-        </span>
+  <!-- Logo -->
+  {{#if (isEquals loggedIn.role 'supervisor')}}
+  <a href="/achievement" class="logo">
+  {{else}}
+  <a href="/dashboard" class="logo">
+  {{/if}}
+    <!-- mini logo for sidebar mini 50x50 pixels -->
+    <span class="logo-mini">
+      <!-- todo 각 FC마다의 로고가 출력될 수 있도록 할 것 (50*50) -->
+      <b>{{loggedIn.fc_name}}</b>
+    </span>
+    <!-- logo for regular state and mobile devices -->
+    <span class="logo-lg">
+      <b>{{loggedIn.fc_name}}</b>
+      <!--<b>Orangenamu</b> System-->
+    </span>
+  </a>
+  <!-- Header Navbar: style can be found in header.less -->
+  <nav class="navbar navbar-static-top" role="navigation">
+    <!-- Sidebar toggle button-->
+    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+      <span class="sr-only">Toggle navigation</span>
     </a>
-    <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top" role="navigation">
-        <!-- Sidebar toggle button-->
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-            <span class="sr-only">Toggle navigation</span>
-        </a>
-        <input type="hidden" id="agent-code" value="{{loggedIn.agent}}"/>
-        <div class="navbar-custom-menu" id="navbar-custom-menu">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;
-                        {{loggedIn.name}}
-                        <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li class="">
-                                <a href="#"
-                                   data-user-id="{{loggedIn.admin_id}}"
-                                   data-user-name="{{loggedIn.name}}"
-                                   data-url="/admin/password/reset"
-                                   data-toggle="modal"
-                                   data-target="#setEmployeePassword"
-                                   class="btn-modify-password">비밀번호 변경
+    <input type="hidden" id="agent-code" value="{{loggedIn.agent}}" />
+    <div class="navbar-custom-menu" id="navbar-custom-menu">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp; {{loggedIn.name}}
+            <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li class="">
+              <a href="#" data-user-id="{{loggedIn.admin_id}}" data-user-name="{{loggedIn.name}}" data-url="/admin/password/reset" data-toggle="modal"
+                data-target="#setEmployeePassword" class="btn-modify-password">비밀번호 변경
                                 </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li><a href="/logout">로그아웃</a></li>
-                        </ul>
-                </li>
-            </ul>
-        </div>
-    </nav>
+            </li>
+            <li class="divider"></li>
+            <li><a href="/logout">로그아웃</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
 </header>
-

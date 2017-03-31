@@ -1,100 +1,96 @@
 <aside class="main-sidebar">
-    <section class="sidebar">
-        <ul class="sidebar-menu">
-            <li {{#if (isEquals current_path 'Dashboard')}}class="active"{{/if}}>
-                <a href="/dashboard">
-                    <i class="fa fa-dashboard"></i>
-                    <span>대시보드</span>
-                    {{#if (isEquals current_path 'Dashboard')}}
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right text-green"></i>
-                    </span>
-                    {{/if}}
-                </a>
-            </li>
+  <section class="sidebar">
+    <ul class="sidebar-menu">
+      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      <li {{#if (isEquals current_path 'Dashboard')}}class="active" {{/if}}>
+        <a href="/dashboard">
+          <i class="fa fa-dashboard"></i>
+          <span>대시보드</span>
+          {{#if (isEquals current_path 'Dashboard')}}
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right text-green"></i>
+          </span>
+          {{/if}}
+        </a>
+      </li>
+      {{/ifCond}}
 
-            <li {{#if (isEquals current_path 'Achievement')}}class="active"{{/if}}>
-                <a href="/achievement">
-                    <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
-                    <span>교육 진척도</span>
-                    {{#if (isEquals current_path 'Achievement')}}
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right text-green"></i>
-                    </span>
-                    {{else if (isEquals current_path 'AchievementDetails')}}
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right text-green"></i>
-                    </span>
-                    {{/if}}
-                </a>
-            </li>
-
-            <li class="{{#if (isEquals menu_group 'education')}}active {{/if}}treeview">
-                <a href="#">
-                    <i class="fa fa-database"></i>
-                    <span>교육과정 관리</span>                    
-                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right text-green"></i></span>                
-                </a>
-                <ul class="treeview-menu">
-                    <li {{#if (isEquals current_path 'Education')}}class="active"{{/if}}><a href="/education"><i class="fa fa-circle-o"></i> 등록</a></li>
-                    <li {{#ifCond (isEquals current_path 'Assignment') '||' (isEquals current_path 'AssignmentDetails')}}class="active"{{/ifCond}}><a href="/assignment"><i class="fa fa-circle-o"></i> 배정</a></li>
-                    <li {{#if (isEquals current_path 'Assignment_history')}}class="active"{{/if}}><a href="/assignment_history"><i class="fa fa-circle-o"></i> 배정이력</a></li>
-                </ul>
-            </li>
-
-            <li {{#if (isEquals current_path 'Course')}}class="active"{{/if}}>
-                <a href="/course">
-                    <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
-                    <span>강의/강사 등록</span>
-                    {{#if (isEquals current_path 'Course')}}
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right text-green"></i>
-                    </span>
-                    {{else if (isEquals current_path 'CourseDetails') }}
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right text-green"></i>
-                    </span>
-                    {{/if}}
-                </a>
-            </li>
-
-            <li {{#if (isEquals current_path 'Employee')}}class="active"{{/if}}>
-                <a href="/employee">
-                    <i class="fa fa-users"></i>
-                    <span>직원관리</span>
-                    {{#if (isEquals current_path 'Employee')}}
-                        <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right text-green"></i>
-                    </span>
-                    {{/if}}
-                </a>
-            </li>            
-
-            {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
-            <li {{#if (isEquals current_path 'Administrator')}}class="active"{{/if}}>
-                <a href="/administrator">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                    <span>관리자</span>
-                    {{#if (isEquals current_path 'Administrator')}}
-                      <span class="pull-right-container">
-                            <i class="fa fa-angle-down pull-right text-green"></i>
-                          </span>
-                    {{/if}}
-                </a>
-            </li>
-            {{/ifCond}}
-
-            <!--<li {{#if (isEquals current_path 'Documentation')}}class="active"{{/if}}>
-                <a href="/documentation">
-                    <i class="fa fa-question"></i>
-                    <span>도움말</span>
-                    {{#if (isEquals current_path 'Documentation')}}
-                        <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right text-green"></i>
-                    </span>
-                    {{/if}}
-                </a>
-            </li>                   -->
+      <li class="{{#if (isEquals menu_group 'achievement')}}active {{/if}}treeview">
+        <a href="#">
+          <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
+          <span>진척도</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right text-green"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li {{#ifCond (isEquals current_path 'Achievement') '||' (isEquals current_path 'AchievementDetails')}}class="active" {{/ifCond}}><a href="/achievement"><i class="fa fa-circle-o"></i> 교육과정별</a></li>
+          <li {{#ifCond (isEquals current_path 'AchievementUser') '||' (isEquals current_path 'AchievementUserDetails')}}class="active" {{/ifCond}}><a href="/achievement/user"><i class="fa fa-circle-o"></i> 교육생별</a></li>
         </ul>
-    </section>
+      </li>
+
+      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      <li class="{{#if (isEquals menu_group 'education')}}active {{/if}}treeview">
+        <a href="#">
+          <i class="fa fa-database"></i>
+          <span>교육과정 관리</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right text-green"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li {{#if (isEquals current_path 'Education')}}class="active" {{/if}}><a href="/education"><i class="fa fa-circle-o"></i> 등록</a></li>
+          <li {{#ifCond (isEquals current_path 'Assignment') '||' (isEquals current_path 'AssignmentDetails')}}class="active" {{/ifCond}}><a href="/assignment"><i class="fa fa-circle-o"></i> 배정</a></li>
+          <li {{#if (isEquals current_path 'Assignment_history')}}class="active" {{/if}}><a href="/assignment_history"><i class="fa fa-circle-o"></i> 배정이력</a></li>
+        </ul>
+      </li>
+      {{/ifCond}}
+
+      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      <li {{#if (isEquals current_path 'Course')}}class="active" {{/if}}>
+        <a href="/course">
+          <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+          <span>강의/강사 등록</span>
+          {{#if (isEquals current_path 'Course')}}
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right text-green"></i>
+          </span>
+          {{else if (isEquals current_path 'CourseDetails') }}
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right text-green"></i>
+          </span>
+          {{/if}}
+        </a>
+      </li>
+      {{/ifCond}}
+
+      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      <li {{#if (isEquals current_path 'Employee')}}class="active" {{/if}}>
+        <a href="/employee">
+          <i class="fa fa-users"></i>
+          <span>직원관리</span>
+          {{#if (isEquals current_path 'Employee')}}
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right text-green"></i>
+          </span>
+          {{/if}}
+        </a>
+      </li>
+      {{/ifCond}}
+
+      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      <li {{#if (isEquals current_path 'Administrator')}}class="active" {{/if}}>
+        <a href="/administrator">
+          <i class="fa fa-user" aria-hidden="true"></i>
+          <span>관리자</span>
+          {{#if (isEquals current_path 'Administrator')}}
+          <span class="pull-right-container">
+            <i class="fa fa-angle-down pull-right text-green"></i>
+          </span>
+          {{/if}}
+        </a>
+      </li>
+      {{/ifCond}}
+    </ul>
+  </section>
 </aside>

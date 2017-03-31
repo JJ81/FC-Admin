@@ -32,9 +32,10 @@
                 <div class="small-box {{#if loggedIn.fc_tile_theme}}bg-{{loggedIn.fc_tile_theme}}{{else}}bg-gray{{/if}}">
                     <div class="inner">
                         <h3>
-                          {{#each current_edu}}{{current_edu}}{{/each}} / {{#each total_edu}}{{total_edu}}{{/each}}
+                          {{#each current_edu}}{{current_edu}}{{/each}}
+                          <!--{{#each current_edu}}{{current_edu}}{{/each}} / {{#each total_edu}}{{total_edu}}{{/each}}-->
                         </h3>
-                        <p>진행중인 교육과정 / 총 교육과정</p>
+                        <p>진행중인 교육과정</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>

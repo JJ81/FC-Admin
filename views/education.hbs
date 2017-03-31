@@ -1,63 +1,47 @@
 <div class="row home_section">
-    <div class="col-xs-12">
-        <div class="box">
-            <div class="box-header with-border">
-                <div class="pull-right">
-                    <button type="button" class="btn btn-primary btn-create-edu" data-toggle="modal" data-target="#registerEdu">
-                        <i class="fa fa-pencil-square-o"></i>
-                        등록
-                    </button>
-                    <!--<button type="button" class="btn btn-primary btn-send-sms">
-                        <i class="fa fa-pencil-square-o"></i>
-                        SMS 전송테스트
-                    </button>-->
-                    <!--<form id="form1" name="form1" action="http://biz.xonda.net/biz/biz_newV2/SMSASP_WEBV4_s.asp" method="post"  charset="euc-kr">
-                        <input type="text" name="send_number" value="000">
-                        <input type="text" name="receive_number" value="1020091407">
-                        <input type="text" name="biz_id" value="molla4455">
-                        <input type="text" name="smskey" value="9407AC67-074A-4F0F-9104-53A4AA053F9B">
-                        <input type="text" name="return_url" value="">
-                        <input name="sms_contents" value="교육과정이 배정되었습니다." />
-                        <input type="submit" id="submit1" name="submit1">
-                    </form>-->
-
-                </div>
-            </div>
-            <div class="box-body table-responsive">
-                <table id="table_education" class="table no-margin table-bordered table-striped" width="100%">
-                    <thead>
-                        <tr>
-                            <th class="center">생성일</th>
-                            <th class="center">교육과정명</th>
-                            <th class="center">시작일</th>
-                            <th class="center">종료일</th>
-                            <th class="center">생성자</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {{#each list}}
-                        <tr>
-                            <td class="center">{{time created_dt}}</td>
-                            <td class="">
-                                <a href="/education/details?id={{education_id}}&course_group_id={{course_group_id}}"
-                                class="btn-link"
-                                data-course-group-id="{{course_group_id}}">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <div class="pull-right">
+          <button type="button" class="btn btn-primary btn-create-edu" data-toggle="modal" data-target="#registerEdu">
+            <i class="fa fa-pencil-square-o"></i>
+            등록
+          </button>
+        </div>
+      </div>
+      <div class="box-body table-responsive">
+        <table id="table_education" class="table no-margin table-bordered table-striped" width="100%">
+          <thead>
+            <tr>
+              <th class="center">생성일</th>
+              <th class="center">교육과정명</th>
+              <th class="center">시작일</th>
+              <th class="center">종료일</th>
+              <th class="center">생성자</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each list}}
+            <tr>
+              <td class="center">{{time created_dt}}</td>
+              <td class="">
+                <a href="/education/details?id={{education_id}}&course_group_id={{course_group_id}}" class="btn-link" data-course-group-id="{{course_group_id}}">
                                 {{name}}
                                 </a>
-                            </td>
-                            <td class="center">{{time start_dt}}</td>
-                            <td class="center">{{time end_dt}}</td>
-                            <td class="center">{{creator}}</td>
-                        </tr>
-                    {{/each}}
-                    </tbody>
-                </table>
-            </div>
-            <!-- /.box-body -->
-        </div>
-        <!-- /.box -->
+              </td>
+              <td class="center">{{time start_dt}}</td>
+              <td class="center">{{time end_dt}}</td>
+              <td class="center">{{creator}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      <!-- /.box-body -->
     </div>
-    <!-- /.col -->
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
 </div>
 <!-- /.row -->
 

@@ -8,6 +8,7 @@ define(
     'jszip',
     'axios',
     'moment',
+    'pace',
     'tinymce',
     'bootstrap',
     'bootstrap_datetimepicker',
@@ -25,7 +26,10 @@ define(
     'fastclick',
     'es6-promise'
   ],
-function ($, jszip, axios, moment) {
+function ($, jszip, axios, moment, pace) {
+  pace.start({
+    document: false
+  });
   // 전역으로 선언해야 동작되는 라이브러리들을 window 객체에 할당한다.
   window.JSZip = jszip;
   window.axios = axios;

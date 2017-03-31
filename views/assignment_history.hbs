@@ -1,51 +1,50 @@
 <div class="row home_section">
-    <div class="col-xs-12">
-        <div class="box">
-            <!--<div class="box-header"></div>-->
-            <!-- /.box-header -->
-            <div class="box-body table-responsive">
-                <table id="table_assignment_history" class="table no-margin table-bordered table-striped" width="100%">
-                    <thead>
-                    <tr>
-                        <th class="center">배정일</th>
-                        <th class="center">교육과정</th>
-                        <th class="center">대상자</th>
-                        <th class="center">시작일</th>
-                        <th class="center">종료일</th>
-                        <th class="center">배정자</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{#each list}}
-                        <tr>
-                            <td class="center">{{time created_dt}}</td>
-                            <td class="">
-                              <a href="/education/details?id={{edu_id}}&course_group_id={{course_group_id}}">
-                              {{name}}
-                              </a>
-                            </td>
-                            <td class="">
-                              <a href="/assignment/details?id={{logBindUserId}}&group_id={{logBindUserGroupId}}">
-                              {{#if (isEmpty target)}}
-                                  -
-                              {{else}}
-                                  {{target}}
-                              {{/if}}
-                              </a>
-                            </td>
-                            <td class="center">{{time start_dt}}</td>
-                            <td class="center">{{time end_dt}}</td>
-                            <td class="center">{{admin}}</td>
-                        </tr>
-                    {{/each}}
-                    </tbody>
-                </table>
-            </div>
-            <!-- /.box-body -->
-        </div>
-        <!-- /.box -->
+  <div class="col-xs-12">
+    <div class="box">
+      <!--<div class="box-header"></div>-->
+      <!-- /.box-header -->
+      <div class="box-body table-responsive">
+        <table id="table_assignment_history" class="table no-margin table-bordered table-striped" width="100%">
+          <thead>
+            <tr>
+              <th class="center">배정일</th>
+              <th class="center">교육과정</th>
+              <th class="center">대상자</th>
+              <th class="center">시작일</th>
+              <th class="center">종료일</th>
+              <th class="center">배정자</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each list}}
+            <tr>
+              <td class="center">{{time created_dt}}</td>
+              <td class="">
+                <a href="/education/details?id={{edu_id}}&course_group_id={{course_group_id}}">
+                  {{name}}
+                </a>
+              </td>
+              <td class="">
+                <a href="/assignment/details?id={{logBindUserId}}&group_id={{logBindUserGroupId}}">
+                  {{#if (isEmpty target)}}
+                      -
+                  {{else}}
+                      {{target}}
+                  {{/if}}
+                </a>
+              </td>
+              <td class="center">{{time start_dt}}</td>
+              <td class="center">{{time end_dt}}</td>
+              <td class="center">{{admin}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      <!-- /.box-body -->
     </div>
-    <!-- /.col -->
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
 </div>
 <!-- /.row -->
-

@@ -1,46 +1,28 @@
 <div class="row home_section">
-    <div class="col-xs-12">
-        <div class="box">
-            <!--<div class="box-header">-->
-                <!--<div class="col-md-3">
-                    <form class="" action="#" method="post">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="교육과정명 검색" required />
-                            <span class="input-group-btn">
-                              <button type="submit" class="btn btn-primary btn-flat">검색</button>
-                            </span>
-                        </div>
-                    </form>
-                </div>-->
-            <!--</div>-->
-            <!-- /.box-header -->
-            <div class="box-body table-responsive">
-                <table id="table_achievement" class="table no-margin table-bordered table-striped" width="100%">
-                    <thead>
-                    <tr>
-                        <th class="center">배정일</th>
-                        <th class="center">교육기간</th>
-                        <th class="center">교육과정</th>
-                        <th class="center">교육대상</th>                        
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{#each list}}
-                        <tr>
-                            <td class="center">{{time created_dt}}</td>
-                            <td class="center">{{time start_dt}} ~ {{time end_dt}}</td>
-                            <td class=""><a href="/achievement/details?id={{id}}&edu_id={{edu_id}}" class="btn-link">{{name}}</a></td>
-                            <td class="">{{target}}</td>                            
-                        </tr>
-                    {{/each}}
-                    </tbody>
-                </table>
-            </div>
-            <!-- /.box-body -->
-        </div>
-        <!-- /.box -->
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <table id="table_achievement" class="table no-margin table-bordered table-striped" width="100%">
+          <thead>
+            <tr>
+              <th class="center">배정일</th>
+              <th class="center">교육기간</th>
+              <th class="center">교육과정</th>
+              <th class="center">교육대상</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each list}}
+            <tr>
+              <td class="center">{{time created_dt}}</td>
+              <td class="center">{{time start_dt}} ~ {{time end_dt}}</td>
+              <td class=""><a href="/achievement/details?id={{id}}&edu_id={{edu_id}}" class="btn-link">{{name}}</a></td>
+              <td class="">{{target}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
     </div>
-    <!-- /.col -->
+  </div>
 </div>
-<!-- /.row -->
-

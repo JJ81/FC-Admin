@@ -68,7 +68,8 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'plugins/slimScroll/jquery.slimscroll.min.js',
     DIR.SRC + '/vendor/' + 'plugins/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
     DIR.SRC + '/vendor/' + 'plugins/es6-promise/dist/es6-promise.min.js',
-    DIR.SRC + '/vendor/' + 'plugins/vimeo-player-js/dist/player.min.js'
+    DIR.SRC + '/vendor/' + 'plugins/vimeo-player-js/dist/player.min.js',
+    DIR.SRC + '/vendor/' + 'plugins/pace/pace.min.js'
   ])
   .pipe(uglify())
   .pipe(gulp.dest(DEST.VENDOR));
@@ -107,7 +108,8 @@ gulp.task('copy-css', () => {
     DIR.SRC + '/vendor/' + 'plugins/datatables.net-bs/css/dataTables.bootstrap.min.css',
     DIR.SRC + '/vendor/' + 'plugins/datatables.net-buttons-bs/css/buttons.bootstrap.min.css',
     DIR.SRC + '/vendor/' + 'plugins/datatables.net-responsive-bs/css/responsive.bootstrap.min.css',
-    DIR.SRC + '/vendor/' + 'plugins/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
+    DIR.SRC + '/vendor/' + 'plugins/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+    DIR.SRC + '/vendor/' + 'plugins/pace/pace.min.css'
   ])
   .pipe(cleanCSS({compatibility: 'ie8'}))
   .pipe(gulp.dest(DIR.DEST + '/stylesheets/'));

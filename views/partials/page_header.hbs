@@ -20,13 +20,17 @@
         {{else if (isEquals current_path 'CourseDetails') }}
             강의/강사등록
         {{else if (isEquals current_path 'Achievement') }}
-            교육 진척도
+            교육과정별 진척도
         {{else if (isEquals current_path 'AchievementDetails') }}
-            교육 진척도
+            교육과정별 진척도 상세페이지
+        {{else if (isEquals current_path 'AchievementUser') }}
+            교육생별 진척도
+        {{else if (isEquals current_path 'AchievementUserDetails') }}
+            교육생별 진척도 상세페이지
         {{else if (isEquals current_path 'Administrator') }}
             관리자
         {{else if (isEquals current_path 'Documentation') }}
-            도움말            
+            도움말
         {{/if}}
     </h1>
     <ol class="breadcrumb">
@@ -57,7 +61,7 @@
             {{else if (isEquals current_path 'Administrator') }}
                 관리자
             {{else if (isEquals current_path 'Documentation') }}
-                도움말                
+                도움말
             {{/if}}
         </li>
     </ol>

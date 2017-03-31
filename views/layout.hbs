@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/static/stylesheets/responsive.bootstrap.min.css" />
     <link rel="stylesheet" href="/static/stylesheets/bootstrap-datetimepicker.min.css" />
     <link rel='stylesheet' href="/static/stylesheets/styles.css" />
+    <link rel='stylesheet' href="/static/stylesheets/pace.min.css" />
 
     <title>{{title}}</title>
 </head>
@@ -54,6 +55,8 @@
     {{#if (isEquals current_path 'Course')}}<script src="/static/javascripts/course.js"></script>{{/if}}
     {{#if (isEquals current_path 'Achievement')}}<script src="/static/javascripts/achievement.js"></script>{{/if}}
     {{#if (isEquals current_path 'AchievementDetails')}}<script src="/static/javascripts/achievement_details.js"></script>{{/if}}
+    {{#if (isEquals current_path 'AchievementUser')}}<script src="/static/javascripts/achievement_user.js"></script>{{/if}}
+    {{#if (isEquals current_path 'AchievementUserDetails')}}<script src="/static/javascripts/achievement_user_details.js"></script>{{/if}}    
     {{#if (isEquals current_path 'CourseDetails')}}<script src="/static/javascripts/course_details.js"></script>{{/if}}
     {{#if (isEquals current_path 'Administrator')}}<script src="/static/javascripts/administrator.js"></script>{{/if}}
     {{#if (isEquals module_type 'create_video')}}<script src="/static/javascripts/winpops/win_create_video.js"></script>{{/if}}

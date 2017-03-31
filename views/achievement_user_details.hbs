@@ -1,0 +1,84 @@
+<div class="row">
+  <!-- 이번 달 교육 진척도 -->
+  <div class="col-lg-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <a href="/achievement/user" class="btn btn-default">
+          <i class="fa fa-list"></i> &nbsp;
+          목록으로
+        </a>
+      </div>
+      <div class="box-body table-responsive">
+        <div class="page-header">
+            <!--<h3 class="box-title">{{ dateformat loggedIn.curdate 'm'}}월 교육과정별 이수율</h3>-->
+            <div class="progress-group">
+              <span class="progress-text">
+                {{#if (isEquals showall undefined)}}
+                  {{ dateformat loggedIn.curdate 'm'}}월
+                {{else}}
+                  전체
+                {{/if}}
+                교육과정별 이수율
+                <div class="pull-right">
+                  {{#if (isEquals showall undefined)}}
+                  <a href="/achievement/user/details?user_id={{userid}}&showall=true" class="btn btn-default">
+                    전체보기
+                  {{else}}
+                  <a href="/achievement/user/details?user_id={{userid}}" class="btn btn-default">
+                    {{ dateformat loggedIn.curdate 'm'}}월 보기
+                  {{/if}}
+                  </a>
+                </div>
+              </span>
+              <br><br>
+              <span class="progress-number"><b>{{avg_completed_rate}}%</b></span><br>
+              <div class="progress progress-sm">
+                  <div class="progress-bar {{#if loggedIn.fc_pgbar_theme}}progress-bar-{{loggedIn.fc_pgbar_theme}}{{else}}progress-bar-green{{/if}} progress-bar-striped"
+                    style="width: {{avg_completed_rate}}%">
+                  </div>
+              </div>
+            </div>
+        </div>
+        <table id="table_achievement_user_details" class="table no-margin table-bordered table-striped" width="100%">
+          <thead>
+            <tr>
+              <th class="center">#</th>
+              <th class="center">교육과정</th>
+              <th class="center">이수율</th>
+              <th class="center">값</th>
+              <th class="center">배정기간</th>
+              <th class="center">학습기간</th>
+              <th class="center">Action</th>
+            </tr>
+          </thead>
+          {{#each list}}
+          <tr>
+            <td>{{addOneForIndex @key}}</td>
+            <td>{{edu_name}}</td>
+            <td>
+              <div class="progress progress-xs">
+                <div class="progress-bar {{#if ../loggedIn.fc_pgbar_theme}}progress-bar-{{../../loggedIn.fc_pgbar_theme}}{{else}}progress-bar-green{{/if}} progress-bar-striped" style="width: {{completed_rate}}%"></div>
+              </div>
+            </td>
+            <td class="center">
+              <span class="badge {{#if (isEquals completed_rate 100)}}bg-green{{else}}bg-red{{/if}}">
+                {{completed_rate}}%
+              </span>
+            </td>
+            <td class="center">{{time assign_start_dt}} ~ {{time assign_end_dt}}</td>
+            <td class="center">{{time study_start_dt}} ~ {{time study_end_dt}}</td>
+            <td class="center">
+              <a class="btn btn-sm btn-default"
+                  data-toggle="modal"
+                  data-training-user-id="{{training_user_id}}"
+                  data-target='#modal-achievement-user-details'>상세보기
+              </a>
+            </td>
+          </tr>
+          {{/each}}
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {{> modal_achievement_details}}

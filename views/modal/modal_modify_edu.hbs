@@ -1,5 +1,5 @@
 <!-- Modify Education -->
-<div class="modal" id="modifyEdu" role="dialog">
+<div class="modal fade" id="modifyEdu" role="dialog">
     <form class="modal-dialog" method="post" action="/education/modify" id="frm_modify_edu">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,14 +10,14 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>교육과정명</label>
-                    <input type="text" class="form-control course-name" 
-                        name="course_name" 
-                        placeholder="교육과정명" 
+                    <input type="text" class="form-control course-name"
+                        name="course_name"
+                        placeholder="교육과정명"
                         required autocomplete="off"
-                        value="{{edu.name}}" 
+                        value="{{edu.name}}"
                     />
                 </div>
-                
+
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
@@ -91,9 +91,8 @@
         <!-- /.modal-content -->
       <input type="hidden" id="course_group_key" value="{{edu.course_group_key}}" />
       <input type="hidden" id="edu_id" value="{{edu.id}}" />
-      
+
     </form>
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-            

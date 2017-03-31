@@ -1,6 +1,6 @@
 <!-- Create Employee -->
 
-<div class="modal" id="uploadFile" role="dialog">
+<div class="modal fade" id="uploadFile" role="dialog">
     <div class="modal-dialog modal-lg">
         <form method="post" action="/assignment/upload" id="frm_upload_file" enctype="multipart/form-data">
             <input type="hidden" name="upload_type" />
@@ -22,14 +22,14 @@
                     <div class="form-group">
                         <label>그룹 설명</label>
                         <textarea class="form-control" name="group_desc" placeholder="그룹에 대한 설명을 입력해주세요" autocomplete="off" required></textarea>
-                    </div>                
+                    </div>
 
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="nav-tabs-custom">
-                                <ul class="nav nav-tabs">                                                                
+                                <ul class="nav nav-tabs">
                                     <li class="active"><a class="tab-item" id="employee" href="#regist-employee" data-toggle="tab">등록된 직원</a></li>
-                                    <li><a class="tab-item" id="excel" href="#regist-excel" data-toggle="tab">엑셀 업로드</a></li>                                                                
+                                    <li><a class="tab-item" id="excel" href="#regist-excel" data-toggle="tab">엑셀 업로드</a></li>
                                 </ul>
 
                                 <div class="tab-content">
@@ -66,20 +66,20 @@
                                                     <a href="/static/uploads/excel/regist_group.xlsx" class="btn btn-default">
                                                         <i class="fa fa-download"></i> &nbsp;
                                                         양식 다운로드
-                                                    </a>                                                    
+                                                    </a>
                                                 </div>
-                                                <div class="form-group">                                             
+                                                <div class="form-group">
                                                     <label for="exampleInputFile">직원 정보가 있는 엑셀 파일을 업로드해주세요. <br />
                                                         <small class="text-red">
-                                                            1. 엑셀파일만 가능합니다.<br> 
+                                                            1. 엑셀파일만 가능합니다.<br>
                                                             2. 반드시 저희가 제공해드리는 양식으로 작성하신 후, 업로드 해주시기 바랍니다.<br>
-                                                        </small>                                                        
+                                                        </small>
                                                     </label><br /><br />
                                                     <input type="file" name="file-excel" id="UploadExcelFile" />
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                             </div>

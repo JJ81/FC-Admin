@@ -34,7 +34,8 @@ requirejs.config({
     'bootstrap_datetimepicker': ['/static/vendor/bootstrap-datetimepicker.min'],
     'es6-promise': '/static/vendor/es6-promise.min',
     'Vimeo': '/static/vendor/player.min',
-    'tinymce': '/static/vendor/tinymce/tinymce.min'
+    'tinymce': '/static/vendor/tinymce/tinymce.min',
+    'pace': '/static/vendor/pace.min'
   },
   shim: {
     'quiz_component': {
