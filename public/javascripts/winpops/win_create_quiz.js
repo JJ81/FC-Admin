@@ -1,11 +1,6 @@
 'use strict';
 requirejs(
   [
-    // 'jquery',
-    // 'axios',
-    // 'jquery_ui',
-    // 'bootstrap',
-    // 'slimScroll',
     'common',
     'quiz_service'
   ],
@@ -89,9 +84,9 @@ function (Util) {
     }
   });
 
-        /**
-         * 단덥형 퀴즈 생성
-         */
+  /**
+   * 단덥형 퀴즈 생성
+   */
   btnAddQuizTypeA.bind('click', function () {
     QuizService.addQuizSingleAnswer();
   });

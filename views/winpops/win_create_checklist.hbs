@@ -1,0 +1,81 @@
+<div class="container-fluid">
+<!--<div class="winpop_quiz" id="createQuiz" data-type="{{type}}">-->
+  <!--<div class="modal-content">
+    <div class="modal-header">-->
+      <!--<h4 class="modal-title">-->
+      <h4>
+        체크리스트 등록하기
+        <div class="pull-right">
+          <button type="button" id="regist-quiz" class="btn btn-primary">
+            <i class="fa fa-floppy-o"> 저장</i>
+          </button>
+          <button type="button" class="btn btn-default" onclick="window.close();">
+            <i class="fa fa-sign-out"> 나가기</i>
+          </button>
+        </div>
+      </h4>
+    </div>
+
+    <div class="modal-body">
+      <label for="title">대표제목 :</label>
+      <div class="form-group">
+        <input type="text" class="form-control" name="title" id="title" placeholder="대표제목을 입력하세요" required autocomplete="off" value="체크리스트" />
+      </div>
+      <input type="hidden" name="course_id" value="{{course_id}}" />
+      <br /><br />
+      <!-- 체크리스트가 삽입되는 위치 -->
+      <small class="text-red pull-left">* 위아래 순서를 변경하려면, 행 선택(2행부터 가능) 후 위 아래로 움직여보세요</small>
+      <table id="table_checklist" class="table no-margin table-bordered table-striped" cellspacing="0" width="100%">
+        <thead>
+          <tr>
+            <th class="center" style="width: 10%">구분</th>
+            <th class="center" style="width: 50%">체크사항</th>
+            <th class="center" style="width: 10%">분류</th>
+            <th class="center" style="width: 20%">점수</th>
+            <th class="center" style="width: 10%">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="item">
+            <td>
+              <select size="1" id="itemtype" name="itemtype" style="width: 100%" class="itemtype">
+                <option value="select">선택형</option>
+                <option value="choose">다답형</option>
+                <option value="write">단답형</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="item" name="item" class="inputitem" style="width: 100%" onClick="this.setSelectionRange(0, this.value.length)">
+            </td>
+            <td>
+              <input type="text" id="category" name="category" class="inputcategory" style="width: 100%" onClick="this.setSelectionRange(0, this.value.length)" value="없음">
+            </td>
+            <td class="center">
+              <div class="select_point">
+                <input type="text" id="start_point" name="start_point" placeholder="시작" value="1" style="width: 20%" onClick="this.setSelectionRange(0, this.value.length)">
+                ~
+                <input type="text" id="end_point" name="end_point" placeholder="끝" value="5" style="width: 20%" onClick="this.setSelectionRange(0, this.value.length)">
+              </div>
+            </td>
+            <td class="center">
+              <button class="btn btn-primary btn-sm additem">추가</button>
+              <button class="btn btn-danger btn-sm removeitem" style="display: none;">삭제</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="modal-footer">
+      <!--<div class="form-group">
+        <div id="quiztype" class="input-group">
+          <button type="button" id="btn-add-quiz-a" class="btn btn-default">단답형</button>
+          <button type="button" id="btn-add-quiz-b" class="btn btn-default">선택형</button>
+          <button type="button" id="btn-add-quiz-c" class="btn btn-default">다답형</button>
+        </div>
+        <br>
+        <small class="text-red pull-left">* 퀴즈 유형을 먼저 선택하세요.</small>
+      </div>-->
+    </div>
+  </div>
+</div>

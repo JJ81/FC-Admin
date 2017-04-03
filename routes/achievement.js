@@ -84,7 +84,10 @@ router.get('/user/details', isAuthenticated, (req, res) => {
         for (var value of rows) {
           sum += value.completed_rate;
         }
-        let avg = (sum / rows.length).toFixed(2);
+        let avg = 0;
+        if (sum !== 0) {
+          avg = (sum / rows.length).toFixed(2);
+        }
 
         res.render('achievement_user_details', {
           menu_group: 'achievement',

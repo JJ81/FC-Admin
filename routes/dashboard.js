@@ -213,6 +213,7 @@ router.get('/point/details', isAuthenticated, (req, res) => {
             item.point_repetition = data[index].point_repetition;
             list.push(item);
           }
+          console.log(list);
           res.json({
             success: true,
             list: list

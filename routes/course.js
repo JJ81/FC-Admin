@@ -1014,6 +1014,22 @@ router.delete('/quiz/option', isAuthenticated, (req, res) => {
 });
 
 /**
+ * 강의/강사등록 상세페이지 > 퀴즈/파이널테스트 생성 팝업
+ */
+router.get('/create/checklist', isAuthenticated, (req, res) => {
+  const { course_id: courseId, type: sessionType } = req.query;
+
+  res.render('winpops/win_create_checklist', {
+    current_path: 'winpop',
+    module_type: 'create_checklist',
+    type: req.query.type,
+    title: global.PROJ_TITLE + 'Create ' + sessionType,
+    loggedIn: req.user,
+    course_id: courseId
+  });
+});
+
+/**
  * 강의세션을 수정한다.
  */
 router.put('/courselist', isAuthenticated, (req, res) => {
