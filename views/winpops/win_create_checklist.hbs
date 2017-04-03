@@ -25,9 +25,11 @@
       <br /><br />
       <!-- 체크리스트가 삽입되는 위치 -->
       <small class="text-red pull-left">* 위아래 순서를 변경하려면, 행 선택(2행부터 가능) 후 위 아래로 움직여보세요</small>
+      <br /><br />
       <table id="table_checklist" class="table no-margin table-bordered table-striped" cellspacing="0" width="100%">
         <thead>
           <tr>
+            <th></th>
             <th class="center" style="width: 10%">구분</th>
             <th class="center" style="width: 50%">체크사항</th>
             <th class="center" style="width: 10%">분류</th>
@@ -37,6 +39,11 @@
         </thead>
         <tbody>
           <tr class="item">
+            <td>
+              <span class="handle ui-sortable-handle">
+                <i class="fa fa-ellipsis-v"></i>
+              </span>
+            </td>
             <td>
               <select size="1" id="itemtype" name="itemtype" style="width: 100%" class="itemtype">
                 <option value="select">선택형</option>

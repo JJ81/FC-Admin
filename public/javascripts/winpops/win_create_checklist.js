@@ -9,7 +9,19 @@ function (Util) {
 
   $(function () {
     tableChecklist.find('tr:first-child').not('thead tr').find('input[name="item"]').focus();
-    tableChecklist.find('tbody').sortable({ items: 'tr:not(:first)' });
+    tableChecklist.find('tbody').sortable({
+      items: 'tr:not(:first)',
+      placeholder: 'sort-highlight',
+      handle: '.handle',
+      forcePlaceholderSize: true,
+      zIndex: 999999,
+      start: function (e, ui) {
+        $(this).attr('data-previndex', ui.item.index());
+      },
+      update: function (e, ui) {
+        $(this).removeAttr('data-previndex');
+      }
+    });
   });
 
   /**
