@@ -1018,6 +1018,7 @@ router.delete('/quiz/option', isAuthenticated, (req, res) => {
  */
 router.get('/create/checklist', isAuthenticated, (req, res) => {
   const { course_id: courseId, type: sessionType } = req.query;
+  console.log(global.PROJ_TITLE);
 
   res.render('winpops/win_create_checklist', {
     current_path: 'winpop',

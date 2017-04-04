@@ -25,11 +25,17 @@ define(
     'adminLTE',
     'fastclick',
     'es6-promise'
+    // 'smoothstate'
   ],
 function ($, jszip, axios, moment, pace) {
   pace.start({
     document: false
   });
+
+  // $('#wrapper').smoothState({
+  //   repeatDelay: 500
+  // });
+
   // 전역으로 선언해야 동작되는 라이브러리들을 window 객체에 할당한다.
   window.JSZip = jszip;
   window.axios = axios;

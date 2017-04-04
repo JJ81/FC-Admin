@@ -32,7 +32,7 @@ function (Util) {
     var $category = $row.find('input[name="category"]');
     var $item = $row.find('input[name="item"]');
     var $itemType = $row.find('.itemtype');
-    var $selectPoint = $row.find('.select_point');
+    var $sample = $row.find('.sample');
 
     if ($itemType.val() !== 'write') {
       if ($category.val() === '') {
@@ -57,7 +57,7 @@ function (Util) {
 
     $itemType.val('select'); // 선택형
     $category.show();
-    $selectPoint.show();
+    $sample.show();
     $item.val('');
     $item.focus();
   });
@@ -77,16 +77,16 @@ function (Util) {
     var $selected = $(this);
     var $item = $row.find('input[name="item"]');
     var $category = $row.find('input[name="category"]');
-    var $selectPoint = $row.find('.select_point');
+    var $sample = $row.find('.sample');
 
     switch ($selected.val()) {
     case 'write':
       $category.hide();
-      $selectPoint.hide();
+      $sample.hide();
       break;
     default:
       $category.show();
-      $selectPoint.show();
+      $sample.show();
       break;
     }
 

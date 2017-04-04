@@ -36,6 +36,7 @@ requirejs.config({
     'Vimeo': '/static/vendor/player.min',
     'tinymce': '/static/vendor/tinymce/tinymce.min',
     'pace': '/static/vendor/pace.min'
+    // 'smoothstate': '/static/vendor/jquery.smoothstate.min'
   },
   shim: {
     'quiz_component': {
@@ -60,6 +61,9 @@ requirejs.config({
       deps: ['jquery']
     },
     'jqueryValidate': {
+      deps: ['jquery']
+    },
+    'smoothstate': {
       deps: ['jquery']
     },
     'slimScroll': {

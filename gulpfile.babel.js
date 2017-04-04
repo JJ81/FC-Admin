@@ -37,6 +37,7 @@ const DEST = {
 gulp.task('js', () => {
   return gulp.src(SRC.JS, { base: './public/javascripts' })
           .pipe(uglify())
+          .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
           .pipe(gulp.dest(DEST.JS));
 });
 
@@ -70,6 +71,7 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'plugins/es6-promise/dist/es6-promise.min.js',
     DIR.SRC + '/vendor/' + 'plugins/vimeo-player-js/dist/player.min.js',
     DIR.SRC + '/vendor/' + 'plugins/pace/pace.min.js'
+    // DIR.SRC + '/vendor/' + 'plugins/smoothstate/jquery.smoothstate.min.js'
   ])
   .pipe(uglify())
   .pipe(gulp.dest(DEST.VENDOR));
