@@ -2,7 +2,7 @@
 requirejs([
   'common'
 ],
-function (Util) {
+(Util) => {
   // datatable 설정
   Util.initDataTable($('#table_achievement_user_details'), {
     'order': [[ 0, 'asc' ]]
@@ -12,17 +12,17 @@ function (Util) {
    * 상세내역 모달창
    *
    */
-  $('#modal-achievement-user-details').on('show.bs.modal', function (e) {
+  $('#modal-achievement-user-details').on('show.bs.modal', (e) => {
     axios.get('/achievement/user/education', {
       params: {
         training_user_id: $(e.relatedTarget).data('training-user-id')
       }
     })
-    .then(function (response) {
+    .then((response) => {
       $('#table_education_details > tbody ').html('');
-      var list = response.data.list;
-      var element = '';
-      for (var index = 0; index < list.length; index++) {
+      const list = response.data.list;
+      let element = '';
+      for (let index = 0; index < list.length; index++) {
         element = '<tr>';
         element += '  <td>' + list[index].course_name + '</td>';
         element += '  <td>';
@@ -48,7 +48,7 @@ function (Util) {
         $('#table_education_details > tbody ').append(element);
       }
     })
-    .catch(function (error) {
+    .catch((error) => {
       console.error(error);
     });
   });

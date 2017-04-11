@@ -88,14 +88,14 @@ hbs.registerHelper('star-rating', function (rating) {
   } else if (rating > 0 && rating < 1.4) {
     _class = 'half';
   } else if (rating > 0 && rating <= 1.4) {
-  _class = 'one';
-} else if (rating >= 1.5 && rating < 2) {
-  _class = 'onehalf';
-} else if (rating >= 2 && rating < 2.5) {
-  _class = 'two';
-} else if (rating >= 2.5 && rating < 3) {
-  _class = 'twohalf';
-} else if (rating >= 3 && rating < 3.5) {
+    _class = 'one';
+  } else if (rating >= 1.5 && rating < 2) {
+    _class = 'onehalf';
+  } else if (rating >= 2 && rating < 2.5) {
+    _class = 'two';
+  } else if (rating >= 2.5 && rating < 3) {
+    _class = 'twohalf';
+  } else if (rating >= 3 && rating < 3.5) {
   _class = 'three';
 } else if (rating >= 3.5 && rating < 4) {
   _class = 'threehalf';
@@ -130,4 +130,9 @@ hbs.registerHelper('top', function (offset, context, options) {
     ret = ret + options.fn(context[i]);
   }
   return ret;
+});
+
+hbs.registerHelper('split', function (str) {
+  var arr = str.split(',');
+  return arr;
 });

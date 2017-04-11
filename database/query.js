@@ -205,13 +205,14 @@ QUERY.COURSE = {
 
   // 세션목록을 조회한다.
   GetSessionListByCourseId:
-    'SELECT * FROM `course_list` AS cl ' +
-    'WHERE cl.course_id= ? ' +
-    'ORDER BY cl.`order` ASC, cl.`id` ASC; ',
+    'SELECT * ' +
+    '  FROM `course_list` AS cl ' +
+    ' WHERE cl.`course_id` = ? ' +
+    ' ORDER BY cl.`order` ASC, cl.`id` ASC; ',
 
  // 세션 정보를 id 로 조회한다.
   GetSessionById:
-    'SELECT `id`, `course_id`, `type`,`title`,`quiz_group_id`, `order` ' +
+    'SELECT * ' +
     '  FROM `course_list` ' +
     ' WHERE `id` = ?; ',
 
@@ -260,7 +261,7 @@ QUERY.COURSE = {
 
   // 비디오를 ID로 조회한다.
   GetVideoDataById:
-    'SELECT * FROM `video` WHERE id= ?;',
+    'SELECT * FROM `video` WHERE id = ?;',
 
   // 비디오 ID 로 삭제한다.
   DeleteVideoById:
@@ -322,12 +323,69 @@ QUERY.COURSE = {
     'INSERT IGNORE `course_list` (`course_id`, `type`, `title`, `quiz_group_id`, `order`) ' +
     'VALUES (?,?,?,?,?); ',
 
-    // 퀴즈 그룹을 생생헌다.
-    // `group_id`, `quiz_id` 가 중복일 경우 순서만 변경할 수 있다.
+  // 체크리스트 세션을 생성한다.
+  InsertCourseListForChecklist:
+    'INSERT IGNORE `course_list` (`course_id`, `type`, `title`, `checklist_group_id`, `order`) ' +
+    'SELECT ?,?,?,?,(SELECT IFNULL(MAX(`order`), 0) + 1 FROM `course_list` WHERE `course_id` = ?) ',
+
+  // 특정 세션의 아이디로 체크리스트를 조회한다.
+  GetChecklistByCourseListId:
+    'SELECT c.`id` AS checklist_id ' +
+    '     , c.`item_type` ' +
+    '     , c.`item_name` ' +
+    '     , c.`item_section` ' +
+    '     , c.`sample` ' +
+    '     , cg.`order` AS checklist_order ' +
+    '     , cl.`title` ' +
+    '  FROM `course_list` AS cl ' +
+    ' INNER JOIN `checklist_group` AS cg ' +
+    '    ON cl.`checklist_group_id` = cg.`group_id` ' +
+    ' INNER JOIN `checklist` AS c ' +
+    '    ON cg.`checklist_id` = c.`id` ' +
+    ' WHERE cl.`id` = ?; ',
+
+  // 특정 세션의 그룹아이디로 체크리스트를 조회한다.
+  GetChecklistByGroupId:
+    'SELECT c.`id` AS checklist_id ' +
+    '     , c.`item_type` ' +
+    '     , c.`item_name` ' +
+    '     , c.`item_section` ' +
+    '     , c.`sample` ' +
+    '     , cg.`order` AS checklist_order ' +
+    '  FROM `checklist_group` AS cg ' +
+    ' INNER JOIN `checklist` AS c ' +
+    '    ON cg.`checklist_id` = c.`id` ' +
+    ' WHERE cg.`group_id` = ? ' +
+    ' ORDER BY cg.`order`; ',
+
+  // 퀴즈 그룹을 생생헌다.
+  // `group_id`, `quiz_id` 가 중복일 경우 순서만 변경할 수 있다.
   InsertOrUpdateQuizGroup:
     'INSERT INTO `quiz_group` (`group_id`, `quiz_id`, `order`) ' +
     'VALUES (?,?,?) ' +
     '    ON DUPLICATE KEY UPDATE `order` = ?; ',
+
+  // 체크리스트 그룹을 생생헌다.
+  // `group_id`, `checklist_id` 가 중복일 경우 순서만 변경할 수 있다.
+  InsertOrUpdateChecklistGroup:
+    'INSERT INTO `checklist_group` (`group_id`, `checklist_id`, `order`) ' +
+    'VALUES (?,?,?) ' +
+    '    ON DUPLICATE KEY UPDATE `order` = ?; ',
+
+  // 체크리스트 입력
+  InsertChecklist:
+    'INSERT INTO `checklist` (`item_name`, `item_type`, `item_section`, `sample`) ' +
+    'VALUES (?,?,?,?); ',
+
+  // 체크리스트 수정
+  UpdateChecklist:
+    'UPDATE `checklist` SET ' +
+    '       `item_name` = ? ' +
+    '     , `item_type` = ? ' +
+    '     , `item_section` = ? ' +
+    '     , `sample` = ? ' +
+    '     , `updated_dt` = NOW() ' +
+    ' WHERE `id` = ?; ',
 
   // 퀴즈(단합형) 를 생성한다.
   CreateQuizNoOption:
@@ -413,7 +471,6 @@ QUERY.COURSE = {
   UpdateSession:
     'UPDATE `course_list` SET ' +
     '       `title` = ? ' +
-    '     , `order` = ? ' +
     '     , `updated_dt` = NOW() ' +
     ' WHERE `id` = ?; ',
 
@@ -430,7 +487,31 @@ QUERY.COURSE = {
 
   // 강의를 비활성화 한다.
   DisableTeacherById:
-    'UPDATE `teacher` SET `active` = 0 WHERE `id` = ?; '
+    'UPDATE `teacher` SET `active` = 0 WHERE `id` = ?; ',
+
+  // 체크리스트 그룹을 삭제한다.
+  DeleteChecklistGroup:
+    'DELETE cg ' +
+    '  FROM `checklist_group` AS cg ' +
+    ' WHERE cg.`group_id` = ? ' +
+    '   AND cg.`checklist_id` = ?; ',
+
+  // 체크리스트를 삭제한다.
+  DeleteChecklist:
+    'DELETE c ' +
+    '  FROM `checklist` AS c ' +
+    ' WHERE c.`id` = ?; ',
+
+  // 퀴즈(quiz) 를 삭제한다.
+  DeleteChecklistByGroupId:
+    'DELETE c ' +
+    '  FROM `checklist` AS c ' +
+    ' WHERE EXISTS ( ' +
+    '        SELECT \'X\' ' +
+    '          FROM `checklist_group` ' +
+    '         WHERE `group_id` = ? ' +
+    '           AND `checklist_id` = c.`id` ' +
+    '       ) '
 };
 
 QUERY.EDU = {

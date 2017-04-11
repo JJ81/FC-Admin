@@ -186,13 +186,55 @@
                                         </a>
                                     </span>
                                 </li>
+                            {{else if (isEquals type 'CHECKLIST') }}
+                                <li>
+                                  <span class="handle ui-sortable-handle">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                    <i class="fa fa-ellipsis-v"></i>
+                                  </span>
+                                  <a href="#checklist" class="btn-preview-checklist"
+                                    data-checklist-group="{{checklist_group_id}}"
+                                    data-type="{{type}}"
+                                    data-title="{{title}}"
+                                    data-order="{{order}}"
+                                    data-id="{{id}}"
+                                  >
+                                    <i class="fa fa-calendar-check-o"></i> &nbsp;
+                                    {{title}}
+                                  </a>
+                                  <span class="pull-right"
+                                    data-course-id="{{course_id}}"
+                                    data-course-list-id="{{id}}"
+                                    data-type="{{type}}"
+                                  >
+                                    <a href="#view" class="btn btn-sm btn-session-detail text-green btn-preview-checklist"
+                                      data-checklist-group="{{checklist_group_id}}"
+                                      data-type="{{type}}"
+                                      data-title="{{title}}"
+                                    >
+                                      <i class="fa fa-eye"></i>
+                                      보기
+                                    </a>
+                                    <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-checklist"
+                                      data-id="{{id}}"
+                                      data-checklist-group="{{checklist_group_id}}"
+                                    >
+                                      <i class="fa fa-pencil"></i> &nbsp; 수정
+                                    </a>
+                                    <a href="#delete" class="btn btn-sm text-red btn-delete-session"
+                                      data-checklist-group="{{checklist_group_id}}"
+                                    >
+                                      <i class="fa fa-eraser"></i> &nbsp; 삭제
+                                    </a>
+                                  </span>
+                                </li>
                             {{/if}}
                             </ul>
                         {{/each}}
                     {{else}}
-                        <div>
-                            아직 등록된 커리큘럼이 없습니다.
-                        </div>
+                      <div>
+                        아직 등록된 커리큘럼이 없습니다.
+                      </div>
                     {{/if}}
                 </div>
             </div>

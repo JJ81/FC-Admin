@@ -1,66 +1,60 @@
 <div class="winpop_quiz" id="watchVideo">
-
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title">{{#if (isEquals type 'FINAL')}} 파이널 테스트 {{else}} 퀴즈 {{/if}} : <strong>{{quiz_title}}</strong>               
-                <div class="pull-right">
-                    <button type="button" id="check-quiz" class="btn btn-primary">
-                        <i class="fa fa-hand-pointer-o"> 정답확인</i>                        
-                    </button>   
-                    <button type="button" class="btn btn-default" onclick="window.close();">
-                        <i class="fa fa-sign-out"> 나가기</i>
-                    </button>
-                </div>                
-            </h4>          
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{#if (isEquals type 'FINAL')}} 파이널 테스트 {{else}} 퀴즈 {{/if}} : <strong>{{quiz_title}}</strong>
+        <div class="pull-right">
+          <button type="button" id="check-quiz" class="btn btn-primary">
+            <i class="fa fa-hand-pointer-o"> 정답확인</i>
+          </button>
+          <button type="button" class="btn btn-default" onclick="window.close();">
+            <i class="fa fa-sign-out"> 나가기</i>
+          </button>
         </div>
-
-        <div class="modal-body">
-        {{#if quiz}}
-            {{#each quiz}}
-            <div class="box box-success">
-                <div class="box-header with-border">
-                    <h3 class="box-title">{{question}}</h3>
-                </div>
-                <div class="box-body">
-                {{#if options}}             
-                    {{#each options}}
-                        <div class="form-group">
-                        {{#if (isEquals ../quiz_type 'B')}}                                                    
-                            <div class="checkbox">
-                                <label>
-                                    <input type="radio" value="">
-                                    &nbsp;&nbsp;{{option}}
-                                </label>
-                            </div> 
-                        {{/if}}                                                            
-                        {{#if (isEquals ../quiz_type 'C')}}                            
-                            <div class="radio">
-                                <label>
-                                    <input type="checkbox" name="radio-group-{{../../quiz_id}}">
-                                    &nbsp;&nbsp;{{option}}
-                                </label>
-                            </div>
-                        {{/if}}
-                        </div>
-                    {{/each}}                    
-                
-                {{else}}
-                    {{#if (isEquals ../quiz_type 'A')}}                   
-                        <input type="text" class="form-control" value="" required="required" placeholder="정답을 입력하세요" >                            
-                    {{/if}}                                          
-                {{/if}}                    
-                </div>
-                <div class="answer attachment" style="display: none;">
-                    <div class="box-footer">
-                        <h4>정답: <span class="text-green">&nbsp;{{answer}}</span></h4>
-                    </div>
-                </div>
-            </div>        
-            {{/each}}
-        {{else}}
-            등록된 {{#if (isEquals type 'FINAL' )}}테스트{{else}}퀴즈{{/if}}가 없습니다.
-        {{/if}}
-
-        </div>
+      </h4>
     </div>
+
+    <div class="modal-body">
+      {{#if quiz}}
+      {{#each quiz}}
+      <div class="box box-success">
+        <div class="box-header with-border">
+          <h3 class="box-title">{{question}}</h3>
+        </div>
+        <div class="box-body">
+          {{#if options}}
+          {{#each options}}
+          <div class="form-group">
+            {{#if (isEquals ../quiz_type 'B')}}
+            <div class="checkbox">
+              <label>
+                <input type="radio" value="">
+                &nbsp;&nbsp;{{option}}
+              </label>
+            </div>
+            {{/if}}
+            {{#if (isEquals ../quiz_type 'C')}}
+            <div class="radio">
+              <label>
+                <input type="checkbox" name="radio-group-{{../../quiz_id}}">
+                &nbsp;&nbsp;{{option}}
+              </label>
+            </div>
+            {{/if}}
+          </div>
+          {{/each}}
+          {{else}}
+          {{#if (isEquals ../quiz_type 'A')}}
+          <input type="text" class="form-control" value="" required="required" placeholder="정답을 입력하세요"> {{/if}} {{/if}}
+        </div>
+        <div class="answer attachment" style="display: none;">
+          <div class="box-footer">
+            <h4>정답: <span class="text-green">&nbsp;{{answer}}</span></h4>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+      {{else}} 등록된 {{#if (isEquals type 'FINAL' )}}테스트{{else}}퀴즈{{/if}}가 없습니다.
+      {{/if}}
+    </div>
+  </div>
 </div>

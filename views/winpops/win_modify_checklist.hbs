@@ -1,0 +1,119 @@
+<div class="container-fluid">
+  <h4>
+    체크리스트 수정하기
+    <div class="pull-right">
+      <button type="button" id="regist-quiz" class="btn btn-primary">
+            <i class="fa fa-floppy-o"> 수정</i>
+          </button>
+      <button type="button" class="btn btn-default" onclick="window.close();">
+            <i class="fa fa-sign-out"> 나가기</i>
+          </button>
+    </div>
+  </h4>
+</div>
+
+<div class="modal-body">
+  <label for="title">대표제목 :</label>
+  <div class="form-group">
+    <input type="text" class="form-control" name="title" id="title"
+      placeholder="대표제목을 입력하세요"
+      required autocomplete="off"
+      value="{{course_list.title}}" />
+  </div>
+  <input type="hidden" name="course_id" value="{{course_list.course_id}}" />
+  <input type="hidden" name="course_list_id" value="{{course_list.id}}" />
+  <input type="hidden" name="checklist_group_id" value="{{course_list.checklist_group_id}}" />
+
+  <br /><br />
+  <!-- 체크리스트가 삽입되는 위치 -->
+  <small class="text-red pull-left">* 위아래 순서를 변경하려면, 행 선택(2행부터 가능) 후 위 아래로 움직여보세요</small>
+  <br /><br />
+  <table id="table_checklist" class="table no-margin table-bordered table-striped" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th></th>
+        <th class="right" style="width: 5%">번호</th>
+        <th class="center" style="width: 10%">구분</th>
+        <th class="center" style="width: 45%">체크사항</th>
+        <th class="center" style="width: 10%">분류</th>
+        <th class="center" style="width: 20%">보기</th>
+        <th class="center" style="width: 10%">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="item" data-id="">
+        <td>
+          <span class="handle ui-sortable-handle">
+                <i class="fa fa-ellipsis-v"></i>
+              </span>
+        </td>
+        <td class="center">
+          <label class="itemno">입력</label>
+        </td>
+        <td>
+          <select size="1" id="itemtype" name="itemtype" style="width: 100%" class="itemtype">
+            <option value="select">선택형</option>
+            <option value="choose">다답형</option>
+            <option value="write">단답형</option>
+          </select>
+        </td>
+        <td>
+          <input type="text" id="item" name="item" class="inputitem" style="width: 100%" onClick="this.setSelectionRange(0, this.value.length)"
+            placeholder="입력 후 Enter 키를 누르세요">
+        </td>
+        <td>
+          <input type="text" id="category" name="category" class="inputcategory" style="width: 100%" onClick="this.setSelectionRange(0, this.value.length)"
+            value="없음">
+        </td>
+        <td class="center">
+          <div class="sample">
+            <input type="text" id="sample" name="sample" class="inputsample" style="width: 100%" onClick="this.setSelectionRange(0, this.value.length)"
+              value="5,4,3,2,1">
+          </div>
+        </td>
+        <td class="center">
+          <button class="btn btn-primary btn-sm additem">추가</button>
+          <button class="btn btn-danger btn-sm removeitem" style="display: none;">삭제</button>
+        </td>
+      </tr>
+      {{#each checklists}}
+      <tr class="item" data-id="{{checklist_id}}">
+        <td>
+          <span class="handle ui-sortable-handle">
+                <i class="fa fa-ellipsis-v"></i>
+              </span>
+        </td>
+        <td class="center">
+          <label class="itemno">{{checklist_order}}</label>
+        </td>
+        <td>
+          <select size="1" id="itemtype" name="itemtype" style="width: 100%" class="itemtype">
+            <option value="select">선택형</option>
+            <option value="choose">다답형</option>
+            <option value="write">단답형</option>
+          </select>
+        </td>
+        <td>
+          <input type="text" id="item" name="item" class="inputitem" style="width: 100%" onClick="this.setSelectionRange(0, this.value.length)"
+            placeholder="입력 후 Enter 키를 누르세요" value="{{item_name}}">
+        </td>
+        <td>
+          <input type="text" id="category" name="category" class="inputcategory" style="width: 100%" onClick="this.setSelectionRange(0, this.value.length)"
+            value="{{item_section}}">
+        </td>
+        <td class="center">
+          <div class="sample">
+            <input type="text" id="sample" name="sample" class="inputsample" style="width: 100%" onClick="this.setSelectionRange(0, this.value.length)"
+              value="{{sample}}">
+          </div>
+        </td>
+        <td class="center">
+          <button class="btn btn-danger btn-sm removeitem">삭제</button>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+</div>
+</div>

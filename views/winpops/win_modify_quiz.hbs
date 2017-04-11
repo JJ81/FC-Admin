@@ -1,49 +1,49 @@
-<div class="winpop_quiz" id="modifyQuiz"
-     data-course-list-id="{{course_list.id}}" 
-     data-course-list-order="{{course_list.order}}"
-     data-type="{{course_list.type}}"
-     data-quiz-group-id="{{course_list.quiz_group_id}}"     
->
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title">
-                {{#if (isEquals type 'QUIZ')}}퀴즈 수정하기{{/if}}
-                {{#if (isEquals type 'FINAL')}}파이널 테스트 수정하기{{/if}}
-                <div class="pull-right">
-                    <button type="button" id="modify-quiz" class="btn btn-primary">
-                        <i class="fa fa-floppy-o"> 저장</i>
-                    </button>                        
-                    <button type="button" class="btn btn-default" onclick="window.close();">
-                        <i class="fa fa-sign-out"> 나가기</i>
-                    </button>
-                </div>                   
-            </h4>
+<div class="winpop_quiz" id="modifyQuiz" data-course-list-id="{{course_list.id}}" data-course-list-order="{{course_list.order}}"
+  data-type="{{course_list.type}}" data-quiz-group-id="{{course_list.quiz_group_id}}">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">
+        {{#if (isEquals type 'QUIZ')}}퀴즈 수정하기{{/if}} {{#if (isEquals type 'FINAL')}}파이널 테스트 수정하기{{/if}}
+        <div class="pull-right">
+          <button type="button" id="modify-quiz" class="btn btn-primary">
+            <i class="fa fa-floppy-o"> 저장</i>
+          </button>
+          <button type="button" class="btn btn-default" onclick="window.close();">
+            <i class="fa fa-sign-out"> 나가기</i>
+          </button>
         </div>
-
-        <div class="modal-body">    
-            <label for="title">대표제목 :</label>  
-            <div class="form-group">
-                <input type="text" class="form-control" name="title" id="title" placeholder="대표제목을 입력하세요" required autocomplete="off" value="{{course_list.title}}" />
-            </div>
-
-            <input type="hidden" name="course_id" value="{{course_list.course_id}}" />
-
-            <br /><br />
-            <!-- 퀴즈가 삽입되는 위치 -->
-            <div id="quiz-container" class="connectedSortable ui-sortable"></div>
-            
-        </div>
-
-        <div class="modal-footer">
-            <div class="form-group">
-                <div id="quiztype" class="input-group">       
-                    <button type="button" id="btn-add-quiz-a" class="btn btn-default">단답형</button>
-                    <button type="button" id="btn-add-quiz-b" class="btn btn-default">선택형</button>
-                    <button type="button" id="btn-add-quiz-c" class="btn btn-default">다답형</button>                                                  
-                </div>
-                <br>
-                <small class="text-red pull-left">* 퀴즈 유형을 먼저 선택하세요.</small>
-            </div>
-        </div>   
+      </h4>
     </div>
+
+    <div class="modal-body">
+      <label for="title">대표제목 :</label>
+      <div class="form-group">
+        <input type="text"
+          class="form-control"
+          name="title"
+          id="title"
+          placeholder="대표제목을 입력하세요"
+          required autocomplete="off"
+          value="{{course_list.title}}"
+        />
+      </div>
+
+      <input type="hidden" name="course_id" value="{{course_list.course_id}}" />
+      <br /><br />
+      <!-- 퀴즈가 삽입되는 위치 -->
+      <div id="quiz-container" class="connectedSortable ui-sortable"></div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="form-group">
+        <div id="quiztype" class="input-group">
+          <button type="button" id="btn-add-quiz-a" class="btn btn-default">단답형</button>
+          <button type="button" id="btn-add-quiz-b" class="btn btn-default">선택형</button>
+          <button type="button" id="btn-add-quiz-c" class="btn btn-default">다답형</button>
+        </div>
+        <br>
+        <small class="text-red pull-left">* 퀴즈 유형을 먼저 선택하세요.</small>
+      </div>
+    </div>
+  </div>
 </div>

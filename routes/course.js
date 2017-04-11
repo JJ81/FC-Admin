@@ -58,7 +58,7 @@ router.get('/', isAuthenticated, (req, res) => {
         } else {
           res.render('course', {
             current_path: 'Course',
-            title: PROJ_TITLE + 'Course',
+            title: global.PROJ_TITLE + 'Course',
             loggedIn: req.user,
             list: result[0],
             teacher_list: result[1]
@@ -72,8 +72,8 @@ router.get('/', isAuthenticated, (req, res) => {
  * 강의/강사등록 상세페이지
  */
 router.get('/details', isAuthenticated, (req, res) => {
-  const _id = req.query.id;
-  let _teacher_id = null;
+  const { id: courseId } = req.query;
+  let teacherId = null;
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -82,7 +82,7 @@ router.get('/details', isAuthenticated, (req, res) => {
       // result[0]
       (callback) => {
         connection.query(QUERY.COURSE.GetCourseListById,
-          [req.user.fc_id, _id],
+          [req.user.fc_id, courseId],
           (err, rows) => {
             if (err) {
               callback(err, null);
@@ -96,14 +96,14 @@ router.get('/details', isAuthenticated, (req, res) => {
       // result[1]
       (callback) => {
         connection.query(QUERY.COURSE.GetStarRatingByCourseId,
-          [_id],
+          [courseId],
           (err, rows) => {
             if (err) {
               console.error(err);
               callback(err, null);
             } else {
               if (rows.length === 0 || rows === null) {
-                callback(null, [{course_id: _id, rate: 0}]);
+                callback(null, [{course_id: courseId, rate: 0}]);
               } else {
                 callback(null, rows);
               }
@@ -115,7 +115,7 @@ router.get('/details', isAuthenticated, (req, res) => {
       // result[2]
       (callback) => {
         connection.query(QUERY.COURSE.GetSessionListByCourseId,
-          [_id],
+          [courseId],
           (err, rows) => {
             if (err) {
               console.error(err);
@@ -130,13 +130,13 @@ router.get('/details', isAuthenticated, (req, res) => {
       // result[3]
       (callback) => {
         connection.query(QUERY.COURSE.GetTeacherInfoByCourseId,
-          [_id],
+          [courseId],
           (err, rows) => {
             if (err) {
               console.error(err);
               callback(err, null);
             } else {
-              _teacher_id = rows[0].teacher_id;
+              teacherId = rows[0].teacher_id;
               callback(null, rows);
             }
           }
@@ -161,7 +161,7 @@ router.get('/details', isAuthenticated, (req, res) => {
       // result[5]
       (callback) => {
         connection.query(QUERY.COURSE.GetStarRatingByTeacherId,
-          [ _teacher_id ],
+          [ teacherId ],
           (err, rows) => {
             // callback(err, rows);
             if (err) {
@@ -185,7 +185,7 @@ router.get('/details', isAuthenticated, (req, res) => {
         } else {
           res.render('course_details', {
             current_path: 'CourseDetails',
-            title: PROJ_TITLE + 'Course Details',
+            title: global.PROJ_TITLE + 'Course Details',
             loggedIn: req.user,
             list: result[0],
             rating: result[1],
@@ -193,7 +193,7 @@ router.get('/details', isAuthenticated, (req, res) => {
             teacher_info: result[3],
             teacher_list: result[4],
             teacher_rating: result[5],
-            course_id: _id
+            course_id: courseId
           });
         }
       });
@@ -226,17 +226,19 @@ router.get('/sessioncount', isAuthenticated, (req, res) => {
  * 강의/강사등록 > 강의생성
  */
 router.post('/register', isAuthenticated, (req, res) => {
-  const course_name = req.body.course_name.trim();
-  const course_desc = req.body.course_desc.trim();
-  const teacher = req.body.teacher_id.trim();
-  const admin_id = req.user.admin_id;
+  const {
+    course_name: courseName,
+    course_desc: courseDescription,
+    teacher_id: teacherId
+  } = req.body;
+  const adminId = req.user.admin_id;
 
   connection.query(QUERY.COURSE.CreateCourse,
     [
-      course_name,
-      teacher,
-      course_desc,
-      admin_id
+      courseName,
+      teacherId,
+      courseDescription,
+      adminId
     ],
     (err, rows) => {
       if (err) {
@@ -252,25 +254,28 @@ router.post('/register', isAuthenticated, (req, res) => {
  * 강의/강사등록 > 강의수정
  */
 router.post('/modify', isAuthenticated, (req, res) => {
-  const _course_id = req.body.course_id.trim();
-  const _course_name = req.body.course_name.trim();
-  const _course_desc = req.body.course_desc.trim();
-  const _teacher_id = req.body.teacher_id.trim();
+  const {
+    course_id: courseId,
+    course_name: courseName,
+    course_desc: courseDescription,
+    teacher_id: teacherId
+  } = req.body;
+  const adminId = req.user.adminId;
 
   connection.query(QUERY.COURSE.UpdateCourse,
     [
-      _course_name,
-      _teacher_id,
-      _course_desc,
-      req.user.admin_id,
+      courseName,
+      teacherId,
+      courseDescription,
+      adminId,
       new Date(),
-      _course_id
+      courseId
     ],
     (err, rows) => {
       if (err) {
         console.error(err);
       } else {
-        res.redirect('/course/details?id=' + _course_id);
+        res.redirect('/course/details?id=' + courseId);
       }
     });
 });
@@ -350,17 +355,16 @@ router.post('/modify/teacher', isAuthenticated, (req, res) => {
  * 강의/강사등록 상세페이지 > 등록된 비디오 보기
  */
 router.get('/video', isAuthenticated, (req, res) => {
-  const _video_id = req.query.id;
-
+  const { id: videoId } = req.query;
   connection.query(QUERY.COURSE.GetVideoDataById,
-    [ _video_id ],
+    [ videoId ],
     (err, rows) => {
       if (err) {
         console.error(err);
       } else {
         res.render('winpops/win_show_video', {
           current_path: 'winpop',
-          title: PROJ_TITLE + 'Video',
+          title: global.PROJ_TITLE + 'Video',
           loggedIn: req.user,
           video: rows
         });
@@ -373,13 +377,13 @@ router.get('/video', isAuthenticated, (req, res) => {
  * 강의/강사등록 상세페이지 > 비디오 생성 팝업
  */
 router.get('/create/video', isAuthenticated, (req, res) => {
-  const _course_id = req.query.course_id;
+  const { course_id: courseId } = req.query;
   res.render('winpops/win_create_video', {
     current_path: 'winpop',
     module_type: 'create_video',
-    title: PROJ_TITLE + 'Register Video',
+    title: global.PROJ_TITLE + 'Register Video',
     loggedIn: req.user,
-    course_id: _course_id
+    course_id: courseId
   });
 });
 
@@ -387,11 +391,13 @@ router.get('/create/video', isAuthenticated, (req, res) => {
  * 비디오 등록하기
  */
 router.post('/create/video', isAuthenticated, (req, res) => {
-  const _course_id = req.body.course_id.trim();
-  const _video_name = req.body.video_name.trim();
-  const _video_provider = req.body.video_provider.trim();
-  const _video_code = req.body.video_code.trim();
-  const _admin_id = req.user.admin_id;
+  const {
+    course_id: courseId,
+    video_name: videoName,
+    video_provider: videoProvider,
+    video_code: videoCode
+  } = req.body;
+  const adminId = req.user.admin_id;
 
   connection.beginTransaction(() => {
     async.waterfall(
@@ -399,10 +405,10 @@ router.post('/create/video', isAuthenticated, (req, res) => {
         (callback) => {
           connection.query(QUERY.COURSE.CreateVideo,
             [
-              _video_name,
-              _video_provider,
-              _video_code,
-              _admin_id
+              videoName,
+              videoProvider,
+              videoCode,
+              adminId
             ],
             (err, result) => {
               if (err) {
@@ -415,13 +421,13 @@ router.post('/create/video', isAuthenticated, (req, res) => {
           );
         },
         (ret, callback) => {
-          let _video_id = ret.insertId;
+          let videoId = ret.insertId;
           connection.query(QUERY.COURSE.InsertIntoCourseListForVideo,
             [
-              _course_id,
+              courseId,
               'VIDEO',
-              _video_name,
-              _video_id
+              videoName,
+              videoId
             ],
             (err, result) => {
               if (err) {
@@ -469,7 +475,7 @@ router.get('/modify/video', isAuthenticated, (req, res) => {
         res.render('winpops/win_modify_video', {
           current_path: 'winpop',
           module_type: 'modify_video',
-          title: PROJ_TITLE + 'Modify Video',
+          title: global.PROJ_TITLE + 'Modify Video',
           loggedIn: req.user,
           video: data[0],
           course_id: _params.course_id,
@@ -554,25 +560,23 @@ router.put('/modify/video', isAuthenticated, (req, res) => {
  */
 router.get('/quiz', isAuthenticated, (req, res) => {
   var _inputs = req.query;
-  var _query = null;
 
-  _query = connection.query(QUERY.COURSE.GetQuizDataByGroupId, [ _inputs.id ], (err, data) => {
+  connection.query(QUERY.COURSE.GetQuizDataByGroupId, [ _inputs.id ], (err, data) => {
     if (err) {
-            // 쿼리 실패
+      // 쿼리 실패
       console.error(err);
     } else {
-      var quiz_list = CourseService.makeQuizList(data);
-            // console.log(quiz_list[2]);
+      let quizList = CourseService.makeQuizList(data);
 
-            // 쿼리 성공
+      // 쿼리 성공
       res.render('winpops/win_show_quiz', {
         current_path: 'winpop',
         module_type: 'show_quiz',
-        title: PROJ_TITLE + 'Quiz',
+        title: global.PROJ_TITLE + 'Quiz',
         loggedIn: req.user,
         type: _inputs.type,
         quiz_title: _inputs.title,
-        quiz: quiz_list
+        quiz: quizList
       });
     }
   });
@@ -582,16 +586,15 @@ router.get('/quiz', isAuthenticated, (req, res) => {
  * 강의/강사등록 상세페이지 > 퀴즈/파이널테스트 생성 팝업
  */
 router.get('/create/quiz', isAuthenticated, (req, res) => {
-  const _course_id = req.query.course_id;
-  const _type = req.query.type;
+  const { course_id: courseId, type: quizType } = req.query.course_id;
 
   res.render('winpops/win_create_quiz', {
     current_path: 'winpop',
     module_type: 'create_quiz',
     type: req.query.type,
-    title: PROJ_TITLE + 'Create ' + req.query.type,
+    title: global.PROJ_TITLE + 'Create ' + quizType,
     loggedIn: req.user,
-    course_id: req.query.course_id
+    course_id: courseId
   });
 });
 
@@ -924,30 +927,30 @@ router.delete('/quiz', isAuthenticated, (req, res) => {
  * course_id, course_list_id, type: QUIZ/FINAL, quiz_group_id
  */
 router.get('/modify/quiz', isAuthenticated, (req, res) => {
-  const _inputs = req.query;
-  let _course_list = null;
-  let _query = null;
+  const { course_list_id: courseListId, type: quizType } = req.query;
 
   async.series(
     [
-      // 세션정보를 조회한다.
-      // results[0]
       (callback) => {
-        _query = connection.query(QUERY.COURSE.GetSessionById, [_inputs.course_list_id], (err, data) => {
-          callback(err, data);
-        });
+        connection.query(QUERY.COURSE.GetSessionById,
+          [
+            courseListId
+          ],
+          (err, data) => {
+            callback(err, data);
+          }
+        );
       }
     ],
     (err, results) => {
       if (err) {
         console.error(err);
       } else {
-        // console.log(results[0]);
         res.render('winpops/win_modify_quiz', {
           current_path: 'winpop',
           module_type: 'modify_quiz',
           type: req.query.type,
-          title: PROJ_TITLE + 'Modify ' + req.query.type,
+          title: global.PROJ_TITLE + 'Modify ' + quizType,
           loggedIn: req.user,
           course_list: results[0][0]
         });
@@ -1014,6 +1017,38 @@ router.delete('/quiz/option', isAuthenticated, (req, res) => {
 });
 
 /**
+ * 체크리스트 보기 페이지를 제공한다.
+ */
+router.get('/checklist', isAuthenticated, (req, res) => {
+  const { course_list_id: courseListId } = req.query;
+
+  connection.query(QUERY.COURSE.GetChecklistByCourseListId, [ courseListId ], (err, data) => {
+    if (err) {
+      // 쿼리 실패
+      console.error(err);
+    } else {
+      // 선택형, 다답형일 경우 보기를 배열로 변환한다.
+      console.log(data);
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].item_type !== 'write' && data[i].sample !== '') {
+          // data[i].sample = JSON.parse('[' + data[i].sample + ']');
+          data[i].sample = data[i].sample.split(',');
+        }
+      }
+      // 쿼리 성공
+      res.render('winpops/win_show_checklist', {
+        current_path: 'winpop',
+        module_type: 'show_checklist',
+        title: global.PROJ_TITLE + 'Checklist',
+        loggedIn: req.user,
+        checklist: data,
+        sessionTitle: data[data.length - 1].title
+      });
+    }
+  });
+});
+
+/**
  * 강의/강사등록 상세페이지 > 퀴즈/파이널테스트 생성 팝업
  */
 router.get('/create/checklist', isAuthenticated, (req, res) => {
@@ -1027,6 +1062,147 @@ router.get('/create/checklist', isAuthenticated, (req, res) => {
     title: global.PROJ_TITLE + 'Create ' + sessionType,
     loggedIn: req.user,
     course_id: courseId
+  });
+});
+
+/**
+ * 체크리스트를 저정한다.
+ */
+router.post('/checklist', isAuthenticated, (req, res) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    connection.beginTransaction((err) => {
+      if (err) throw err;
+      CourseService.InsertOrUpdateChecklist(connection, req.body, (err, result) => {
+        connection.release();
+        if (err) {
+          connection.rollback();
+          return res.json({
+            success: false,
+            msg: err
+          });
+        } else {
+          if (result) {
+            connection.commit();
+            return res.send({
+              success: true
+            });
+          }
+        }
+      });
+    });
+  });
+});
+
+/**
+ * 체크리스트 수정페이지를 보여준다.
+ * @req.query
+ * course_id, course_list_id, type: QUIZ/FINAL, quiz_group_id
+ */
+router.get('/modify/checklist', isAuthenticated, (req, res) => {
+  const {
+    course_list_id: courseListId,
+    checklist_group_id: groupId
+  } = req.query;
+
+  async.series(
+    [
+      (callback) => {
+        connection.query(QUERY.COURSE.GetSessionById,
+          [
+            courseListId
+          ],
+          (err, data) => {
+            callback(err, data);
+          }
+        );
+      },
+      (callback) => {
+        connection.query(QUERY.COURSE.GetChecklistByGroupId,
+          [
+            groupId
+          ],
+          (err, data) => {
+            callback(err, data);
+          }
+        );
+      }
+    ],
+    (err, results) => {
+      // console.log(results[0][0]);
+      if (err) {
+        console.error(err);
+      } else {
+        res.render('winpops/win_modify_checklist', {
+          current_path: 'winpop',
+          module_type: 'modify_checklist',
+          type: req.query.type,
+          title: global.PROJ_TITLE + 'Modify Checklist',
+          loggedIn: req.user,
+          course_list: results[0][0],
+          checklists: results[1]
+        });
+      }
+    }
+  );
+});
+
+/**
+ * 체크리스트를 삭제한다.
+ */
+router.delete('/checklist', isAuthenticated, (req, res) => {
+  const { checklist_id: checklistId, checklist_group_id: groupId } = req.query;
+
+  connection.beginTransaction((err) => {
+    // 트렌젝션 오류 발생시 처리
+    if (err) {
+      res.json({
+        success: false,
+        msg: err
+      });
+    }
+
+    async.series(
+      [
+        (callback) => {
+          connection.query(QUERY.COURSE.DeleteChecklistGroup, [groupId, checklistId], (err, data) => {
+            callback(err, data);
+          });
+        },
+        (callback) => {
+          connection.query(QUERY.COURSE.DeleteChecklist, [checklistId], (err, data) => {
+            callback(err, data);
+          });
+        }
+      ],
+      (err, results) => {
+        if (err) {
+          // 쿼리 오류
+          return connection.rollback(() => {
+            res.json({
+              success: false,
+              msg: err
+            });
+          });
+        } else {
+          connection.commit((err) => {
+            // 커밋 오류
+            if (err) {
+              return connection.rollback(() => {
+                res.json({
+                  success: false,
+                  msg: err
+                });
+              });
+            }
+            // 커밋 성공
+            return res.json({
+              success: true
+            });
+          });
+        }
+      }
+    );
   });
 });
 
@@ -1079,8 +1255,6 @@ router.put('/courselist', isAuthenticated, (req, res) => {
  */
 router.delete('/courselist', isAuthenticated, (req, res) => {
   const _inputs = req.query;
-  let _query = null;
-
   connection.beginTransaction((err) => {
     // 트렌젝션 오류 발생시 처리
     if (err) {
@@ -1106,6 +1280,8 @@ router.delete('/courselist', isAuthenticated, (req, res) => {
             });
           } else if (_inputs.course_list_type === 'VIDEO') {
             callback(null, null);
+          } else if (_inputs.course_list_type === 'CHECKLIST') {
+            callback(null, null);
           }
         },
         // 3.퀴즈/비디오 를 삭제한다.
@@ -1116,6 +1292,10 @@ router.delete('/courselist', isAuthenticated, (req, res) => {
             });
           } else if (_inputs.course_list_type === 'VIDEO') {
             connection.query(QUERY.COURSE.DeleteVideoById, [_inputs.video_id], (err, data) => {
+              callback(err, data);
+            });
+          } else if (_inputs.course_list_type === 'CHECKLIST') {
+            connection.query(QUERY.COURSE.DeleteChecklistByGroupId, [_inputs.checklist_group_id], (err, data) => {
               callback(err, data);
             });
           }

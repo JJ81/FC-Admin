@@ -7,6 +7,8 @@ import cleanCSS from 'gulp-clean-css';
 import htmlmin from 'gulp-htmlmin';
 import imagemin from 'gulp-imagemin';
 import del from 'del';
+import sourcemaps from 'gulp-sourcemaps';
+import babel from 'gulp-babel';
 
 const DIR = {
   SRC: 'public',
@@ -36,7 +38,10 @@ const DEST = {
 
 gulp.task('js', () => {
   return gulp.src(SRC.JS, { base: './public/javascripts' })
+          .pipe(sourcemaps.init())
+          .pipe(babel())
           .pipe(uglify())
+          .pipe(sourcemaps.write('../maps'))
           .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
           .pipe(gulp.dest(DEST.JS));
 });

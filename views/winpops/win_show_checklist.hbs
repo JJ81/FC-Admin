@@ -1,0 +1,46 @@
+<div class="winpop_checklist" id="previewChecklist">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">체크리스트 : <strong>{{sessionTitle}}</strong>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" onclick="window.close();">
+            <i class="fa fa-sign-out"> 나가기</i>
+          </button>
+        </div>
+      </h4>
+    </div>
+
+    <div class="modal-body">
+      {{#each checklist}}
+      <div class="box box-success">
+        <div class="box-header with-border">
+          <h3 class="box-title">{{item_name}}</h3>
+        </div>
+        <div class="box-body">
+          {{#if sample}}
+          {{#ifCond item_type '!==' 'write' }}
+          <table class="checklist" border="0" cellpadding="5" cellspacing="0">
+            <tbody>
+              <tr>
+          {{#each sample}}
+                <td><label>{{this}}</label></td>
+          {{/each}}
+              </tr>
+              <tr>
+          {{#each sample}}
+          {{#if (isEquals ../item_type 'select')}}
+                <td><label><input type="radio" name="sample-{{../../checklist_id}}" value="{{this}}"></label></td>
+          {{else if (isEquals ../../item_type 'choose')}}
+                <td><label><input type="checkbox" name="sample-{{../../../checklist_id}}" value="{{this}}"></label></td>
+          {{/if}}
+          {{/each}}
+              </tr>
+          </table>
+          {{/ifCond}}
+          {{/if}}
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</div>
