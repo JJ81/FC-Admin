@@ -260,7 +260,7 @@ router.post('/modify', isAuthenticated, (req, res) => {
     course_desc: courseDescription,
     teacher_id: teacherId
   } = req.body;
-  const adminId = req.user.adminId;
+  const adminId = req.user.admin_id;
 
   connection.query(QUERY.COURSE.UpdateCourse,
     [
@@ -586,7 +586,7 @@ router.get('/quiz', isAuthenticated, (req, res) => {
  * 강의/강사등록 상세페이지 > 퀴즈/파이널테스트 생성 팝업
  */
 router.get('/create/quiz', isAuthenticated, (req, res) => {
-  const { course_id: courseId, type: quizType } = req.query.course_id;
+  const { course_id: courseId, type: quizType } = req.query;
 
   res.render('winpops/win_create_quiz', {
     current_path: 'winpop',

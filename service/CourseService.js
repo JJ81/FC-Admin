@@ -35,6 +35,16 @@ exports.deactivateTeacherById = (_id, _callback) => {
 };
 
 /**
+ * 퀴즈 보기를 입력/수정한다.
+ */
+exports.InsertOrUpdateQuizOptions = (_connection, _data, _callback) => {
+  CourseService.connection = _connection;
+  async.each(_data, saveQuizOption, (err, data) => {
+    _callback(err, data);
+  });
+};
+
+/**
  * 퀴즈 보기를 입력/수정을 수행하는 내부함수
  *
  * @param {object} option

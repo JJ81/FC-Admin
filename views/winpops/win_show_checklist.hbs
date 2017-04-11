@@ -32,6 +32,8 @@
                 <td><label><input type="radio" name="sample-{{../../checklist_id}}" value="{{this}}"></label></td>
           {{else if (isEquals ../../item_type 'choose')}}
                 <td><label><input type="checkbox" name="sample-{{../../../checklist_id}}" value="{{this}}"></label></td>
+          {{else if (isEquals ../../item_type 'write')}}
+                <td><textarea cols="30" rows="10"></textarea>
           {{/if}}
           {{/each}}
               </tr>
