@@ -42,6 +42,9 @@ function (Util) {
   btnPreviewChecklist.bind('click', function (e) {
     e.preventDefault();
     var courseListId = window.$(this).parent('span').data('course-list-id');
+    if (!courseListId) {
+      courseListId = window.$(this).data('id');
+    }
     Util.createWindowPopup('/course/checklist?course_list_id=' + courseListId, 'Checklist', windowOption);
   });
 
