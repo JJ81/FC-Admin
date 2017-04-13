@@ -94,7 +94,7 @@ exports.getLogoInfo = (req, res, next) => {
   case 'admin.waffle.kosc.orangenamu.net':
     logoImageName = 'waffle.kosc.png';
     logoName = '와플대학';
-    theme = 'skin-red-light';
+    theme = 'skin-yellow-light';
     themeOfTile = 'bg-red-active';
     themeOfProgressBar = 'progress-bar-yellow';
     break;
