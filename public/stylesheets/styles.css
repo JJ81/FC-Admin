@@ -207,10 +207,28 @@ table {
   width: 100%;
 }
 
-th, td {
+.checklist th, td {
   /*padding: 8px;*/
   text-align: center;
   border-bottom: 1px solid #ddd;
+  padding: 5px;
+}
+
+.img-container img {
+    /*position: relative;*/
+    /*left: 0;*/
+    /*top: 0;*/
+    width: 100%;
+    max-width: 50%;
+    height: auto;
+    /*padding: 10px 10px 10px 10px;*/
+    opacity: 0.6;
+    display: block;
+    margin: 0 auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /*top: 0;*/
+    /*position: relative;*/
 }
 
 /*# sourceMappingURL=styles.css.map */

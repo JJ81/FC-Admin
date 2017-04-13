@@ -20,10 +20,14 @@
     <link rel='stylesheet' href="/static/stylesheets/styles.css" />
     <link rel='stylesheet' href="/static/stylesheets/pace.min.css" />
 
-    <title>{{title}}</title>
+    {{#if title}}
+    <title>{{title}} - {{logoName}}</title>
+    {{else}}
+    <title>{{logoName}}</title>
+    {{/if}}
 </head>
 
-<body class="hold-transition {{#if loggedIn.fc_theme}}{{loggedIn.fc_theme}}{{else}}skin-green-light{{/if}} sidebar-mini {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
+<body class="hold-transition {{theme}} sidebar-mini {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
     {{#if (isEquals current_path 'Login')}}
     {{{body}}}
     {{else if (isEquals current_path 'winpop')}}

@@ -27,7 +27,7 @@ requirejs([
         element += '  <td>' + list[index].course_name + '</td>';
         element += '  <td>';
         element += '    <div class="progress progress-xs">';
-        element += '      <div class="progress-bar progress-bar-green progress-bar-striped" style="width: ' + list[index].completed_rate + '%"></div>';
+        element += '      <div class="progress-bar ' + response.data.progress_bar_theme + ' progress-bar-striped" style="width: ' + list[index].completed_rate + '%"></div>';
         element += '    </div>';
         element += '  </td>';
         element += '  <td class="center">';

@@ -1,38 +1,13 @@
 const express = require('express');
 const router = express.Router();
-// var mysql_dbc = require('../commons/db_conn')();
-// var connection = mysql_dbc.init();
 const QUERY = require('../database/query');
-const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    if (req.user.role === 'supervisor') {
-      return res.redirect('achievement');
-    }
-    return next();
-  }
-  res.redirect('/login');
-};
-require('../commons/helpers');
 const async = require('async');
 const DashboardService = require('../service/DashboardService');
 const pool = require('../commons/db_conn_pool');
+const util = require('../util/util');
 
-/**
- * 메인
- * 1. 총 교육생 수
- * 2. 총 지점 수
- * 3. 총 진행중인 교육과정
- * 4. 총 교육과정
- * 5. 포인트 가중치 설정값
- * 6. 이번 달 전체 교육 이수율
- * 7. 이번 달 교육 진척도
- * 8. 교육 이수율 랭킹 (지점)
- * 9. 포인트 현황
- */
-router.get('/', isAuthenticated, (req, res) => {
+router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   let eduProgress = null;
-  // let pointWeight = null;
-  // let query = null;
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -165,7 +140,7 @@ router.get('/', isAuthenticated, (req, res) => {
 
             res.render('dashboard', {
               current_path: 'Dashboard',
-              title: global.PROJ_TITLE + 'Dashboard',
+              title: '대시보드',
               loggedIn: req.user,
               total_users: result[0],
               total_branch: result[1],
@@ -187,7 +162,7 @@ router.get('/', isAuthenticated, (req, res) => {
 /**
  * 포인트 상세내역 조회
  */
-router.get('/point/details', isAuthenticated, (req, res) => {
+router.get('/point/details', util.isAuthenticated, (req, res) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
     connection.query(QUERY.DASHBOARD.GetUserPointDetails,
@@ -213,7 +188,7 @@ router.get('/point/details', isAuthenticated, (req, res) => {
             item.point_repetition = data[index].point_repetition;
             list.push(item);
           }
-          console.log(list);
+          // console.log(list);
           res.json({
             success: true,
             list: list
@@ -227,7 +202,7 @@ router.get('/point/details', isAuthenticated, (req, res) => {
 /**
  * 가중치 등록
  */
-router.post('/point/weight/record', isAuthenticated, (req, res) => {
+router.post('/point/weight/record', util.isAuthenticated, (req, res) => {
   const _eduComplete = req.body.complete;
   const _quizComplete = req.body.quiz;
   const _finalComplete = req.body.final_test;
@@ -235,32 +210,35 @@ router.post('/point/weight/record', isAuthenticated, (req, res) => {
   const _speedComplete = req.body.speed;
   const _repsComplete = req.body.reps;
 
-  connection.query(QUERY.DASHBOARD.SetPointWeight,
-    [
-      _eduComplete,
-      _quizComplete,
-      _finalComplete,
-      _reeltimeComplete,
-      _speedComplete,
-      _repsComplete,
-      req.user.admin_id
-    ],
-    (err, result) => {
-      if (err) {
-        console.error(err);
-        throw new Error(err);
-      } else {
-        res.redirect('/dashboard');
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    connection.query(QUERY.DASHBOARD.SetPointWeight,
+      [
+        _eduComplete,
+        _quizComplete,
+        _finalComplete,
+        _reeltimeComplete,
+        _speedComplete,
+        _repsComplete,
+        req.user.admin_id
+      ],
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          throw new Error(err);
+        } else {
+          res.redirect('/dashboard');
+        }
       }
-    });
+    );
+  });
 });
 
 /**
  * 교육과정별 포인트 현황을 반환한다.
  */
-router.get('/edupoint', isAuthenticated, (req, res) => {
+router.get('/edupoint', util.isAuthenticated, (req, res) => {
   const _inputs = req.query;
-  let query = null;
   let pointWeight = null;
 
   pool.getConnection((err, connection) => {
@@ -269,7 +247,7 @@ router.get('/edupoint', isAuthenticated, (req, res) => {
       [
         // 포인트 가중치 설정값
         (callback) => {
-          query = connection.query(QUERY.DASHBOARD.GetRecentPointWeight,
+          connection.query(QUERY.DASHBOARD.GetRecentPointWeight,
             [req.user.fc_id],
             (err, rows) => {
               if (err) {
@@ -295,7 +273,7 @@ router.get('/edupoint', isAuthenticated, (req, res) => {
         // 교육과정별 포인트 현황
         (callback) => {
           if (pointWeight != null) {
-            query = connection.query(QUERY.DASHBOARD.GetUserPointListByEduId,
+            connection.query(QUERY.DASHBOARD.GetUserPointListByEduId,
               [
                 req.user.fc_id,
                 req.user.fc_id,

@@ -1,69 +1,9 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>
-        {{#if (isEquals current_path 'Dashboard') }}
-            대시보드
-        {{else if (isEquals current_path 'Employee') }}
-            직원관리
-        {{else if (isEquals current_path 'Education') }}
-            교육과정 등록
-        {{else if (isEquals current_path 'EducationDetails') }}
-            교육과정 등록
-        {{else if (isEquals current_path 'Assignment') }}
-            교육과정 배정
-        {{else if (isEquals current_path 'AssignmentDetails') }}
-            교육과정 배정
-        {{else if (isEquals current_path 'Assignment_history') }}
-            교육과정 배정이력
-        {{else if (isEquals current_path 'Course') }}
-            강의/강사등록
-        {{else if (isEquals current_path 'CourseDetails') }}
-            강의/강사등록
-        {{else if (isEquals current_path 'Achievement') }}
-            교육과정별 진척도
-        {{else if (isEquals current_path 'AchievementDetails') }}
-            교육과정별 진척도 상세페이지
-        {{else if (isEquals current_path 'AchievementUser') }}
-            교육생별 진척도
-        {{else if (isEquals current_path 'AchievementUserDetails') }}
-            교육생별 진척도 상세페이지
-        {{else if (isEquals current_path 'Administrator') }}
-            관리자
-        {{else if (isEquals current_path 'Documentation') }}
-            도움말
-        {{/if}}
-    </h1>
+    <h1>{{title}}</h1>
     <ol class="breadcrumb">
         <li><a href="/dashboard"><i class="fa fa-home"></i> Home</a></li>
-        <li class="active">
-            {{#if (isEquals current_path 'Dashboard') }}
-                대시보드
-            {{else if (isEquals current_path 'Employee') }}
-                직원관리
-            {{else if (isEquals current_path 'Education') }}
-                교육과정 등록
-            {{else if (isEquals current_path 'EducationDetails') }}
-                교육과정 등록
-            {{else if (isEquals current_path 'Assignment') }}
-                교육과정 배정
-            {{else if (isEquals current_path 'AssignmentDetails') }}
-                교육과정 배정
-            {{else if (isEquals current_path 'Assignment_history') }}
-                교육과정 배정이력
-            {{else if (isEquals current_path 'Course') }}
-                강의/강사등록
-            {{else if (isEquals current_path 'CourseDetails') }}
-                강의/강사등록
-            {{else if (isEquals current_path 'Achievement') }}
-                교육 진척도
-            {{else if (isEquals current_path 'AchievementDetails') }}
-                교육 진척도
-            {{else if (isEquals current_path 'Administrator') }}
-                관리자
-            {{else if (isEquals current_path 'Documentation') }}
-                도움말
-            {{/if}}
-        </li>
+        <li class="active">{{title}}</li>
     </ol>
 </section>
 <!-- // page header -->

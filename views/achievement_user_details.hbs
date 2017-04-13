@@ -33,7 +33,7 @@
               <br><br>
               <span class="progress-number"><b>{{avg_completed_rate}}%</b></span><br>
               <div class="progress progress-sm">
-                  <div class="progress-bar {{#if loggedIn.fc_pgbar_theme}}progress-bar-{{loggedIn.fc_pgbar_theme}}{{else}}progress-bar-green{{/if}} progress-bar-striped"
+                  <div class="progress-bar {{themeOfProgressBar}} progress-bar-striped"
                     style="width: {{avg_completed_rate}}%">
                   </div>
               </div>
@@ -57,7 +57,7 @@
             <td>{{edu_name}}</td>
             <td>
               <div class="progress progress-xs">
-                <div class="progress-bar {{#if ../loggedIn.fc_pgbar_theme}}progress-bar-{{../../loggedIn.fc_pgbar_theme}}{{else}}progress-bar-green{{/if}} progress-bar-striped" style="width: {{completed_rate}}%"></div>
+                <div class="progress-bar {{../themeOfProgressBar}} progress-bar-striped" style="width: {{completed_rate}}%"></div>
               </div>
             </td>
             <td class="center">

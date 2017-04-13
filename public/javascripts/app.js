@@ -1,5 +1,5 @@
 'use strict';
-requirejs.config({
+window.requirejs.config({
   paths: {
     'jquery': ['/static/vendor/jquery-2.2.3.min'],
     'jquery-private': ['/static/vendor/jquery-private'],

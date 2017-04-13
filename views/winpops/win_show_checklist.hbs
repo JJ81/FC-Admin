@@ -19,7 +19,7 @@
         <div class="box-body">
           {{#if sample}}
           {{#ifCond item_type '!==' 'write' }}
-          <table class="checklist" border="0" cellpadding="5" cellspacing="0">
+          <table class="checklist" class="table no-margin table-bordered table-striped">
             <tbody>
               <tr>
           {{#each sample}}
@@ -32,13 +32,13 @@
                 <td><label><input type="radio" name="sample-{{../../checklist_id}}" value="{{this}}"></label></td>
           {{else if (isEquals ../../item_type 'choose')}}
                 <td><label><input type="checkbox" name="sample-{{../../../checklist_id}}" value="{{this}}"></label></td>
-          {{else if (isEquals ../../item_type 'write')}}
-                <td><textarea cols="30" rows="10"></textarea>
           {{/if}}
           {{/each}}
               </tr>
           </table>
           {{/ifCond}}
+          {{else}}
+          <textarea cols="30" rows="5" style="width: 100%;"></textarea>
           {{/if}}
         </div>
       </div>

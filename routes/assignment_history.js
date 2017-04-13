@@ -1,24 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const QUERY = require('../database/query');
-const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    if (req.user.role === 'supervisor') {
-      return res.redirect('achievement');
-    }
-    return next();
-  }
-  res.redirect('/login');
-};
-require('../commons/helpers');
+const util = require('../util/util');
 const pool = require('../commons/db_conn_pool');
 const AssignmentService = require('../service/AssignmentService');
 
-router.get('/', isAuthenticated, (req, res) => {
-  pool.getConnection((err, connInPool) => {
+router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
+  pool.getConnection((err, connection) => {
     if (err) throw err;
-    connInPool.query(QUERY.HISTORY.GetAssignEduHistory, [req.user.fc_id], (err, rows) => {
-      connInPool.release();
+    connection.query(QUERY.HISTORY.GetAssignEduHistory, [req.user.fc_id], (err, rows) => {
+      connection.release();
       if (err) {
         console.error(err);
         throw new Error(err);
@@ -26,7 +17,7 @@ router.get('/', isAuthenticated, (req, res) => {
         res.render('assignment_history', {
           current_path: 'Assignment_history',
           menu_group: 'education',
-          title: PROJ_TITLE + 'Assignment History',
+          title: '교육과정 배정이력',
           loggedIn: req.user,
           list: rows
         });
@@ -38,7 +29,7 @@ router.get('/', isAuthenticated, (req, res) => {
 /**
  * log_assign_edu 를 삭제한다.
  */
-router.delete('/', isAuthenticated, (req, res, next) => {
+router.delete('/', util.isAuthenticated, (req, res, next) => {
   AssignmentService.deactivateEduAssignmentById(req.query.id, (err, data) => {
     if (err) {
       return res.status(500).send({

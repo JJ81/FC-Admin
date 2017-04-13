@@ -22,7 +22,7 @@ const SRC = {
   UPLOADS: DIR.SRC + '/uploads/**/*.*',
   CSS: DIR.SRC + '/stylesheets/*.css',
   HTML: DIR.SRC + '/*.html',
-  IMAGES: DIR.SRC + '/images/*'
+  IMAGES: DIR.SRC + '/images/**/*.*'
 };
 
 const DEST = {

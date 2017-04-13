@@ -1,29 +1,30 @@
-var express = require('express');
-var path = require('path');
-// var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var helmet = require('helmet');
+const express = require('express');
+const path = require('path');
+// const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const helmet = require('helmet');
 
 /* routes */
-var routes = require('./routes/index'); // all about login
-var dashboard = require('./routes/dashboard');
-var employee = require('./routes/employee');
-var education = require('./routes/education');
-var assignment = require('./routes/assignment');
-var assignmentHistory = require('./routes/assignment_history');
-var course = require('./routes/course');
-var achievement = require('./routes/achievement');
-var administrator = require('./routes/administrator');
+const routes = require('./routes/index'); // all about login
+const dashboard = require('./routes/dashboard');
+const employee = require('./routes/employee');
+const education = require('./routes/education');
+const assignment = require('./routes/assignment');
+const assignmentHistory = require('./routes/assignment_history');
+const course = require('./routes/course');
+const achievement = require('./routes/achievement');
+const administrator = require('./routes/administrator');
 const api = require('./routes/api');
 
 /* routes */
-var app = express();
-var hbs = require('hbs');
-var passport = require('passport');
-var flash = require('connect-flash');
-var cookieSession = require('cookie-session');
+const app = express();
+const hbs = require('hbs');
+const helper = require('./commons/helpers');
+const passport = require('passport');
+const flash = require('connect-flash');
+const cookieSession = require('cookie-session');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,7 +38,7 @@ app.use('/static', express.static(path.join(__dirname, '/dist')));
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
-global.PROJ_TITLE = 'Orangenamu, Backoffice ';
+// global.PROJ_TITLE = 'Orangenamu, Backoffice ';
 global.AppRoot = process.env.PWD;
 
 app.use(helmet.xssFilter());
@@ -76,8 +77,8 @@ app.use('/administrator', administrator);
 app.use('/api/v1', api);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found');
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
