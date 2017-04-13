@@ -1531,15 +1531,15 @@ QUERY.DASHBOARD = {
        'SELECT @course_id:= g.course_id AS course_id ' +
        '     , MAX(g.`course_name`) AS course_name ' +
        '     , IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate ' +
-     '     , ( ' +
-     '        SELECT IFNULL(TRUNCATE(AVG(course_rate), 2), 0) ' +
+       '     , ( ' +
+       '        SELECT IFNULL(TRUNCATE(AVG(course_rate), 2), 0) ' +
        '      FROM `user_rating` AS ur ' +
-      '       WHERE ur.`course_id` = @course_id ' +
+       '       WHERE ur.`course_id` = @course_id ' +
        '     ) AS course_rate ' +
-     '     , ( ' +
-     '        SELECT COUNT(DISTINCT ur.user_id) ' +
+       '     , ( ' +
+       '        SELECT COUNT(DISTINCT ur.user_id) ' +
        '      FROM `user_rating` AS ur ' +
-      '       WHERE ur.`course_id` = @course_id ' +
+       '       WHERE ur.`course_id` = @course_id ' +
        '     ) AS vote_count ' +
        '  FROM ( ' +
        '        SELECT @training_user_id:= tu.`id` AS training_user_id ' +
