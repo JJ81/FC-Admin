@@ -74,9 +74,10 @@ router.get('/user/details', util.isAuthenticated, util.getLogoInfo, (req, res, n
   const { user_id: userId, showall } = req.query;
   pool.getConnection((err, connection) => {
     if (err) throw err;
-    // 슈퍼바이저일 경우 자신의 점포만 볼 수 있다.
+    // todo 슈퍼바이저일 경우 자신의 점포만 볼 수 있다.
     connection.query(QUERY.ACHIEVEMENT.GetUserEduProgressAll(showall),
       [
+        req.user.fc_id,
         userId
       ],
       (err, rows) => {
@@ -121,6 +122,7 @@ router.get('/user/education', util.isAuthenticated, util.getLogoInfo, (req, res,
     // 슈퍼바이저일 경우 자신의 점포만 볼 수 있다.
     connection.query(QUERY.ACHIEVEMENT.GetUserEduCourseProgress(),
       [
+        req.user.fc_id,
         trainingUserId
       ],
       (err, rows) => {

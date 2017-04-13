@@ -1228,7 +1228,7 @@ QUERY.ACHIEVEMENT = {
     '        FROM `training_users` AS tu ' +
     '       INNER JOIN `users` AS u ' +
     '         ON tu.`user_id` = u.`id` ' +
-    '         AND u.`fc_id` = 1 ' +
+    '         AND u.`fc_id` = ? ' +
     '         AND u.`active` = 1 ' +
     '       INNER JOIN `training_edu` AS te ' +
     '         ON tu.`training_edu_id` = te.`id` ' +
@@ -1303,7 +1303,7 @@ QUERY.ACHIEVEMENT = {
     '          FROM `training_users` AS tu ' +
     '         INNER JOIN `users` AS u ' +
     '            ON tu.`user_id` = u.`id` ' +
-    '           AND u.`fc_id` = 1 ' +
+    '           AND u.`fc_id` = ? ' +
     '           AND u.`active` = 1 ' +
     '         INNER JOIN `training_edu` AS te ' +
     '            ON tu.`training_edu_id` = te.`id` ' +
