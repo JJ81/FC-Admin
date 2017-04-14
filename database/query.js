@@ -592,8 +592,11 @@ QUERY.EDU = {
 
   // 교육과정을 생성한다.
   InsertEdu:
-    'INSERT INTO `edu` (`name`, `desc`, `course_group_id`, `creator_id`, `start_dt`, `end_dt`) ' +
-    'VALUES(?,?,?,?,?,?); ',
+    'INSERT INTO `edu` (`name`, `desc`, `course_group_id`, `creator_id`) ' +
+    'VALUES(?,?,?,?); ',
+  // InsertEdu:
+  //   'INSERT INTO `edu` (`name`, `desc`, `course_group_id`, `creator_id`, `start_dt`, `end_dt`) ' +
+  //   'VALUES(?,?,?,?,?,?); ',
 
   // 교육과정을 수정한다.
   UpdateEdu:
@@ -732,25 +735,62 @@ QUERY.HISTORY = {
     'VALUES(?,?,?,?,?); ',
 
   // 교육과정 배정 정보
-  GetAssignEduHistory:
-    'SELECT e.`id` AS edu_id, te.`id`, e.`name`, te.`created_dt` ' +
-    // '     , e.`start_dt`, e.`end_dt` ' +
-    '     , lae.`start_dt` ' +
-    '     , lae.`end_dt` ' +
-    '     , e.`course_group_id` ' +
-    '     , a.`name` AS admin, lbu.`title` AS target ' +
-    '     , lbu.`id` AS logBindUserId, lbu.`group_id` AS logBindUserGroupId ' +
+  GetAssignEduHistory: (showAll) => {
+    let sql =
+      'SELECT e.`id` AS edu_id, te.`id`, e.`name`, te.`created_dt` ' +
+      '     , lae.`start_dt` ' +
+      '     , lae.`end_dt` ' +
+      '     , e.`course_group_id` ' +
+      '     , a.`name` AS admin, lbu.`title` AS target ' +
+      '     , lbu.`id` AS logBindUserId, lbu.`group_id` AS logBindUserGroupId ' +
+      '  FROM `training_edu` AS te ' +
+      ' INNER JOIN `admin` AS a ' +
+      '    ON a.`id` = te.`assigner` ' +
+      '   and a.`fc_id` = ? ' +
+      '  LEFT JOIN `edu` AS e ' +
+      '    ON e.`id` = te.`edu_id` ' +
+      '  LEFT JOIN `log_assign_edu` AS lae ' +
+      '    ON lae.`training_edu_id` = te.`id` ' +
+      '  LEFT JOIN `log_bind_users` AS lbu ' +
+      '    ON lbu.`id` = lae.`target_users_id` ';
+
+    if (!showAll) {
+      sql +=
+        ' WHERE te.`id` IN ( ' +
+        '    SELECT DISTINCT training_edu_id ' +
+        '      FROM `training_users` AS tu  ' +
+        '     INNER JOIN `users` AS u ' +
+        '        ON tu.`user_id` = u.`id` ' +
+        '     INNER JOIN `admin_branch` AS ab ' +
+        '        ON u.`branch_id` = ab.`branch_id` ' +
+        '       AND ab.`admin_id` = ?) ';
+    }
+    sql += ' ORDER BY te.`created_dt` DESC; ';
+    return sql;
+  },
+
+  // 진척도관리(슈퍼바이저) - deprecated
+  GetAssignEduHistory2:
+    'SELECT e.id AS edu_id, te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name AS admin, lbu.title AS target ' +
     '  FROM `training_edu` AS te ' +
     ' INNER JOIN `admin` AS a ' +
     '    ON a.`id` = te.`assigner` ' +
-    '   and a.`fc_id` = ? ' +
+    '   AND a.`fc_id` = ? ' +
     '  LEFT JOIN `edu` AS e ' +
     '    ON e.`id` = te.`edu_id` ' +
     '  LEFT JOIN `log_assign_edu` AS lae ' +
     '    ON lae.`training_edu_id` = te.`id` ' +
     '  LEFT JOIN `log_bind_users` AS lbu ' +
     '    ON lbu.`id` = lae.`target_users_id` ' +
-    ' ORDER BY te.`created_dt` DESC; ',
+    ' WHERE te.`id` IN ( ' +
+    '    SELECT DISTINCT training_edu_id ' +
+    '      FROM `training_users` AS tu  ' +
+    '     INNER JOIN `users` AS u ' +
+    '        ON tu.`user_id` = u.`id` ' +
+    '     INNER JOIN `admin_branch` AS ab ' +
+    '        ON u.`branch_id` = ab.`branch_id` ' +
+    '       AND ab.`admin_id` = ?) ' +
+    'ORDER BY te.created_dt DESC; ',
 
   // 진척도관리
   GetAssignEduHistoryById:
@@ -774,30 +814,7 @@ QUERY.HISTORY = {
     ' INNER JOIN `log_bind_users` AS lbu ' +
     '    ON lbu.`id` = lae.`target_users_id` ' +
     '   AND lbu.`id` = ? ' +
-    ' ORDER BY te.`created_dt` DESC; ',
-
-  // 진척도관리(슈퍼바이저)
-  GetAssignEduHistory2:
-    'SELECT e.id AS edu_id, te.id, e.name, te.created_dt, e.start_dt, e.end_dt, a.name AS admin, lbu.title AS target ' +
-    '  FROM `training_edu` AS te ' +
-    ' INNER JOIN `admin` AS a ' +
-    '    ON a.`id` = te.`assigner` ' +
-    '   AND a.`fc_id` = ? ' +
-    '  LEFT JOIN `edu` AS e ' +
-    '    ON e.`id` = te.`edu_id` ' +
-    '  LEFT JOIN `log_assign_edu` AS lae ' +
-    '    ON lae.`training_edu_id` = te.`id` ' +
-    '  LEFT JOIN `log_bind_users` AS lbu ' +
-    '    ON lbu.`id` = lae.`target_users_id` ' +
-    ' WHERE te.`id` IN ( ' +
-    '    SELECT DISTINCT training_edu_id ' +
-    '      FROM `training_users` AS tu  ' +
-    '     INNER JOIN `users` AS u ' +
-    '        ON tu.`user_id` = u.`id` ' +
-    '     INNER JOIN `admin_branch` AS ab ' +
-    '        ON u.`branch_id` = ab.`branch_id` ' +
-    '       AND ab.`admin_id` = ?) ' +
-    'ORDER BY te.created_dt DESC; '
+    ' ORDER BY te.`created_dt` DESC; '
 };
 
 QUERY.ACHIEVEMENT = {
@@ -1088,7 +1105,6 @@ QUERY.ACHIEVEMENT = {
           '        ON u.`branch_id` = ab.`branch_id` ' +
           '       AND ab.`admin_id` = ? ';
     }
-
     sql +=
       '    ) AS g ' +
       '  LEFT JOIN `branch` AS b ' +
@@ -1331,7 +1347,72 @@ QUERY.ACHIEVEMENT = {
     ' GROUP BY x.`training_user_id`, x.`course_id` ' +
     ' ORDER BY x.`course_order`; ';
     return sql;
-  }
+  },
+  // 체크리스트
+  GetChecklistQuestionByEduId:
+    'SELECT cl.`id` ' +
+    '     , cl.`title` ' +
+    '     , c.`item_name` ' +
+    '     , c.`item_type` ' +
+    '     , c.`item_section` ' +
+    '     , c.`sample` ' +
+    '  FROM `course_list` AS cl ' +
+    ' INNER JOIN `checklist_group` AS cg ' +
+    '    ON cl.`checklist_group_id` = cg.`group_id` ' +
+    ' INNER JOIN `checklist` AS c ' +
+    '    ON cg.`checklist_id` = c.`id` ' +
+    ' INNER JOIN ' +
+    '       ( ' +
+    '        SELECT cg.`course_id` ' +
+    '          FROM `edu` AS e ' +
+    '         INNER JOIN `course_group` AS cg ' +
+    '            ON e.`course_group_id` = cg.`group_id` ' +
+    '         WHERE e.`id` = ? ' +
+    '       ) AS e ' +
+    '    ON cl.`course_id` = e.`course_id` ' +
+    ' WHERE cl.`type` = \'CHECKLIST\' ' +
+    ' ORDER BY cl.`order`, cg.`order`; ',
+
+  GetChecklistUserAnswers:
+    'SELECT luc.`user_id`, luc.`course_id`, luc.`course_list_id` ' +
+    '     , MAX(d.`name`) AS duty_name ' +
+    '     , MAX(b.`name`) AS branch_name ' +
+    '     , MAX(u.`name`) AS user_name ' +
+    '     , GROUP_CONCAT(luc.`answer` ORDER BY luc.`user_id`, luc.`course_id`, luc.`course_list_id`, cg.`order` SEPARATOR \',\' ) AS answered ' +
+    '  FROM `course_list` AS cl ' +
+    ' INNER JOIN `checklist_group` AS cg ' +
+    '    ON cl.`checklist_group_id` = cg.`group_id` ' +
+    ' INNER JOIN `checklist` AS c ' +
+    '    ON cg.`checklist_id` = c.`id` ' +
+    ' INNER JOIN ' +
+    '       ( ' +
+    '        SELECT cg.`course_id` ' +
+    '          FROM `edu` AS e ' +
+    '        INNER JOIN `course_group` AS cg ' +
+    '            ON e.`course_group_id` = cg.`group_id` ' +
+    '        WHERE e.`id` = ? ' +
+    '       ) AS e ' +
+    '    ON cl.`course_id` = e.`course_id` ' +
+    ' INNER JOIN `log_user_checklist` AS luc ' +
+    '    ON c.`id` = luc.`checklist_id` ' +
+    '   AND luc.`edu_id` = ? ' +
+    '   AND luc.`id` = ( ' +
+    '         SELECT MAX(`id`) ' +
+    '           FROM `log_user_checklist` ' +
+    '          WHERE `edu_id` = luc.`edu_id` ' +
+    '            AND `course_list_id` = luc.`course_list_id` ' +
+    '            AND `checklist_id` = luc.`checklist_id` ' +
+    '            AND `user_id` = luc.`user_id` ' +
+    '        ) ' +
+    '  INNER JOIN `users` AS u ' +
+    '     ON luc.`user_id` = u.`id` ' +
+    '   LEFT JOIN `branch` AS b ' +
+    '     ON u.`branch_id` = b.`id` ' +
+    '   LEFT JOIN `duty` AS d ' +
+    '     ON d.`id` = u.`duty_id` ' +
+    '  WHERE cl.`type` = \'CHECKLIST\' ' +
+    '  GROUP BY luc.`user_id`, luc.`course_id`, luc.`course_list_id` ' +
+    '  ORDER BY b.`name`; '
 };
 
 QUERY.DASHBOARD = {

@@ -33,23 +33,35 @@
                     <p>
                       {{{edu.desc}}}
                     </p>
+
+                    <br>
+                    {{#each edu_course_list}}
+                    <h4 class="course-title">
+                      <strong>강의목록</strong>
+                    </h4>
+                    <ul class="session-list">
+                      <li>
+                        <a href="/course/details?id={{course_id}}">{{course_name}}</a>
+                      </li>
+                    </ul>
+                    {{/each}}
                 </div>
             </div>
 
             <!-- /.box-body -->
         </div>
         <!-- /.box -->
-        <div class="list-group">
+        <!--<div class="list-group">
             {{#each edu_course_list}}
             <div class="box list-group-item"
                 data-course-group-id="{{course_group_id}}"
-                data-course-group-key="{{course_group_key}}" 
+                data-course-group-key="{{course_group_key}}"
             >
                 <div class="box-header with-border handle ui-sortable-handle">
                     <h3 class="box-title">{{course_name}}</h3>
-                    <div class="box-tools pull-right">                        
-                        <a href="/course/details?id={{course_id}}" class="btn btn-default btn-sm">자세히</a>                        
-                    </div>                    
+                    <div class="box-tools pull-right">
+                        <a href="/course/details?id={{course_id}}" class="btn btn-default btn-sm">자세히</a>
+                    </div>
                 </div>
                 <div class="box-body">
                     <strong>강사명 : {{teacher_name}}</strong>
@@ -61,11 +73,11 @@
                 <div class="box-footer"></div>
             </div>
             {{/each}}
-        </div>
+        </div>-->
 
     </div>
     <!-- /.col -->
-    
+
 </div>
 <!-- /.row -->
 

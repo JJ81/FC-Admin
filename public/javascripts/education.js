@@ -11,31 +11,31 @@ function (Util) {
 
   $(function () {
     // DateTimePicker 설정
-    var startDt = moment().format();
-    var endDt = moment().add(6, 'days');
+    // var startDt = moment().format();
+    // var endDt = moment().add(6, 'days');
 
     // 교육 시작일자
-    $('#start_dt').datetimepicker({
-      defaultDate: startDt,
-      format: 'YYYY-MM-DD',
-      showTodayButton: true
-    });
+    // $('#start_dt').datetimepicker({
+    //   defaultDate: startDt,
+    //   format: 'YYYY-MM-DD',
+    //   showTodayButton: true
+    // });
 
-    // 교육 종료일자
-    $('#end_dt').datetimepicker({
-      defaultDate: endDt,
-      format: 'YYYY-MM-DD',
-      useCurrent: false,
-      showTodayButton: true
-    });
+    // // 교육 종료일자
+    // $('#end_dt').datetimepicker({
+    //   defaultDate: endDt,
+    //   format: 'YYYY-MM-DD',
+    //   useCurrent: false,
+    //   showTodayButton: true
+    // });
 
-    // 날짜가 서로 겹치지 않도록 설정한다.
-    $('#start_dt').on('dp.change', function (e) {
-      $('#end_dt').data('DateTimePicker').minDate(e.date);
-    });
-    $('#end_dt').on('dp.change', function (e) {
-      $('#start_dt').data('DateTimePicker').maxDate(e.date);
-    });
+    // // 날짜가 서로 겹치지 않도록 설정한다.
+    // $('#start_dt').on('dp.change', function (e) {
+    //   $('#end_dt').data('DateTimePicker').minDate(e.date);
+    // });
+    // $('#end_dt').on('dp.change', function (e) {
+    //   $('#start_dt').data('DateTimePicker').maxDate(e.date);
+    // });
 
     // datatable 설정
     Util.initDataTable($('#table_education'));
@@ -140,7 +140,7 @@ function (Util) {
     e.preventDefault();
 
     var modal = $('#frm_register_edu'),
-      edu_name = $('.course-name'),
+      edu_name = $('.course-name').first(),
       edu_desc = tinymce.activeEditor.getContent(), // $('.course-desc');
       course_group_list = makeCourseGroupList();
 
@@ -170,9 +170,9 @@ function (Util) {
       data: {
         name: edu_name.val().trim(),
         desc: edu_desc, // edu_desc.val().trim(),
-        course_group_list: course_group_list.data,
-        start_dt: $('#start_dt').find('input').val() + ' ' + '00:00:00',
-        end_dt: $('#end_dt').find('input').val() + ' ' + '23:59:59'
+        course_group_list: course_group_list.data
+        // start_dt: $('#start_dt').find('input').val() + ' ' + '00:00:00',
+        // end_dt: $('#end_dt').find('input').val() + ' ' + '23:59:59'
       }
     }).then(function (res) {
       if (res.data.success == true) {

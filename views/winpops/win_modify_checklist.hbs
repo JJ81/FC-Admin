@@ -18,7 +18,7 @@
     <input type="text" class="form-control" name="title" id="title"
       placeholder="대표제목을 입력하세요"
       required autocomplete="off"
-      value="{{course_list.title}}" />cou
+      value="{{course_list.title}}" />
   </div>
   <input type="hidden" name="course_id" value="{{course_list.course_id}}" />
   <input type="hidden" name="course_list_id" value="{{course_list.id}}" />
@@ -88,9 +88,9 @@
         </td>
         <td>
           <select size="1" id="itemtype" name="itemtype" style="width: 100%" class="itemtype">
-            <option value="select">선택형</option>
-            <option value="choose">다답형</option>
-            <option value="write">단답형</option>
+            <option value="select" {{#if (isEquals item_type 'select') }}selected{{/if}}>선택형</option>
+            <option value="choose" {{#if (isEquals item_type 'choose') }}selected{{/if}}>다답형</option>
+            <option value="write" {{#if (isEquals item_type 'write') }}selected{{/if}}>단답형</option>
           </select>
         </td>
         <td>
@@ -98,13 +98,17 @@
             placeholder="입력 후 Enter 키를 누르세요" value="{{item_name}}">
         </td>
         <td>
+          {{#ifCond item_type '!==' 'write'}}
           <input type="text" id="category" name="category" class="inputcategory" style="width: 100%" onClick="this.setSelectionRange(0, this.value.length)"
             value="{{item_section}}">
+          {{/ifCond}}
         </td>
         <td class="center">
+          {{#ifCond item_type '!==' 'write'}}
           <div class="sample">
             <input type="text" id="sample" name="sample" class="inputsample" style="width: 100%" onClick="this.setSelectionRange(0, this.value.length)"
               value="{{sample}}">
+            {{/ifCond}}
           </div>
         </td>
         <td class="center">

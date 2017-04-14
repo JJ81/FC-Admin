@@ -1219,6 +1219,7 @@ router.delete('/checklist', util.isAuthenticated, (req, res, next) => {
 
       async.series(
         [
+          // todo log_session_progress, log_user_checklist 선 제거(FK 참조)
           (callback) => {
             connection.query(QUERY.COURSE.DeleteChecklistGroup, [groupId, checklistId], (err, data) => {
               callback(err, data);

@@ -4,7 +4,6 @@
     if (err) throw err;
     async.series(
       [
-        // Description
         (callback) => {
           connection.query(QUERY.foo,
             [ parametes ],
@@ -24,7 +23,8 @@
           throw new Error(err);
         } else {
         }
-      });
+      }
+    );
   });
   ```
 

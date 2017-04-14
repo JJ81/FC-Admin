@@ -157,9 +157,9 @@ router.post('/create/edu', util.isAuthenticated, (req, res, next) => {
                 _inputs.name,
                 _inputs.desc,
                 courseGroupId,
-                req.user.admin_id,
-                _inputs.start_dt,
-                _inputs.end_dt
+                req.user.admin_id
+                // _inputs.start_dt,
+                // _inputs.end_dt
               ],
               (err, result) => {
                 callback(err, result);

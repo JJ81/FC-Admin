@@ -8,7 +8,7 @@ const AssignmentService = require('../service/AssignmentService');
 router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
-    connection.query(QUERY.HISTORY.GetAssignEduHistory, [req.user.fc_id], (err, rows) => {
+    connection.query(QUERY.HISTORY.GetAssignEduHistory(true), [req.user.fc_id], (err, rows) => {
       connection.release();
       if (err) {
         console.error(err);
