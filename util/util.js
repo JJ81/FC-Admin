@@ -99,7 +99,7 @@ exports.getLogoInfo = (req, res, next) => {
     theme = 'skin-yellow-light';
     themeOfTile = 'bg-red-active';
     themeOfProgressBar = 'progress-bar-yellow';
-    copyright = 'Waffle univercity coop';
+    copyright = 'Waffle university coop';
     break;
   default:
     // edu.orangenamu.net
