@@ -118,7 +118,8 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
           loggedIn: req.user,
           branch_progress: results[0],
           user_progress: results[2],
-          edu_name: results[3][0].name
+          edu_name: results[3][0].name,
+          edu_id: eduId
         });
       }
     });

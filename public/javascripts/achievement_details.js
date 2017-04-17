@@ -28,7 +28,7 @@ window.requirejs([ 'common' ],
 
     window.axios.get('/achievement/checklist', {
       params: {
-        edu_id: 39
+        edu_id: window.$('#checklist_container').data('edu-id')
       }
     })
     .then((response) => {

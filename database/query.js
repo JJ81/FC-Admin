@@ -752,11 +752,12 @@ QUERY.HISTORY = {
       '  LEFT JOIN `log_assign_edu` AS lae ' +
       '    ON lae.`training_edu_id` = te.`id` ' +
       '  LEFT JOIN `log_bind_users` AS lbu ' +
-      '    ON lbu.`id` = lae.`target_users_id` ';
+      '    ON lbu.`id` = lae.`target_users_id` ' +
+      ' WHERE te.`active` = 1 ';
 
     if (!showAll) {
       sql +=
-        ' WHERE te.`id` IN ( ' +
+        ' AND te.`id` IN ( ' +
         '    SELECT DISTINCT training_edu_id ' +
         '      FROM `training_users` AS tu  ' +
         '     INNER JOIN `users` AS u ' +

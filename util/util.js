@@ -82,6 +82,7 @@ exports.getLogoInfo = (req, res, next) => {
   let theme;
   let themeOfTile;
   let themeOfProgressBar;
+  let copyright;
 
   switch (req.headers.host) {
   case 'admin.vodaeyewear.orangenamu.net':
@@ -90,6 +91,7 @@ exports.getLogoInfo = (req, res, next) => {
     theme = 'skin-green-light';
     themeOfTile = 'bg-gray';
     themeOfProgressBar = 'progress-bar-green';
+    copyright = 'Copyright © 2017 Orangenamu ALL RIGHTS RESERVED.';
     break;
   case 'admin.waffle.kosc.orangenamu.net':
     logoImageName = 'waffle.kosc.png';
@@ -97,6 +99,7 @@ exports.getLogoInfo = (req, res, next) => {
     theme = 'skin-yellow-light';
     themeOfTile = 'bg-red-active';
     themeOfProgressBar = 'progress-bar-yellow';
+    copyright = 'Waffle univercity coop';
     break;
   default:
     // edu.orangenamu.net
@@ -105,6 +108,7 @@ exports.getLogoInfo = (req, res, next) => {
     theme = 'skin-yellow-light';
     themeOfTile = 'bg-gray';
     themeOfProgressBar = 'progress-bar-yellow';
+    copyright = 'Copyright © 2017 Orangenamu ALL RIGHTS RESERVED.';
     break;
   }
   res.locals.logoImageName = logoImageName;
@@ -112,6 +116,7 @@ exports.getLogoInfo = (req, res, next) => {
   res.locals.theme = theme;
   res.locals.themeOfTile = themeOfTile;
   res.locals.themeOfProgressBar = themeOfProgressBar;
+  res.locals.copyright = copyright;
 
   return next();
 };
