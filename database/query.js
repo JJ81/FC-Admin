@@ -184,7 +184,7 @@ QUERY.COURSE = {
     '    ON a.`id` = c.`creator_id` ' +
     ' WHERE a.`fc_id` = ? ' +
     '   AND c.`id` = ? ' +
-    ' ORDER BY c.`order` ASC; ',
+    ' ORDER BY c.`created_dt` DESC; ',
 
   // 강의평가를 조회한다.
   GetStarRatingByCourseId:
@@ -468,7 +468,7 @@ QUERY.COURSE = {
   UpdateSession:
     'UPDATE `course_list` SET ' +
     '       `title` = ? ' +
-    '       `order` = ? ' +
+    '     , `order` = ? ' +
     '     , `updated_dt` = NOW() ' +
     ' WHERE `id` = ?; ',
 
