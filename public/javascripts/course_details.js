@@ -29,9 +29,9 @@ function (Util) {
         window.$(this).attr('data-previndex', ui.item.index());
       },
       update: function (e, ui) {
-          // var newIndex = ui.item.index();
-          // var oldIndex = window.$(this).attr('data-previndex');
-          // console.log('newIndex : ' + newIndex + ' oldIndex : ' + oldIndex);
+        // var newIndex = ui.item.index();
+        // var oldIndex = window.$(this).attr('data-previndex');
+        // window.console.log('newIndex : ' + newIndex + ' oldIndex : ' + oldIndex);
         window.$(this).removeAttr('data-previndex');
         changeSessionOrder();
       }

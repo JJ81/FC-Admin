@@ -142,6 +142,11 @@ function ($, jszip, axios, moment, pace) {
             text: '<i class="fa fa-download"></i> 엑셀',
             extend: 'excel',
             className: 'btn-sm btn-default'
+          },
+          {
+            text: '<i class="fa fa-download"></i> CSV',
+            extend: 'csv',
+            className: 'btn-sm btn-default'
           }
         ];
       }

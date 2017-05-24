@@ -101,8 +101,8 @@ exports.getLogoInfo = (req, res, next) => {
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'Waffle university coop';
     break;
+  case 'admin.sample.orangenamu.net':
   default:
-    // edu.orangenamu.net
     logoImageName = 'orangenamu.png';
     logoName = '오렌지나무시스템';
     theme = 'skin-yellow-light';
