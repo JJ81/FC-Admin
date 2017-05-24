@@ -170,13 +170,19 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
               includeEmpty: false
             }, (row, rowNumber) => {
               if (rowNumber >= 2) {
+                // email 이 hyperlink 일 경우
+                // { text: 'hyoungia67@naver.com', hyperlink: 'mailto:hyoungia67@naver.com' } 이와 같이 넘어온다.
+                let email = row.values[5];
+                if (typeof email === 'object') {
+                  email = util.replaceEmptySpace(email.text);
+                }
                 result.push({
                   row: rowNumber,
                   branch: row.values[1] == undefined ? '' : util.replaceEmptySpace(row.values[1]),
                   duty: row.values[2] == undefined ? '' : util.replaceEmptySpace(row.values[2]),
                   name: row.values[3] == undefined ? '' : util.replaceEmptySpace(row.values[3]),
                   phone: util.getDigitOnly(row.values[4] == undefined ? '' : util.replaceEmptySpace(row.values[4])),
-                  email: row.values[5] == undefined ? '' : util.replaceEmptySpace(row.values[5]),
+                  email: email == undefined ? '' : email,
                   error: false,
                   error_msg: []
                 });
@@ -185,8 +191,10 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
                 loopData = result[loopIndex];
 
                 // 필수입력값 체크
+                // 제외할 필드
+                const columnToUncheck = ['error', 'error_msg', 'email'];
                 for (let key in loopData) {
-                  if (loopData.hasOwnProperty(key) && key !== 'error' && key != 'error_msg') {
+                  if (loopData.hasOwnProperty(key) && (columnToUncheck.findIndex(x => x === key) === undefined)) {
                     if (loopData[key] === '') {
                       loopData['error'] = true;
                       loopData['error_msg'].push('필수입력값 누락');
@@ -196,7 +204,8 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
                 }
 
                 // 잘못된 이메일 형식
-                if (!util.isValidEmail(loopData.email)) {
+                console.log(loopData.email);
+                if (loopData.email !== '' && !util.isValidEmail(loopData.email)) {
                   loopData['error'] = true;
                   loopData['error_msg'].push('잘못된 이메일 형식');
                 }
@@ -208,8 +217,11 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
                 }
               }
             });
-
             callback(null, result);
+          })
+          .catch((error) => {
+            console.log('wb error occurred!');
+            console.log(error);
           });
       },
       // 엑셀데이터 2차 검증 (휴대폰번호)
@@ -254,9 +266,10 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
 
         for (index = 0, len = dataToVerifyEmail.length; index < len; index++) {
           row = dataToVerifyEmail[index];
-          email[index] = row.email;
+          if (row.email !== '') {
+            email[index] = row.email;
+          }
         }
-
         connection.query(QUERY.EDU.GetUserDataByEmail, [email], (err, data) => {
           if (err) throw err;
           if (data.length > 0) {

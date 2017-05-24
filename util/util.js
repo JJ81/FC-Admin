@@ -73,7 +73,7 @@ exports.hasSpace = (str) => {
 
 // 공백을 모두 제거한다.
 exports.replaceEmptySpace = (str) => {
-  return str.replace(/ /g, '').trim();
+  return str.toString().replace(/ /g, '').trim();
 };
 
 exports.getLogoInfo = (req, res, next) => {

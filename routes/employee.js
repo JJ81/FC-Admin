@@ -62,7 +62,7 @@ router.post('/create', util.isAuthenticated, (req, res, next) => {
 
   if (_data.pass !== _data.re_pass ||
      !util.isValidPhone(_data.tel) ||
-     !util.isValidEmail(_data.email) ||
+     !util.isValidEmail(_data.email === '' ? 'dummy@email.com' : _data.email) ||
      !util.checkPasswordSize(_data.pass, 4)) {
     return next({
       status: 500,
@@ -114,7 +114,7 @@ router.post('/modify', util.isAuthenticated, (req, res, next) => {
   };
 
   if (!util.isValidPhone(_data.tel) ||
-     !util.isValidEmail(_data.email) ||
+     !util.isValidEmail(_data.email === '' ? 'dummy@email.com' : _data.email) ||
      _data.branch_id === '' ||
      _data.duty_id === ''
   ) {
