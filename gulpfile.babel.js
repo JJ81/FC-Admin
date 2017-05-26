@@ -106,7 +106,7 @@ gulp.task('copy-css', () => {
     DIR.SRC + '/vendor/' + 'bootstrap/css/bootstrap.min.css',
     DIR.SRC + '/vendor/' + 'font-awesome-4.7.0/css/font-awesome.min.css',
     DIR.SRC + '/vendor/' + 'ionicons-2.0.1/css/ionicons.min.css',
-    DIR.SRC + '/vendor/' + 'dist/css/AdminLTE.min.css',
+    DIR.SRC + '/vendor/' + 'dist/css/AdminLTE.css',
     // DIR.SRC + '/vendor/' + 'dist/css/skins/skin-green-light.min.css',
     DIR.SRC + '/vendor/' + 'dist/css/skins/_all-skins.min.css',
     DIR.SRC + '/vendor/' + 'plugins/datepicker/datepicker3.css',
