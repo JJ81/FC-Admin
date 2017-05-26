@@ -85,15 +85,15 @@ exports.getLogoInfo = (req, res, next) => {
   let copyright;
 
   switch (req.headers.host) {
-  case 'admin.vodaeyewear.orangenamu.net':
-    logoImageName = 'vodaeyewear.png';
-    logoName = '보다안경원';
-    theme = 'skin-green-light';
-    themeOfTile = 'bg-gray';
-    themeOfProgressBar = 'progress-bar-green';
-    copyright = 'Copyright © 2017 Orangenamu ALL RIGHTS RESERVED.';
-    break;
-  case 'admin.waffle.kosc.orangenamu.net':
+  // case 'admin.vodaeyewear.orangenamu.net':
+  //   logoImageName = 'vodaeyewear.png';
+  //   logoName = '보다안경원';
+  //   theme = 'skin-green-light';
+  //   themeOfTile = 'bg-gray';
+  //   themeOfProgressBar = 'progress-bar-green';
+  //   copyright = 'Copyright © 2017 Orangenamu ALL RIGHTS RESERVED.';
+  //   break;
+  case 'waffle.edu1004.kr':
     logoImageName = 'waffle.kosc.png';
     logoName = '와플대학';
     theme = 'skin-yellow-light';
@@ -101,7 +101,7 @@ exports.getLogoInfo = (req, res, next) => {
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'Waffle university coop';
     break;
-  case 'admin.sample.orangenamu.net':
+  case 'dev.edu1004.kr':
   default:
     logoImageName = 'orangenamu.png';
     logoName = '오렌지나무시스템';
