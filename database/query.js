@@ -1431,12 +1431,16 @@ QUERY.ACHIEVEMENT = {
 
 QUERY.DASHBOARD = {
   GetUserCount:
-    'SELECT count(*) AS total_users FROM `users` ' +
-    'WHERE fc_id= ?; ',
+    'SELECT count(*) AS total_users ' +
+    '  FROM `users` ' +
+    ' WHERE `fc_id` = ? ' +
+    '   AND `active` = 1',
 
   GetBranchCount:
-    'SELECT count(*) total_branch FROM `branch` ' +
-    'WHERE fc_id= ?;',
+    'SELECT count(*) total_branch ' +
+    '  FROM `branch` ' +
+    ' WHERE `fc_id` = ? ' +
+    '   AND `active` = 1 ',
 
   // 진행중인 교육과정 수
   GetCurrentEduCount:
@@ -1703,7 +1707,7 @@ QUERY.DASHBOARD = {
         '            , (lup.`repetition` * epw.`point_repetition`) AS repetition ' +
         '          FROM `log_user_point` AS lup ' +
         '         INNER JOIN `users` AS u ' +
-        '            ON lup.`user_id` = u.`id` ' +
+        '            ON lup.`user_id` = u.`id` AND u.`active` = 1 ' +
         '           AND u.`fc_id` = ? ' +
         '          LEFT JOIN `branch` AS b ' +
         '            ON u.`branch_id` = b.`id` ' +
@@ -1774,6 +1778,8 @@ QUERY.DASHBOARD = {
         '        r.`speed` + ' +
         '        r.`repetition` ' +
         '       ) AS point_total ' +
+        '     , MAX(r.`start_dt`) AS edu_start_dt ' +
+        '     , MAX(r.`end_dt`) AS edu_end_dt ' +
         '  FROM ( ' +
         '        SELECT u.`id` AS user_id ' +
         '             , u.`name` AS user_name ' +
@@ -1787,19 +1793,19 @@ QUERY.DASHBOARD = {
         '             , (lup.`reeltime` * epw.`point_reeltime`) AS reeltime ' +
         '             , (lup.`speed` * epw.`point_speed`) AS speed ' +
         '             , (lup.`repetition` * epw.`point_repetition`) AS repetition ' +
-        // '             , (lup.`complete` * ?) AS complete ' +
-        // '             , (lup.`quiz_correction` * ?) AS quiz_correction ' +
-        // '             , (lup.`final_correction` * ?) AS final_correction ' +
-        // '             , (lup.`reeltime` * ?) AS reeltime ' +
-        // '             , (lup.`speed` * ?) AS speed ' +
-        // '             , (lup.`repetition` * ?) AS repetition ' +
+        '             , lae.`start_dt` ' +
+        '             , lae.`end_dt` ' +
         '             , lup.`logs` ' +
         '          FROM `log_user_point` AS lup ' +
+        '         INNER JOIN `training_users` AS tu ' +
+        '            ON lup.training_user_id = tu.id ' +
+        '         INNER JOIN `log_assign_edu` AS lae ' +
+        '            ON lae.`training_edu_id` = tu.`training_edu_id` ' +
         '          LEFT JOIN `edu_point_weight` AS epw ' +
         '            ON lup.`edu_id` = epw.`edu_id` ' +
         '           AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ? AND `edu_id` = epw.`edu_id`) ' +
         '         INNER JOIN `users` AS u ' +
-        '            ON lup.`user_id` = u.`id` ' +
+        '            ON lup.`user_id` = u.`id` AND u.`active` = 1 ' +
         '          LEFT JOIN `branch` AS b ' +
         '            ON u.`branch_id` = b.`id` ' +
         '          LEFT JOIN `duty` AS d ' +

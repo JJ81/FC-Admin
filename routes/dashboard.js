@@ -279,16 +279,28 @@ router.get('/edupoint', util.isAuthenticated, (req, res) => {
               _inputs.edu_id
             ],
             (err, rows) => {
+              // console.log(rows);
               if (err) console.log(err);
               for (let index = 0; index < rows.length; index++) {
-                let logs = JSON.parse(rows[index].logs);
-                rows[index].period = logs.edu_start_dt + ' ~ ' + logs.edu_end_dt;
-                rows[index].complete = logs.complete.complete_course_count + ' / ' + logs.complete.total_course_count;
-                rows[index].quiz_correction = logs.quiz_correction.correct_count + ' / ' + logs.quiz_correction.total_count;
-                rows[index].final_correction = logs.final_correction.correct_count + ' / ' + logs.final_correction.total_count;
-                rows[index].reeltime = logs.reeltime.played_seconds + ' / ' + logs.reeltime.duration;
-                rows[index].speed = logs.speed.user_period + ' / ' + logs.speed.edu_period;
-                rows[index].repetition = logs.repetition.value == 1 ? '예' : '아니오';
+                if (rows[index].logs !== null) {
+                  let logs = JSON.parse(rows[index].logs);
+                  // console.log(logs);
+                  rows[index].period = logs.edu_start_dt + ' ~ ' + logs.edu_end_dt;
+                  rows[index].complete = logs.complete.complete_course_count + ' / ' + logs.complete.total_course_count;
+                  rows[index].quiz_correction = logs.quiz_correction.correct_count + ' / ' + logs.quiz_correction.total_count;
+                  rows[index].final_correction = logs.final_correction.correct_count + ' / ' + logs.final_correction.total_count;
+                  rows[index].reeltime = logs.reeltime.played_seconds + ' / ' + logs.reeltime.duration;
+                  rows[index].speed = logs.speed.user_period + ' / ' + logs.speed.edu_period;
+                  rows[index].repetition = logs.repetition.value === 1 ? '예' : '아니오';
+                } else {
+                  rows[index].period = '';
+                  rows[index].complete = '';
+                  rows[index].quiz_correction = '';
+                  rows[index].final_correction = '';
+                  rows[index].reeltime = '';
+                  rows[index].speed = '';
+                  rows[index].repetition = '';
+                }
               }
               // console.log(rows);
               callback(err, rows);
