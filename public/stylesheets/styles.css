@@ -231,5 +231,9 @@ table {
     /*position: relative;*/
 }
 
+.caution {
+  color: red;
+}
+
 /*# sourceMappingURL=styles.css.map */
 

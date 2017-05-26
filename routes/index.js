@@ -208,6 +208,11 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
                 }
 
                 // 잘못된 휴대폰번호 형식
+
+                // 앞자리가 0이 아닐 경우 자동으로 0을 추가합니다.
+                if (loopData.phone.toString().substring(0, 1) !== '0') {
+                  loopData.phone = '0' + loopData.phone;
+                }
                 if (!util.isValidPhone(loopData.phone)) {
                   loopData['error'] = true;
                   loopData['error_msg'].push('잘못된 휴대폰번호 형식');
@@ -223,7 +228,7 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
       },
       // 엑셀데이터 2차 검증 (휴대폰번호)
       (dataToVerifyPhone, callback) => {
-        // console.log("excel 체크 중.. 2");
+        console.log('휴대폰번호 체크중..');
         let phone = [];
         let row = null;
         let len = 0;
@@ -236,7 +241,8 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
           phone[index] = row.phone;
         }
 
-        connection.query(QUERY.EDU.GetUserDataByPhone, [phone], (err, data) => {
+        connection.query(QUERY.EMPLOYEE.GetActivatedUserByPhone, [phone], (err, data) => {
+        // connection.query(QUERY.EDU.GetUserDataByPhone, [phone], (err, data) => {
           if (err) throw err;
           if (data.length > 0) {
             for (index = 0, len = data.length; index < len; index++) {
@@ -253,7 +259,7 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
       },
       // 엑셀데이터 3차 검증 (이메일)
       (dataToVerifyEmail, callback) => {
-        // console.log("excel 체크 중.. 3");
+        console.log('이메일 체크중..');
         let email = [];
         let row = null;
         let len = 0;
@@ -267,21 +273,24 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
             email[index] = row.email;
           }
         }
-        connection.query(QUERY.EDU.GetUserDataByEmail, [email], (err, data) => {
-          if (err) throw err;
-          if (data.length > 0) {
-            for (index = 0, len = data.length; index < len; index++) {
-              for (index2 = 0, len2 = dataToVerifyEmail.length; index2 < len2; index2++) {
-                if (data[index].email === dataToVerifyEmail[index2].email) {
-                  dataToVerifyEmail[index2]['error'] = true;
-                  dataToVerifyEmail[index2]['error_msg'].push('이메일 중복');
+
+        if (email.length > 0) {
+          connection.query(QUERY.EDU.GetUserDataByEmail, [email], (err, data) => {
+            if (err) throw err;
+            if (data.length > 0) {
+              for (index = 0, len = data.length; index < len; index++) {
+                for (index2 = 0, len2 = dataToVerifyEmail.length; index2 < len2; index2++) {
+                  if (data[index].email === dataToVerifyEmail[index2].email) {
+                    dataToVerifyEmail[index2]['error'] = true;
+                    dataToVerifyEmail[index2]['error_msg'].push('이메일 중복');
+                  }
                 }
               }
             }
-          }
+          });
+        }
 
-          callback(null, dataToVerifyEmail);
-        });
+        callback(null, dataToVerifyEmail);
       },
       // DB 입력
       (dataToInsert, callback) => {

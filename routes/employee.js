@@ -46,7 +46,7 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
 });
 
 /**
- * 유저 생성
+ * 유저 생성하기
  */
 router.post('/create', util.isAuthenticated, (req, res, next) => {
   let _data = {
@@ -66,31 +66,47 @@ router.post('/create', util.isAuthenticated, (req, res, next) => {
      !util.checkPasswordSize(_data.pass, 4)) {
     return next({
       status: 500,
-      message: '잘못된 형식의 휴대폰번호 또는 이메일이 존재합니다.'
+      message: '잘못된 형식의 휴대폰번호 사용자가 존재합니다.'
     });
   } else {
     _data.pass = bcrypt.hashSync(_data.pass, 10);
 
     pool.getConnection((err, connection) => {
       if (err) throw err;
-      connection.query(QUERY.EMPLOYEE.CreateEmployee, [
-        _data.name,
-        _data.pass,
-        _data.email,
-        _data.tel,
-        _data.fc_id,
-        _data.duty_id,
-        _data.branch_id
+      async.series([
+        (callback) => {
+          connection.query(QUERY.EMPLOYEE.GetActivatedUserByPhone,
+            [_data.tel],
+            (err, result) => {
+              if (result.length > 0) {
+                err = {
+                  status: 500,
+                  message: '중복된 휴대폰번호 사용자가 존재합니다.'
+                };
+              }
+              callback(err, result);
+            }
+          );
+        },
+        (callback) => {
+          connection.query(QUERY.EMPLOYEE.CreateEmployee, [
+            _data.name,
+            _data.pass,
+            _data.email,
+            _data.tel,
+            _data.fc_id,
+            _data.duty_id,
+            _data.branch_id
+          ],
+          (err, result) => {
+            callback(err, result);
+          });
+        }
       ],
-      (err, result) => {
+      (err, results) => {
         connection.release();
         if (err) {
-          if (err) {
-            return next({
-              status: 500,
-              message: '중복된 휴대폰번호 또는 이메일이 존재합니다.'
-            });
-          }
+          return next(err);
         } else {
           res.redirect('/employee');
         }
@@ -120,30 +136,45 @@ router.post('/modify', util.isAuthenticated, (req, res, next) => {
   ) {
     return next({
       status: 500,
-      message: '잘못된 형식의 휴대폰번호 또는 이메일이 존재합니다.'
+      message: '잘못된 형식의 휴대폰번호 사용자가 존재합니다.'
     });
   } else {
     pool.getConnection((err, connection) => {
       if (err) throw err;
-      connection.query(QUERY.EMPLOYEE.ModifyEmployee, [
-        _data.name,
-        _data.email,
-        _data.tel,
-        _data.branch_id,
-        _data.duty_id,
-        _data.user_id,
-        _data.fc_id
+      async.series([
+        (callback) => {
+          connection.query(QUERY.EMPLOYEE.GetAnotherActivatedUserByPhone,
+            [_data.user_id, _data.tel],
+            (err, result) => {
+              if (result.length > 0) {
+                err = {
+                  status: 500,
+                  message: '중복된 휴대폰번호 사용자가 존재합니다.'
+                };
+              }
+              callback(err, result);
+            }
+          );
+        },
+        (callback) => {
+          connection.query(QUERY.EMPLOYEE.ModifyEmployee, [
+            _data.name,
+            _data.email,
+            _data.tel,
+            _data.branch_id,
+            _data.duty_id,
+            _data.user_id,
+            _data.fc_id
+          ],
+          (err, result) => {
+            callback(err, result);
+          });
+        }
       ],
-      (err, result) => {
+      (err, results) => {
         connection.release();
         if (err) {
-          console.error(err);
-          if (err) {
-            return next({
-              status: 500,
-              message: '중복된 휴대폰번호 또는 이메일이 존재합니다.'
-            });
-          }
+          return next(err);
         } else {
           res.redirect('/employee');
         }

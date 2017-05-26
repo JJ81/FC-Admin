@@ -157,7 +157,22 @@ QUERY.EMPLOYEE = {
     '     , `branch_id` = ? ' +
     '     , `duty_id` = ? ' +
     ' WHERE `id` = ? ' +
-    '   AND `fc_id` = ?; '
+    '   AND `fc_id` = ?; ',
+
+  // 활성화된 사용자 중 휴대폰 번호가 같은 사람이 있는지 조회한다.
+  GetActivatedUserByPhone:
+    'SELECT `id`, `phone` ' +
+    '  FROM `users` ' +
+    ' WHERE `phone` = ? ' +
+    '   AND `active` = 1; ',
+
+  // 활성화된 다른 사용자 중 휴대폰 번호가 같은 사람이 있는지 조회한다.
+  GetAnotherActivatedUserByPhone:
+    'SELECT `id`, `phone` ' +
+    '  FROM `users` ' +
+    ' WHERE `id` <> ? ' +
+    '   AND `phone` = ? ' +
+    '   AND `active` = 1; '
 };
 
 QUERY.COURSE = {
