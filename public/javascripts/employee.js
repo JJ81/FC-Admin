@@ -47,8 +47,8 @@ function (Util) {
   var formDuty = $('#frm_create_duty');
   var btnDeleteDuty = $('#btnDisableDuty');
 
-  // 직원정보 수정 페이지
-  $('.btn-modify-userinfo').bind('click', function () {
+  // 직원정보 수정 페이지 호출
+  $('#table-employee').on('click', '.btn-modify-userinfo', function (e) {
     var _self = $(this);
     var _name = _self.attr('data-user-name');
     var _branch = _self.attr('data-user-branch');
@@ -65,6 +65,25 @@ function (Util) {
     _target.find('#select_branch').val(_branch).trigger('change'); // select2 의 선택방식은 다르다.
     _target.find('#select_duty').val(_duty);
   });
+
+  // $('.btn-modify-userinfo').bind('click', function () {
+  //   var _self = $(this);
+  //   console.log(_self);
+  //   var _name = _self.attr('data-user-name');
+  //   var _branch = _self.attr('data-user-branch');
+  //   var _duty = _self.attr('data-user-duty');
+  //   var _phone = _self.attr('data-user-phone');
+  //   var _email = _self.attr('data-user-email');
+  //   var _userid = _self.attr('data-user-id');
+  //   var _target = $('#frm_modify_employee');
+
+  //   _target.find('#name').val(_name);
+  //   _target.find('#tel').val(_phone);
+  //   _target.find('#email').val(_email);
+  //   _target.find('.employee_id').val(_userid);
+  //   _target.find('#select_branch').val(_branch).trigger('change'); // select2 의 선택방식은 다르다.
+  //   _target.find('#select_duty').val(_duty);
+  // });
 
   // 지점 ..등록모드에서 수정모드로 변경
   // 2nd 페이지에서 이벤트 안먹히는 증상 (http://stackoverflow.com/questions/25414778/jquery-onclick-not-working-in-datatables-2nd-page-or-rows-past-11)

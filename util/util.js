@@ -85,14 +85,6 @@ exports.getLogoInfo = (req, res, next) => {
   let copyright;
 
   switch (req.headers.host) {
-  // case 'admin.vodaeyewear.orangenamu.net':
-  //   logoImageName = 'vodaeyewear.png';
-  //   logoName = '보다안경원';
-  //   theme = 'skin-green-light';
-  //   themeOfTile = 'bg-gray';
-  //   themeOfProgressBar = 'progress-bar-green';
-  //   copyright = 'Copyright © 2017 Orangenamu ALL RIGHTS RESERVED.';
-  //   break;
   case 'waffle.edu1004.kr':
     logoImageName = 'waffle.kosc.png';
     logoName = '와플대학';
