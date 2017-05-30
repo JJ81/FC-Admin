@@ -238,7 +238,6 @@ router.post('/point/weight/record', util.isAuthenticated, (req, res) => {
  */
 router.get('/edupoint', util.isAuthenticated, (req, res) => {
   const _inputs = req.query;
-  let pointWeight = null;
 
   pool.getConnection((err, connection) => {
     if (err) throw err;

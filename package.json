@@ -35,7 +35,8 @@
     "randomstring": "^1.1.5",
     "request": "^2.79.0",
     "serve-favicon": "~2.3.0",
-    "tinymce": "^4.5.3"
+    "tinymce": "^4.5.3",
+    "unirest": "0.5.1"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",

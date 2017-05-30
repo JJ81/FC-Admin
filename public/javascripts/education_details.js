@@ -38,31 +38,31 @@ function (Util) {
     });
 
       // DateTimePicker 설정
-    var start_dt = moment().format();
-    var end_dt = moment().add(6, 'days');
+    // var start_dt = moment().format();
+    // var end_dt = moment().add(6, 'days');
 
-      // 교육 시작일자
-    $('#start_dt').datetimepicker({
-      defaultDate: start_dt,
-      format: 'YYYY-MM-DD',
-      showTodayButton: true
-    });
+    //   // 교육 시작일자
+    // $('#start_dt').datetimepicker({
+    //   defaultDate: start_dt,
+    //   format: 'YYYY-MM-DD',
+    //   showTodayButton: true
+    // });
 
-      // 교육 종료일자
-    $('#end_dt').datetimepicker({
-      defaultDate: end_dt,
-      format: 'YYYY-MM-DD',
-      useCurrent: false,
-      showTodayButton: true
-    });
+    //   // 교육 종료일자
+    // $('#end_dt').datetimepicker({
+    //   defaultDate: end_dt,
+    //   format: 'YYYY-MM-DD',
+    //   useCurrent: false,
+    //   showTodayButton: true
+    // });
 
-      // 날짜가 서로 겹치지 않도록 설정한다.
-    $('#start_dt').on('dp.change', function (e) {
-      $('#end_dt').data('DateTimePicker').minDate(e.date);
-    });
-    $('#end_dt').on('dp.change', function (e) {
-      $('#start_dt').data('DateTimePicker').maxDate(e.date);
-    });
+    //   // 날짜가 서로 겹치지 않도록 설정한다.
+    // $('#start_dt').on('dp.change', function (e) {
+    //   $('#end_dt').data('DateTimePicker').minDate(e.date);
+    // });
+    // $('#end_dt').on('dp.change', function (e) {
+    //   $('#start_dt').data('DateTimePicker').maxDate(e.date);
+    // });
 
     tinymce.init({
       selector: '.course-desc'

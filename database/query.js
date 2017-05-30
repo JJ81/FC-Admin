@@ -163,7 +163,7 @@ QUERY.EMPLOYEE = {
   GetActivatedUserByPhone:
     'SELECT `id`, `phone` ' +
     '  FROM `users` ' +
-    ' WHERE `phone` = ? ' +
+    ' WHERE `phone` IN(?) ' +
     '   AND `active` = 1; ',
 
   // 활성화된 다른 사용자 중 휴대폰 번호가 같은 사람이 있는지 조회한다.

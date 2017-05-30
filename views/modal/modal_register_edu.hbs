@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>교육과정명</label>
+                    <label>* 교육과정명</label>
                     <input type="text" class="form-control course-name" name="course_name" placeholder="교육과정명" required autocomplete="off" />
                 </div>
 
@@ -39,12 +39,12 @@
                 </div>-->
 
                 <div class="form-group">
-                    <label>교육과정 소개</label>
+                    <label>* 교육과정 소개</label>
                     <textarea class="form-control course-desc editor" name="course_desc" placeholder="교육과정 소개를 입력하세요."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>교육과정에 추가할 강의를 선택하세요.</label>
+                    <label>* 교육과정에 추가할 강의를 선택하세요.</label>
                     <select name="teacher_id" id="select-course-list" class="form-control">
                         {{#each course_list}}
                         <option value="{{course_id}}">{{course_name}} <small>({{teacher_name}})</small></option>

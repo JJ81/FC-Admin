@@ -9,17 +9,17 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>강의명</label>
+                    <label>* 강의명</label>
                     <input type="text" class="form-control" name="course_name" placeholder="강의명" required autocomplete="off" />
                 </div>
 
                 <div class="form-group">
-                    <label>강의 소개</label>
+                    <label>* 강의 소개</label>
                     <textarea class="form-control course-desc editor" name="course_desc" placeholder="강의소개를 입력하세요."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>강사</label>
+                    <label>* 강사</label>
                     <select name="teacher_id" class="form-control">
                         {{#each teacher_list}}
                         <option value="{{id}}">{{name}}</option>

@@ -10,7 +10,7 @@ const isAuthenticated = function (req, res, next) {
 const util = require('../util/util');
 var CourseService = require('../service/CourseService');
 const queryString = require('query-string');
-var MessageService = require('../service/MessageService');
+const MessageService = require('../service/MessageService');
 
 router.get('/course/group/id/create', isAuthenticated, (req, res) => {
   res.json({
@@ -54,11 +54,14 @@ router.get('/quizlist', isAuthenticated, (req, res) => {
   });
 });
 
-// url : /api/v1/sms/callback
-router.get('/sms/callback', (req, res) => {
-  console.log('------------------');
-  console.log(req);
-  console.log('------------------');
+/**
+  SMS 를 전송한다.
+ */
+router.post('/sms/send', (req, res, next) => {
+  const { phone, msg } = req.body;
+  MessageService.sendMessage(phone, msg, (response) => {
+    console.log(response);
+  });
 });
 
 router.get('/test', (req, res) => {
