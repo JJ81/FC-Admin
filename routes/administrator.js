@@ -16,7 +16,9 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
     async.series(
       [
         (callback) => {
-          connection.query(QUERY.ADMIN.GetList, [req.user.fc_id], (err, results) => {
+          let q = connection.query(QUERY.ADMIN.GetList, [req.user.admin_id, req.user.fc_id], (err, results) => {
+            console.log(results);
+            console.log(q.sql);
             callback(err, results);
           });
         },

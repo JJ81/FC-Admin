@@ -7,6 +7,7 @@ QUERY.ADMIN = {
 
   GetList:
     'SELECT * ' +
+    '     , CASE WHEN `role` = \'superadmin\' AND `id` != ? THEN \'N\' ELSE \'Y\' END AS canedit ' +
     '  FROM `admin` ' +
     ' WHERE `fc_id` = ? ' +
     '   AND `active` = 1 ' +
@@ -534,7 +535,7 @@ QUERY.EDU = {
   GetList:
     'SELECT e.`id` AS education_id ' +
     '     , e.`name` ' +
-    '     , e.desc ' +
+    '     , e.`desc` ' +
     '     , e.`created_dt` ' +
     '     , e.`start_dt` ' +
     '     , e.`end_dt` ' +

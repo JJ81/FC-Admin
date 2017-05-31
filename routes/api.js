@@ -59,7 +59,25 @@ router.get('/quizlist', isAuthenticated, (req, res) => {
  */
 router.post('/sms/send', (req, res, next) => {
   const { phone, msg } = req.body;
+  console.log(req.body);
+  if (phone === undefined || msg === undefined) {
+    return res.status(500).send('잘못된 파라미터가 입력되었습니다.');
+  }
   MessageService.sendMessage(phone, msg, (response) => {
+    console.log(response);
+  });
+});
+
+/**
+  SMS 를 전송한다.
+ */
+router.post('/sendnumber', (req, res, next) => {
+  const { phone } = req.body;
+
+  if (phone === undefined) {
+    return res.status(500).send('잘못된 파라미터가 입력되었습니다.');
+  }
+  MessageService.registSendNumber(phone, (response) => {
     console.log(response);
   });
 });

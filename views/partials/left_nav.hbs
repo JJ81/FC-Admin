@@ -94,6 +94,22 @@
         </a>
       </li>
       {{/ifCond}}
+
+      <div class="blind">
+      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      <li {{#if (isEquals current_path 'Help')}}class="active" {{/if}}>
+        <a href="/help">
+          <i class="fa fa-question"></i>
+          <span>도움말</span>
+          {{#if (isEquals current_path 'Help')}}
+          <span class="pull-right-container">
+            <i class="fa fa-angle-down pull-right text-green"></i>
+          </span>
+          {{/if}}
+        </a>
+      </li>
+      {{/ifCond}}
+      </div>
     </ul>
   </section>
 </aside>

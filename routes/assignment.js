@@ -120,7 +120,7 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
           res.render('assignment_details', {
             current_path: 'AssignmentDetails',
             menu_group: 'education',
-            title: '교육과정 배정',
+            title: '교육생 그룹 상세',
             loggedIn: req.user,
             detail: result[0],
             detail_list: result[1],

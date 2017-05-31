@@ -32,6 +32,7 @@
                         {{#ifCond (isEquals ../loggedIn.role 'supervisor') '||' (isEquals ../loggedIn.role 'admin')}}
                         -
                         {{else}}
+                        {{#if (isEquals canedit 'Y') }}
                         <div class="btn-group">
                           <button type="button" class="btn btn-warning btn-sm">수정</button>
                           <button type="button" class="btn btn-warning dropdown-toggle btn-sm" data-toggle="dropdown">
@@ -72,6 +73,9 @@
                           </ul>
                         </div>
                         <button type="button" class="btn btn-danger btn-sm btn-delete-admin" data-user-id="{{id}}">삭제</button>
+                        {{else}}
+                        -
+                        {{/if}}
                         {{/ifCond}}
                       </td>
                     </tr>
