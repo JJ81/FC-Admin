@@ -95,7 +95,6 @@
       </li>
       {{/ifCond}}
 
-      <div>
       {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
       <li {{#if (isEquals current_path 'Help')}}class="active" {{/if}}>
         <a href="/help">
@@ -109,7 +108,6 @@
         </a>
       </li>
       {{/ifCond}}
-      </div>
     </ul>
   </section>
 </aside>
