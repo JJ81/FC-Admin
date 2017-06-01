@@ -8,6 +8,21 @@ function (Util) {
   var btnDeleteAssignment = $('#delete-assignment');
   var formRegistAssignment = $('#allocationEdu');
   var formModifyAssignment = $('#modifyAssignment');
+  var tableEmployee = Util.initDataTable($('#table-employee'));
+  var tableAssignedEmployee = Util.initDataTable($('#table-employee-assigned'),
+    {
+      'columns': [
+        { 'data': null, defaultContent: '<input type="checkbox",value="">' },
+        { 'data': 'branch_name', className: 'center' },
+        { 'data': 'duty_name', className: 'center' },
+        { 'data': 'user_name', className: 'center' },
+        { 'data': 'user_phone', className: 'center' },
+        { 'data': 'user_id', className: 'center', visible: false }
+      ]
+    }
+  );
+  var checkAllEmployee = $('#check-all');
+  var checkAllAssignedEmployee = $('#check-all-assigned');
 
   $(function () {
     // DateTimePicker 설정
@@ -91,5 +106,35 @@ function (Util) {
     form.find('#end_dt').datetimepicker().children('input').val($(this).data('end'));
     form.find('#log_assign_edu_id').val($(this).data('logassigneduid'));
     form.find('#eduName').html($(this).data('eduname'));
+  });
+
+  checkAllEmployee.bind('click', function () {
+    $(':checkbox', tableEmployee.rows().nodes()).prop('checked', this.checked);
+  });
+
+  checkAllAssignedEmployee.bind('click', function () {
+    $(':checkbox', tableAssignedEmployee.rows().nodes()).prop('checked', this.checked);
+  });
+
+  // 교육과정 선택 변경
+  $('#select-education').change(function () {
+    var eduId = $(this).val();
+
+    axios.get('/assignment/employees', {
+      params: {
+        edu_id: eduId
+      }
+    })
+    .then(function (response) {
+      var newData = response.data.data;
+      var table = $('#table-employee-assigned').DataTable();
+
+      table.clear().draw();
+      table.rows.add(newData); // Add new data
+      table.columns.adjust().draw(); // Redraw the DataTable
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
   });
 });

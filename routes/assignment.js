@@ -107,7 +107,26 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
               } else {
                 callback(null, rows);
               }
-            });
+            }
+          );
+        },
+        // 직원목록
+        (callback) => {
+          connection.query(QUERY.EMPLOYEE.GetEmployeeList,
+            [req.user.fc_id],
+            (err, data) => {
+              callback(err, data);
+            }
+          );
+        },
+        // 이번 달 교육 진척도
+        (callback) => {
+          connection.query(QUERY.DASHBOARD.GetThisMonthProgressByEdu,
+            [ req.user.fc_id ],
+            (err, data) => {
+              callback(err, data);
+            }
+          );
         }
       ],
       (err, result) => {
@@ -125,7 +144,49 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
             detail: result[0],
             detail_list: result[1],
             edu_list: result[2],
-            assignmentHistory: result[3]
+            assignmentHistory: result[3],
+            employees: result[4],
+            edu_progress: result[5]
+          });
+        }
+      });
+  });
+});
+
+/**
+ * 교육과정별 포인트 현황을 반환한다.
+ */
+router.get('/employees', util.isAuthenticated, (req, res) => {
+  const { edu_id: eduId } = req.query;
+
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    async.series(
+      [
+        (callback) => {
+          connection.query(QUERY.EDU.GetUserByEduId,
+            [
+              req.user.fc_id,
+              eduId
+            ],
+            (err, rows) => {
+              console.log(rows);
+              callback(err, rows);
+            }
+          );
+        }
+      ],
+      (err, results) => {
+        connection.release();
+        if (err) {
+          return res.json({
+            success: false,
+            data: err
+          });
+        } else {
+          return res.json({
+            success: true,
+            data: results[0]
           });
         }
       });

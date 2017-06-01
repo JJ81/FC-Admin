@@ -1,126 +1,120 @@
 <div class="row home_section">
-    <div class="col-xs-12">
-        <div class="box">
-            <div class="box-header with-border margin">
-                <a href="/assignment" class="btn btn-default">
-                    <i class="fa fa-list"></i> &nbsp;
-                    목록으로
-                </a>
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header with-border margin">
+        <a href="/assignment" class="btn btn-default">
+          <i class="fa fa-list"></i> &nbsp; 목록으로
+        </a>
 
-                <div class="pull-right">
-                    <button class="btn btn-default btn-assign-education" data-toggle="modal" data-target="#allocationEdu">
-                        <i class="fa fa-calendar-minus-o"></i> &nbsp;
-                        교육과정 배정
-                    </button>
-
-                    {{#each detail}}
-                    <button id="delete-assignment" type="button" class="btn btn-danger"
-                        data-id="{{id}}"
-                        data-group-id="{{group_id}}"
-                    >
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                        교육생 그룹 삭제
-                    </button>
-                    {{/each}}
-                </div>
-
-                <!--교육 대상자 리스트를 보여준다.<br />-->
-                <!--교육 배정을 할 수 있다. <br />-->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body table-responsive margin">
-
-                <h4 class="box-title">
-                {{#each detail}}
-                  <strong>{{title}}</strong><br><br>
-                </h4>
-                <p>{{desc}}</p>
-
-                <input type="hidden" name="logBindUserId" class="description bind_group_id" value="{{id}}" />
-                <input type="hidden" name="logBindUserGroupId" class="description group_id" value="{{group_id}}" />
-                {{/each}}
-
-                <hr />
-
-                <table id="table_assignment_details" class="table no-margin table-bordered table-striped" width="100%">
-                    <thead>
-                    <tr>
-                        <th class="center">지점</th>
-                        <th class="center">직책</th>
-                        <th class="center">이름</th>
-                        <th class="center">전화번호</th>
-                        <th class="center">이메일</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{#each detail_list}}
-                    <tr>
-                        <td class="center">{{branch}}</td>
-                        <td class="center">{{duty}}</td>
-                        <td class="center">{{name}}</td>
-                        <td class="center">{{phone}}</td>
-                        <td class="center">{{email}}</td>
-                    </tr>
-                    {{/each}}
-                    </tbody>
-                </table>
-            </div>
-            <!-- /.box-body -->
+        <div class="pull-right">
+          <button class="btn btn-default btn-assign-education" data-toggle="modal" data-target="#allocationEdu">
+            <i class="fa fa-calendar-minus-o"></i> &nbsp;
+            교육과정 배정
+          </button>
+          <button class="btn btn-default" data-toggle="modal" data-target="#sendMessage">
+            <i class="fa fa-paper-plane"></i> &nbsp;
+            SMS 전송
+          </button>
+          {{#each detail}}
+          <button id="delete-assignment" type="button" class="btn btn-danger" data-id="{{id}}" data-group-id="{{group_id}}">
+            <i class="fa fa-times" aria-hidden="true"></i>
+            교육생 그룹 삭제
+          </button>
+          {{/each}}
         </div>
-        <div class="box">
-          <div class="box-header with-border margin">
-            <h4 class="box-title"><strong>배정이력</strong></h4>
-          </div>
-          <div class="box-body table-responsive">
-            <table id="table_assignment_history" class="table no-margin table-bordered table-striped" width="100%">
-                <thead>
-                <tr>
-                    <th class="center">배정일</th>
-                    <th class="center">교육과정</th>
-                    <!--<th class="center">대상자</th>-->
-                    <th class="center">시작일</th>
-                    <th class="center">종료일</th>
-                    <th class="center">배정자</th>
-                    <th class="center">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {{#each assignmentHistory}}
-                    <tr>
-                        <td class="center">{{time created_dt}}</td>
-                        <td class="">
-                          <a href="/education/details?id={{edu_id}}&course_group_id={{course_group_id}}">
+
+        <!--교육 대상자 리스트를 보여준다.<br />-->
+        <!--교육 배정을 할 수 있다. <br />-->
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body table-responsive margin">
+
+        <h4 class="box-title">
+          {{#each detail}}
+          <strong>{{title}}</strong><br><br>
+        </h4>
+        <p>{{desc}}</p>
+
+        <input type="hidden" name="logBindUserId" class="description bind_group_id" value="{{id}}" />
+        <input type="hidden" name="logBindUserGroupId" class="description group_id" value="{{group_id}}" /> {{/each}}
+
+        <hr />
+
+        <table id="table_assignment_details" class="table no-margin table-bordered table-striped" width="100%">
+          <thead>
+            <tr>
+              <th class="center">지점</th>
+              <th class="center">직책</th>
+              <th class="center">이름</th>
+              <th class="center">전화번호</th>
+              <th class="center">이메일</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each detail_list}}
+            <tr>
+              <td class="center">{{branch}}</td>
+              <td class="center">{{duty}}</td>
+              <td class="center">{{name}}</td>
+              <td class="center">{{phone}}</td>
+              <td class="center">{{email}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <div class="box">
+      <div class="box-header with-border margin">
+        <h4 class="box-title"><strong>배정이력</strong></h4>
+      </div>
+      <div class="box-body table-responsive">
+        <table id="table_assignment_history" class="table no-margin table-bordered table-striped" width="100%">
+          <thead>
+            <tr>
+              <th class="center">배정일</th>
+              <th class="center">교육과정</th>
+              <!--<th class="center">대상자</th>-->
+              <th class="center">시작일</th>
+              <th class="center">종료일</th>
+              <th class="center">배정자</th>
+              <th class="center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each assignmentHistory}}
+            <tr>
+              <td class="center">{{time created_dt}}</td>
+              <td class="">
+                <a href="/education/details?id={{edu_id}}&course_group_id={{course_group_id}}">
                           {{name}}
                           </a>
-                        </td>
-                        <!--<td class="">
+              </td>
+              <!--<td class="">
                             {{#if (isEmpty target)}}
                                 -
                             {{else}}
                                 {{target}}
                             {{/if}}
                         </td>-->
-                        <td class="center">{{time start_dt}}</td>
-                        <td class="center">{{time end_dt}}</td>
-                        <td class="center">{{admin}}</td>
-                        <td class="center">
-                          <a href="#" class="btn-sm btn-warning btn-modify-assignment"
-                            data-logassigneduid="{{logAssignEduId}}"
-                            data-eduname="{{name}}"
-                            data-start="{{time start_dt}}"
-                            data-end="{{time end_dt}}"
-                            data-toggle="modal" data-target="#modifyAssignment"
-                          >수정</a>
-                          <a href="#" class="btn-sm btn-danger btn-delete-assignment" data-logassigneduid="{{logAssignEduId}}">삭제</a>
-                        </td>
-                    </tr>
-                {{/each}}
-                </tbody>
-            </table>
-          </div>
+              <td class="center">{{time start_dt}}</td>
+              <td class="center">{{time end_dt}}</td>
+              <td class="center">{{admin}}</td>
+              <td class="center">
+                <a href="#" class="btn-sm btn-warning btn-modify-assignment" data-logassigneduid="{{logAssignEduId}}" data-eduname="{{name}}"
+                  data-start="{{time start_dt}}" data-end="{{time end_dt}}" data-toggle="modal" data-target="#modifyAssignment">수정</a>
+                <a href="#" class="btn-sm btn-danger btn-delete-assignment" data-logassigneduid="{{logAssignEduId}}">삭제</a>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
       </div>
     </div>
+  </div>
 </div>
 
 {{> modal_assign_edu}}
 {{> modal_modify_assign}}
+{{> modal_send_message }}

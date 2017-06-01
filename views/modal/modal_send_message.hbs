@@ -1,0 +1,101 @@
+<div class="modal fade" id="sendMessage" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <form method="post" action="/api/v1/sms/send" id="frm_send_message" enctype="multipart/form-data">
+      <input type="hidden" name="upload_type" />
+      <input type="hidden" name="upload_employee_ids" />
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">SMS 전송</h4>
+        </div>
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active">
+                    <a class="tab-item" id="employee" href="#tab-employee" data-toggle="tab">등록된 직원</a>
+                  </li>
+                  <li>
+                    <a class="tab-item" id="employee-assigned" href="#tab-employee-assigned" data-toggle="tab">교육과정별</a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <div class="tab-pane active table-responsive" id="tab-employee" style="position: relative;">
+                    <table id="table-employee" class="table no-margin table-bordered table-striped" width="100%">
+                      <thead>
+                        <tr>
+                          <th><input type="checkbox" id="check-all"></th>
+                          <th class="center">지점</th>
+                          <th class="center">직책</th>
+                          <th class="center">이름</th>
+                          <th class="center">전화번호</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {{#each employees}}
+                        <tr>
+                          <td><input type="checkbox" name="table-records" data-id="{{id}}"></td>
+                          <td class="center">{{branch}}</td>
+                          <td class="center">{{duty}}</td>
+                          <td class="center">{{name}}</td>
+                          <td class="center">{{phone}}</td>
+                        </tr>
+                        {{/each}}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="tab-pane table-responsive" id="tab-employee-assigned" style="position: relative;">
+                    <div class="form-group">
+                      <select id="select-education" class="form-control select2" style="width: 100%;">
+                        <option selected="selected">교육과정을 선택하세요</option>
+                      {{#each edu_progress}}
+                        <option value="{{edu_id}}">{{edu_name}}</option>
+                      {{/each}}
+                      </select>
+                    </div>
+                    <table id="table-employee-assigned" class="table no-margin table-bordered table-striped" width="100%">
+                      <thead>
+                        <tr>
+                          <th><input type="checkbox" id="check-all-assigned"></th>
+                          <th class="center">지점</th>
+                          <th class="center">직책</th>
+                          <th class="center">이름</th>
+                          <th class="center">전화번호</th>
+                          <th class="class">아이디</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label>메세지</label>
+                <textarea class="form-control" name="input-message" rows="5" maxlength="45" required></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+          <button type="submit" class="btn btn-success btn-submit">보내기</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </form>
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

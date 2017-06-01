@@ -730,7 +730,32 @@ QUERY.EDU = {
 
   // 교육과정을 비활성화 한다.
   DisableEduById:
-    'UPDATE `edu` SET `active` = 0 WHERE `id` = ?; '
+    'UPDATE `edu` SET `active` = 0 WHERE `id` = ?; ',
+
+  // 교육과정이 배정된 직원목록을 조회한다.
+  GetUserByEduId:
+    'SELECT u.`id` AS user_id ' +
+    '     , u.`name` AS user_name ' +
+    '     , u.`phone` AS user_phone ' +
+    '     , b.`name` AS branch_name ' +
+    '     , d.`name` AS duty_name ' +
+    '     , lae.`start_dt` ' +
+    '     , lae.`end_dt` ' +
+    '  FROM `training_users` AS tu ' +
+    ' INNER JOIN `training_edu` AS te ' +
+    '    ON tu.`training_edu_id` = te.`id` ' +
+    ' INNER JOIN `log_assign_edu` AS lae ' +
+    '    ON lae.`training_edu_id` = tu.`training_edu_id` ' +
+    ' INNER JOIN `users` AS u ' +
+    '    ON tu.`user_id` = u.`id` ' +
+    '   AND u.`active` = 1 ' +
+    '  LEFT JOIN `branch` AS b ' +
+    '    ON u.`branch_id` = b.`id` ' +
+    '  LEFT JOIN `duty` AS d ' +
+    '    ON u.`duty_id` = d.`id` ' +
+    '   AND u.`fc_id` = ? ' +
+    ' WHERE te.`edu_id` = ? ' +
+    ' ORDER BY b.`name`, d.`order`, u.`name`; '
 };
 
 QUERY.HISTORY = {
