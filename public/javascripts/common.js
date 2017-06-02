@@ -85,6 +85,28 @@ function ($, jszip, axios, moment, pace) {
   });
 
   return {
+    cutBytes: function (str, limit) {
+      var len = str.length;
+      while (this.getBytes(str) > limit) {
+        len--;
+        str = str.substring(0, len);
+      }
+      return str;
+    },
+    getBytes: function (str) {
+      var size = 0;
+      if (str !== null) {
+        for (var index = 0; index < str.length; index++) {
+          var chr = escape(str.charAt(index));
+          if (chr.indexOf('%u') !== -1) {
+            size += 2;
+          } else {
+            size++;
+          }
+        }
+      }
+      return size;
+    },
     // text editor 를 초기화 한다.
     initTextEditor: function (_selector, options) {
       tinymce.init({

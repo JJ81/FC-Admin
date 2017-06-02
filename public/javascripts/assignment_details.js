@@ -2,10 +2,11 @@
  * Created by yijaejun on 30/11/2016.
  */
 'use strict';
-requirejs(['common'],
+window.requirejs(['common'],
 function (Util) {
   var btnAssignEducation = $('.btn-assign-education');
   var btnDeleteAssignment = $('#delete-assignment');
+  var btnSubmit = $('.btn-submit');
   var formRegistAssignment = $('#allocationEdu');
   var formModifyAssignment = $('#modifyAssignment');
   var tableEmployee = Util.initDataTable($('#table-employee'));
@@ -23,6 +24,7 @@ function (Util) {
   );
   var checkAllEmployee = $('#check-all');
   var checkAllAssignedEmployee = $('#check-all-assigned');
+  var messageInput = $('.message');
 
   $(function () {
     // DateTimePicker 설정
@@ -137,4 +139,86 @@ function (Util) {
       console.error(error);
     });
   });
+
+  messageInput.on('keyup', function (e) {
+    var message = window.$(e.currentTarget).val();
+    var messageBytes = Util.getBytes(message);
+    var remain = 90 - messageBytes;
+
+    // console.log(message);
+    // console.log(Util.getBytes(message));
+    // console.log(remain);
+
+    if (remain < 0) {
+      window.alert('90 Bytes 를 초과할 수 없습니다.');
+      // message = message.substring(0, 90);
+      message = Util.cutBytes(message, 90);
+      window.$(e.currentTarget).val(message);
+      window.$(e.currentTarget).focus();
+      messageBytes = Util.getBytes(message);
+    }
+
+    window.$('.remain-bytes').html(messageBytes + ' / 90 바이트');
+  });
+
+  btnSubmit.on('click', function (e) {
+    e.preventDefault();
+
+    var currentTabId = window.$('ul.nav li.active').children().attr('id');
+    var checkedEmployeeIds;
+    switch (currentTabId) {
+    case 'employee':
+      checkedEmployeeIds = window.$(':checkbox:checked',
+        tableEmployee.rows({filter: 'applied'}).nodes()).map(
+          function () {
+            return tableEmployee.row(window.$(this).parents('tr')).data()[4];
+          }
+        ).get().join(',');
+      break;
+    case 'employee-assigned':
+      checkedEmployeeIds = window.$(':checkbox:checked',
+        tableAssignedEmployee.rows({filter: 'applied'}).nodes()).map(
+          function () {
+            return tableAssignedEmployee.row(window.$(this).parents('tr')).data()['user_phone'];
+          }
+        ).get().join(',');
+      break;
+    default:
+      break;
+    }
+
+    if (!checkedEmployeeIds) {
+      window.alert('직원을 선택하세요.');
+      return false;
+    }
+
+    var message = messageInput.val().trim();
+    if (message === '') {
+      window.alert('메세지를 입력하세요.');
+      messageInput.focus();
+      return false;
+    }
+
+    if (!window.confirm('메세지를 보내시겠습니까?')) {
+      return false;
+    }
+
+    window.axios({
+      method: 'post',
+      url: '/api/v1/sms/send',
+      data: {
+        phones: checkedEmployeeIds,
+        msg: message
+      }
+    })
+    .then(
+      function (res) {
+        if (res.data.success === true) {
+          window.alert('메세지를 전송하였습니다.');
+        } else {
+          window.alert('알 수 없는 오류가 발생했습니다. 잠시 후에 다시 시도해주세요.');
+        }
+      });
+  }
+  );
 });

@@ -1880,4 +1880,10 @@ QUERY.ASSIGNMENT = {
     'DELETE FROM `log_group_user` WHERE `group_id` = ?; '
 };
 
+QUERY.COMMON = {
+  // 메세지 전송 로그 입력
+  InsertMessageLog:
+    'INSERT INTO `messages` (`sender_id`, `fc_id`, `send_msg`, `dest_phone`) VALUES ? '
+};
+
 module.exports = QUERY;

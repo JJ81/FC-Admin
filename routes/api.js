@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const mysql_dbc = require('../commons/db_conn')();
-const connection = mysql_dbc.init();
+const mysqlDbc = require('../commons/db_conn')();
+const connection = mysqlDbc.init();
 const QUERY = require('../database/query');
+const pool = require('../commons/db_conn_pool');
+const async = require('async');
 const isAuthenticated = function (req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 };
 const util = require('../util/util');
 var CourseService = require('../service/CourseService');
-const queryString = require('query-string');
 const MessageService = require('../service/MessageService');
 
 router.get('/course/group/id/create', isAuthenticated, (req, res) => {
@@ -57,28 +58,61 @@ router.get('/quizlist', isAuthenticated, (req, res) => {
 /**
   SMS 를 전송한다.
  */
-router.post('/sms/send', (req, res, next) => {
-  const { phone, msg } = req.body;
-  console.log(req.body);
-  if (phone === undefined || msg === undefined) {
+router.post('/sms/send', util.isAuthenticated, (req, res, next) => {
+  const { phones, msg } = req.body;
+
+  const phonesArray = phones.split(',');
+  let logs = [];
+  for (let phone of phonesArray) {
+    logs.push([ req.user.admin_id, req.user.fc_id, msg, phone ]);
+  }
+
+  // console.log(logs);
+  // return res.status(200).send('success!');
+
+  if (phones === undefined || msg === undefined) {
     return res.status(500).send('잘못된 파라미터가 입력되었습니다.');
   }
-  MessageService.sendMessage(phone, msg, (response) => {
-    console.log(response);
+  MessageService.sendMessage(phones, msg, (response) => {
+    console.log(response.body);
+
+    pool.getConnection((err, connection) => {
+      if (err) throw err;
+      async.series([
+        (callback) => {
+          connection.query(QUERY.COMMON.InsertMessageLog, [logs], (err, rows) => {
+            callback(err, rows);
+          });
+        }
+      ],
+      (err, results) => {
+        connection.release();
+        if (err) {
+          console.error(err);
+        } else {
+          return res.json({
+            success: true
+          });
+        }
+      });
+    });
   });
 });
 
 /**
   SMS 를 전송한다.
  */
-router.post('/sendnumber', (req, res, next) => {
+router.post('/sendnumber', util.isAuthenticated, (req, res, next) => {
   const { phone } = req.body;
 
   if (phone === undefined) {
     return res.status(500).send('잘못된 파라미터가 입력되었습니다.');
   }
   MessageService.registSendNumber(phone, (response) => {
-    console.log(response);
+    return res.json({
+      success: true,
+      msg: response.body
+    });
   });
 });
 

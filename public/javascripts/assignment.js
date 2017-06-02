@@ -57,7 +57,7 @@ function (Util) {
     case 'excel': // 파일업로드
       if (document.getElementById('UploadExcelFile').files.length === 0) {
         $('#UploadExcelFile').focus();
-        alert('일을 선택하세요.');
+        alert('파일을 선택하세요.');
         return false;
       }
       break;
