@@ -28,7 +28,7 @@
     {{/if}}
 </head>
 
-<body class="hold-transition {{theme}} sidebar-mini sidebar-collapse {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
+<body class="hold-transition {{theme}} sidebar-mini {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
     {{#if (isEquals current_path 'Login')}}
     {{{body}}}
     {{else if (isEquals current_path 'winpop')}}
@@ -56,6 +56,7 @@
     {{#if (isEquals current_path 'Education')}}<script src="/static/javascripts/education.js"></script>{{/if}}
     {{#if (isEquals current_path 'EducationDetails')}}<script src="/static/javascripts/education_details.js"></script>{{/if}}
     {{#if (isEquals current_path 'Assignment')}}<script src="/static/javascripts/assignment.js"></script>{{/if}}
+    {{#if (isEquals current_path 'SimpleAssignment')}}<script src="/static/javascripts/simple-assignment.js"></script>{{/if}}
     {{#if (isEquals current_path 'AssignmentDetails')}}<script src="/static/javascripts/assignment_details.js"></script>{{/if}}
     {{#if (isEquals current_path 'Assignment_history')}}<script src="/static/javascripts/assignment_history.js"></script>{{/if}}
     {{#if (isEquals current_path 'Course')}}<script src="/static/javascripts/course.js"></script>{{/if}}

@@ -93,6 +93,14 @@ exports.getLogoInfo = (req, res, next) => {
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'Waffle university coop';
     break;
+  case 'momstouch.edu1004.kr':
+    logoImageName = 'momstouch.png';
+    logoName = '와플대학';
+    theme = 'skin-yellow-light';
+    themeOfTile = 'bg-red-active';
+    themeOfProgressBar = 'progress-bar-yellow';
+    copyright = 'MOM\'S TOUCH';
+    break;
   case 'dev.edu1004.kr':
   default:
     logoImageName = 'orangenamu.png';

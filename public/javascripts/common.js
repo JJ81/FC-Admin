@@ -58,7 +58,7 @@ function ($, jszip, axios, moment, pace) {
     mode: 'specific_textareas',
     editor_selector: 'editor',
     // theme: 'simple',
-    height: 200,
+    height: 100,
     theme: 'modern',
     plugins: [
       'link image textcolor lists'

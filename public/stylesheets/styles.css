@@ -312,7 +312,31 @@ table {
 .new-account
 {
     display: block;
-    margin-top: 10px;
+    margin-top: 15px;
+}
+
+.panel-collapse-clickable {
+  cursor: pointer;
+}
+
+.description-block {
+  cursor: pointer;
+  padding: 8px;
+}
+
+.description-block:hover {
+  background-color: #eee;
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  border-top-color: #F39C12;
+  background-color: #F39C12;
+}
+
+.sms-button-group {
+  margin-top: 5px;
 }
 
 /*# sourceMappingURL=styles.css.map */

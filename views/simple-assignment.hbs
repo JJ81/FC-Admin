@@ -1,0 +1,33 @@
+<div class="row home_section">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <form action="/simple_assignment" method="post"></form>
+          <button class="btn btn-default btn-lg" type="submit">
+            <i class="fa fa-plus"></i>
+            등록하기
+          </button>
+      </div>
+      <div class="box-body table-responsive">
+        <table id="table_course" class="table no-margin table-bordered table-striped" width="100%">
+          <thead>
+            <tr>
+              <th class="center">생성일</th>
+              <th class="center">교육과정명</th>
+              <th class="center">생성자</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each list}}
+            <tr>
+              <td class="center">{{time created_dt}}</td>
+              <td class=""><a href="/course/details?id={{course_id}}" class="btn-link">{{name}}</a></td>
+              <td class="center">{{creator}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
