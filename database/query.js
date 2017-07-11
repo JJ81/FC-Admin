@@ -1207,7 +1207,7 @@ QUERY.ACHIEVEMENT = {
     '                   AND u.`fc_id` = ? ' +
     '                   AND u.`active` = 1 ' +
     // SUPERVISOR 별 점포에 대한 처리
-    '                  LEFT JOIN `admin_branch` AS ab ' +
+    '                 INNER JOIN `admin_branch` AS ab ' +
     '                    ON u.`branch_id` = ab.`branch_id` ' +
     '                   AND ab.`admin_id` = ? ' +
     '                 INNER JOIN `training_edu` AS te ' +
