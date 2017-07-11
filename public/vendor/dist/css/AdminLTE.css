@@ -2454,7 +2454,7 @@ a:focus {
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  border-top-color: #3c8dbc;
+  border-top-color: #f39c12; f39c12;
 }
 .nav-pills > li.active > a {
   font-weight: 600;
@@ -2471,7 +2471,7 @@ a:focus {
   background: transparent;
   color: #444;
   border-top: 0;
-  border-left-color: #3c8dbc;
+  border-left-color: #f39c12;
 }
 .nav-stacked > li.header {
   border-bottom: 1px solid #ddd;
@@ -2519,7 +2519,7 @@ a:focus {
   border-color: transparent;
 }
 .nav-tabs-custom > .nav-tabs > li.active {
-  border-top-color: #3c8dbc;
+  border-top-color: #f39c12;
 }
 .nav-tabs-custom > .nav-tabs > li.active > a,
 .nav-tabs-custom > .nav-tabs > li.active:hover > a {
@@ -4479,7 +4479,7 @@ table.text-center th {
   background-color: #b5bbc8 !important;
 }
 .bg-black-active {
-  background-color: #000000 !important;
+  background-color: #3F3F3F !important;
 }
 .bg-red-active,
 .modal-danger .modal-header,

@@ -96,8 +96,8 @@ exports.getLogoInfo = (req, res, next) => {
   case 'momstouch.edu1004.kr':
     logoImageName = 'momstouch.png';
     logoName = '와플대학';
-    theme = 'skin-yellow-light';
-    themeOfTile = 'bg-red-active';
+    theme = 'skin-red-light';
+    themeOfTile = 'bg-yellow-gradient';
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'MOM\'S TOUCH';
     break;
