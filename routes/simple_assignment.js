@@ -4,8 +4,11 @@ const util = require('../util/util');
 const pool = require('../commons/db_conn_pool');
 const QUERY = require('../database/query');
 const async = require('async');
+const AssignmentService = require('../service/AssignmentService');
 
-router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
+router.get('/', util.isAuthenticated, util.getLogoInfo, AssignmentService.getSimpleAssignmentList);
+
+router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
     async.series([
@@ -22,7 +25,7 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
       if (err) {
         console.error(err);
       } else {
-        res.render('simple-assignment', {
+        res.render('simple-assignment-detail', {
           title: '교육 간편배정',
           current_path: 'SimpleAssignment',
           menu_group: 'education',
@@ -33,5 +36,7 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
     });
   });
 });
+
+router.post('/', util.isAuthenticated, AssignmentService.createSimpleAssignment);
 
 module.exports = router;

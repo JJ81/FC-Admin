@@ -1877,7 +1877,18 @@ QUERY.ASSIGNMENT = {
     'DELETE FROM `log_bind_users` WHERE `id` = ?; ',
 
   DeleteLogGroupUserByGroupId:
-    'DELETE FROM `log_group_user` WHERE `group_id` = ?; '
+    'DELETE FROM `log_group_user` WHERE `group_id` = ?; ',
+
+  SelectSimpleAssignments:
+    'SELECT sa.`id`, sa.`title`, DATE_FORMAT(sa.`created_dt`, \'%Y-%m-%d\') AS created_dt ' +
+    '     , a.`name` AS created_name ' +
+    '  FROM `simple_assignment` AS sa ' +
+    ' INNER JOIN `admin` AS a ON sa.`creator_id` = a.`id` ' +
+    ' ORDER BY sa.`created_dt` DESC; ',
+
+  InsertSimpleAssignment:
+    'INSERT INTO `simple_assignment` (`title`, `creator_id`) ' +
+    'SELECT CONCAT(DATE_FORMAT(CURDATE(), \'%Y-%m-%d\'), \' 생성내역\'), ?; '
 };
 
 QUERY.COMMON = {

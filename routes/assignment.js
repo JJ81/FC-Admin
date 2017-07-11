@@ -325,7 +325,7 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
               callback(err, result);
             });
           },
-              // 엑셀파일을 삭제한다.
+          // 엑셀파일을 삭제한다.
           (callback) => {
             if (requestData.upload_type === 'excel') {
               util.deleteFile(filePath, (err, result) => {
