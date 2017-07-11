@@ -28,7 +28,7 @@
     {{/if}}
 </head>
 
-<body class="hold-transition {{theme}} sidebar-mini sidebar-collapse {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
+<body class="hold-transition {{theme}} sidebar-mini {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
     {{#if (isEquals current_path 'Login')}}
     {{{body}}}
     {{else if (isEquals current_path 'winpop')}}

@@ -93,15 +93,24 @@ exports.getLogoInfo = (req, res, next) => {
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'Waffle university coop';
     break;
-  case 'dev.edu1004.kr':
+  case 'momstouch.edu1004.kr':
   default:
-    logoImageName = 'orangenamu.png';
-    logoName = '오렌지나무시스템';
-    theme = 'skin-yellow-light';
-    themeOfTile = 'bg-gray';
+    logoImageName = 'momstouch.png';
+    logoName = '와플대학';
+    theme = 'skin-red-light';
+    themeOfTile = 'bg-yellow-gradient';
     themeOfProgressBar = 'progress-bar-yellow';
-    copyright = 'Copyright © 2017 Orangenamu ALL RIGHTS RESERVED.';
+    copyright = 'MOM\'S TOUCH';
     break;
+  // case 'dev.edu1004.kr':
+  // default:
+  //   logoImageName = 'orangenamu.png';
+  //   logoName = '오렌지나무시스템';
+  //   theme = 'skin-yellow-light';
+  //   themeOfTile = 'bg-gray';
+  //   themeOfProgressBar = 'progress-bar-yellow';
+  //   copyright = 'Copyright © 2017 Orangenamu ALL RIGHTS RESERVED.';
+  //   break;
   }
   res.locals.logoImageName = logoImageName;
   res.locals.logoName = logoName;
