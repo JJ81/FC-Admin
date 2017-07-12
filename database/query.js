@@ -11,6 +11,7 @@ QUERY.ADMIN = {
     '  FROM `admin` ' +
     ' WHERE `fc_id` = ? ' +
     '   AND `active` = 1 ' +
+    '   AND `role` NOT IN (\'systemadmin\') ' +
     ' ORDER BY `id` ASC; ',
 
   GetAdminBranch:

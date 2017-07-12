@@ -4,7 +4,8 @@
   </div>
   <section class="sidebar">
     <ul class="sidebar-menu">
-      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      {{#ifCond loggedIn.role '!==' 'supervisor' }}
+      <!--{{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}-->
       <li {{#if (isEquals current_path 'Dashboard')}}class="active" {{/if}}>
         <a href="/dashboard">
           <i class="fa fa-dashboard"></i>
