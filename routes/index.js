@@ -84,7 +84,6 @@ router.post('/login',
     failureFlash: true
   }),
   (req, res) => {
-    console.log(req.user);
     if (req.user.role === 'supervisor') {
       res.redirect('/achievement');
     } else {

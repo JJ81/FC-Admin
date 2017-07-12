@@ -11,6 +11,7 @@ QUERY.ADMIN = {
     '  FROM `admin` ' +
     ' WHERE `fc_id` = ? ' +
     '   AND `active` = 1 ' +
+    '   AND `role` NOT IN (\'systemadmin\') ' +
     ' ORDER BY `id` ASC; ',
 
   GetAdminBranch:
@@ -485,6 +486,12 @@ QUERY.COURSE = {
     'UPDATE `course_list` SET ' +
     '       `title` = ? ' +
     '     , `order` = ? ' +
+    '     , `updated_dt` = NOW() ' +
+    ' WHERE `id` = ?; ',
+
+  UpdateSessionTitle:
+    'UPDATE `course_list` SET ' +
+    '       `title` = ? ' +
     '     , `updated_dt` = NOW() ' +
     ' WHERE `id` = ?; ',
 
