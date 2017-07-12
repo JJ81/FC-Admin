@@ -1232,6 +1232,7 @@ router.delete('/checklist', util.isAuthenticated, (req, res, next) => {
           }
         ],
         (err, results) => {
+          console.log(err);
           if (err) {
             // 쿼리 오류
             return connection.rollback(() => {

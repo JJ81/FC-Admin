@@ -304,7 +304,7 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
 
             if (i === results[0].length - 1) {
               let userdata = results[1].filter((data) => {
-                return data.course_list_id === courseListId;
+                return data.course_list_id === results[0][i].id;
               });
 
               let rows = [];
@@ -326,7 +326,7 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
               courseListTitle = results[0][i].title;
             }
           }
-          console.log(checklists);
+          // console.log(JSON.stringify(checklists));
           res.send({
             checklists: checklists
           });
