@@ -83,7 +83,8 @@ function (Util) {
       }).then(function (response) {
         window.alert('체크리스트를 삭제하였습니다.');
         $row.remove();
-        closeWindow();
+        // closeWindow();
+        setRowNo();
       })
       .catch(function (error) {
         console.error(error);
