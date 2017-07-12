@@ -1,10 +1,10 @@
 <aside class="main-sidebar">
   <div class="img-container">
-    <img src="/static/images/logo/{{logoImageName}}" alt="{{logo}}" width="80" class="" />
+    <img src="/static/images/logo/{{logoImageName}}" alt="{{logo}}" width="80" />
   </div>
   <section class="sidebar">
     <ul class="sidebar-menu">
-      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      {{#ifCond loggedIn.role '!==' 'supervisor' }}
       <li {{#if (isEquals current_path 'Dashboard')}}class="active" {{/if}}>
         <a href="/dashboard">
           <i class="fa fa-dashboard"></i>
@@ -32,7 +32,7 @@
         </ul>
       </li>
 
-      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      {{#ifCond loggedIn.role '!==' 'supervisor' }}
       <li class="{{#if (isEquals menu_group 'education')}}active {{/if}}treeview">
         <a href="#">
           <i class="fa fa-database"></i>
@@ -49,7 +49,7 @@
       </li>
       {{/ifCond}}
 
-      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      {{#ifCond loggedIn.role '!==' 'supervisor' }}
       <li {{#if (isEquals current_path 'Course')}}class="active" {{/if}}>
         <a href="/course">
           <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
@@ -67,7 +67,7 @@
       </li>
       {{/ifCond}}
 
-      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      {{#ifCond loggedIn.role '!==' 'supervisor' }}
       <li {{#if (isEquals current_path 'Employee')}}class="active" {{/if}}>
         <a href="/employee">
           <i class="fa fa-users"></i>
@@ -81,7 +81,7 @@
       </li>
       {{/ifCond}}
 
-      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      {{#ifCond loggedIn.role '!==' 'supervisor' }}
       <li {{#if (isEquals current_path 'Administrator')}}class="active" {{/if}}>
         <a href="/administrator">
           <i class="fa fa-user" aria-hidden="true"></i>
@@ -95,7 +95,7 @@
       </li>
       {{/ifCond}}
 
-      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'admin')}}
+      {{#ifCond loggedIn.role '!==' 'supervisor' }}
       <li {{#if (isEquals current_path 'Help')}}class="active" {{/if}}>
         <a href="/help">
           <i class="fa fa-question"></i>
