@@ -489,6 +489,12 @@ QUERY.COURSE = {
     '     , `updated_dt` = NOW() ' +
     ' WHERE `id` = ?; ',
 
+  UpdateSessionTitle:
+    'UPDATE `course_list` SET ' +
+    '       `title` = ? ' +
+    '     , `updated_dt` = NOW() ' +
+    ' WHERE `id` = ?; ',
+
   // 세션 제목을 수정한다.
   UpdateSessionTitleById:
     'UPDATE `course_list` SET ' +

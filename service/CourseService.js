@@ -113,7 +113,7 @@ exports.InsertOrUpdateChecklist = (_connection, _data, _callback) => {
     CourseService.data = _data;
     async.series([
       (callback) => {
-        CourseService.connection.query(QUERY.COURSE.UpdateSession,
+        CourseService.connection.query(QUERY.COURSE.UpdateSessionTitle,
           [
             _data.title,
             _data.course_list_id
