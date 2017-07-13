@@ -1868,6 +1868,7 @@ QUERY.DASHBOARD = {
         '        ) AS r ' +
         ' WHERE 1=1 ' +
         ' GROUP BY r.`training_user_id` ' +
+        ' HAVING point_total > 0 ' +
         ' ORDER BY `point_total` DESC ',
 
     // 사용자 포인트 상세내역
@@ -1885,6 +1886,7 @@ QUERY.DASHBOARD = {
         '   AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ? AND `edu_id` = epw.`edu_id`) ' +
         ' WHERE lup.`user_id` = ? ' +
         '   AND lup.`logs` IS NOT NULL ' +
+        '   AND (epw.`point_complete` + epw.`point_quiz` + epw.`point_final` + epw.`point_reeltime` + epw.`point_speed` + epw.`point_repetition`) > 0 ' +
         ' ORDER BY lup.`created_dt`; '
 };
 

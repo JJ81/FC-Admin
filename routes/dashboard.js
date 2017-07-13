@@ -278,8 +278,6 @@ router.get('/edupoint', util.isAuthenticated, (req, res) => {
               _inputs.edu_id
             ],
             (err, rows) => {
-              // console.log(rows);
-              if (err) console.log(err);
               for (let index = 0; index < rows.length; index++) {
                 if (rows[index].logs !== null) {
                   let logs = JSON.parse(rows[index].logs);
