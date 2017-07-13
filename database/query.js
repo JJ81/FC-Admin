@@ -1096,7 +1096,7 @@ QUERY.ACHIEVEMENT = {
     return sql;
   },
 
-    // 교육생별 이수율 (전체)
+    // 특정교육과정에 대한 교육생별 이수율 (전체)
   GetUserProgressAllByEdu: (showAll) => {
     let sql =
       'SELECT MAX(g.`user_name`) AS user_name ' +
@@ -1165,7 +1165,8 @@ QUERY.ACHIEVEMENT = {
   },
 
   // 교육생별 전체(전 교육과정에 대한) 이수율
-  GetUserProgressAll:
+  GetUserProgressAll: (showAll, { fcId, adminId }) => {
+    let sql =
     'SELECT x.`user_name` ' +
     '     , x.`branch_name` ' +
     '     , x.`duty_name` ' +
@@ -1211,12 +1212,15 @@ QUERY.ACHIEVEMENT = {
     '                  FROM `training_users` AS tu ' +
     '                 INNER JOIN `users` AS u ' +
     '                    ON tu.`user_id` = u.`id` ' +
-    '                   AND u.`fc_id` = ? ' +
-    '                   AND u.`active` = 1 ' +
-    // SUPERVISOR 별 점포에 대한 처리
+    '                   AND u.`fc_id` = ' + fcId +
+    '                   AND u.`active` = 1 ';
+    if (!showAll) {
+      sql +=
     '                 INNER JOIN `admin_branch` AS ab ' +
     '                    ON u.`branch_id` = ab.`branch_id` ' +
-    '                   AND ab.`admin_id` = ? ' +
+    '                   AND ab.`admin_id` = ' + adminId;
+    }
+    sql +=
     '                 INNER JOIN `training_edu` AS te ' +
     '                    ON tu.`training_edu_id` = te.`id` ' +
     '                 INNER JOIN  ' +
@@ -1243,14 +1247,17 @@ QUERY.ACHIEVEMENT = {
     '             , pw.`point_speed` ' +
     '             , pw.`point_repetition` ' +
     '             , pw.`edu_id` ' +
-    '          FROM (SELECT `fc_id`, `edu_id`, MAX(`id`) AS `id` FROM `edu_point_weight` WHERE `fc_id` = ? GROUP BY `fc_id`, `edu_id`) AS pwg ' +
+    '          FROM (SELECT `fc_id`, `edu_id`, MAX(`id`) AS `id` FROM `edu_point_weight` WHERE `fc_id` = ' + fcId + ' GROUP BY `fc_id`, `edu_id`) AS pwg ' +
     '         INNER JOIN `edu_point_weight` AS pw ' +
     '            ON pwg.`fc_id` = pw.`fc_id` ' +
     '           AND pwg.`id` = pw.`id` ' +
     '       ) AS epg ' +
     '    ON x.`edu_id` = epg.`edu_id` ' +
     ' GROUP BY x.`user_id` ' +
-    ' ORDER BY `completed_rate` DESC; ',
+    ' ORDER BY `completed_rate` DESC; ';
+
+    return sql;
+  },
 
   // 교육생별 전체(전 교육과정에 대한) 이수율
   GetUserEduProgressAll: (showall) => {
@@ -1420,7 +1427,8 @@ QUERY.ACHIEVEMENT = {
     ' WHERE cl.`type` = \'CHECKLIST\' ' +
     ' ORDER BY cl.`order`, cg.`order`; ',
 
-  GetChecklistUserAnswers:
+  GetChecklistUserAnswers: (showAll, { eduId, adminId }) => {
+    let sql =
     'SELECT luc.`user_id`, luc.`course_id`, luc.`course_list_id` ' +
     '     , MAX(d.`name`) AS duty_name ' +
     '     , MAX(b.`name`) AS branch_name ' +
@@ -1437,12 +1445,12 @@ QUERY.ACHIEVEMENT = {
     '          FROM `edu` AS e ' +
     '        INNER JOIN `course_group` AS cg ' +
     '            ON e.`course_group_id` = cg.`group_id` ' +
-    '        WHERE e.`id` = ? ' +
+    '        WHERE e.`id` = ' + eduId +
     '       ) AS e ' +
     '    ON cl.`course_id` = e.`course_id` ' +
     ' INNER JOIN `log_user_checklist` AS luc ' +
     '    ON c.`id` = luc.`checklist_id` ' +
-    '   AND luc.`edu_id` = ? ' +
+    '   AND luc.`edu_id` = ' + eduId +
     '   AND luc.`id` = ( ' +
     '         SELECT MAX(`id`) ' +
     '           FROM `log_user_checklist` ' +
@@ -1452,14 +1460,25 @@ QUERY.ACHIEVEMENT = {
     '            AND `user_id` = luc.`user_id` ' +
     '        ) ' +
     '  INNER JOIN `users` AS u ' +
-    '     ON luc.`user_id` = u.`id` ' +
+    '     ON luc.`user_id` = u.`id` ';
+    if (!showAll) {
+      sql +=
+      '  INNER JOIN `admin_branch` AS ab ' +
+      '     ON u.`branch_id` = ab.`branch_id` ' +
+      '    AND ab.`admin_id` = ' + adminId;
+    }
+
+    sql +=
     '   LEFT JOIN `branch` AS b ' +
     '     ON u.`branch_id` = b.`id` ' +
     '   LEFT JOIN `duty` AS d ' +
     '     ON d.`id` = u.`duty_id` ' +
     '  WHERE cl.`type` = \'CHECKLIST\' ' +
     '  GROUP BY luc.`user_id`, luc.`course_id`, luc.`course_list_id` ' +
-    '  ORDER BY b.`name`; '
+    '  ORDER BY b.`name`; ';
+
+    return sql;
+  }
 };
 
 QUERY.DASHBOARD = {
@@ -1849,6 +1868,7 @@ QUERY.DASHBOARD = {
         '        ) AS r ' +
         ' WHERE 1=1 ' +
         ' GROUP BY r.`training_user_id` ' +
+        ' HAVING point_total > 0 ' +
         ' ORDER BY `point_total` DESC ',
 
     // 사용자 포인트 상세내역
@@ -1866,6 +1886,7 @@ QUERY.DASHBOARD = {
         '   AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ? AND `edu_id` = epw.`edu_id`) ' +
         ' WHERE lup.`user_id` = ? ' +
         '   AND lup.`logs` IS NOT NULL ' +
+        '   AND (epw.`point_complete` + epw.`point_quiz` + epw.`point_final` + epw.`point_reeltime` + epw.`point_speed` + epw.`point_repetition`) > 0 ' +
         ' ORDER BY lup.`created_dt`; '
 };
 

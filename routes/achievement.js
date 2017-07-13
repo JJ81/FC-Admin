@@ -9,7 +9,6 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   let querystring;
   const showAll = (req.user.role !== 'supervisor');
 
-  // 슈퍼바이저일 경우 자신의 점포만 볼 수 있다.
   querystring = QUERY.HISTORY.GetAssignEduHistory(showAll);
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -130,15 +129,13 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
  * 교육생별 진척도
  */
 router.get('/user', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
+  const showAll = (req.user.role !== 'supervisor');
+
   pool.getConnection((err, connection) => {
     if (err) throw err;
     // 슈퍼바이저일 경우 자신의 점포만 볼 수 있다.
-    connection.query(QUERY.ACHIEVEMENT.GetUserProgressAll,
-      [
-        req.user.fc_id,
-        req.user.admin_id,
-        req.user.fc_id
-      ],
+    connection.query(QUERY.ACHIEVEMENT.GetUserProgressAll(showAll, { fcId: req.user.fc_id, adminId: req.user.admin_id }),
+      [],
       (err, rows) => {
         connection.release();
         if (err) {
@@ -233,10 +230,13 @@ router.get('/user/education', util.isAuthenticated, util.getLogoInfo, (req, res,
 });
 
 /**
- * 체크리스트 데이터를 반환한다.
+ * 체크리스트 데이터를 반환한다
  */
+ // TODO supervisor 권한처리
 router.get('/checklist', util.isAuthenticated, (req, res, next) => {
   const { edu_id: eduId } = req.query;
+  const showAll = (req.user.role !== 'supervisor');
+
   pool.getConnection((err, connection) => {
     if (err) throw err;
     async.series(
@@ -250,8 +250,8 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
           );
         },
         (callback) => {
-          connection.query(QUERY.ACHIEVEMENT.GetChecklistUserAnswers,
-            [ eduId, eduId ],
+          connection.query(QUERY.ACHIEVEMENT.GetChecklistUserAnswers(showAll, { eduId: eduId, adminId: req.user.admin_id }),
+            [],
             (err, rows) => {
               callback(err, rows);
             }
@@ -263,10 +263,9 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
         if (err) {
           console.error(err);
           throw err;
-        } else {
+        } else if (results[1].length > 0) {
           let checklists = [];
           let colums = [];
-          // let userChecklists = [];
 
           colums.push({ title: '지점' });
           colums.push({ title: '이름' });
@@ -304,7 +303,7 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
 
             if (i === results[0].length - 1) {
               let userdata = results[1].filter((data) => {
-                return data.course_list_id === courseListId;
+                return data.course_list_id === results[0][i].id;
               });
 
               let rows = [];
@@ -326,9 +325,13 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
               courseListTitle = results[0][i].title;
             }
           }
-          console.log(checklists);
+          // console.log(JSON.stringify(checklists));
           res.send({
             checklists: checklists
+          });
+        } else {
+          res.send({
+            checklists: null
           });
         }
       }

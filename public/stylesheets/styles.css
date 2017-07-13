@@ -339,5 +339,8 @@ table {
   margin-top: 5px;
 }
 
+ul.list-group > a {
+  text-decoration: none;
+}
 /*# sourceMappingURL=styles.css.map */
 

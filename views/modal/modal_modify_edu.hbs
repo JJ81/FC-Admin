@@ -17,32 +17,6 @@
                         value="{{edu.name}}"
                     />
                 </div>
-
-                <!--<div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="start_dt">시작일 :</label>
-                            <div class="input-group date" id="start_dt">
-                                <input type="text" class="form-control" value="{{ time edu.start_dt}}" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='col-sm-6'>
-                        <div class="form-group">
-                            <label for="end_dt">종료일 :</label>
-                            <div class="input-group date" id="end_dt">
-                                <input type="text" class="form-control" value="{{ time edu.end_dt}}" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
-
                 <div class="form-group">
                     <label>교육과정 소개</label>
                     <textarea class="form-control course-desc editor" name="course_desc" placeholder="교육과정 소개를 입력하세요.">{{edu.desc}}</textarea>
@@ -88,11 +62,7 @@
                 <button type="button" id="modify-edu" class="btn btn-primary btn-modify-edu">수정</button>
             </div>
         </div>
-        <!-- /.modal-content -->
       <input type="hidden" id="course_group_key" value="{{edu.course_group_key}}" />
       <input type="hidden" id="edu_id" value="{{edu.id}}" />
-
     </form>
-    <!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
