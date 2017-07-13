@@ -263,10 +263,9 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
         if (err) {
           console.error(err);
           throw err;
-        } else {
+        } else if (results[1].length > 0) {
           let checklists = [];
           let colums = [];
-          // let userChecklists = [];
 
           colums.push({ title: '지점' });
           colums.push({ title: '이름' });
@@ -329,6 +328,10 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
           // console.log(JSON.stringify(checklists));
           res.send({
             checklists: checklists
+          });
+        } else {
+          res.send({
+            checklists: null
           });
         }
       }
