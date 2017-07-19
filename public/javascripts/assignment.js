@@ -2,8 +2,9 @@
  * Created by yijaejun on 30/11/2016.
  */
 'use strict';
-requirejs([ 'common' ],
+window.requirejs([ 'common' ],
 function (Util) {
+  var $ = $ || window.$;
   var tableCheckAll = $('#check-all');
   // var tableAssignment = Util.initDataTable($('#table_assignment'))
   var tableEmployee = Util.initDataTable($('#table_employee'), {
@@ -22,14 +23,14 @@ function (Util) {
     e.preventDefault();
 
     if ($('input[name=\'group_name\']').val() === '') {
-      alert('그룹명을 입력하세요.');
+      window.alert('그룹명을 입력하세요.');
       $('input[name=\'group_name\']').focus();
       return false;
     }
 
     // validation check2
     if ($('textarea[name=\'group_desc\']').val() === '') {
-      alert('그룹 설명을 입력하세요.');
+      window.alert('그룹 설명을 입력하세요.');
       $('textarea[name=\'group_desc\']').focus();
       return false;
     }
@@ -45,9 +46,8 @@ function (Util) {
         return $(this).data('id');
       }).get().join(', ');
 
-        // validation check3
       if (!data) {
-        alert('직원을 선택하세요.');
+        window.alert('직원을 선택하세요.');
         return false;
       }
 
@@ -57,7 +57,7 @@ function (Util) {
     case 'excel': // 파일업로드
       if (document.getElementById('UploadExcelFile').files.length === 0) {
         $('#UploadExcelFile').focus();
-        alert('파일을 선택하세요.');
+        window.alert('파일을 선택하세요.');
         return false;
       }
       break;

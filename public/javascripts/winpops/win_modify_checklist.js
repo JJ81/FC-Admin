@@ -212,7 +212,8 @@ function (Util) {
   };
 
   const closeWindow = () => {
-    window.parent.opener.location.reload();
+    // window.parent.opener.location.reload();
+    window.parent.opener.winpop_listener();
     window.close();
   };
 });

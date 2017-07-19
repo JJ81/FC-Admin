@@ -2,13 +2,14 @@
  * Created by yijaejun on 30/11/2016.
  */
 'use strict';
-define(
+window.define(
   [
     'jquery',
     'jszip',
     'axios',
     'moment',
     'pace',
+    'lodash',
     'tinymce',
     'bootstrap',
     'bootstrap_datetimepicker',
@@ -27,7 +28,8 @@ define(
     'es6-promise'
     // 'smoothstate'
   ],
-function ($, jszip, axios, moment, pace) {
+function ($, jszip, axios, moment, pace, _) {
+  // window.alert(_.VERSION);
   pace.start({
     document: false
   });
@@ -81,7 +83,10 @@ function ($, jszip, axios, moment, pace) {
           //     '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
           //     '//www.tinymce.com/css/codepen.min.css'
           // ],
-    language: 'ko_KR'
+    language: 'ko_KR',
+    valid_elements: 'i,sub,sup',
+    invalid_elements: 'p, script',
+    editor_deselector: 'mceOthers'
   });
 
   return {

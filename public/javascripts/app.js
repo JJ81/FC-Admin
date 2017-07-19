@@ -35,7 +35,10 @@ window.requirejs.config({
     'es6-promise': '/static/vendor/es6-promise.min',
     'Vimeo': '/static/vendor/player.min',
     'tinymce': '/static/vendor/tinymce/tinymce.min',
-    'pace': '/static/vendor/pace.min'
+    'pace': '/static/vendor/pace.min',
+    'lodash': '/static/vendor/lodash.min',
+    'handlebars': '/static/vendor/handlebars.min',
+    'text': '/static/vendor/text'
     // 'smoothstate': '/static/vendor/jquery.smoothstate.min'
   },
   shim: {

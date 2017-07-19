@@ -99,8 +99,8 @@ function (Util) {
       QuizService = new QuizService(options, data, function (result) {
         // 퀴즈 등록시 호출된다.
         alert('자료를 수정하였습니다.');
-        window.parent.opener.location.reload(); // 부모폼을 reload 한다.
-
+        // window.parent.opener.location.reload(); // 부모폼을 reload 한다.
+        window.parent.opener.winpop_listener();
         _confirm = false;
         window.close();
       });

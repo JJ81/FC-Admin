@@ -6,6 +6,8 @@ const QUERY = require('../database/query');
 const async = require('async');
 const AssignmentService = require('../service/AssignmentService');
 
+router.param('id', AssignmentService.getSimpleAssignmentById);
+
 router.get('/', util.isAuthenticated, util.getLogoInfo, AssignmentService.getSimpleAssignmentList);
 
 router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
@@ -13,8 +15,8 @@ router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
     if (err) throw err;
     async.series([
       (callback) => {
-        connection.query(QUERY.EMPLOYEE.GetEmployeeList,
-          [req.user.fc_id],
+        connection.query(QUERY.EMPLOYEE.GetEmployeeListByAssignUserId,
+          [ req.assignment.log_bind_user_id, req.user.fc_id ],
           (err, data) => {
             callback(err, data);
           });
@@ -30,7 +32,8 @@ router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
           current_path: 'SimpleAssignment',
           menu_group: 'education',
           loggedIn: req.user,
-          employees: results[0]
+          employees: results[0],
+          assignment: req.assignment
         });
       }
     });
@@ -38,5 +41,7 @@ router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
 });
 
 router.post('/', util.isAuthenticated, AssignmentService.createSimpleAssignment);
+// router.post('/progress', util.isAuthenticated, AssignmentService.updateProgress);
+router.delete('/', util.isAuthenticated, AssignmentService.deleteSimpleAssignment);
 
 module.exports = router;

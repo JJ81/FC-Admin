@@ -270,14 +270,19 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
   incomingForm.parse(req, (err, fields, files) => {
     if (err) throw err;
     const uploadType = fields.upload_type;
-    const filePath = files['file-excel'].path;
+    let filePath;
+    let logBindUserId;
+    let employeeIds;
     let requestData = {
       admin_id: req.user.admin_id,
       upload_type: fields.upload_type,
       upload_employee_ids: JSON.parse('[' + fields.upload_employee_ids + ']'),
       group_name: fields.group_name,
-      group_desc: fields.group_desc
+      group_desc: fields.group_desc,
+      redirect: fields.redirect ? fields.redirect : true,
+      simple_assignment_id: fields.id
     };
+
     pool.getConnection((err, connection) => {
       if (err) throw err;
       async.series(
@@ -285,14 +290,9 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
           // 엑셀 데이터를 읽어들인다.
           (callback) => {
             switch (uploadType) {
-            case 'excel_bak':
-              convertExcel(filePath, undefined, false, (err, data) => {
-                requestData.excel = data;
-                callback(err, data);
-              });
-              break;
-
             case 'excel':
+              filePath = files['file-excel'].path;
+
               const wb = new Excel.Workbook();
               wb.xlsx.readFile(filePath)
               .then(() => {
@@ -303,7 +303,7 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
                     if (rowNumber >= 2 && colNumber === 2) {
                       phone.push(cell.value);
                     }
-                    console.log('Row ' + rowNumber + ', Cell ' + colNumber + ' = ' + cell.value);
+                    // console.log('Row ' + rowNumber + ', Cell ' + colNumber + ' = ' + cell.value);
                   });
                 });
                 requestData.excel = phone;
@@ -319,11 +319,43 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
               break;
             }
           },
+          // 간편배정 시 이전 교육배정 그룹을 삭제한다.
+          // (callback) => {
+          //   if (requestData.simple_assignment_id !== undefined) {
+          //     AssignmentService.deleteAssignment({
+          //       id: parseInt(requestData.simple_assignment_id)
+          //     }, function () {
+          //       callback(null, null);
+          //     });
+          //   } else {
+          //     callback(null, null);
+          //   }
+          // },
           // 교육배정 그룹을 생성한다.
           (callback) => {
             AssignmentService.create(connection, requestData, (err, result) => {
+              if (result.insertId) {
+                logBindUserId = result.insertId;
+              }
+              if (result.employeeIds) {
+                employeeIds = result.employeeIds.join(',');
+              }
               callback(err, result);
             });
+          },
+          // 간편배정내역을 수정한다.
+          (callback) => {
+            if (requestData.simple_assignment_id !== undefined && logBindUserId !== undefined) {
+              AssignmentService.updateSimpleAssignment({
+                id: parseInt(requestData.simple_assignment_id),
+                logBindUserId: logBindUserId,
+                step: 2
+              }, function () {
+                callback(null, null);
+              });
+            } else {
+              callback(null, null);
+            }
           },
           // 엑셀파일을 삭제한다.
           (callback) => {
@@ -347,7 +379,16 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
             console.error(err);
             throw new Error('err');
           }
-          res.redirect('/assignment');
+
+          if (requestData.redirect === undefined) {
+            res.redirect('/assignment');
+          } else {
+            res.send({
+              success: true,
+              employeeIds: employeeIds,
+              logBindUserId: logBindUserId
+            });
+          }
         }
       );
     });

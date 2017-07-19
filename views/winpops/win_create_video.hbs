@@ -1,59 +1,60 @@
 <div class="winpop_video" id="watchVideo">
-    <form action="/course/create/video" method="post">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">
-                    비디오 강좌 등록하기
-                    <div class="pull-right">
-                        <button type="button" id="regist-video" class="btn btn-primary">
-                            <i class="fa fa-floppy-o"> 저장</i>
-                        </button>
-                        <button type="button" class="btn btn-default" onclick="window.close();">
-                            <i class="fa fa-sign-out"> 나가기</i>
-                        </button>
-                    </div>
-                </h4>
-            </div>
+  <form action="/course/create/video" method="post">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">
+          비디오 강좌 등록하기
+          <div class="pull-right">
+            <button type="button" id="regist-video" class="btn btn-primary">
+              <i class="fa fa-floppy-o"> 저장</i>
+            </button>
+            <button type="button" class="btn btn-default" onclick="window.close();">
+              <i class="fa fa-sign-out"> 나가기</i>
+            </button>
+          </div>
+        </h4>
+      </div>
 
-            <div class="modal-body">
-
-                <div class="form-group">
-                    <label for="video_title">비디오 강좌명</label>
-                    <input type="text" name="video_name" class="form-control" id="video-title" placeholder="비디오 강좌명" autocomplete="off" required autofocus />
-                </div>
-
-                <div class="form-group">
-                    <label>비디오 제공수단</label>
-                    <select class="form-control" id="video-provider" name="video_provider">
-                        <!--<option value="YOUTUBE">YOUTUBE</option>-->
-                        <option value="VIMEO">VIMEO</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="video_title">비디오 코드</label>
-
-                    <div class="input-group">
-                        <input type="text" name="video_code" class="form-control" id="video-code" placeholder="비디오 코드를 입력해주세요." autocomplete="off" required />
-                        <span class="input-group-btn">
-                            <button type="button" id="play-video" class="btn btn-default btn-flat">
-                                <i class="fa fa-arrow-circle-right"></i>
-                                재생
-                            </button>
-                        </span>
-                    </div>
-                    <small class="text-red">* Domain을 제외한 영상의 고유 코드를 입력해주세요. (ex. 189789781 or A_jTJ3CM8YU1)</small>
-                </div>
-
-                <input type="hidden" name="course_id" value="{{course_id}}" />
-
-                <hr />
-
-                <div class="video-preview">비디오를 미리 볼 수 있습니다.</div>
-                <div id="video-player"></div>
-            </div>
-
-            <div class="modal-footer"></div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="video_title">비디오 강좌명</label>
+          <input type="text" name="video_name" class="form-control" id="video-title" placeholder="비디오 강좌명" autocomplete="off" required
+            autofocus />
         </div>
-    </form>
+
+        <div class="form-group">
+          <label>비디오 제공수단</label>
+          <select class="form-control" id="video-provider" name="video_provider">
+            <!--<option value="YOUTUBE">YOUTUBE</option>-->
+            <option value="VIMEO">VIMEO</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="video_title">비디오 코드</label>
+
+          <div class="input-group">
+            <input type="text" name="video_code" class="form-control" id="video-code" placeholder="비디오 코드를 입력해주세요." autocomplete="off"
+              required />
+            <span class="input-group-btn">
+              <button type="button" id="play-video" class="btn btn-default btn-flat">
+                <i class="fa fa-arrow-circle-right"></i>
+                재생
+              </button>
+            </span>
+          </div>
+          <small class="text-red">* Domain을 제외한 영상의 고유 코드를 입력해주세요. (ex. 189789781 or A_jTJ3CM8YU1)</small>
+        </div>
+
+        <input type="hidden" name="course_id" value="{{course_id}}" />
+
+        <hr />
+
+        <div class="video-preview">비디오를 미리 볼 수 있습니다.</div>
+        <div id="video-player"></div>
+      </div>
+
+      <div class="modal-footer"></div>
+    </div>
+  </form>
 </div>

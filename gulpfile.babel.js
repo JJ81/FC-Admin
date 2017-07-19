@@ -75,7 +75,10 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'plugins/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
     DIR.SRC + '/vendor/' + 'plugins/es6-promise/dist/es6-promise.min.js',
     DIR.SRC + '/vendor/' + 'plugins/vimeo-player-js/dist/player.min.js',
-    DIR.SRC + '/vendor/' + 'plugins/pace/pace.min.js'
+    DIR.SRC + '/vendor/' + 'plugins/pace/pace.min.js',
+    DIR.SRC + '/vendor/' + 'lodash.min.js',
+    DIR.SRC + '/vendor/' + 'handlebars/dist/handlebars.min.js',
+    DIR.SRC + '/vendor/' + 'text/text.js'
     // DIR.SRC + '/vendor/' + 'plugins/smoothstate/jquery.smoothstate.min.js'
   ])
   .pipe(uglify())

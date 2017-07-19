@@ -6,6 +6,7 @@ const util = require('../util/util');
 const CourseService = require('../service/CourseService');
 const pool = require('../commons/db_conn_pool');
 
+router.param('id', CourseService.getDetailsByCourseId);
 /**
  * 강의/강사등록 첫 페이지
  */
@@ -53,6 +54,10 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
         }
       });
   });
+});
+
+router.get('/:id', util.isAuthenticated, (req, res, next) => {
+  return res.send(req.data);
 });
 
 /**
@@ -216,6 +221,7 @@ router.get('/sessioncount', util.isAuthenticated, (req, res, next) => {
 /**
  * 강의/강사등록 > 강의등록
  */
+router.post('/', util.isAuthenticated, CourseService.create);
 router.post('/register', util.isAuthenticated, (req, res, next) => {
   const {
     course_name: courseName,
@@ -248,6 +254,7 @@ router.post('/register', util.isAuthenticated, (req, res, next) => {
 /**
  * 강의/강사등록 > 강의수정
  */
+router.put('/', util.isAuthenticated, CourseService.update);
 router.post('/modify', util.isAuthenticated, (req, res, next) => {
   const {
     course_id: courseId,
@@ -282,7 +289,7 @@ router.post('/modify', util.isAuthenticated, (req, res, next) => {
 
 /** 강의 비활성화 */
 router.delete('/deactivate', util.isAuthenticated, (req, res, next) => {
-  CourseService.deactivateById(req.query.course_id, (err, data) => {
+  CourseService.deactivateById(req.query.id, (err, data) => {
     if (err) {
       return res.json({
         success: false,

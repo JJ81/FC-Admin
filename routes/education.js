@@ -53,6 +53,8 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   });
 });
 
+router.get('/:id/courses', util.isAuthenticated, EducationService.getCourseList);
+
 /**
  * 교육과정관리 상세페이지
  */
@@ -132,6 +134,8 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
     );
   });
 });
+
+router.post('/', util.isAuthenticated, EducationService.create);
 
 /**
  * 교육과정을 등록한다.

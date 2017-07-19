@@ -2,7 +2,72 @@ const QUERY = require('../database/query');
 const async = require('async');
 const pool = require('../commons/db_conn_pool');
 const util = require('../util/util');
+const EducationService = require('./EducationService');
 var CourseService = {};
+
+exports.getDetailsByCourseId = (req, res, next, courseId) => {
+  var teacherName;
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    async.series([
+      // 강의정보 조회
+      callback => {
+        connection.query(QUERY.COURSE.GetCourseById,
+          [ courseId ],
+          (err, row) => {
+            if (row.length > 0) {
+              teacherName = row.teacher_name;
+            }
+            callback(err, row);
+          }
+        );
+      },
+      // 강의평가 정보 조회
+      callback => {
+        connection.query(QUERY.COURSE.GetStarRatingByCourseId,
+          [ courseId ],
+          (err, row) => {
+            callback(err, row);
+          }
+        );
+      },
+      // 강사평가 정보를 조회한다.
+      callback => {
+        connection.query(QUERY.COURSE.GetStarRatingByTeacherName,
+          [ req.user.fc_id, teacherName ],
+          (err, row) => {
+            callback(err, row);
+          }
+        );
+      },
+      // 강의 세션목록 조회
+      callback => {
+        connection.query(QUERY.COURSE.GetSessionListByCourseId,
+          [ courseId ],
+          (err, rows) => {
+            callback(err, rows);
+          }
+        );
+      }],
+      (err, results) => {
+        console.log(results[2]);
+        connection.release();
+        if (err) {
+          throw new Error(err);
+        } else {
+          req.data = {
+            course_name: results[0][0].course_name,
+            course_desc: results[0][0].course_desc,
+            teacher_name: results[0][0].teacher_name,
+            course_rate: results[1].length === 0 ? 0 : results[1][0].rate,
+            teacher_rate: results[2].length === 0 ? 0 : results[2][0].rate,
+            session_list: results[3]
+          };
+          return next();
+        }
+      });
+  });
+};
 
 /**
  * 강의를 비활성화 한다.
@@ -270,5 +335,136 @@ exports.makeQuizList = (quizList) => {
 
   return returnList;
 };
+
+// 강의생성
+exports.create = (req, res, next) => {
+  const {
+    course_name: courseName,
+    course_desc: courseDescription,
+    teacher_name: teacherName,
+    edu_id: eduId
+  } = req.body;
+  const adminId = req.user.admin_id;
+  let courseId;
+  let courseGroupId;
+
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    async.series([
+      callback => {
+        connection.query(QUERY.COURSE.CreateCourse2,
+          [
+            courseName,
+            courseDescription,
+            teacherName,
+            adminId
+          ],
+          (err, row) => {
+            courseId = row.insertId;
+            callback(err, null);
+          }
+        );
+      },
+      callback => {
+        connection.query(QUERY.EDU.GetEduInfoById,
+          [
+            eduId
+          ],
+          (err, row) => {
+            courseGroupId = row[0].course_group_key;
+            callback(err, null);
+          }
+        );
+      },
+      callback => {
+        connection.query(QUERY.EDU.InsertCourseGroup,
+          [
+            courseGroupId,
+            courseId,
+            999
+          ],
+          (err, row) => {
+            callback(err, null);
+          }
+        );
+      },
+      callback => {
+        if (courseId) {
+          connection.query(QUERY.COURSE.GetCourseById,
+            [
+              courseId
+            ],
+            (err, row) => {
+              callback(err, row);
+            }
+          );
+        } else {
+          callback(null, null);
+        }
+      }
+    ],
+    (err, results) => {
+      connection.release();
+      if (err) {
+        throw new Error(err);
+      } else {
+        res.send(results[3][0]);
+      }
+    });
+  });
+};
+// 강의수정
+exports.update = (req, res, next) => {
+  const {
+    course_id: courseId,
+    course_name: courseName,
+    course_desc: courseDescription,
+    teacher_name: teacherName
+  } = req.body;
+
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    async.series([
+      callback => {
+        let q = connection.query(QUERY.COURSE.UpdateCourse2,
+          [
+            courseName,
+            courseDescription,
+            teacherName,
+            courseId
+          ],
+          (err, row) => {
+            console.log(q.sql);
+            callback(err, null);
+          }
+        );
+      },
+      callback => {
+        if (courseId) {
+          connection.query(QUERY.COURSE.GetCourseById,
+            [
+              courseId
+            ],
+            (err, row) => {
+              callback(err, row);
+            }
+          );
+        } else {
+          callback(null, null);
+        }
+      }
+    ],
+    (err, results) => {
+      console.log(results);
+      connection.release();
+      if (err) {
+        throw new Error(err);
+      } else {
+        res.send(results[1][0]);
+      }
+    });
+  });
+};
+
 
 // module.exports = CourseService;

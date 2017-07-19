@@ -5,11 +5,18 @@ requirejs([
   'Vimeo'
 ],
 function (Util, Vimeo) {
+  var $ = $ || window.$;
   var player = null;
   // var playerContainer = $('#videoplayer');
   var btnRegistVideo = $('#regist-video');
   var btnPlayVideo = $('#play-video');
   var _confirm = true; // 윈도우 종료 시 창을 닫을지 여부
+
+  window.$(function () {
+    // console.log('hello!');
+    // window.alert(window.parent.opener);
+    // window.parent.opener.winpop_listener();
+  });
 
   /**
    * Player 를 초기화 한다.
@@ -55,7 +62,7 @@ function (Util, Vimeo) {
 
     if (!validateForm()) { return false; }
 
-    if (!confirm('저장하시겠습니까?')) { return false; }
+    if (!window.confirm('저장하시겠습니까?')) { return false; }
 
     var params = $('form').serialize();
     $.ajax({
@@ -65,8 +72,9 @@ function (Util, Vimeo) {
       contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
       dataType: 'html',
       success: function (response) {
-        alert('비디오를 저장하였습니다.');
-        window.parent.opener.location.reload(); // 부모폼을 reload 한다.
+        window.alert('비디오를 저장하였습니다.');
+        // window.parent.opener.location.reload(); // 부모폼을 reload 한다.
+        window.parent.opener.winpop_listener();
 
         _confirm = false;
         window.close();

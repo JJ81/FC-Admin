@@ -146,6 +146,36 @@ QUERY.EMPLOYEE = {
     '   AND u.`active` = true ' +
     ' ORDER BY `branch`, d.`order`, u.`name`; ',
 
+  // 교육과정 배정 직원목록 조회
+  GetEmployeeListByAssignUserId:
+    'SELECT u.`id` AS id ' +
+    '     , CASE WHEN bu.`user_id` IS NOT NULL THEN \'Y\' ELSE \'N\' END AS assigned ' +
+    '     , u.`name` AS name ' +
+    '     , u.`phone` AS phone ' +
+    '     , u.`email` AS email ' +
+    '     , b.`name` AS branch ' +
+    '     , d.`name` AS duty ' +
+    '     , b.`id` AS branch_id ' +
+    '     , d.`id` AS duty_id ' +
+    '  FROM `users` AS u ' +
+    '  LEFT JOIN `fc` AS f ' +
+    '    ON f.`id` = u.`fc_id` ' +
+    '  LEFT JOIN `branch` AS b ' +
+    '    ON b.`id` = u.`branch_id` ' +
+    '  LEFT JOIN `duty` AS d ' +
+    '    ON d.`id` = u.`duty_id` ' +
+    '  LEFT JOIN ( ' +
+    '       SELECT lgu.`user_id` ' +
+    '         FROM `log_bind_users` AS lbu ' +
+    '        INNER JOIN `log_group_user` AS lgu ' +
+    '           ON lbu.`group_id` = lgu.`group_id` ' +
+    '        WHERE lbu.`id` = ? ' +
+    '       ) AS bu ' +
+    '    ON u.`id` = bu.`user_id` ' +
+    ' WHERE u.`fc_id` = ? ' +
+    '   AND u.`active` = true ' +
+    ' ORDER BY `branch`, d.`order`, u.`name`; ',
+
   ResetPassword:
     'UPDATE `users` SET password = ? ' +
     'WHERE `id` = ? and name = ?; ',
@@ -203,11 +233,19 @@ QUERY.COURSE = {
     '   AND c.`id` = ? ' +
     ' ORDER BY c.`created_dt` DESC; ',
 
+  // 강의 정보를 조회한다.
+  GetCourseById:
+    'SELECT c.`id` AS course_id, c.`name` AS course_name, c.`desc` AS course_desc ' +
+    '     ,  c.teacher AS teacher_name, c.`created_dt`, 0 AS course_rate, 0 AS teacher_rate ' +
+    '  FROM `course` AS c ' +
+    ' WHERE c.`id` = ? ' +
+    ' ORDER BY c.`created_dt` DESC; ',
+
   // 강의평가를 조회한다.
   GetStarRatingByCourseId:
     'SELECT ROUND(AVG(`course_rate`), 1) AS rate ' +
     '  FROM `user_rating` ' +
-    ' WHERE course_id= ? ' +
+    ' WHERE course_id = ? ' +
     ' GROUP BY `course_id`; ',
 
   // 강의평가를 조회한다.
@@ -216,6 +254,16 @@ QUERY.COURSE = {
     '  FROM `user_rating` ' +
     ' WHERE teacher_id = ? ' +
     ' GROUP BY `teacher_id`; ',
+
+  // 강사명으로 강의평가를 조회한다.
+  GetStarRatingByTeacherName:
+    'SELECT ROUND(AVG(`teacher_rate`), 1) AS rate ' +
+    '  FROM `user_rating` AS ur ' +
+    ' INNER JOIN `users` AS u ' +
+    '    ON ur.`user_id` = u.`id` ' +
+    '   AND u.`fc_id` = ? ' +
+    ' WHERE ur.teacher_name = ? ' +
+    ' GROUP BY `teacher_name`; ',
 
   // 세션목록을 조회한다.
   GetSessionListByCourseId:
@@ -263,10 +311,17 @@ QUERY.COURSE = {
   CreateCourse:
     'INSERT INTO `course` (`name`, `teacher_id`, `desc`, `creator_id`) ' +
     'VALUES (?,?,?,?); ',
+  // 강의를 생성한다.
+  CreateCourse2:
+    'INSERT INTO `course` (`name`, `desc`, `teacher`, `creator_id`) ' +
+    'VALUES (?,?,?,?); ',
 
   // 강의를 수정한다.
   UpdateCourse:
     'UPDATE `course` SET `name` = ?, `teacher_id` = ?, `desc` = ?, `creator_id` = ?, `updated_dt` = ? ' +
+    'WHERE `id` = ?; ',
+  UpdateCourse2:
+    'UPDATE `course` SET `name` = ?, `desc` = ?, `teacher` = ?, `updated_dt` = NOW() ' +
     'WHERE `id` = ?; ',
 
   // 강의 세션수를 조회한다.
@@ -583,6 +638,20 @@ QUERY.EDU = {
     ' WHERE `group_id` = ? ' +
     ' ORDER BY cg.`order` ASC, cg.`id` ASC ',
 
+  GetCourseListByEduId:
+    'SELECT c.`id` AS course_id ' +
+    '     , c.`name` AS course_name ' +
+    '     , c.desc AS course_desc ' +
+    '     , c.`teacher` AS teacher_name ' +
+    '     , cg.`id` AS course_group_id ' +
+    '     , cg.`group_id` AS course_group_key ' +
+    '  FROM `course_group` AS cg ' +
+    ' INNER JOIN `course` AS c ' +
+    '    ON cg.`course_id` = c.`id` ' +
+    ' INNER JOIN `edu` AS e ' +
+    '    ON e.`course_group_id` = cg.`group_id` ' +
+    '   AND e.`id` = ?; ',
+
   // 교육과정의 강의를 조회한다. (deprecated)
   GetCourseListByGroupId_bak:
     'SELECT c.`id`, c.`name` AS name, c.`desc`, t.`name` AS teacher ' +
@@ -625,8 +694,6 @@ QUERY.EDU = {
     '       `name` = ? ' +
     '     , `desc` = ? ' +
     '     , `updated_dt` = NOW() ' +
-    '     , `start_dt` = ? ' +
-    '     , `end_dt` = ? ' +
     ' WHERE `id` = ?; ',
 
     // 강의그룹을 생성한다.
@@ -1907,16 +1974,110 @@ QUERY.ASSIGNMENT = {
   DeleteLogGroupUserByGroupId:
     'DELETE FROM `log_group_user` WHERE `group_id` = ?; ',
 
+  DeleteGroupUserBySimpleAssignId: ({ id }) => {
+    let sql =
+    'DELETE lgu.* ' +
+    '  FROM `log_group_user` AS lgu ' +
+    ' INNER JOIN `log_bind_users` AS lbu ' +
+    '    ON lgu.`group_id` = lbu.`group_id` ' +
+    ' INNER JOIN `simple_assignment` AS sa ' +
+    '    ON lbu.`id` = sa.`log_bind_user_id` ' +
+    '   AND sa.`id` = ' + id + '; ';
+
+    return sql;
+  },
+
+  DeleteTrainingEduById:
+    'DELETE FROM `training_edu` WHERE `id` = ?; ',
+
+  DeleteTrainingUsersByTrainingEduId:
+    'DELETE FROM `training_users` WHERE `training_edu_id` = ?; ',
+
+  DeleteLogAssignEduByTrainingEduId:
+    'DELETE FROM `log_assign_edu` WHERE `training_edu_id` = ?; ',
+
+  DeleteBindUserBySimpleAssignId: ({ id }) => {
+    let sql =
+    'DELETE lbu.* ' +
+    '  FROM `log_bind_users` AS lbu ' +
+    ' INNER JOIN `simple_assignment` AS sa ' +
+    '    ON lbu.`id` = sa.`log_bind_user_id` ' +
+    '   AND sa.`id` = ' + id + '; ';
+
+    return sql;
+  },
+
+  DisableBindUserBySimpleAssignId: ({ id }) => {
+    let sql =
+    'UPDATE `log_bind_users` AS lbu ' +
+    ' INNER JOIN `simple_assignment` AS sa ' +
+    '    ON lbu.`id` = sa.`log_bind_user_id` ' +
+    '   AND sa.`id` = ' + id +
+    '   SET lbu.`active` = 0; ';
+
+    return sql;
+  },
+
   SelectSimpleAssignments:
     'SELECT sa.`id`, sa.`title`, DATE_FORMAT(sa.`created_dt`, \'%Y-%m-%d\') AS created_dt ' +
+    '     , IFNULL(sa.`activated_step`, 0) AS activated_step ' +
     '     , a.`name` AS created_name ' +
     '  FROM `simple_assignment` AS sa ' +
     ' INNER JOIN `admin` AS a ON sa.`creator_id` = a.`id` ' +
     ' ORDER BY sa.`created_dt` DESC; ',
 
+  SelectSimpleAssignmentById:
+    'SELECT sa.`id`, sa.`title`, DATE_FORMAT(sa.`created_dt`, \'%Y-%m-%d\') AS created_dt ' +
+    '     , sa.`activated_step`, sa.`log_bind_user_id`, sa.`edu_id`, sa.`training_edu_id` ' +
+    '     , a.`name` AS created_name ' +
+    '     , e.`name` AS edu_name, e.`desc` AS edu_desc ' +
+    '     , epw.`point_complete` AS complete_point ' +
+    '     , epw.`point_quiz` AS quiz_point ' +
+    '     , epw.`point_final` AS test_point ' +
+    '     , epw.`point_reeltime` AS reeltime_point ' +
+    '     , epw.`point_speed` AS speed_point ' +
+    '     , epw.`point_repetition` AS reps_point ' +
+    '  FROM `simple_assignment` AS sa ' +
+    ' INNER JOIN `admin` AS a ON sa.`creator_id` = a.`id` ' +
+    '  LEFT JOIN `edu` AS e ON sa.`edu_id` = e.`id` ' +
+    '  LEFT JOIN `edu_point_weight` AS epw ON e.`id` = epw.`edu_id` ' +
+    ' WHERE sa.`id` = ? ' +
+    ' ORDER BY sa.`created_dt` DESC; ',
+
   InsertSimpleAssignment:
     'INSERT INTO `simple_assignment` (`title`, `creator_id`) ' +
-    'SELECT CONCAT(DATE_FORMAT(CURDATE(), \'%Y-%m-%d\'), \' 생성내역\'), ?; '
+    'SELECT CONCAT( ' +
+    ' DATE_FORMAT(CURDATE(), \'%Y-%m-%d\'), ' +
+    ' \' 배정내역\', ' +
+    ' \'(\', ' +
+    ' (SELECT IFNULL(COUNT(*), 0) FROM `simple_assignment` WHERE DATE_FORMAT(`created_dt`, \'%Y-%m-%d\') = CURDATE()), ' +
+    ' \')\' ' +
+    '), ?; ',
+
+  DeleteSimpleAssignment:
+    'DELETE FROM `simple_assignment` WHERE `id` = ?; ',
+
+  UpdateSimpleAssignment: ({ id, step, logBindUserId, eduId, trainingEduId }) => {
+    let sql =
+    'UPDATE `simple_assignment` SET ' +
+    '       `updated_dt` = NOW() ';
+    if (step) {
+      sql += '       ,`activated_step` = (CASE WHEN ' + step + ' > IFNULL(`activated_step`, 0) THEN ' + step + ' ELSE IFNULL(`activated_step`, 0) END) ';
+    }
+    if (logBindUserId) {
+      sql += '       ,`log_bind_user_id` = ' + logBindUserId;
+    }
+    if (eduId) {
+      sql += '       ,`edu_id` = ' + eduId;
+    }
+    if (trainingEduId) {
+      sql += '       ,`training_edu_id` = ' + trainingEduId;
+    }
+    sql +=
+    ' WHERE `id` = ' + id + '; ';
+
+    return sql;
+  }
 };
 
 QUERY.COMMON = {

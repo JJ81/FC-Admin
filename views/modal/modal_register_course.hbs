@@ -1,41 +1,42 @@
 <!-- Create Employee -->
 <div class="modal fade" id="registerCourse" role="dialog">
-    <form class="modal-dialog" method="post" action="/course/register" id="frm_register_course">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">강의등록</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>* 강의명</label>
-                    <input type="text" class="form-control" name="course_name" placeholder="강의명" required autocomplete="off" />
-                </div>
-
-                <div class="form-group">
-                    <label>* 강의 소개</label>
-                    <textarea class="form-control course-desc editor" name="course_desc" placeholder="강의소개를 입력하세요."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>* 강사</label>
-                    <select name="teacher_id" class="form-control">
-                        {{#each teacher_list}}
-                        <option value="{{id}}">{{name}}</option>
-                        {{/each}}
-                    </select>
-                </div>
-
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
-                <button type="submit" class="btn btn-primary btn-set-agent-password-submit">등록</button>
-            </div>
+  <form class="modal-dialog" method="post" action="/course/register" id="frm_register_course">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">강의추가</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>* 강의명</label>
+          <input type="text" class="form-control" name="course_name" placeholder="강의명" required autocomplete="off" autofocus />
         </div>
-        <!-- /.modal-content -->
-    </form>
-    <!-- /.modal-dialog -->
+
+        <div class="form-group">
+          <label>* 강의 소개</label>
+          <textarea class="form-control course-desc editor" id="course_desc" name="course_desc" placeholder="강의소개를 입력하세요."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>* 강사</label>
+          <input type="text" class="form-control" name="teacher_name" placeholder="강사명" required autocomplete="off" />
+          <!--<select name="teacher_id" class="form-control">
+            {{#each teacher_list}}
+            <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </select>-->
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+        <button type="submit" class="btn btn-primary btn-set-agent-password-submit">등록</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </form>
+  <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
