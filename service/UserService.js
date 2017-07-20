@@ -242,7 +242,7 @@ UserService.createUserByExcel = function (_connection, _data, _callback) {
                 branch_id
               ],
                 function (err, data) {
-                  console.log(query.sql);
+                  // console.log(query.sql);
                   if (err) console.log(err);
                   // 다음 엑셀 데이터를 읽기 위해 카운터를 증가시킨다.
                   _count++;
