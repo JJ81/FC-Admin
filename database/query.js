@@ -239,6 +239,7 @@ QUERY.COURSE = {
     '     ,  c.teacher AS teacher_name, c.`created_dt`, 0 AS course_rate, 0 AS teacher_rate ' +
     '  FROM `course` AS c ' +
     ' WHERE c.`id` = ? ' +
+    '   AND c.`active` = 1 ' +
     ' ORDER BY c.`created_dt` DESC; ',
 
   // 강의평가를 조회한다.
@@ -638,16 +639,50 @@ QUERY.EDU = {
     ' WHERE `group_id` = ? ' +
     ' ORDER BY cg.`order` ASC, cg.`id` ASC ',
 
-  GetCourseListByEduId:
+  // 교육과정 id로 강의를 조회한다.
+  GetCourseListByEduId_X:
     'SELECT c.`id` AS course_id ' +
     '     , c.`name` AS course_name ' +
     '     , c.desc AS course_desc ' +
     '     , c.`teacher` AS teacher_name ' +
     '     , cg.`id` AS course_group_id ' +
     '     , cg.`group_id` AS course_group_key ' +
+    '     , 0 AS course_rate ' +
+    '     , 0 AS teacher_rate ' +
     '  FROM `course_group` AS cg ' +
     ' INNER JOIN `course` AS c ' +
     '    ON cg.`course_id` = c.`id` ' +
+    '   AND c.`active` = 1 ' +
+    ' INNER JOIN `edu` AS e ' +
+    '    ON e.`course_group_id` = cg.`group_id` ' +
+    '   AND e.`id` = ?; ',
+
+  GetCourseListByEduId:
+    'SELECT @course_id:= c.`id` AS course_id ' +
+    '     , c.`name` AS course_name ' +
+    '     , c.desc AS course_desc ' +
+    '     , @teacher_name:= c.`teacher` AS teacher_name ' +
+    '     , cg.`id` AS course_group_id ' +
+    '     , cg.`group_id` AS course_group_key ' +
+    '     , IFNULL(( ' +
+    '        SELECT ROUND(AVG(`course_rate`), 1) ' +
+    '          FROM `user_rating` ' +
+    '         WHERE course_id = @course_id ' +
+    '         GROUP BY `course_id` ' +
+    '       ), 0) AS course_rate ' +
+    '     , IFNULL(( ' +
+    '        SELECT ROUND(AVG(`teacher_rate`), 1) ' +
+    '          FROM `user_rating` AS ur ' +
+    '         INNER JOIN `users` AS u ' +
+    '            ON ur.`user_id` = u.`id` ' +
+    '           AND u.`fc_id` = ? ' +
+    '         WHERE ur.teacher_name = @teacher_name ' +
+    '         GROUP BY `teacher_name` ' +
+    '       ), 0) AS teacher_rate ' +
+    '  FROM `course_group` AS cg ' +
+    ' INNER JOIN `course` AS c ' +
+    '    ON cg.`course_id` = c.`id` ' +
+    '   AND c.`active` = 1 ' +
     ' INNER JOIN `edu` AS e ' +
     '    ON e.`course_group_id` = cg.`group_id` ' +
     '   AND e.`id` = ?; ',
@@ -2023,7 +2058,9 @@ QUERY.ASSIGNMENT = {
     '     , IFNULL(sa.`activated_step`, 0) AS activated_step ' +
     '     , a.`name` AS created_name ' +
     '  FROM `simple_assignment` AS sa ' +
-    ' INNER JOIN `admin` AS a ON sa.`creator_id` = a.`id` ' +
+    ' INNER JOIN `admin` AS a ' +
+    '    ON sa.`creator_id` = a.`id` ' +
+    '   AND a.`fc_id` = ? ' +
     ' ORDER BY sa.`created_dt` DESC; ',
 
   SelectSimpleAssignmentById:

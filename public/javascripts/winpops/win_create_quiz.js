@@ -59,7 +59,7 @@ function (Util) {
         // 퀴즈 등록시 호출된다.
         window.alert('퀴즈를 등록하였습니다.');
         // window.parent.opener.location.reload(); // 부모폼을 reload 한다.
-        window.parent.opener.winpop_listener();
+        window.parent.opener.winpop_listener(true);
         // _confirm = false;
         window.close();
       });

@@ -1,95 +1,67 @@
 <div class="row home_section">
-    <div class="col-xs-12">
-        <div class="box">
-            {{#if (isEquals loggedIn.role 'superadmin')}}
-            <div class="box-header">
-                <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#registerAdmin">
-                  <i class="fa fa-pencil-square-o"></i>
-                  관리자 등록
-                </button>
-            </div>
-            {{/if}}
-            <!-- /.box-header -->
-            <div class="box-body table-responsive">
-                <table id="table_admin" class="table no-margin table-bordered table-striped" width="100%">
-                    <thead>
-                    <tr>
-                        <th class="center">ID</th>
-                        <th class="center">이름</th>
-                        <th class="center">이메일</th>
-                        <th class="center">권한</th>
-                        <th class="center">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{#each list}}
-                    <tr>
-                      <td class="center">{{id}}</td>
-                      <td class="center">{{name}}</td>
-                      <td class="center">{{email}}</td>
-                      <td class="center">{{role}}</td>
-                      <td class="center">
-                        {{#ifCond (isEquals ../loggedIn.role 'supervisor') '||' (isEquals ../loggedIn.role 'admin')}}
-                        -
-                        {{else}}
-                        {{#if (isEquals canedit 'Y') }}
-                        <div class="btn-group">
-                          <button type="button" class="btn btn-warning btn-sm">수정</button>
-                          <button type="button" class="btn btn-warning dropdown-toggle btn-sm" data-toggle="dropdown">
+  <div class="col-xs-12">
+    <div class="box">
+      {{#if (isEquals loggedIn.role 'superadmin')}}
+      <div class="box-header">
+        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#registerAdmin">
+          <i class="fa fa-pencil-square-o"></i>
+          관리자 등록
+        </button>
+      </div>
+      {{/if}}
+      <div class="box-body table-responsive">
+        <table id="table_admin" class="table no-margin table-bordered table-striped" width="100%">
+          <thead>
+            <tr>
+              <th class="center">ID</th>
+              <th class="center">이름</th>
+              <th class="center">이메일</th>
+              <th class="center">권한</th>
+              <th class="center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each list}}
+            <tr>
+              <td class="center">{{id}}</td>
+              <td class="center">{{name}}</td>
+              <td class="center">{{email}}</td>
+              <td class="center">{{role}}</td>
+              <td class="center">
+                {{#ifCond (isEquals ../loggedIn.role 'supervisor') '||' (isEquals ../loggedIn.role 'admin')}} - {{else}} {{#if (isEquals
+                canedit 'Y') }}
+                <div class="btn-group dropup">
+                  <button type="button" class="btn btn-warning btn-sm">수정</button>
+                  <button type="button" class="btn btn-warning dropdown-toggle btn-sm" data-toggle="dropdown">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
-                          <ul class="dropdown-menu" role="menu">
-                            <li><a href="#"
-                                   data-user-id="{{id}}"
-                                   data-user-name="{{name}}"
-                                   data-user-email="{{email}}"
-                                   data-user-role="{{role}}"
-                                   class="btn-modify-admininfo"
-                                   data-toggle="modal"
-                                   data-target="#modifyAdmin">정보수정</a>
-                            </li>
-                            <li><a href="#"
-                                   data-user-id="{{id}}"
-                                   data-user-role="{{role}}"
-                                   data-toggle="modal"
-                                   data-target="#setAdminRole"
-                                   class="btn-modify-role">권한수정</a></li>
-                            <li><a href="#"
-                                   data-user-id="{{id}}"
-                                   data-toggle="modal"
-                                   data-target="#setEmployeePassword"
-                                   data-url="/administrator/password/reset"
-                                   class="btn-modify-password">비밀번호변경</a>
-                            </li>
-                            {{#if (isEquals role 'supervisor') }}
-                            <li><a href="#"
-                                   data-user-id="{{id}}"
-                                   data-toggle="modal"
-                                   data-target="#assignBranch"
-                                   class="btn-add-branch">지점배정</a>
-                            </li>
-                            {{/if}}
-                          </ul>
-                        </div>
-                        <button type="button" class="btn btn-danger btn-sm btn-delete-admin" data-user-id="{{id}}">삭제</button>
-                        {{else}}
-                        -
-                        {{/if}}
-                        {{/ifCond}}
-                      </td>
-                    </tr>
-                    {{/each}}
-                    </tbody>
-                </table>
-            </div>
-            <!-- /.box-body -->
-        </div>
-        <!-- /.box -->
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#" data-user-id="{{id}}" data-user-name="{{name}}" data-user-email="{{email}}" data-user-role="{{role}}"
+                        class="btn-modify-admininfo" data-toggle="modal" data-target="#modifyAdmin">정보수정</a>
+                    </li>
+                    <li><a href="#" data-user-id="{{id}}" data-user-role="{{role}}" data-toggle="modal" data-target="#setAdminRole"
+                        class="btn-modify-role">권한수정</a></li>
+                    <li><a href="#" data-user-id="{{id}}" data-toggle="modal" data-target="#setEmployeePassword" data-url="/administrator/password/reset"
+                        class="btn-modify-password">비밀번호변경</a>
+                    </li>
+                    {{#if (isEquals role 'supervisor') }}
+                    <li><a href="#" data-user-id="{{id}}" data-toggle="modal" data-target="#assignBranch" class="btn-add-branch">지점배정</a>
+                    </li>
+                    {{/if}}
+                  </ul>
+                </div>
+                <button type="button" class="btn btn-danger btn-sm btn-delete-admin" data-user-id="{{id}}">삭제</button> {{else}}
+                - {{/if}} {{/ifCond}}
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
     </div>
-    <!-- /.col -->
+  </div>
 </div>
-<!-- /.row -->
 
 {{> modal_register_admin}}
 {{> modal_modify_admin}}

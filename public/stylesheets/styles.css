@@ -297,13 +297,16 @@ table {
 }
 .profile-img
 {
-    width: 96px;
-    height: 96px;
+  width: 50%;
+  display: block;
+  margin: 0 auto;
+    /*width: 96px;
+    height: auto;
     margin: 0 auto 10px;
     display: block;
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
-    border-radius: 50%;
+    border-radius: 50%;*/
 }
 .need-help
 {
@@ -382,15 +385,22 @@ ul.list-group > a {
   border-top-color: #EEEEEE;
 }
 
-a.list-group-item {
-  overflow: hidden;
-  display: table;
+ul.session-content {
+  line-height: 35px;
 }
 
-a.list-group-item > div {
-  display: table-cell;
-  vertical-align: middle;
-  float:none;
+ul.session-content > li:hover {
+  background-color: #EEE;
+  cursor: pointer;
+}
+
+.panel-heading:hover {
+  background-color: #A2A1A3;
+}
+
+.panel-title a:hover {
+  color: #fff;
+  font-weight: bold;
 }
 /*# sourceMappingURL=styles.css.map */
 

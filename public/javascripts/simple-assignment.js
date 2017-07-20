@@ -2,7 +2,6 @@
 
 window.requirejs([
   'common',
-  'handlebars',
   'text!../course.template.html',
   'text!../session.template.html'
 ], function (Util, Handlebars, courseTemplate, sessionTemplate) {
@@ -23,79 +22,6 @@ window.requirejs([
   var courseView = Handlebars.compile(courseTemplate);
   var sessionView = Handlebars.compile(sessionTemplate);
   var windowOption = 'scrollbars=yes, toolbar=no, location=no, status=no, menubar=no, resizable=yes, width=1040, height=760, left=0, top=0';
-
-  window.winpop_listener = function (data) {
-    getSessionList();
-  };
-
-  function getSessionList () {
-    var selectedCourseId = $('.panel-group').data('selected-course-id');
-    var $selectedPanel = $('.panel[data-id=' + selectedCourseId + ']');
-
-    // if ($selectedPanel.data('metadata').sessionLoaded === undefined) {
-    window.axios.get('/course/' + selectedCourseId)
-    .then(function (res) {
-      if (res.data) {
-        console.log($selectedPanel.data('metadata'));
-        $selectedPanel.find('.session-content').html(getSessionView({ session_list: res.data.session_list }));
-        $selectedPanel.data('metadata').sessionLoaded = true;
-      }
-    })
-    .catch(function (err) {
-      console.log(err);
-    });
-    // }
-  }
-
-  function getCourseList () {
-    var eduId = $('#edu_id').val();
-
-    window.axios.get('/education/' + eduId + '/courses')
-    .then(function (res) {
-      if (res.data) {
-        // console.log(res.data);
-        $.each(res.data.edu_course_list, function (index, data) {
-          $('#course-list').append(getCourseView(data));
-          $('.panel').last().data('metadata', data);
-        });
-      }
-    })
-    .catch(function (err) {
-      console.log(err);
-    });
-  }
-
-  Handlebars.registerHelper('isEquals', function (a, b) {
-    return (a === b);
-  });
-
-  Handlebars.registerHelper('star-rating', function (rating) {
-    var _class = '';
-    if (rating === 0) {
-      _class = 'empty';
-    } else if (rating > 0 && rating < 1.4) {
-      _class = 'half';
-    } else if (rating > 0 && rating <= 1.4) {
-      _class = 'one';
-    } else if (rating >= 1.5 && rating < 2) {
-      _class = 'onehalf';
-    } else if (rating >= 2 && rating < 2.5) {
-      _class = 'two';
-    } else if (rating >= 2.5 && rating < 3) {
-      _class = 'twohalf';
-    } else if (rating >= 3 && rating < 3.5) {
-      _class = 'three';
-    } else if (rating >= 3.5 && rating < 4) {
-      _class = 'threehalf';
-    } else if (rating >= 4 && rating < 4.5) {
-      _class = 'four';
-    } else if (rating >= 4.5 && rating < 5) {
-      _class = 'fourhalf';
-    } else {
-      _class = ''; // full
-    }
-    return _class;
-  });
 
   $(function () {
     allWells.hide();
@@ -120,9 +46,71 @@ window.requirejs([
       getCourseList();
     }
 
-    // generateCourseView({ id: 1 });
-    // generateCourseView({ id: 2 });
+    $('.session-content').sortable();
+    $('.session-content').disableSelection();
+
+    // jquery-ui sortable 설정
+    // $('#course-list').sortable();
+    // $('#course').disableSelection();
+    $('.session-content').sortable({
+      connectWith: '.list-group-item'
+    }).disableSelection();
   });
+
+  /**
+   * 윈도우 팝업창에서의 저장 작업 완료 시 호출된다.
+   * @data: 갱신여부를 반환한다. true 일 경우 세션정보를 갱신한다.
+   */
+  window.winpop_listener = function (data) {
+    getSessionList(data);
+  };
+
+  /**
+   * 세션목록 조회
+   * 처음 강의를 열었을 때와 세션정보가 변경되는 경우만 세션 정보를 갱신한다.
+   */
+  function getSessionList (refresh) {
+    var selectedCourseId = $('.panel-group').data('selected-course-id');
+    var $selectedPanel = $('.panel[data-id=' + selectedCourseId + ']');
+
+    if ($selectedPanel.data('metadata').sessionLoaded === undefined || refresh) {
+      window.axios.get('/course/' + selectedCourseId)
+      .then(function (res) {
+        if (res.data) {
+          $selectedPanel.find('.session-content').html(getSessionView({ session_list: res.data.session_list }));
+          $selectedPanel.data('metadata').sessionLoaded = true;
+
+          $('.list-group').sortable({
+            connectWith: '.list-group-item'
+          }).disableSelection();
+        }
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+    }
+  }
+
+  /**
+   * 강의목록 조회
+   */
+  function getCourseList () {
+    var eduId = $('#edu_id').val();
+
+    window.axios.get('/education/' + eduId + '/courses')
+    .then(function (res) {
+      if (res.data) {
+        // console.log(res.data);
+        $.each(res.data.edu_course_list, function (index, data) {
+          $('#course-list').append(getCourseView(data));
+          $('.panel').last().data('metadata', data);
+        });
+      }
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+  }
 
   tableCheckAll.bind('click', function () {
     $(':checkbox', tableEmployee.rows().nodes()).prop('checked', this.checked);
@@ -477,7 +465,7 @@ window.requirejs([
    */
   function changeSessionOrder () {
     var promises = [];
-    var items = window.$('.session-list-items');
+    var items = window.$('.session-content');
 
     for (var index = 0; index < items.length; index++) {
       promises.push(makeSessionOrderChangeRequest(window.$(items[index])));
@@ -596,16 +584,16 @@ window.requirejs([
   // 비디오 생성하기
   $('.panel-group').on('click', '.btn-create-video', function (e) {
     e.preventDefault();
-    var courseId = window.$(this).attr('data-course-id');
+    var courseId = $(this).attr('data-course-id');
     Util.createWindowPopup('/course/create/video?course_id=' + courseId, 'Video', windowOption);
   });
   // 퀴즈 풀어보기
   $('.panel-group').on('click', '.btn-create-video', function (e) {
     e.preventDefault();
 
-    var quizGroupId = window.$(this).attr('data-quiz-group');
-    var dataTitle = window.$(this).attr('data-title');
-    var dataType = window.$(this).attr('data-type');
+    var quizGroupId = $(this).attr('data-quiz-group');
+    var dataTitle = $(this).attr('data-title');
+    var dataType = $(this).attr('data-type');
 
     Util.createWindowPopup('/course/quiz?id=' + quizGroupId + '&title=' + dataTitle + '&type=' + dataType, 'Quiz', windowOption);
   });
@@ -613,21 +601,21 @@ window.requirejs([
   $('.panel-group').on('click', '.btn-create-quiz', function (e) {
     e.preventDefault();
 
-    var courseId = window.$(this).attr('data-course-id');
+    var courseId = $(this).attr('data-course-id');
     Util.createWindowPopup('/course/create/quiz?course_id=' + courseId + '&type=QUIZ', 'Quiz', windowOption);
   });
   // 파이널테스트 생성하기
   $('.panel-group').on('click', '.btn-create-final', function (e) {
     e.preventDefault();
 
-    var courseId = window.$(this).attr('data-course-id');
+    var courseId = $(this).attr('data-course-id');
     Util.createWindowPopup('/course/create/quiz?course_id=' + courseId + '&type=FINAL', 'Final', windowOption);
   });
   // 파이널테스트 생성하기
   $('.panel-group').on('click', '.btn-create-checklist', function (e) {
     e.preventDefault();
 
-    var courseId = window.$(this).attr('data-course-id');
+    var courseId = $(this).attr('data-course-id');
     Util.createWindowPopup('/course/create/checklist?course_id=' + courseId + '&type=CHECK', 'Checklist', windowOption);
   });
   // 세션을 삭제한다.
@@ -638,38 +626,54 @@ window.requirejs([
       return false;
     }
 
+    var $self = $(this);
     var params = {};
-    params.course_list_id = window.$(this).parent('span').data('course-list-id');
-    params.course_list_type = window.$(this).parent('span').data('type');
+    params.course_list_id = $(this).parent('span').data('course-list-id');
+    params.course_list_type = $(this).parent('span').data('type');
 
-    var courselistType = window.$(this).parent('span').data('type');
+    var courselistType = $(this).parent('span').data('type');
     switch (courselistType) {
     case 'QUIZ':
     case 'FINAL':
-      params.quiz_group_id = window.$(this).data('quiz-group');
+      params.quiz_group_id = $(this).data('quiz-group');
       break;
     case 'VIDEO':
-      params.video_id = window.$(this).data('video-id');
+      params.video_id = $(this).data('video-id');
       break;
     case 'CHECKLIST':
-      params.checklist_group_id = window.$(this).data('checklist-group');
+      params.checklist_group_id = $(this).data('checklist-group');
       break;
     default:
       break;
     }
-    deleteSession(params);
+
+    window.axios.delete('/course/courselist',
+      {
+        params: params
+      })
+      .then(function (response) {
+        if (!response.data.success) {
+          window.alert('진행한 이력이 있어 세션을 삭제하지 못했습니다. 관리자에게 문의해주시기 바랍니다.');
+        } else {
+          window.alert('세션을 삭제하였습니다.');
+          $self.parents('li').remove();
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   });
 
   // 세션 수정하기
   $('.panel-group').on('click', '.btn-modify-session', function (e) {
     e.preventDefault();
 
-    var dataCourseId = window.$(this).parent('span').data('course-id');
-    var dataCourseListId = window.$(this).parent('span').data('course-list-id');
-    var dataVideoId = window.$(this).data('video-id');
-    var dataQuizGroupId = window.$(this).data('quiz-group');
-    var dataChecklistGroupId = window.$(this).data('checklist-group');
-    var dataType = window.$(this).parent('span').data('type'); // VIDEO/QUIZ/FINAL
+    var dataCourseId = $(this).parent('span').data('course-id');
+    var dataCourseListId = $(this).parent('span').data('course-list-id');
+    var dataVideoId = $(this).data('video-id');
+    var dataQuizGroupId = $(this).data('quiz-group');
+    var dataChecklistGroupId = $(this).data('checklist-group');
+    var dataType = $(this).parent('span').data('type'); // VIDEO/QUIZ/FINAL
 
     if (dataType === 'VIDEO') {
       Util.createWindowPopup('/course/modify/video?course_id=' + dataCourseId + '&course_list_id=' + dataCourseListId + '&video_id=' + dataVideoId, 'Video', windowOption);
@@ -678,6 +682,36 @@ window.requirejs([
     } else if (dataType === 'CHECKLIST') {
       Util.createWindowPopup('/course/modify/checklist?course_id=' + dataCourseId + '&course_list_id=' + dataCourseListId + '&type=' + dataType + '&checklist_group_id=' + dataChecklistGroupId, 'Checklist', windowOption);
     }
+  });
+
+  // 체크리스트 보기
+  $('.panel-group').on('click', '.btn-preview-checklist', function (e) {
+    e.preventDefault();
+    var courseListId = window.$(this).parent('span').data('course-list-id');
+    if (!courseListId) {
+      courseListId = window.$(this).data('id');
+    }
+    Util.createWindowPopup('/course/checklist?course_list_id=' + courseListId, 'Checklist', windowOption);
+  });
+
+  // 퀴즈 풀어보기
+  $('.panel-group').on('click', '.btn-solve-quiz', function (e) {
+    e.preventDefault();
+
+    var quizGroupId = window.$(this).attr('data-quiz-group');
+    var dataTitle = window.$(this).attr('data-title');
+    var dataType = window.$(this).attr('data-type');
+
+    Util.createWindowPopup('/course/quiz?id=' + quizGroupId + '&title=' + dataTitle + '&type=' + dataType, 'Quiz', windowOption);
+  });
+
+  // 비디오 보기
+  $('.panel-group').on('click', '.btn-watch-video', function (e) {
+    e.preventDefault();
+
+    // 비디오 아이디를 추출
+    var videoId = window.$(this).attr('data-video-id');
+    Util.createWindowPopup('/course/video?id=' + videoId, 'Video', windowOption);
   });
 
   $('.panel-group').on('click', '.btn-delete-course', function () {

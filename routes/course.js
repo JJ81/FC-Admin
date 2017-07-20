@@ -56,10 +56,6 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   });
 });
 
-router.get('/:id', util.isAuthenticated, (req, res, next) => {
-  return res.send(req.data);
-});
-
 /**
  * 강의/강사등록 상세페이지
  */
@@ -369,7 +365,7 @@ router.post('/modify/teacher', util.isAuthenticated, (req, res, next) => {
 /**
  * 강의/강사등록 상세페이지 > 등록된 비디오 보기
  */
-router.get('/video', util.isAuthenticated, (req, res, next) => {
+router.get('/video', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   const { id: videoId } = req.query;
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -382,7 +378,7 @@ router.get('/video', util.isAuthenticated, (req, res, next) => {
         } else {
           res.render('winpops/win_show_video', {
             current_path: 'winpop',
-            title: global.PROJ_TITLE + 'Video',
+            title: '비디오 미리보기',
             loggedIn: req.user,
             video: rows
           });
@@ -485,7 +481,7 @@ router.post('/create/video', util.isAuthenticated, (req, res, next) => {
 /**
  * 강의/강사등록 상세페이지 > 비디오 수정 팝업
  */
-router.get('/modify/video', util.isAuthenticated, (req, res, next) => {
+router.get('/modify/video', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   const _params = req.query;
 
   pool.getConnection((err, connection) => {
@@ -493,14 +489,14 @@ router.get('/modify/video', util.isAuthenticated, (req, res, next) => {
     connection.query(QUERY.COURSE.GetVideoDataById,
       [ _params.video_id ],
       (err, data) => {
-        console.log(data[0]);
+        // console.log(data[0]);
         if (err) {
           console.error(err);
         } else {
           res.render('winpops/win_modify_video', {
             current_path: 'winpop',
             module_type: 'modify_video',
-            title: global.PROJ_TITLE + 'Modify Video',
+            title: '비디오 수정',
             loggedIn: req.user,
             video: data[0],
             course_id: _params.course_id,
@@ -533,7 +529,7 @@ router.put('/modify/video', util.isAuthenticated, (req, res, next) => {
         // 세션 수정
         (callback) => {
           _query = connection.query(QUERY.COURSE.UpdateSessionTitleById, [_inputs.video_name, _inputs.course_list_id], (err, data) => {
-            console.log(_query.sql);
+            //console.log(_query.sql);
             callback(err, data);
           });
         },
@@ -547,7 +543,7 @@ router.put('/modify/video', util.isAuthenticated, (req, res, next) => {
               _inputs.video_id
             ],
             (err, data) => {
-              console.log(_query.sql);
+              //console.log(_query.sql);
               callback(err, data);
             }
           );
@@ -650,7 +646,7 @@ router.post('/quiz/courselist', util.isAuthenticated, (req, res, next) => {
     (err, data) => {
       connection.release();
       if (err) {
-        console.log(err);
+        //console.log(err);
         throw err;
       }
       inputs.course_list_id = data.insertId;
@@ -818,7 +814,7 @@ router.put('/quiz', util.isAuthenticated, (req, res, next) => {
                 inputs.quiz.quiz_id
               ],
               (err, data) => {
-                console.log(_query.sql);
+                //console.log(_query.sql);
                 callback(err, data);
               }
             );
@@ -831,7 +827,7 @@ router.put('/quiz', util.isAuthenticated, (req, res, next) => {
                 inputs.quiz.quiz_id
               ],
               (err, data) => {
-                console.log(_query.sql);
+                //console.log(_query.sql);
                 callback(err, data);
               }
             );
@@ -848,7 +844,7 @@ router.put('/quiz', util.isAuthenticated, (req, res, next) => {
                 inputs.quiz.order
               ],
               (err, data) => {
-                console.log(_query.sql);
+                //console.log(_query.sql);
                 callback(err, data);
               }
             );
@@ -1034,7 +1030,7 @@ router.delete('/quiz/option', util.isAuthenticated, (req, res, next) => {
           // 1.퀴즈 보기(quiz_option) 삭제
           (callback) => {
             query = connection.query(QUERY.COURSE.DeleteQuizOptionById, [inputs.option_id], (err, data) => {
-              console.log(query.sql);
+              //console.log(query.sql);
               callback(err, data);
             });
           }
@@ -1277,7 +1273,7 @@ router.delete('/checklist', util.isAuthenticated, (req, res, next) => {
  */
 router.put('/courselist', util.isAuthenticated, (req, res, next) => {
   const inputs = req.body;
-  console.log(inputs);
+  //console.log(inputs);
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -1396,6 +1392,10 @@ router.delete('/courselist', util.isAuthenticated, (req, res, next) => {
       );
     });
   });
+});
+
+router.get('/:id', util.isAuthenticated, (req, res, next) => {
+  return res.send(req.data);
 });
 
 module.exports = router;

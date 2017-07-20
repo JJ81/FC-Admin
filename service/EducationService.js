@@ -256,6 +256,9 @@ EducationService.create = (req, res, next) => {
   });
 };
 
+/**
+ * education/:id/courses
+ */
 EducationService.getCourseList = (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -263,8 +266,10 @@ EducationService.getCourseList = (req, res, next) => {
       [
         // 교육과정의 강의목록을 조회한다.
         (callback) => {
-          connection.query(QUERY.EDU.GetCourseListByEduId, [ req.params.id ], (err, data) => {
-            callback(err, data);
+          connection.query(QUERY.EDU.GetCourseListByEduId,
+          [ req.user.fc_id, req.params.id ],
+          (err, rows) => {
+            callback(err, rows);
           });
         }
         // 전체 강의목록을 조회한다.

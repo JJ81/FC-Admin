@@ -2,44 +2,43 @@ const QUERY = require('../database/query');
 const async = require('async');
 const pool = require('../commons/db_conn_pool');
 const util = require('../util/util');
-const EducationService = require('./EducationService');
 var CourseService = {};
 
 exports.getDetailsByCourseId = (req, res, next, courseId) => {
-  var teacherName;
+  // var teacherName;
   pool.getConnection((err, connection) => {
     if (err) throw err;
     async.series([
       // 강의정보 조회
-      callback => {
-        connection.query(QUERY.COURSE.GetCourseById,
-          [ courseId ],
-          (err, row) => {
-            if (row.length > 0) {
-              teacherName = row.teacher_name;
-            }
-            callback(err, row);
-          }
-        );
-      },
+      // callback => {
+      //   connection.query(QUERY.COURSE.GetCourseById,
+      //     [ courseId ],
+      //     (err, row) => {
+      //       if (row.length > 0) {
+      //         teacherName = row.teacher_name;
+      //       }
+      //       callback(err, row);
+      //     }
+      //   );
+      // },
       // 강의평가 정보 조회
-      callback => {
-        connection.query(QUERY.COURSE.GetStarRatingByCourseId,
-          [ courseId ],
-          (err, row) => {
-            callback(err, row);
-          }
-        );
-      },
+      // callback => {
+      //   connection.query(QUERY.COURSE.GetStarRatingByCourseId,
+      //     [ courseId ],
+      //     (err, row) => {
+      //       callback(err, row);
+      //     }
+      //   );
+      // },
       // 강사평가 정보를 조회한다.
-      callback => {
-        connection.query(QUERY.COURSE.GetStarRatingByTeacherName,
-          [ req.user.fc_id, teacherName ],
-          (err, row) => {
-            callback(err, row);
-          }
-        );
-      },
+      // callback => {
+      //   connection.query(QUERY.COURSE.GetStarRatingByTeacherName,
+      //     [ req.user.fc_id, teacherName ],
+      //     (err, row) => {
+      //       callback(err, row);
+      //     }
+      //   );
+      // },
       // 강의 세션목록 조회
       callback => {
         connection.query(QUERY.COURSE.GetSessionListByCourseId,
@@ -50,18 +49,17 @@ exports.getDetailsByCourseId = (req, res, next, courseId) => {
         );
       }],
       (err, results) => {
-        console.log(results[2]);
         connection.release();
         if (err) {
           throw new Error(err);
         } else {
           req.data = {
-            course_name: results[0][0].course_name,
-            course_desc: results[0][0].course_desc,
-            teacher_name: results[0][0].teacher_name,
-            course_rate: results[1].length === 0 ? 0 : results[1][0].rate,
-            teacher_rate: results[2].length === 0 ? 0 : results[2][0].rate,
-            session_list: results[3]
+            // course_name: results[0][0].course_name,
+            // course_desc: results[0][0].course_desc,
+            // teacher_name: results[0][0].teacher_name,
+            // course_rate: results[1].length === 0 ? 0 : results[1][0].rate,
+            // teacher_rate: results[2].length === 0 ? 0 : results[2][0].rate,
+            session_list: results[0]
           };
           return next();
         }

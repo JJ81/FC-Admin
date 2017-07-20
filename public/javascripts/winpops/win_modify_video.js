@@ -53,7 +53,7 @@ requirejs([
       success: function (response) {
         alert('비디오를 저장하였습니다.');
         // window.parent.opener.location.reload(); // 부모폼을 reload 한다.
-        window.parent.opener.winpop_listener();
+        window.parent.opener.winpop_listener(true);
         _confirm = false;
         window.close();
       }

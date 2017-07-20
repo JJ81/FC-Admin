@@ -202,7 +202,7 @@ function (Util) {
 
   const closeWindow = () => {
     // window.parent.opener.location.reload();
-    window.parent.opener.winpop_listener();
+    window.parent.opener.winpop_listener(true);
     window.close();
   };
 });

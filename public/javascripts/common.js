@@ -10,6 +10,7 @@ window.define(
     'moment',
     'pace',
     'lodash',
+    'handlebars',
     'tinymce',
     'bootstrap',
     'bootstrap_datetimepicker',
@@ -28,7 +29,7 @@ window.define(
     'es6-promise'
     // 'smoothstate'
   ],
-function ($, jszip, axios, moment, pace, _) {
+function ($, jszip, axios, moment, pace, _, Handlebars) {
   // window.alert(_.VERSION);
   pace.start({
     document: false
@@ -55,7 +56,39 @@ function ($, jszip, axios, moment, pace, _) {
     $('#frm_set_employee_password').attr('action', $(this).attr('data-url'));
   });
 
-  tinymce.init({
+  Handlebars.registerHelper('isEquals', function (a, b) {
+    return (a === b);
+  });
+
+  Handlebars.registerHelper('star-rating', function (rating) {
+    var _class = '';
+    if (rating === 0) {
+      _class = 'empty';
+    } else if (rating > 0 && rating < 1.4) {
+      _class = 'half';
+    } else if (rating > 0 && rating <= 1.4) {
+      _class = 'one';
+    } else if (rating >= 1.5 && rating < 2) {
+      _class = 'onehalf';
+    } else if (rating >= 2 && rating < 2.5) {
+      _class = 'two';
+    } else if (rating >= 2.5 && rating < 3) {
+      _class = 'twohalf';
+    } else if (rating >= 3 && rating < 3.5) {
+      _class = 'three';
+    } else if (rating >= 3.5 && rating < 4) {
+      _class = 'threehalf';
+    } else if (rating >= 4 && rating < 4.5) {
+      _class = 'four';
+    } else if (rating >= 4.5 && rating < 5) {
+      _class = 'fourhalf';
+    } else {
+      _class = ''; // full
+    }
+    return _class;
+  });
+
+  window.tinymce.init({
     // selector: 'textarea',
     mode: 'specific_textareas',
     editor_selector: 'editor',
