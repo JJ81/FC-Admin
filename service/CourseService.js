@@ -4,6 +4,9 @@ const pool = require('../commons/db_conn_pool');
 const util = require('../util/util');
 var CourseService = {};
 
+/**
+ * /course/:id
+ */
 exports.getDetailsByCourseId = (req, res, next, courseId) => {
   // var teacherName;
   pool.getConnection((err, connection) => {

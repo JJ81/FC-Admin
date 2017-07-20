@@ -56,6 +56,7 @@ function ($, jszip, axios, moment, pace, _, Handlebars) {
     $('#frm_set_employee_password').attr('action', $(this).attr('data-url'));
   });
 
+  window.Handlebars = Handlebars;
   Handlebars.registerHelper('isEquals', function (a, b) {
     return (a === b);
   });

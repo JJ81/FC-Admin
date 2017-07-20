@@ -4,7 +4,7 @@ window.requirejs([
   'common',
   'text!../course.template.html',
   'text!../session.template.html'
-], function (Util, Handlebars, courseTemplate, sessionTemplate) {
+], function (Util, courseTemplate, sessionTemplate) {
   var $ = undefined || window.$;
   var _ = undefined || window._;
   var assignmentId = $('#assignment_id').val();
@@ -19,8 +19,8 @@ window.requirejs([
     ]});
   var btnDeleteSimpleAssign = $('#js-delete-simple-assign');
   var btnSaveSimpleAssign = $('#js-save-simple-assign');
-  var courseView = Handlebars.compile(courseTemplate);
-  var sessionView = Handlebars.compile(sessionTemplate);
+  var courseView = window.Handlebars.compile(courseTemplate);
+  var sessionView = window.Handlebars.compile(sessionTemplate);
   var windowOption = 'scrollbars=yes, toolbar=no, location=no, status=no, menubar=no, resizable=yes, width=1040, height=760, left=0, top=0';
 
   $(function () {
@@ -52,9 +52,9 @@ window.requirejs([
     // jquery-ui sortable 설정
     // $('#course-list').sortable();
     // $('#course').disableSelection();
-    $('.session-content').sortable({
-      connectWith: '.list-group-item'
-    }).disableSelection();
+    // $('.session-content').sortable({
+    //   connectWith: '.list-group-item'
+    // }).disableSelection();
   });
 
   /**
@@ -81,7 +81,17 @@ window.requirejs([
           $selectedPanel.data('metadata').sessionLoaded = true;
 
           $('.list-group').sortable({
-            connectWith: '.list-group-item'
+            connectWith: '.list-group-item',
+            start: function (e, ui) {
+              $(this).attr('data-previndex', ui.item.index());
+            },
+            update: function (e, ui) {
+              // var newIndex = ui.item.index();
+              // var oldIndex = window.$(this).attr('data-previndex');
+              // window.console.log('newIndex : ' + newIndex + ' oldIndex : ' + oldIndex);
+              $(this).removeAttr('data-previndex');
+              changeSessionOrder();
+            }
           }).disableSelection();
         }
       })
@@ -453,8 +463,8 @@ window.requirejs([
       method: 'put',
       url: '/course/courselist',
       data: {
-        title: session.children().children('a').data('title'),
-        course_list_id: session.children().children('a').data('id'),
+        title: session.children('a').data('title'),
+        course_list_id: session.children('a').data('id'),
         course_list_order: session.index()
       }
     });
@@ -465,7 +475,7 @@ window.requirejs([
    */
   function changeSessionOrder () {
     var promises = [];
-    var items = window.$('.session-content');
+    var items = window.$('.session-content > .list-group-item');
 
     for (var index = 0; index < items.length; index++) {
       promises.push(makeSessionOrderChangeRequest(window.$(items[index])));
@@ -473,6 +483,7 @@ window.requirejs([
 
     window.axios.all(promises).then(function (results) {
       results.forEach(function (response) {
+        console.log(response);
       });
     });
   }

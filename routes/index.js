@@ -201,7 +201,7 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
                 }
 
                 // 잘못된 이메일 형식
-                console.log(loopData.email);
+                // console.log(loopData.email);
                 if (loopData.email !== '' && !util.isValidEmail(loopData.email)) {
                   loopData['error'] = true;
                   loopData['error_msg'].push('잘못된 이메일 형식');
