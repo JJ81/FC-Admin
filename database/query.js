@@ -2067,7 +2067,7 @@ QUERY.ASSIGNMENT = {
   },
 
   SelectSimpleAssignments:
-    'SELECT sa.`id`, sa.`title`, DATE_FORMAT(sa.`created_dt`, \'%Y-%m-%d\') AS created_dt ' +
+    'SELECT sa.`id`, sa.`title`, sa.`created_dt` ' +
     '     , IFNULL(sa.`activated_step`, 0) AS activated_step ' +
     '     , a.`name` AS created_name ' +
     '  FROM `simple_assignment` AS sa ' +

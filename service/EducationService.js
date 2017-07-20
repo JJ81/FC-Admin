@@ -196,7 +196,7 @@ EducationService.create = (req, res, next) => {
                 eduId: eduId,
                 trainingEduId: trainingEduId,
                 step: 3
-              }, function () {
+              }, () => {
                 callback(null, null);
               });
             } else {
@@ -244,6 +244,7 @@ EducationService.create = (req, res, next) => {
                 // success code
                 return res.send({
                   success: true,
+                  eduId: eduId,
                   trainingEduId: trainingEduId,
                   courseGroupId: courseGroupId
                 });

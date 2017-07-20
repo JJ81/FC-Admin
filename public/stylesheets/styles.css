@@ -402,5 +402,9 @@ ul.session-content > li:hover {
   color: #fff;
   font-weight: bold;
 }
+
+.mce-widget.mce-tooltip {
+  display: none !important;
+}
 /*# sourceMappingURL=styles.css.map */
 

@@ -81,6 +81,7 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
             title: '강의관리',
             menu_group: 'education',
             loggedIn: req.user,
+            course_id: results[0][0].course_id,
             course_name: results[0][0].course_name,
             course_desc: results[0][0].course_desc,
             teacher_name: results[0][0].teacher_name,

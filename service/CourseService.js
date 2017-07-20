@@ -372,6 +372,7 @@ exports.create = (req, res, next) => {
             eduId
           ],
           (err, row) => {
+            console.log(row);
             courseGroupId = row[0].course_group_key;
             callback(err, null);
           }

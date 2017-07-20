@@ -272,7 +272,7 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
     const uploadType = fields.upload_type;
     let filePath;
     let logBindUserId;
-    let employeeIds;
+    // let employeeIds;
     let requestData = {
       admin_id: req.user.admin_id,
       upload_type: fields.upload_type,
@@ -337,9 +337,9 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
               if (result.insertId) {
                 logBindUserId = result.insertId;
               }
-              if (result.employeeIds) {
-                employeeIds = result.employeeIds.join(',');
-              }
+              // if (result.employeeIds) {
+              //   employeeIds = result.employeeIds.join(',');
+              // }
               callback(err, result);
             });
           },
@@ -385,7 +385,7 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
           } else {
             res.send({
               success: true,
-              employeeIds: employeeIds,
+              // employeeIds: employeeIds,
               logBindUserId: logBindUserId
             });
           }

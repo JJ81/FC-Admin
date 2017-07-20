@@ -20,6 +20,12 @@ AssignmentService.deactivateEduAssignmentById = (_id, _callback) => {
   });
 };
 
+AssignmentService.updateProgress = (req, res, next) => {
+  AssignmentService.updateSimpleAssignment(req.body, () => {
+    return res.sendStatus(200);
+  });
+};
+
 /**
  * log_assign_edu 의 start_dt, end_dt 를 수정한다.
  */
@@ -121,7 +127,6 @@ AssignmentService.create = (_connection, _data, _callback) => {
                         return;
                       });
                     } else {
-                      console.log('commit success!');
                       _callback(null, { insertId: result.insertId, employeeIds: userIds });
                     }
                   });
@@ -188,7 +193,7 @@ AssignmentService.create = (_connection, _data, _callback) => {
                       return;
                     });
                   } else {
-                    console.log('commit success!');
+                    // console.log('commit success!');
                     _callback(null, result);
                   }
                 });
@@ -218,7 +223,7 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
 
   async.series([
     callback => {
-      // training_edu 테이블에 입력
+      console.log('AssignmentService.allocate (0)');
       _connection.query(QUERY.EDU.InsertTrainingEdu,
         [ eduId, userData.admin_id ],
         (err, data) => {
@@ -230,6 +235,7 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
       );
     },
     callback => {
+      console.log('AssignmentService.allocate (1)');
       // training_user 테이블에 입력
       _connection.query(QUERY.EDU.InsertUserIdInTrainingUsers,
         [
@@ -242,6 +248,7 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
       );
     },
     callback => {
+      console.log('AssignmentService.allocate (2)');
       // log_assign_edu 테이블에 입력
       _connection.query(QUERY.HISTORY.InsertIntoLogAssignEdu,
         [
@@ -331,7 +338,6 @@ AssignmentService.getSimpleAssignmentList = (req, res, next) => {
           console.error(err);
           throw new Error(err);
         } else {
-          console.log(results[0]);
           return res.render('simple-assignment', {
             title: '교육개설',
             current_path: 'SimpleAssignment',

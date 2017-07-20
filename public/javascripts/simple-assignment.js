@@ -19,6 +19,8 @@ window.requirejs([
     ]});
   var btnDeleteSimpleAssign = $('#js-delete-simple-assign');
   var btnSaveSimpleAssign = $('#js-save-simple-assign');
+  var btnSendMessage = $('.btn-send-message');
+  var messageInput = $('.message');
   var courseView = window.Handlebars.compile(courseTemplate);
   var sessionView = window.Handlebars.compile(sessionTemplate);
   var windowOption = 'scrollbars=yes, toolbar=no, location=no, status=no, menubar=no, resizable=yes, width=1040, height=760, left=0, top=0';
@@ -46,16 +48,17 @@ window.requirejs([
       getCourseList();
     }
 
-    $('.session-content').sortable();
-    $('.session-content').disableSelection();
-
-    // jquery-ui sortable 설정
-    // $('#course-list').sortable();
-    // $('#course').disableSelection();
-    // $('.session-content').sortable({
-    //   connectWith: '.list-group-item'
-    // }).disableSelection();
+    // 교육대상자 id 조회
+    setEmployeeIds();
   });
+
+  // 교육대상자 id 조회
+  function setEmployeeIds () {
+    var employeeIds = $(':checkbox:checked', tableEmployee.rows({filter: 'applied'}).nodes()).map(function () {
+      return $(this).data('id');
+    }).get().join(', ');
+    $('input[name=\'upload_employee_ids\']').val(employeeIds);
+  }
 
   /**
    * 윈도우 팝업창에서의 저장 작업 완료 시 호출된다.
@@ -110,7 +113,6 @@ window.requirejs([
     window.axios.get('/education/' + eduId + '/courses')
     .then(function (res) {
       if (res.data) {
-        // console.log(res.data);
         $.each(res.data.edu_course_list, function (index, data) {
           $('#course-list').append(getCourseView(data));
           $('.panel').last().data('metadata', data);
@@ -218,7 +220,7 @@ window.requirejs([
       id: assignmentId
     })
     .then(function (response) {
-      // console.log(response);
+      activatedStep(step);
       return true;
     })
     .catch(function (error) {
@@ -241,10 +243,9 @@ window.requirejs([
 
     window.axios.post('/assignment/upload', formData)
       .then(function (res) {
-        // console.log(res.data.employeeIds);
-        if (res.data.employeeIds) {
-          $('input[name=\'upload_employee_ids\']').val(res.data.employeeIds);
-          $('input[name=\'log_bind_user_id\']').val(res.data.logBindUserId);
+        if (res.data) {
+          // $('input[name=\'upload_employee_ids\']').val(res.data.employeeIds);
+          $('#log_bind_user_id').val(res.data.logBindUserId);
         }
       })
       .catch(function (error) {
@@ -277,8 +278,9 @@ window.requirejs([
     window.axios.post('/education', data)
     .then(function (res) {
       // console.log(res);
-      if (res.data.trainingEduId) {
+      if (res.data) {
         $('#training_edu_id').val(res.data.trainingEduId);
+        $('#edu_id').val(res.data.eduId);
       }
     })
     .catch(function (err) {
@@ -516,7 +518,11 @@ window.requirejs([
     window.axios.post('/course', data)
     .then(function (res) {
       if (res.data) {
-        // console.log(res.data);
+        if ($('#course-list').children().length === 0) {
+          var currSelector = 'ul.setup-panel li:eq(3)'; // 4. 메세지
+          $(currSelector).removeClass('disabled');
+          updateProgress(4);
+        }
         $('#course-list').append(getCourseView(res.data));
         $('.panel').last().data('metadata', res.data);
       }
@@ -739,5 +745,65 @@ window.requirejs([
         console.log(error);
       });
     }
+  });
+
+  btnSendMessage.on('click', function (e) {
+    e.preventDefault();
+
+    var currentTabId = $('ul.select-employee li.active').children().attr('id');
+    var checkedEmployeeIds;
+    switch (currentTabId) {
+    case 'employee':
+      checkedEmployeeIds = window.$(':checkbox:checked',
+        tableEmployee.rows({filter: 'applied'}).nodes()).map(
+          function () {
+            return tableEmployee.row(window.$(this).parents('tr')).data()[4];
+          }
+        ).get().join(',');
+      break;
+    case 'employee-assigned':
+      // checkedEmployeeIds = window.$(':checkbox:checked',
+      //   tableAssignedEmployee.rows({filter: 'applied'}).nodes()).map(
+      //     function () {
+      //       return tableAssignedEmployee.row(window.$(this).parents('tr')).data()['user_phone'];
+      //     }
+      //   ).get().join(',');
+      break;
+    default:
+      break;
+    }
+
+    if (!checkedEmployeeIds) {
+      window.alert('직원을 선택하세요.');
+      return false;
+    }
+
+    var message = messageInput.val().trim();
+    if (message === '') {
+      window.alert('메세지를 입력하세요.');
+      messageInput.focus();
+      return false;
+    }
+
+    if (!window.confirm('메세지를 보내시겠습니까?')) {
+      return false;
+    }
+
+    window.axios({
+      method: 'post',
+      url: '/api/v1/sms/send',
+      data: {
+        phones: checkedEmployeeIds,
+        msg: message
+      }
+    })
+    .then(
+      function (res) {
+        if (res.data.success === true) {
+          window.alert('메세지를 전송하였습니다.');
+        } else {
+          window.alert('알 수 없는 오류가 발생했습니다. 잠시 후에 다시 시도해주세요.');
+        }
+      });
   });
 });

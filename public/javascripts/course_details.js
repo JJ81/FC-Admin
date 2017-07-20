@@ -64,7 +64,7 @@ function (Util) {
     }
 
     var params = {
-      course_id: window.$(this).data('course-id')
+      id: window.$(this).data('course-id')
     };
 
     window.axios.delete('/course/deactivate',

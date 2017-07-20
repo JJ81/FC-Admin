@@ -17,8 +17,8 @@ router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
       (callback) => {
         connection.query(QUERY.EMPLOYEE.GetEmployeeListByAssignUserId,
           [ req.assignment.log_bind_user_id, req.user.fc_id ],
-          (err, data) => {
-            callback(err, data);
+          (err, rows) => {
+            callback(err, rows);
           });
       }
     ],
@@ -41,7 +41,7 @@ router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
 });
 
 router.post('/', util.isAuthenticated, AssignmentService.createSimpleAssignment);
-// router.post('/progress', util.isAuthenticated, AssignmentService.updateProgress);
+router.post('/progress', util.isAuthenticated, AssignmentService.updateProgress);
 router.delete('/', util.isAuthenticated, AssignmentService.deleteSimpleAssignment);
 
 module.exports = router;
