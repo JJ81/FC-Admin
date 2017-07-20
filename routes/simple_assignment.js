@@ -28,7 +28,7 @@ router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
         console.error(err);
       } else {
         res.render('simple-assignment-detail', {
-          title: '교육 간편배정',
+          title: '교육개설',
           current_path: 'SimpleAssignment',
           menu_group: 'education',
           loggedIn: req.user,

@@ -1,281 +1,184 @@
 <div class="row home_section">
-    <div class="col-xs-12">
-        <div class="box">
-            <div class="box-header with-border">
-                <a href="/course" class="btn btn-default">
-                  <i class="fa fa-list"></i> &nbsp;
-                  목록으로
-                </a>
-                <div class="pull-right">
-                  <button class="btn btn-primary" data-toggle="modal" data-target="#modifyCourse">
-                    <i class="fa fa-pencil"></i> &nbsp;
-                    수정
-                  </button>
-                  <button class="btn btn-danger" id="btnDeleteCourse" data-course-id="{{course_id}}">
-                    <i class="fa fa-times"></i> &nbsp;
-                    삭제
-                  </button>
-                </div>
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <a href="/course" class="btn btn-default">
+          <i class="fa fa-list"></i> &nbsp; 목록으로
+        </a>
+      </div>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="form-group">
+              <label>강의제목</label>
+              <p>{{course_name}}</p>
             </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                {{#each list}}
-                <div class="course-info">
-                    <h2 class="course-title">{{name}}</h2>
-                    <p class="star-rating-area">
-                        <div class="star-rating">
-                            강의 평점 :
-                            {{#each ../rating}}
-                            <span class="ratings {{star-rating rate}}"></span> ( {{rate}} )
-                            {{/each}}
-                        </div>
-                    </p>
-                    <span class="author">
-                        강사명 : {{teacher}}
-                    </span>
-
-                    <div class="course-desc-preview">
-                        <br>
-                        <span>{{{desc}}}</span> <!-- 강의 설명 부분에 개행 처리가 들어가지 않았다. -->
-                    </div>
-                </div>
-                {{/each}}
+            <div class="form-group">
+              <label>강의설명</label>
+              <p>{{{course_desc}}}</p>
             </div>
-            <!-- /.box-body -->
-            <div class="box-footer"></div>
+            <div class="form-group">
+              <label>강의 평점</label>
+              <p><span class="ratings {{star-rating course_rate}}"></span> ( {{course_rate}} )</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label>강사</label>
+              <p>{{teacher_name}}</p>
+            </div>
+            <div class="form-group">
+              <label>강사 평점</label>
+              <p><span class="ratings {{star-rating teacher_rate}}"></span> ( {{teacher_rate}} )</p>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-warning" data-toggle="modal" data-target="#modifyCourse"><i class="fa fa-pencil"></i> 수정하기</button>
+              <button class="btn btn-danger btn-delete-course" id="btnDeleteCourse"><i class="fa fa-remove"></i> 삭제하기</button>
+            </div>
+          </div>
         </div>
-
-        <div class="box">
-            <div class="box-header with-border">
-                <h3>
-                    이 강좌의 커리큘럼
-                    <span class="pull-right">
-                        <button class="btn btn-sm btn-default btn-create-video" data-course-id="{{course_id}}">
-                          <i class="fa fa-video-camera"></i> &nbsp;
-                          비디오 등록
-                        </button>
-                        <button class="btn btn-sm btn-default btn-create-quiz" data-course-id="{{course_id}}">
-                          <i class="fa fa-quora"></i> &nbsp;
-                          퀴즈 등록
-                        </button>
-                        <button class="btn btn-sm btn-default btn-create-final" data-course-id="{{course_id}}">
-                          <i class="fa fa-sticky-note-o"></i> &nbsp;
-                          파이널테스트 등록
-                        </button>
-                        <button class="btn btn-sm btn-default btn-create-checklist" data-course-id="{{course_id}}">
-                          <i class="fa fa-calendar-check-o"></i> &nbsp;
-                          체크리스트 등록
-                        </button>
-                      </span>
-                </h3>
-            </div>
-            <div class="box-body">
-                <div class="course-session">
-
-                    <!--강의에 속한 세션 항목 나열과 선택시 볼 수 있어야 한다.-->
-                    {{#if session_list}}
-                        {{#each session_list}}
-                            <ul class="session-list">
-                            {{#if (isEquals type 'QUIZ')}}
-                                <li>
-                                    <span class="handle ui-sortable-handle">
-                                        <i class="fa fa-ellipsis-v"></i>
-                                        <i class="fa fa-ellipsis-v"></i>
-                                    </span>
-                                    <a href="#quiz" class="btn-solve-quiz"
-                                        data-quiz-group="{{quiz_group_id}}"
-                                        data-type="QUIZ"
-                                        data-title="{{title}}"
-                                        data-order="{{order}}"
-                                        data-id="{{id}}"
-                                    >
-                                        <i class="fa fa-quora"></i> &nbsp;
-                                        {{title}}
-                                    </a>
-                                    <span class="pull-right"
-                                        data-course-id="{{course_id}}"
-                                        data-course-list-id="{{id}}"
-                                        data-type="{{type}}"
-                                    >
-                                        <a href="#view" class="btn btn-sm btn-session-detail text-green btn-solve-quiz"
-                                            data-quiz-group="{{quiz_group_id}}"
-                                            data-type="QUIZ"
-                                            data-title="{{title}}">
-                                            <i class="fa fa-eye"></i>
-                                            보기
-                                        </a>
-                                        <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-quiz"
-                                            data-id="{{id}}"
-                                            data-quiz-group="{{quiz_group_id}}"
-                                        >
-                                            <i class="fa fa-pencil"></i> &nbsp; 수정
-                                        </a>
-                                        <a href="#delete" class="btn btn-sm text-red btn-delete-session btn-delete-session"
-                                            data-id="{{id}}"
-                                            data-quiz-group="{{quiz_group_id}}"
-                                        >
-                                            <i class="fa fa-eraser"></i> &nbsp; 삭제
-                                        </a>
-                                    </span>
-                                </li>
-                            {{else if (isEquals type 'VIDEO') }}
-                                <li>
-                                    <span class="handle ui-sortable-handle">
-                                        <i class="fa fa-ellipsis-v"></i>
-                                        <i class="fa fa-ellipsis-v"></i>
-                                    </span>
-                                    <a href="#video" class="btn-watch-video"
-                                        data-video-id="{{video_id}}"
-                                        data-order="{{order}}"
-                                        data-title="{{title}}"
-                                        data-id="{{id}}"
-                                    >
-                                        <i class="fa fa-file-video-o"></i> &nbsp;
-                                        {{title}}
-                                    </a>
-                                    <span class="pull-right" data-course-id="{{course_id}}" data-course-list-id="{{id}}" data-type="{{type}}">
-                                        <a href="#view" class="btn btn-sm btn-session-detail text-green btn-watch-video" data-video-id="{{video_id}}">
-                                            <i class="fa fa-eye"></i>
-                                            보기
-                                        </a>
-                                        <a href="#modify" class="btn btn-sm btn-modify-session" data-id="{{id}}" data-video-id="{{video_id}}">
-                                            <i class="fa fa-pencil"></i> &nbsp; 수정
-                                        </a>
-                                        <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-id="{{id}}" data-video-id="{{video_id}}">
-                                            <i class="fa fa-eraser"></i> &nbsp; 삭제
-                                        </a>
-                                    </span>
-                                </li>
-                            {{else if (isEquals type 'FINAL') }}
-                                <li>
-                                    <span class="handle ui-sortable-handle">
-                                        <i class="fa fa-ellipsis-v"></i>
-                                        <i class="fa fa-ellipsis-v"></i>
-                                    </span>
-                                    <a href="#final" class="btn-solve-quiz"
-                                        data-quiz-group="{{quiz_group_id}}"
-                                        data-type="{{type}}"
-                                        data-title="{{title}}"
-                                        data-order="{{order}}"
-                                        data-id="{{id}}"
-                                    >
-                                        <i class="fa fa-sticky-note"></i> &nbsp;
-                                        {{title}}
-                                    </a>
-                                    <span class="pull-right"
-                                        data-course-id="{{course_id}}"
-                                        data-course-list-id="{{id}}"
-                                        data-type="{{type}}"
-                                    >
-                                        <a href="#view" class="btn btn-sm btn-session-detail text-green btn-solve-quiz"
-                                            data-quiz-group="{{quiz_group_id}}"
-                                            data-type="{{type}}"
-                                            data-title="{{title}}"
-                                        >
-                                            <i class="fa fa-eye"></i>
-                                            보기
-                                        </a>
-                                        <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-quiz"
-                                            data-id="{{id}}"
-                                            data-quiz-group="{{quiz_group_id}}"
-                                        >
-                                            <i class="fa fa-pencil"></i> &nbsp; 수정
-                                        </a>
-                                        <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-quiz-group="{{quiz_group_id}}">
-                                            <i class="fa fa-eraser"></i> &nbsp; 삭제
-                                        </a>
-                                    </span>
-                                </li>
-                            {{else if (isEquals type 'CHECKLIST') }}
-                                <li>
-                                  <span class="handle ui-sortable-handle">
-                                    <i class="fa fa-ellipsis-v"></i>
-                                    <i class="fa fa-ellipsis-v"></i>
-                                  </span>
-                                  <a href="#checklist" class="btn-preview-checklist"
-                                    data-checklist-group="{{checklist_group_id}}"
-                                    data-type="{{type}}"
-                                    data-title="{{title}}"
-                                    data-order="{{order}}"
-                                    data-id="{{id}}"
-                                  >
-                                    <i class="fa fa-calendar-check-o"></i> &nbsp;
-                                    {{title}}
-                                  </a>
-                                  <span class="pull-right"
-                                    data-course-id="{{course_id}}"
-                                    data-course-list-id="{{id}}"
-                                    data-type="{{type}}"
-                                  >
-                                    <a href="#view" class="btn btn-sm btn-session-detail text-green btn-preview-checklist"
-                                      data-checklist-group="{{checklist_group_id}}"
-                                      data-type="{{type}}"
-                                      data-title="{{title}}"
-                                    >
-                                      <i class="fa fa-eye"></i>
-                                      보기
-                                    </a>
-                                    <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-checklist"
-                                      data-id="{{id}}"
-                                      data-checklist-group="{{checklist_group_id}}"
-                                    >
-                                      <i class="fa fa-pencil"></i> &nbsp; 수정
-                                    </a>
-                                    <a href="#delete" class="btn btn-sm text-red btn-delete-session"
-                                      data-checklist-group="{{checklist_group_id}}"
-                                    >
-                                      <i class="fa fa-eraser"></i> &nbsp; 삭제
-                                    </a>
-                                  </span>
-                                </li>
-                            {{/if}}
-                            </ul>
-                        {{/each}}
-                    {{else}}
-                      <div>
-                        아직 등록된 커리큘럼이 없습니다.
-                      </div>
-                    {{/if}}
-                </div>
-            </div>
-            <div class="box-footer"></div>
+        <hr>
+        <div class="session-group-btn pull-left">
+          <button class="btn btn-sm btn-default btn-create-video" data-course-id="{{course_id}}">
+            <i class="fa fa-plus"></i> &nbsp;
+            비디오
+          </button>
+          <button class="btn btn-sm btn-default btn-create-quiz" data-course-id="{{course_id}}">
+            <i class="fa fa-plus"></i> &nbsp;
+            퀴즈
+          </button>
+          <button class="btn btn-sm btn-default btn-create-final" data-course-id="{{course_id}}">
+            <i class="fa fa-plus"></i> &nbsp;
+            테스트
+          </button>
+          <button class="btn btn-sm btn-default btn-create-checklist" data-course-id="{{course_id}}">
+            <i class="fa fa-plus"></i> &nbsp;
+            점검표
+          </button>
         </div>
-        <!-- /.box -->
-
-        <div class="box">
-            <div class="box-header with-border">
-                <h3>
-                    강사 정보
-                </h3>
-            </div>
-            <div class="box-body">
-                {{#if teacher_info}}
-                    {{#each teacher_info}}
-                    <h4>{{name}}</h4>
-                    <p class="star-rating-area">
-                        <div class="star-rating">
-                            강사 평점 :
-                            <!--{{#each ../teacher_rating}}-->
-                            <span class="ratings {{star-rating teacher_rate}}"></span> ( {{ teacher_rate }} )
-                            <!--{{/each}}-->
-                        </div>
-                    </p>
-
-                    <!--<pre class="teacher-desc">{{desc}}</pre>-->
-                    <div class="teacher-desc">
-                        {{{desc}}}
-                    </div>
-                    {{/each}}
-                {{else}}
-                    등록된 강사 정보가 없습니다.
-                {{/if}}
-
-            </div>
-            <div class="box-footer"></div>
-        </div>
+        <div class="clearfix"></div>
+        <br>
+        <ul class="session-content list-group">
+        {{#if session_list}}
+        {{#each session_list}}
+          {{#if (isEquals type 'QUIZ')}}
+          <li class="list-group-item clearfix">
+            <span class="handle ui-sortable-handle">
+              <i class="fa fa-ellipsis-v"></i>
+              <i class="fa fa-ellipsis-v"></i>
+            </span>
+            <a href="#quiz" class="btn-solve-quiz" data-quiz-group="{{quiz_group_id}}" data-type="QUIZ" data-title="{{title}}" data-order="{{order}}"
+              data-id="{{id}}">
+              <i class="fa fa-quora"></i> &nbsp;
+              {{title}}
+            </a>
+            <span class="pull-right" data-course-id="{{course_id}}" data-course-list-id="{{id}}" data-type="{{type}}">
+              <a href="#view" class="btn btn-sm btn-session-detail text-green btn-solve-quiz"
+                data-quiz-group="{{quiz_group_id}}"
+                data-type="QUIZ"
+                data-title="{{title}}">
+                <i class="fa fa-eye"></i> &nbsp; 보기
+              </a>
+              <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-quiz"
+                data-id="{{id}}"
+                data-quiz-group="{{quiz_group_id}}">
+                <i class="fa fa-pencil"></i> &nbsp; 수정
+              </a>
+              <a href="#delete" class="btn btn-sm text-red btn-delete-session btn-delete-session"
+                data-id="{{id}}"
+                data-quiz-group="{{quiz_group_id}}">
+                <i class="fa fa-eraser"></i> &nbsp; 삭제
+              </a>
+            </span>
+          </li>
+          {{else if (isEquals type 'VIDEO') }}
+          <li class="list-group-item clearfix">
+            <span class="handle ui-sortable-handle">
+              <i class="fa fa-ellipsis-v"></i>
+              <i class="fa fa-ellipsis-v"></i>
+            </span>
+            <a href="#video" class="btn-watch-video" data-video-id="{{video_id}}" data-order="{{order}}" data-title="{{title}}" data-id="{{id}}">
+              <i class="fa fa-file-video-o"></i> &nbsp;
+              {{title}}
+            </a>
+            <span class="pull-right" data-course-id="{{course_id}}" data-course-list-id="{{id}}" data-type="{{type}}">
+              <a href="#view" class="btn btn-sm btn-session-detail text-green btn-watch-video" data-video-id="{{video_id}}">
+                <i class="fa fa-eye"></i> &nbsp; 보기
+              </a>
+              <a href="#modify" class="btn btn-sm btn-modify-session" data-id="{{id}}" data-video-id="{{video_id}}">
+                <i class="fa fa-pencil"></i> &nbsp; 수정
+              </a>
+              <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-id="{{id}}" data-video-id="{{video_id}}">
+                <i class="fa fa-remove"></i> &nbsp; 삭제
+              </a>
+            </span>
+          </li>
+          {{else if (isEquals type 'FINAL') }}
+          <li class="list-group-item clearfix">
+            <span class="handle ui-sortable-handle">
+              <i class="fa fa-ellipsis-v"></i>
+              <i class="fa fa-ellipsis-v"></i>
+            </span>
+            <a href="#final" class="btn-solve-quiz" data-quiz-group="{{quiz_group_id}}" data-type="{{type}}" data-title="{{title}}" data-order="{{order}}"
+              data-id="{{id}}">
+              <i class="fa fa-sticky-note"></i> &nbsp;
+              {{title}}
+            </a>
+            <span class="pull-right" data-course-id="{{course_id}}" data-course-list-id="{{id}}" data-type="{{type}}">
+              <a href="#view" class="btn btn-sm btn-session-detail text-green btn-solve-quiz"
+                data-quiz-group="{{quiz_group_id}}"
+                data-type="{{type}}"
+                data-title="{{title}}">
+                <i class="fa fa-eye"></i> &nbsp; 보기
+              </a>
+              <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-quiz"
+                data-id="{{id}}"
+                data-quiz-group="{{quiz_group_id}}">
+                <i class="fa fa-pencil"></i> &nbsp; 수정
+              </a>
+              <a href="#delete" class="btn btn-sm text-red btn-delete-session" data-quiz-group="{{quiz_group_id}}">
+                <i class="fa fa-eraser"></i> &nbsp; 삭제
+              </a>
+            </span>
+          </li>
+          {{else if (isEquals type 'CHECKLIST') }}
+          <li class="list-group-item clearfix">
+            <span class="handle ui-sortable-handle">
+              <i class="fa fa-ellipsis-v"></i>
+              <i class="fa fa-ellipsis-v"></i>
+            </span>
+            <a href="#checklist" class="btn-preview-checklist" data-checklist-group="{{checklist_group_id}}" data-type="{{type}}" data-title="{{title}}"
+              data-order="{{order}}" data-id="{{id}}">
+              <i class="fa fa-calendar-check-o"></i> &nbsp;
+              {{title}}
+            </a>
+            <span class="pull-right" data-course-id="{{course_id}}" data-course-list-id="{{id}}" data-type="{{type}}">
+              <a href="#view" class="btn btn-sm btn-session-detail text-green btn-preview-checklist"
+                data-checklist-group="{{checklist_group_id}}"
+                data-type="{{type}}"
+                data-title="{{title}}">
+                <i class="fa fa-eye"></i> &nbsp; 보기
+              </a>
+              <a href="#modify" class="btn btn-sm btn-modify-session btn-modify-checklist"
+                data-id="{{id}}"
+                data-checklist-group="{{checklist_group_id}}">
+                <i class="fa fa-pencil"></i> &nbsp; 수정
+              </a>
+              <a href="#delete" class="btn btn-sm text-red btn-delete-session"
+                data-checklist-group="{{checklist_group_id}}">
+                <i class="fa fa-eraser"></i> &nbsp; 삭제
+              </a>
+            </span>
+          </li>
+          {{/if}}
+        {{/each}}
+        {{else}}
+        아직 등록된 커리큘럼이 없습니다.
+        {{/if}}
+        </ul>
+      </div>
     </div>
-    <!-- /.col -->
+  </div>
 </div>
-<!-- /.row -->
 
 {{> modal_modify_course}}

@@ -25,18 +25,6 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
                 callback(null, rows);
               }
             });
-        },
-        (callback) => {
-          connection.query(QUERY.COURSE.GetTeacherList,
-            [req.user.fc_id],
-            (err, rows) => {
-              if (err) {
-                console.error(err);
-                callback(err, null);
-              } else {
-                callback(null, rows);
-              }
-            });
         }
       ],
       (err, result) => {
@@ -46,10 +34,10 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
         } else {
           res.render('course', {
             current_path: 'Course',
-            title: '강의/강사등록',
+            title: '강의관리',
+            menu_group: 'education',
             loggedIn: req.user,
-            list: result[0],
-            teacher_list: result[1]
+            list: result[0]
           });
         }
       });
@@ -61,127 +49,44 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
  */
 router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   const { id: courseId } = req.query;
-  let teacherId = null;
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
     async.series([
-      // 강의정보를 조회한다.
-      // result[0]
+      // 강의정보 조회
       (callback) => {
         connection.query(QUERY.COURSE.GetCourseListById,
-          [req.user.fc_id, courseId],
-          (err, rows) => {
-            if (err) {
-              callback(err, null);
-            } else {
-              callback(null, rows);
-            }
+          [ req.user.fc_id, courseId ],
+          (err, row) => {
+            callback(err, row);
           }
         );
       },
-      // 강의평가 정보를 조회한다.
-      // result[1]
       (callback) => {
-        connection.query(QUERY.COURSE.GetStarRatingByCourseId,
-          [courseId],
-          (err, rows) => {
-            if (err) {
-              console.error(err);
-              callback(err, null);
-            } else {
-              if (rows.length === 0 || rows === null) {
-                callback(null, [{course_id: courseId, rate: 0}]);
-              } else {
-                callback(null, rows);
-              }
-            }
-          }
-        );
-      },
-      // 강의 세션목록을 조회한다.
-      // result[2]
-      (callback) => {
+        // 세션정보 조회
         connection.query(QUERY.COURSE.GetSessionListByCourseId,
-          [courseId],
+          [ courseId ],
           (err, rows) => {
-            if (err) {
-              console.error(err);
-              callback(err, null);
-            } else {
-              callback(null, rows);
-            }
-          }
-        );
-      },
-      // 강사 정보를 조회한다.
-      // result[3]
-      (callback) => {
-        connection.query(QUERY.COURSE.GetTeacherInfoByCourseId,
-          [courseId],
-          (err, rows) => {
-            if (err) {
-              console.error(err);
-              callback(err, null);
-            } else {
-              teacherId = rows[0].teacher_id;
-              callback(null, rows);
-            }
-          }
-        );
-      },
-      // 강사 목록을 조회한다.
-      // result[4]
-      (callback) => {
-        connection.query(QUERY.COURSE.GetTeacherList,
-          [req.user.fc_id],
-          (err, rows) => {
-            if (err) {
-              console.error(err);
-              callback(err, null);
-            } else {
-              callback(null, rows);
-            }
-          }
-        );
-      },
-      // 강사평가 정보를 조회한다.
-      // result[5]
-      (callback) => {
-        connection.query(QUERY.COURSE.GetStarRatingByTeacherId,
-          [ teacherId ],
-          (err, rows) => {
-            // callback(err, rows);
-            if (err) {
-              console.error(err);
-              callback(err, null);
-            } else {
-              if (rows.length === 0 || rows === null) {
-                callback(null, [{ teacher_rate: 0 }]);
-              } else {
-                callback(null, rows);
-              }
-            }
+            callback(err, rows);
           }
         );
       }],
-      // out
-      (err, result) => {
+      (err, results) => {
         connection.release();
         if (err) {
           console.error(err);
         } else {
           res.render('course_details', {
             current_path: 'CourseDetails',
-            title: '강의상세',
+            title: '강의관리',
+            menu_group: 'education',
             loggedIn: req.user,
-            list: result[0],
-            rating: result[1],
-            session_list: result[2],
-            teacher_info: result[3],
-            teacher_list: result[4],
-            teacher_rating: result[5],
-            course_id: courseId
+            course_name: results[0][0].course_name,
+            course_desc: results[0][0].course_desc,
+            teacher_name: results[0][0].teacher_name,
+            course_rate: results[0][0].teacher_name,
+            teacher_rate: results[0][0].teacher_rate,
+            session_list: results[1]
           });
         }
       });

@@ -223,14 +223,27 @@ QUERY.COURSE = {
 
    // 강의정보를 조회한다.
   GetCourseListById:
-    'SELECT c.`id` AS course_id, c.`name`, t.`name` AS teacher, c.`created_dt`, a.`name` AS creator, c.`desc` ' +
+    'SELECT @course_id:= c.`id` AS course_id ' +
+    '     , c.`name` AS course_name ' +
+    '     , c.desc AS course_desc ' +
+    '     , @teacher_name:= c.`teacher` AS teacher_name ' +
+    '     , IFNULL(( ' +
+    '        SELECT ROUND(AVG(`course_rate`), 1) ' +
+    '          FROM `user_rating` ' +
+    '         WHERE course_id = @course_id ' +
+    '         GROUP BY `course_id` ' +
+    '       ), 0) AS course_rate ' +
+    '     , IFNULL(( ' +
+    '        SELECT ROUND(AVG(`teacher_rate`), 1) ' +
+    '          FROM `user_rating` AS ur ' +
+    '         INNER JOIN `users` AS u ' +
+    '            ON ur.`user_id` = u.`id` ' +
+    '           AND u.`fc_id` = ? ' +
+    '         WHERE ur.teacher_name = @teacher_name ' +
+    '         GROUP BY `teacher_name` ' +
+    '       ), 0) AS teacher_rate ' +
     '  FROM `course` AS c ' +
-    '  LEFT JOIN `teacher` AS t ' +
-    '    ON c.`teacher_id` = t.`id` ' +
-    '  LEFT JOIN `admin` AS a ' +
-    '    ON a.`id` = c.`creator_id` ' +
-    ' WHERE a.`fc_id` = ? ' +
-    '   AND c.`id` = ? ' +
+    ' WHERE c.`id` = ? ' +
     ' ORDER BY c.`created_dt` DESC; ',
 
   // 강의 정보를 조회한다.

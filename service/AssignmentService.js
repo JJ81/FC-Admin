@@ -333,7 +333,7 @@ AssignmentService.getSimpleAssignmentList = (req, res, next) => {
         } else {
           console.log(results[0]);
           return res.render('simple-assignment', {
-            title: '교육 간편배정',
+            title: '교육개설',
             current_path: 'SimpleAssignment',
             menu_group: 'education',
             loggedIn: req.user,
