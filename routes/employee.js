@@ -34,7 +34,7 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
       } else {
         res.render('employee', {
           current_path: 'Employee',
-          title: '직원관리',
+          title: '교육생 관리',
           loggedIn: req.user,
           list: results[0],
           branch: results[1],

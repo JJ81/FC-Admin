@@ -148,7 +148,7 @@ function ($, jszip, axios, moment, pace, _, Handlebars) {
     },
     // text editor 를 초기화 한다.
     initTextEditor: function (_selector, options) {
-      tinymce.init({
+      window.tinymce.init({
         selector: _selector
       });
     },
@@ -225,16 +225,21 @@ function ($, jszip, axios, moment, pace, _, Handlebars) {
       // 시작일자
       start.datetimepicker({
         defaultDate: startDt,
-        format: 'YYYY-MM-DD',
-        showTodayButton: true
+        format: 'YYYY-MM-DD HH:mm'
+        // showTodayButton: true
+        // timePicker: true
+        // timePickerIncrement: 30,
+        // locale: {
+        //   format: 'YYYY-MM-DD h:mm A'
+        // }
       });
 
       // 종료일자
       end.datetimepicker({
         defaultDate: endDt,
-        format: 'YYYY-MM-DD',
-        useCurrent: false,
-        showTodayButton: true
+        format: 'YYYY-MM-DD HH:mm'
+        // useCurrent: false,
+        // showTodayButton: true
       });
 
       // 날짜가 서로 겹치지 않도록 설정한다.

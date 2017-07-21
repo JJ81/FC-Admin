@@ -730,8 +730,8 @@ QUERY.EDU = {
 
   // 교육과정을 생성한다.
   InsertEdu:
-    'INSERT INTO `edu` (`name`, `desc`, `course_group_id`, `creator_id`) ' +
-    'VALUES(?,?,?,?); ',
+    'INSERT INTO `edu` (`name`, `desc`, `course_group_id`, `can_replay`, `creator_id`) ' +
+    'VALUES(?,?,?,?,?); ',
   // InsertEdu:
   //   'INSERT INTO `edu` (`name`, `desc`, `course_group_id`, `creator_id`, `start_dt`, `end_dt`) ' +
   //   'VALUES(?,?,?,?,?,?); ',
@@ -741,6 +741,7 @@ QUERY.EDU = {
     'UPDATE `edu` SET ' +
     '       `name` = ? ' +
     '     , `desc` = ? ' +
+    '     , `can_replay` = ? ' +
     '     , `updated_dt` = NOW() ' +
     ' WHERE `id` = ?; ',
 

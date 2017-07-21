@@ -131,12 +131,14 @@ EducationService.create = (req, res, next) => {
           callback => {
             if (req.body.edu_id) {
               console.log('//// 교육과정 수정 ////');
+              console.log(req.body);
               eduId = req.body.edu_id;
               connection.query(QUERY.EDU.UpdateEdu,
                 [
                   req.body.name,
                   req.body.desc,
-                  req.body.edu_id
+                  req.body.can_replay,
+                  eduId
                 ],
                 (err, result) => {
                   callback(err, result);
@@ -149,6 +151,7 @@ EducationService.create = (req, res, next) => {
                   req.body.name,
                   req.body.desc,
                   courseGroupId,
+                  req.body.can_replay,
                   req.user.admin_id
                 ],
                 (err, result) => {

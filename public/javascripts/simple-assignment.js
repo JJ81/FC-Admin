@@ -272,7 +272,8 @@ window.requirejs([
       'upload_employee_ids': $('input[name=\'upload_employee_ids\']').val(),
       'edu_id': $('#edu_id').val(),
       'log_bind_user_id': $('#log_bind_user_id').val(),
-      'training_edu_id': $('#training_edu_id').val()
+      'training_edu_id': $('#training_edu_id').val(),
+      'can_replay': $('#can-replay').prop('checked') ? 1 : 0
     };
 
     window.axios.post('/education', data)
