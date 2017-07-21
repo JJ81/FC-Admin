@@ -181,10 +181,11 @@
         <div class="col-lg-4">
           <div class="input-group">
             <span class="input-group-addon">
-              <input type="checkbox" checked>
+              <input type="checkbox" {{#ifCond assignment.complete_point '!==' 0}}checked{{/ifCond}}>
             </span>
             <input type="number" class="form-control point-item" name="complete_point" placeholder="교육과정 이수"
               value="{{assignment.complete_point}}"
+              {{#ifCond assignment.complete_point '===' 0}}disabled{{/ifCond}}
             ><br>
           </div>
           <small><b>교육과정이수</b> 완료한 교육과정 수 X 포인트</small>
@@ -192,10 +193,11 @@
         <div class="col-lg-4">
           <div class="input-group">
             <span class="input-group-addon">
-              <input type="checkbox" checked>
+              <input type="checkbox" {{#ifCond assignment.quiz_point '!==' 0}}checked{{/ifCond}}>
             </span>
             <input type="number" class="form-control point-item" name="quiz_point" placeholder="퀴즈"
               value="{{assignment.quiz_point}}"
+              {{#ifCond assignment.quiz_point '===' 0}}disabled{{/ifCond}}
             ><br>
           </div>
           <small><b>퀴즈</b> (맞은 문항 수 ÷ 전체 문항 수) X 100 X 포인트</small>
@@ -203,10 +205,11 @@
         <div class="col-lg-4">
           <div class="input-group">
             <span class="input-group-addon">
-              <input type="checkbox" checked>
+              <input type="checkbox" {{#ifCond assignment.test_point '!==' 0}}checked{{/ifCond}}>
             </span>
             <input type="number" class="form-control point-item" name="test_point" placeholder="테스트"
               value="{{assignment.test_point}}"
+              {{#ifCond assignment.test_point '===' 0}}disabled{{/ifCond}}
             ><br>
           </div>
           <small><b>테스트</b> (맞은 문항 수 ÷ 전체 문항 수) X 100 X 포인트</small>
@@ -217,10 +220,11 @@
         <div class="col-lg-4">
           <div class="input-group">
             <span class="input-group-addon">
-              <input type="checkbox" checked>
+              <input type="checkbox" {{#ifCond assignment.reeltime_point '!==' 0}}checked{{/ifCond}}>
             </span>
             <input type="number" class="form-control point-item" name="reeltime_point" placeholder="교육 시청시간"
               value="{{assignment.reeltime_point}}"
+              {{#ifCond assignment.reeltime_point '===' 0}}disabled{{/ifCond}}
             ><br>
           </div>
           <small><b>영상시청 성실도</b> (포인트 - 불성실 시청(-1)) X (완료 영상 수 ÷ 총 영상 수)</small>
@@ -228,10 +232,11 @@
         <div class="col-lg-4">
           <div class="input-group">
             <span class="input-group-addon">
-              <input type="checkbox" checked>
+              <input type="checkbox" {{#ifCond assignment.speed_point '!==' 0}}checked{{/ifCond}}>
             </span>
             <input type="number" class="form-control point-item" name="speed_point" placeholder="교육과정 이수 속도"
               value="{{assignment.speed_point}}"
+              {{#ifCond assignment.speed_point '===' 0}}disabled{{/ifCond}}
             ><br>
           </div>
           <small><b>교육과정 이수 속도</b> (1 - 학습시간 ÷ 총 이수시간) X 포인트</small>
@@ -239,10 +244,11 @@
         <div class="col-lg-4">
           <div class="input-group">
             <span class="input-group-addon">
-              <input type="checkbox" checked>
+              <input type="checkbox" {{#ifCond assignment.reps_point '!==' 0}}checked{{/ifCond}}>
             </span>
             <input type="number" class="form-control point-item" name="reps_point" placeholder="강의 반복 학습율"
               value="{{assignment.reps_point}}"
+              {{#ifCond assignment.reps_point '===' 0}}disabled{{/ifCond}}
             ><br>
           </div>
           <small><b>강의 반복 학습율</b> 강의 반복여부(2회 이상) X 포인트</small>

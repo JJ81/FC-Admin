@@ -50,6 +50,13 @@ window.requirejs([
 
     // 교육대상자 id 조회
     setEmployeeIds();
+
+    var $tinymceDesc = $('#input-course-desc_ifr');
+    if ($tinymceDesc) {
+      $tinymceDesc.prop('title', '');
+    }
+
+    sumPoint();
   });
 
   // 교육대상자 id 조회
@@ -58,6 +65,19 @@ window.requirejs([
       return $(this).data('id');
     }).get().join(', ');
     $('input[name=\'upload_employee_ids\']').val(employeeIds);
+  }
+
+  function sumPoint () {
+    var pointTotal = 0;
+    $('.point-item').each(function () {
+      var checked = $(this).parent().find('.input-group-addon').children('input:checkbox').prop('checked');
+      if (checked && $(this).val() !== '') {
+        pointTotal += parseInt($(this).val());
+      }
+    });
+
+    $('.badge').text(pointTotal);
+    return pointTotal;
   }
 
   /**
@@ -356,7 +376,7 @@ window.requirejs([
    */
   function validateStep2 () {
     var $eduName = $('input[name=\'course_name\']');
-    var $eduDescription = window.tinymce.activeEditor.getContent();
+    var $eduDescription = $('#input-course-desc').val(); // window.tinymce.activeEditor.getContent();
 
     if ($eduName.val() === '') {
       window.alert('교육과정명을 입력하세요.');
@@ -408,8 +428,12 @@ window.requirejs([
     var sum = 0;
     $('.point-item').each(function () {
       var checked = $(this).parent().find('.input-group-addon').children('input:checkbox').prop('checked');
-      if (checked && $(this).val() !== '') {
-        sum += parseInt($(this).val());
+      if (checked && $(this).val() !== '' && $(this).val() !== '0') {
+        var point = parseInt($(this).val());
+        sum += point;
+      } else {
+        $(this).prop('disabled', true);
+        $(this).parent().find('.input-group-addon').children('input:checkbox').prop('checked', false);
       }
     });
 

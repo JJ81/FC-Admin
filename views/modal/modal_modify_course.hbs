@@ -10,18 +10,20 @@
       <div class="modal-body">
         <div class="form-group">
           <label>* 강의명</label>
-          <input type="text" class="form-control" name="course_name" placeholder="강의명" required autocomplete="off" value="{{name}}" autofocus
+          <input type="text" class="form-control" name="course_name" placeholder="강의명" required autocomplete="off" value="{{course_name}}" autofocus
           />
         </div>
 
         <div class="form-group">
           <label>* 강의 소개</label>
-          <textarea class="form-control course-desc editor" id="course_desc" name="course_desc" placeholder="강의소개를 입력하세요."></textarea>
+          <textarea class="form-control course-desc editor" id="course_desc" name="course_desc" placeholder="강의소개를 입력하세요.">
+            {{course_desc}}
+          </textarea>
         </div>
 
         <div class="form-group">
           <label>* 강사명</label>
-          <input type="text" class="form-control" name="teacher_name" placeholder="강사명" required autocomplete="off" />
+          <input type="text" class="form-control" name="teacher_name" placeholder="강사명" required autocomplete="off" value="{{teacher_name}}" />
           <!--<select name="teacher_id" class="form-control">
             {{#each ../teacher_list}}
             <option value="{{id}}" {{#if (isEquals name ../teacher)}}selected{{/if}}>{{name}}</option>

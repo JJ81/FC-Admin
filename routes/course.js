@@ -162,7 +162,7 @@ router.post('/modify', util.isAuthenticated, (req, res, next) => {
     course_id: courseId,
     course_name: courseName,
     course_desc: courseDescription,
-    teacher_id: teacherId
+    teacher_name: teacherName
   } = req.body;
   const adminId = req.user.admin_id;
 
@@ -171,7 +171,7 @@ router.post('/modify', util.isAuthenticated, (req, res, next) => {
     connection.query(QUERY.COURSE.UpdateCourse,
       [
         courseName,
-        teacherId,
+        teacherName,
         courseDescription,
         adminId,
         new Date(),

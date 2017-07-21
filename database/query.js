@@ -332,7 +332,7 @@ QUERY.COURSE = {
 
   // 강의를 수정한다.
   UpdateCourse:
-    'UPDATE `course` SET `name` = ?, `teacher_id` = ?, `desc` = ?, `creator_id` = ?, `updated_dt` = ? ' +
+    'UPDATE `course` SET `name` = ?, `teacher` = ?, `desc` = ?, `creator_id` = ?, `updated_dt` = ? ' +
     'WHERE `id` = ?; ',
   UpdateCourse2:
     'UPDATE `course` SET `name` = ?, `desc` = ?, `teacher` = ?, `updated_dt` = NOW() ' +
