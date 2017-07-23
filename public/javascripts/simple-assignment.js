@@ -222,6 +222,8 @@ window.requirejs([
   btnSaveSimpleAssign.on('click', function () {
     // updateProgress($('ul.setup-panel li.active').index() + 1);
     var step = $('ul.setup-panel li.active').index() + 1;
+
+    if (!window.confirm('저장하시겠습니까?')) return false;
     switch (step) {
     case 1:
       if (validateStep1()) {
@@ -638,16 +640,6 @@ window.requirejs([
     e.preventDefault();
     var courseId = $(this).attr('data-course-id');
     Util.createWindowPopup('/course/create/video?course_id=' + courseId, 'Video', windowOption);
-  });
-  // 퀴즈 풀어보기
-  $('.panel-group').on('click', '.btn-create-video', function (e) {
-    e.preventDefault();
-
-    var quizGroupId = $(this).attr('data-quiz-group');
-    var dataTitle = $(this).attr('data-title');
-    var dataType = $(this).attr('data-type');
-
-    Util.createWindowPopup('/course/quiz?id=' + quizGroupId + '&title=' + dataTitle + '&type=' + dataType, 'Quiz', windowOption);
   });
   // 퀴즈 생성하기
   $('.panel-group').on('click', '.btn-create-quiz', function (e) {
