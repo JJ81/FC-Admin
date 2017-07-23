@@ -909,8 +909,9 @@ QUERY.HISTORY = {
       ' INNER JOIN `admin` AS a ' +
       '    ON a.`id` = te.`assigner` ' +
       '   and a.`fc_id` = ? ' +
-      '  LEFT JOIN `edu` AS e ' +
+      ' INNER JOIN `edu` AS e ' +
       '    ON e.`id` = te.`edu_id` ' +
+      '   AND e.`active` = 1 ' +
       '  LEFT JOIN `log_assign_edu` AS lae ' +
       '    ON lae.`training_edu_id` = te.`id` ' +
       '  LEFT JOIN `log_bind_users` AS lbu ' +
@@ -1695,6 +1696,7 @@ QUERY.DASHBOARD = {
     '                  FROM `edu` AS e ' +
     '                 INNER JOIN `course_group` AS cg ' +
     '                    ON e.`course_group_id` = cg.`group_id` ' +
+    '                 WHERE e.`active` = 1 ' +
     // '                 WHERE DATE_FORMAT(NOW(), \'%Y-%m\') BETWEEN DATE_FORMAT(e.`start_dt`, \'%Y-%m\') AND DATE_FORMAT(e.`end_dt`, \'%Y-%m\') ' +
     '               ) AS e ' +
     '            ON te.`edu_id` = e.`edu_id` ' +
@@ -1746,6 +1748,7 @@ QUERY.DASHBOARD = {
        '                  FROM `edu` AS e ' +
        '                 INNER JOIN `course_group` AS cg ' +
        '                    ON e.`course_group_id` = cg.`group_id` ' +
+       '                 WHERE e.`active` = 1' +
       //  '                 WHERE DATE_FORMAT(NOW(), \'%Y-%m\') BETWEEN DATE_FORMAT(e.`start_dt`, \'%Y-%m\') AND DATE_FORMAT(e.`end_dt`, \'%Y-%m\') ' +
        '               ) AS e ' +
        '            ON te.`edu_id` = e.`edu_id` ' +
