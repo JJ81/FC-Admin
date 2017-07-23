@@ -117,6 +117,7 @@ EducationService.create = (req, res, next) => {
   let eduId;
   let trainingEduId;
   let courseGroupId = util.publishHashByMD5(new Date());
+  let isUpdate = req.body.edu_id !== undefined;
 
   if (req.body.training_edu_id !== undefined) {
     trainingEduId = req.body.training_edu_id;
@@ -131,7 +132,7 @@ EducationService.create = (req, res, next) => {
           callback => {
             if (req.body.edu_id) {
               console.log('//// 교육과정 수정 ////');
-              console.log(req.body);
+              // console.log(req.body);
               eduId = req.body.edu_id;
               connection.query(QUERY.EDU.UpdateEdu,
                 [
@@ -178,13 +179,18 @@ EducationService.create = (req, res, next) => {
           // },
           // 교육생 배정내역을 생성한다.
           callback => {
-            console.log('//// 교육생 배정내역 생성 ////');
+            if (isUpdate) {
+              console.log('//// 교육생 배정내역 수정 ////');
+            } else {
+              console.log('//// 교육생 배정내역 생성 ////');
+            }
             AssignmentService.allocate(connection, {
               edu_id: eduId,
               log_bind_user_id: parseInt(req.body.log_bind_user_id),
               start_dt: req.body.start_dt,
               end_dt: req.body.finish_dt,
-              user: req.user
+              user: req.user,
+              update: isUpdate
             }, (err, data) => {
               trainingEduId = data.trainingEduId;
               callback(err, null);

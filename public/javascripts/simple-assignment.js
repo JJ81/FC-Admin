@@ -51,11 +51,6 @@ window.requirejs([
     // 교육대상자 id 조회
     setEmployeeIds();
 
-    var $tinymceDesc = $('#input-course-desc_ifr');
-    if ($tinymceDesc) {
-      $tinymceDesc.prop('title', '');
-    }
-
     sumPoint();
   });
 

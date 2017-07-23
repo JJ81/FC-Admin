@@ -2017,6 +2017,9 @@ QUERY.ASSIGNMENT = {
   UpdateLogAssignEduById:
     'UPDATE `log_assign_edu` SET `start_dt` = ?, `end_dt` = ? WHERE `id` = ?; ',
 
+  UpdateLogAssignEduByTrainingEduId:
+    'UPDATE `log_assign_edu` SET `start_dt` = ?, `end_dt` = ? WHERE `training_edu_id` = ?; ',
+
   DeleteLogBindUserById:
     'DELETE FROM `log_bind_users` WHERE `id` = ?; ',
 

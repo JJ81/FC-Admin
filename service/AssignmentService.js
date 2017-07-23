@@ -36,10 +36,30 @@ AssignmentService.modifyLogAssignEdu = (_data, _callback) => {
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
-    let q = connection.query(QUERY.ASSIGNMENT.UpdateLogAssignEduById,
+    connection.query(QUERY.ASSIGNMENT.UpdateLogAssignEduById,
       [trainingStartDate, trainingEndDate, logAssignEduId],
       (err, data) => {
-        console.log(q.sql);
+        // console.log(q.sql);
+        connection.release();
+        if (err) throw err;
+        _callback(err, data);
+      }
+    );
+  });
+};
+/**
+ * log_assign_edu 의 start_dt, end_dt 를 수정한다.
+ */
+AssignmentService.modifyLogAssignEdu2 = (_data, _callback) => {
+  const trainingEduId = _data.training_edu_id;
+  const trainingStartDate = _data.start_dt;
+  const trainingEndDate = _data.end_dt;
+
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    connection.query(QUERY.ASSIGNMENT.UpdateLogAssignEduByTrainingEduId,
+      [trainingStartDate, trainingEndDate, trainingEduId],
+      (err, data) => {
         connection.release();
         if (err) throw err;
         _callback(err, data);
@@ -219,49 +239,67 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
   const trainingStartDate = _data.start_dt;
   const trainingEndDate = _data.end_dt;
   const userData = _data.user;
-  let trainingEduId = null;
+  let trainingEduId = _data.training_edu_id;
 
   async.series([
     callback => {
-      console.log('AssignmentService.allocate (0)');
-      _connection.query(QUERY.EDU.InsertTrainingEdu,
-        [ eduId, userData.admin_id ],
-        (err, data) => {
-          if (!err) {
-            trainingEduId = data.insertId;
+      if (!_data.isUpdate) {
+        _connection.query(QUERY.EDU.InsertTrainingEdu,
+          [ eduId, userData.admin_id ],
+          (err, data) => {
+            if (!err) {
+              trainingEduId = data.insertId;
+            }
+            callback(err, data);
           }
-          callback(err, data);
-        }
-      );
+        );
+      } else {
+        callback(null, null);
+      }
     },
     callback => {
-      console.log('AssignmentService.allocate (1)');
-      // training_user 테이블에 입력
-      _connection.query(QUERY.EDU.InsertUserIdInTrainingUsers,
-        [
-          trainingEduId,
-          logBindUserId
-        ],
-        (err, data) => {
-          callback(err, data);
-        }
-      );
+      if (!_data.isUpdate) {
+        console.log('AssignmentService.allocate (1)');
+        // training_user 테이블에 입력
+        _connection.query(QUERY.EDU.InsertUserIdInTrainingUsers,
+          [
+            trainingEduId,
+            logBindUserId
+          ],
+          (err, data) => {
+            callback(err, data);
+          }
+        );
+      } else {
+        callback(null, null);
+      }
     },
     callback => {
-      console.log('AssignmentService.allocate (2)');
-      // log_assign_edu 테이블에 입력
-      _connection.query(QUERY.HISTORY.InsertIntoLogAssignEdu,
-        [
-          trainingEduId,
-          logBindUserId,
-          userData.admin_id,
-          trainingStartDate, // + ' ' + '00:00:00',
-          trainingEndDate // + ' ' + '23:59:59'
-        ],
-        (err, data) => {
+      if (!_data.isUpdate) {
+        console.log('AssignmentService.allocate (2)');
+        // log_assign_edu 테이블에 입력
+        _connection.query(QUERY.HISTORY.InsertIntoLogAssignEdu,
+          [
+            trainingEduId,
+            logBindUserId,
+            userData.admin_id,
+            trainingStartDate, // + ' ' + '00:00:00',
+            trainingEndDate // + ' ' + '23:59:59'
+          ],
+          (err, data) => {
+            callback(err, data);
+          }
+        );
+      } else {
+        // training_edu_id 로 log_assign_edu 수정
+        AssignmentService.modifyLogAssignEdu2({
+          start_dt: trainingStartDate,
+          end_dt: trainingEndDate,
+          training_edu_id: trainingEduId
+        }, (err, data) => {
           callback(err, data);
-        }
-      );
+        });
+      }
     }
   ],
   (err, results) => {
