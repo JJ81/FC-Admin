@@ -255,8 +255,8 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
           trainingEduId,
           logBindUserId,
           userData.admin_id,
-          trainingStartDate + ' ' + '00:00:00',
-          trainingEndDate + ' ' + '23:59:59'
+          trainingStartDate, // + ' ' + '00:00:00',
+          trainingEndDate // + ' ' + '23:59:59'
         ],
         (err, data) => {
           callback(err, data);

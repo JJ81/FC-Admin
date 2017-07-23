@@ -14,7 +14,7 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
     if (err) throw err;
     connection.query(querystring, [req.user.fc_id, req.user.admin_id], (err, rows) => {
       connection.release();
-      console.log(rows);
+      // console.log(rows);
       if (err) {
         console.error(err);
         throw new Error(err);

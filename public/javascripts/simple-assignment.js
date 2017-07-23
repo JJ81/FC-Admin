@@ -224,10 +224,14 @@ window.requirejs([
     var step = $('ul.setup-panel li.active').index() + 1;
     switch (step) {
     case 1:
-      saveStep1Data();
+      if (validateStep1()) {
+        saveStep1Data();
+      }
       break;
     case 2:
-      saveStep2Data();
+      if (validateStep2()) {
+        saveStep2Data();
+      }
       break;
     default:
       break;
@@ -266,6 +270,7 @@ window.requirejs([
         if (res.data) {
           // $('input[name=\'upload_employee_ids\']').val(res.data.employeeIds);
           $('#log_bind_user_id').val(res.data.logBindUserId);
+          window.alert('교육생을 저장하였습니다.');
         }
       })
       .catch(function (error) {
@@ -296,12 +301,16 @@ window.requirejs([
       'can_replay': $('#can-replay').prop('checked') ? 1 : 0
     };
 
+    // console.log(data);
+    // return false;
+
     window.axios.post('/education', data)
     .then(function (res) {
       // console.log(res);
       if (res.data) {
         $('#training_edu_id').val(res.data.trainingEduId);
         $('#edu_id').val(res.data.eduId);
+        window.alert('교육과정을 저장하였습니다.');
       }
     })
     .catch(function (err) {
@@ -426,14 +435,15 @@ window.requirejs([
 
   $('.point-item').on('keyup', _.debounce(function () {
     var sum = 0;
+
     $('.point-item').each(function () {
       var checked = $(this).parent().find('.input-group-addon').children('input:checkbox').prop('checked');
       if (checked && $(this).val() !== '' && $(this).val() !== '0') {
         var point = parseInt($(this).val());
         sum += point;
       } else {
-        $(this).prop('disabled', true);
-        $(this).parent().find('.input-group-addon').children('input:checkbox').prop('checked', false);
+        // $(this).prop('disabled', true);
+        // $(this).parent().find('.input-group-addon').children('input:checkbox').prop('checked', false);
       }
     });
 
