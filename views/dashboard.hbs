@@ -1,286 +1,274 @@
 <section class="section">
-    <!--<div class="col-xs-12">-->
-        <!-- Summary -->
-        <div class="row">
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <!--<div class="small-box bg-gray">-->
-                <div class="small-box {{themeOfTile}}">
-                    <div class="inner">
-                      <h3>{{#each total_users}}{{total_users}}{{/each}}</h3>
-                        <p>총 교육생수</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box {{themeOfTile}}">
-                    <div class="inner">
-                        <h3>{{#each total_branch}}{{total_branch}}{{/each}}</h3>
-                        <p>총 지점수</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box {{themeOfTile}}">
-                    <div class="inner">
-                        <h3>
-                          {{#each current_edu}}{{current_edu}}{{/each}}
-                          <!--{{#each current_edu}}{{current_edu}}{{/each}} / {{#each total_edu}}{{total_edu}}{{/each}}-->
-                        </h3>
-                        <p>진행중인 교육과정</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box {{themeOfTile}}">
-                    <div class="inner">
-                        <h3>{{total_edu_progress.completed_rate}} <sup style="font-size: 20px">%</sup></h3>
-                        <p>{{ dateformat loggedIn.curdate 'm'}}월 교육과정 이수율</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                    </div>
-                </div>
-            </div>
+  <!--<div class="col-xs-12">-->
+  <!-- Summary -->
+  <div class="row">
+    <div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <!--<div class="small-box bg-gray">-->
+      <div class="small-box {{themeOfTile}}">
+        <div class="inner">
+          <h3>{{#each total_users}}{{total_users}}{{/each}}</h3>
+          <p>총 교육생수</p>
         </div>
-
-        <div class="row">
-            <!-- 이번 달 교육 진척도 -->
-            <div class="col-lg-6">
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">{{ dateformat loggedIn.curdate 'm'}}월 교육과정별 이수율</h3>
-                    </div>
-                    <div class="box-body">
-                        {{#each edu_progress}}
-                        <div class="progress-group">
-                            <span class="progress-text">{{edu_name}} <small>({{ time edu_start_dt }} ~ {{ time edu_end_dt }})</small></span>
-                            <span class="progress-number"><b>{{completed_rate}}%</b></span>
-
-                            <div class="progress progress-sm active">
-                                <div class="progress-bar {{../themeOfProgressBar}} progress-bar-striped" style="width: {{completed_rate}}%"></div>
-                            </div>
-                        </div>
-                        <!-- /.progress-group -->
-                        {{/each}}
-                    </div>
-                </div>
-                <!-- /.box -->
-            </div>
-            <!-- 교육이수율 점포별 순위 -->
-            <div class="col-lg-6">
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">교육과정 이수율 랭킹 (지점)</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="agentRankList">
-                            <div class="col-md-6 agentTopRankList">
-                                <p class="list-header header-bottom-line">
-                                    <i class="fa fa-thumbs-o-up"></i>&nbsp; 상위 10위
-                                </p>
-                                <ol>
-                                    {{#top 10 branch_progress_top_most}}
-                                    {{#if branch_name}}
-                                    <li>{{branch_name}} ({{completed_rate}}%)</li>
-                                    {{/if}}
-                                    {{/top}}
-                                </ol>
-                            </div>
-                            <div class="col-md-6 agentBottomRankList">
-                                <p class="list-header header-bottom-line">
-                                    <i class="fa fa-thumbs-o-down"></i>&nbsp;하위 10위
-                                </p>
-                                <ol>
-                                    {{#top 10 branch_progress_bottom_most}}
-                                    {{#if branch_name}}
-                                    <li>{{branch_name}} ({{completed_rate}}%)</li>
-                                    {{/if}}
-                                    {{/top}}
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /.col -->
+        <div class="icon">
+          <i class="ion ion-person-add"></i>
         </div>
-        <!-- /.row -->
-        <!-- // 기간별 교육과정 진척도 -->
-
-        <div class="row">
-            <!-- 교육과정별 강의 이수율 -->
-            <div class="col-lg-12">
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">{{ dateformat loggedIn.curdate 'm'}}월 교육과정 강의별 이수율</h3>
-                    </div>
-
-                    <div class="box-body">
-                        {{#each edu_progress}}
-                        <!-- course details -->
-                        <div class="col-md-3 course-achievement">
-                            <p class="list-header header-bottom-line">{{edu_name}} <br><small>({{ time edu_start_dt }} ~ {{ time edu_end_dt }})</small></p>
-                            <div class="container-course-list">
-                                {{#each course}}
-                                <!-- course details -->
-                                <div class="progress-course-detail">
-                                    <h4 class="course-name">{{course_name}}</h4>
-                                    <div class="progress progress-sm active">
-                                        <div class="progress-bar {{../../themeOfProgressBar}} progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="{{completed_rate}}" aria-valuemin="0" aria-valuemax="100" style="width: {{completed_rate}}%"></div>
-                                    </div>
-                                    <div class="star-rating">
-                                        <span class="ratings {{star-rating course_rate}}"></span> ( {{course_rate}}점, {{vote_count}}명 평가 )
-                                    </div>
-                                </div>
-                                <!-- // course details -->
-                                {{/each}}
-                            </div>
-                        </div>
-                        <!-- // course details -->
-                        {{/each}}
-                    </div>
-                    <!-- // course details list -->
-                </div>
-            </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box {{themeOfTile}}">
+        <div class="inner">
+          <h3>{{#each total_branch}}{{total_branch}}{{/each}}</h3>
+          <p>총 지점수</p>
         </div>
-
-        <div class="row">
-            <!-- 이번 달 교육과정뱔 포인트 현황 -->
-            <div class="col-lg-12">
-                <div class="nav-tabs-custom">
-                    <!-- Tabs within a box -->
-                    <ul class="nav nav-tabs pull-right">
-                        <li>
-                            <a href="#point-stack" data-toggle="tab">누적</a>
-                        </li>
-                        <li class="active">
-                            <a href="#point-edu" data-toggle="tab">{{ dateformat loggedIn.curdate 'm'}}월 교육과정</a>
-                        </li>
-                        <li class="pull-left header">
-                            포인트 현황
-                        </li>
-                        <!--<li class="pull-left">
-                            <a class="text-red" role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#pointWeight">
-                                <i class="fa fa-gear"></i>
-                                가중치 설정
-                            </a>
-                        </li>-->
-                    </ul>
-                    <div class="tab-content no-padding">
-                        <!-- 교육과정별 포인트 현황 -->
-                        <div class="tab-pane active" id="point-edu" style="position: relative;">
-                            <div class="box box-solid">
-                                <div class="box-header with-border">
-                                    <div class="form-group">
-                                        <select id="select-point-by-edu" class="form-control select2" style="width: 100%;">
-                                            <option selected="selected">교육과정을 선택하세요</option>
-                                        {{#each edu_progress}}
-                                            <option value="{{edu_id}}">{{edu_name}}</option>
-                                        {{/each}}
-                                        </select>
-                                    </div>
-                                </div>
-                                <!-- /.box-header -->
-                                <div class="box-body table-responsive">
-                                    <table id="table-point-by-edu" class="table no-margin table-bordered table-striped" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th class="center">지점</th>
-                                                <th class="center">직책</th>
-                                                <th class="center">이름</th>
-                                                <th class="center">기간</th>
-                                                <th class="center">이수</th>
-                                                <th class="center">퀴즈</th>
-                                                <th class="center">파이널</th>
-                                                <th class="center">시청시간(초)</th>
-                                                <th class="center">완료일</th>
-                                                <th class="center">반복</th>
-                                                <th class="center">포인트</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- /.box-body -->
-                                <div class="box-footer clearfix">
-                                    <!--<ul class="pagination pagination-sm no-margin pull-right">-->
-                                        <!--<li><a href="#">&laquo;</a></li>-->
-                                        <!--<li><a href="#">1 / 11</a></li>-->
-                                        <!--<li><a href="#">&raquo;</a></li>-->
-                                    <!--</ul>-->
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 누적 포인트 현황 -->
-                        <div class="tab-pane" id="point-stack" style="position: relative;">
-                            <div class="box box-solid">
-                                <div class="box-header">
-                                </div>
-                                <!-- /.box-header -->
-                                <div class="box-body table-responsive">
-                                    <table id="table_point" class="table no-margin table-bordered table-striped" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th class="center">지점</th>
-                                                <th class="center">직책</th>
-                                                <th class="center">이름</th>
-                                                <th class="center">포인트</th>
-                                                <th class="center">근거</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {{#each point_rank}}
-                                            <tr>
-                                                <td class="center">{{branch_name}}</td>
-                                                <td class="center">{{duty_name}}</td>
-                                                <td class="center">{{user_name}}</td>
-                                                <td class="right">{{comma-number point_total}}</td>
-                                                <td class="center">
-                                                    <a class="btn btn-sm btn-default"
-                                                        data-toggle="modal"
-                                                        data-user-id="{{user_id}}"
-                                                        data-target='#modal-point-details'>상세보기
-                                                    </a>
-                                                    <!--<button class="btn btn-sm btn-success">상세보기</button>-->
-                                                    <!-- 팝업으로 띄울 것 -->
-                                                    <!-- 이수율 100%, 퀴즈(20문항 중 20문항), 테스트(240문항 중 240문항), 총 비디오 시청 기록 (300분), 이수속도(상위1%), 반복학습빈도(상위1%)-->
-                                                </td>
-                                            </tr>
-                                            {{/each}}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- /.box-body -->
-                                <div class="box-footer clearfix">
-                                    <!--<ul class="pagination pagination-sm no-margin pull-right">-->
-                                        <!--<li><a href="#">&laquo;</a></li>-->
-                                        <!--<li><a href="#">1 / 11</a></li>-->
-                                        <!--<li><a href="#">&raquo;</a></li>-->
-                                    <!--</ul>-->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="icon">
+          <i class="ion ion-bag"></i>
         </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box {{themeOfTile}}">
+        <div class="inner">
+          <h3>
+            {{#each current_edu}}{{current_edu}}{{/each}}
+            <!--{{#each current_edu}}{{current_edu}}{{/each}} / {{#each total_edu}}{{total_edu}}{{/each}}-->
+          </h3>
+          <p>진행중인 교육과정</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-pie-graph"></i>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box {{themeOfTile}}">
+        <div class="inner">
+          <h3>{{total_edu_progress.completed_rate}} <sup style="font-size: 20px">%</sup></h3>
+          <p>{{ dateformat loggedIn.curdate 'm'}}월 교육과정 이수율</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-stats-bars"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <!--</div>-->
+  <div class="row">
+    <!-- 이번 달 교육 진척도 -->
+    <div class="col-lg-6">
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title">{{ dateformat loggedIn.curdate 'm'}}월 교육과정별 이수율</h3>
+        </div>
+        <div class="box-body">
+          {{#each edu_progress}}
+          <div class="progress-group">
+            <span class="progress-text">{{edu_name}} <small>({{ time edu_start_dt }} ~ {{ time edu_end_dt }})</small></span>
+            <span class="progress-number"><b>{{completed_rate}}%</b></span>
+
+            <div class="progress progress-sm active">
+              <div class="progress-bar {{../themeOfProgressBar}} progress-bar-striped" style="width: {{completed_rate}}%"></div>
+            </div>
+          </div>
+          <!-- /.progress-group -->
+          {{/each}}
+        </div>
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- 교육이수율 점포별 순위 -->
+    <div class="col-lg-6">
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title">교육과정 이수율 랭킹 (지점)</h3>
+        </div>
+        <div class="box-body">
+          <div class="agentRankList">
+            <div class="col-md-6 agentTopRankList">
+              <p class="list-header header-bottom-line">
+                <i class="fa fa-thumbs-o-up"></i>&nbsp; 상위 10위
+              </p>
+              <ol>
+                {{#top 10 branch_progress_top_most}} {{#if branch_name}}
+                <li>{{branch_name}} ({{completed_rate}}%)</li>
+                {{/if}} {{/top}}
+              </ol>
+            </div>
+            <div class="col-md-6 agentBottomRankList">
+              <p class="list-header header-bottom-line">
+                <i class="fa fa-thumbs-o-down"></i>&nbsp;하위 10위
+              </p>
+              <ol>
+                {{#top 10 branch_progress_bottom_most}} {{#if branch_name}}
+                <li>{{branch_name}} ({{completed_rate}}%)</li>
+                {{/if}} {{/top}}
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- /.col -->
+  </div>
+  <!-- /.row -->
+  <!-- // 기간별 교육과정 진척도 -->
+
+  <div class="row">
+    <!-- 교육과정별 강의 이수율 -->
+    <div class="col-lg-12">
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title">{{ dateformat loggedIn.curdate 'm'}}월 교육과정 강의별 이수율</h3>
+        </div>
+
+        <div class="box-body">
+          {{#each edu_progress}}
+          <!-- course details -->
+          <div class="col-md-3 course-achievement">
+            <p class="list-header header-bottom-line">{{edu_name}} <br><small>({{ time edu_start_dt }} ~ {{ time edu_end_dt }})</small></p>
+            <div class="container-course-list">
+              {{#each course}}
+              <!-- course details -->
+              <div class="progress-course-detail">
+                <h4 class="course-name">{{course_name}}</h4>
+                <div class="progress progress-sm active">
+                  <div class="progress-bar {{../../themeOfProgressBar}} progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="{{completed_rate}}"
+                    aria-valuemin="0" aria-valuemax="100" style="width: {{completed_rate}}%"></div>
+                </div>
+                <div class="star-rating">
+                  <span class="ratings {{star-rating course_rate}}"></span> ( {{course_rate}}점, {{vote_count}}명 평가 )
+                </div>
+              </div>
+              <!-- // course details -->
+              {{/each}}
+            </div>
+          </div>
+          <!-- // course details -->
+          {{/each}}
+        </div>
+        <!-- // course details list -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- 이번 달 교육과정뱔 포인트 현황 -->
+    <div class="col-lg-12">
+      <div class="nav-tabs-custom">
+        <!-- Tabs within a box -->
+        <ul class="nav nav-tabs pull-right">
+          <li>
+            <a href="#point-stack" data-toggle="tab">누적</a>
+          </li>
+          <li class="active">
+            <a href="#point-edu" data-toggle="tab">{{ dateformat loggedIn.curdate 'm'}}월 교육과정</a>
+          </li>
+          <li class="pull-left header">
+            포인트 현황
+          </li>
+        </ul>
+        <div class="tab-content no-padding">
+          <!-- 교육과정별 포인트 현황 -->
+          <div class="tab-pane active" id="point-edu" style="position: relative;">
+            <div class="box box-solid">
+              <div class="box-header with-border">
+                <div class="form-group">
+                  <select id="select-point-by-edu" class="form-control select2" style="width: 100%;">
+                    <option selected="selected">교육과정을 선택하세요</option>
+                  {{#each edu_progress}}
+                    <option value="{{edu_id}}">{{edu_name}}</option>
+                  {{/each}}
+                  </select>
+                </div>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body table-responsive">
+                <table id="table-point-by-edu" class="table no-margin table-bordered table-striped" width="100%">
+                  <thead>
+                    <tr>
+                      <th class="center">지점</th>
+                      <th class="center">직책</th>
+                      <th class="center">이름</th>
+                      <th class="center">기간</th>
+                      <th class="center">이수</th>
+                      <th class="center">퀴즈</th>
+                      <th class="center">파이널</th>
+                      <th class="center">시청시간(초)</th>
+                      <th class="center">완료일</th>
+                      <th class="center">반복</th>
+                      <th class="center">포인트</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer clearfix">
+                <!--<ul class="pagination pagination-sm no-margin pull-right">-->
+                <!--<li><a href="#">&laquo;</a></li>-->
+                <!--<li><a href="#">1 / 11</a></li>-->
+                <!--<li><a href="#">&raquo;</a></li>-->
+                <!--</ul>-->
+              </div>
+            </div>
+          </div>
+          <!-- 누적 포인트 현황 -->
+          <div class="tab-pane" id="point-stack" style="position: relative;">
+            <div class="box box-solid">
+              <div class="box-header">
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body table-responsive">
+                <table id="table_point" class="table no-margin table-bordered table-striped" width="100%">
+                  <thead>
+                    <tr>
+                      <th class="center">지점</th>
+                      <th class="center">직책</th>
+                      <th class="center">이름</th>
+                      <th class="center">포인트</th>
+                      <th class="center">근거</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each point_rank}}
+                    <tr>
+                      <td class="center">{{branch_name}}</td>
+                      <td class="center">{{duty_name}}</td>
+                      <td class="center">{{user_name}}</td>
+                      <td class="right">{{comma-number point_total}}</td>
+                      <td class="center">
+                        <a class="btn btn-sm btn-default" data-toggle="modal" data-user-id="{{user_id}}" data-target='#modal-point-details'>상세보기
+                                                    </a>
+                        <!--<button class="btn btn-sm btn-success">상세보기</button>-->
+                        <!-- 팝업으로 띄울 것 -->
+                        <!-- 이수율 100%, 퀴즈(20문항 중 20문항), 테스트(240문항 중 240문항), 총 비디오 시청 기록 (300분), 이수속도(상위1%), 반복학습빈도(상위1%)-->
+                      </td>
+                    </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer clearfix">
+                <!--<ul class="pagination pagination-sm no-margin pull-right">-->
+                <!--<li><a href="#">&laquo;</a></li>-->
+                <!--<li><a href="#">1 / 11</a></li>-->
+                <!--<li><a href="#">&raquo;</a></li>-->
+                <!--</ul>-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--</div>-->
+  <!-- /.col -->
 </section>
 <!-- /.row -->
 

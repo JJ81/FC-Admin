@@ -6,14 +6,15 @@
 
 .course-achievement {
   border: 1px solid #eee;
-  height: 400px;
+  max-height: 400px;
   margin-bottom: 20px; }
 
 .container-course-list {
-  height: 315px;
+  max-height: 315px;
   border: 1px solid #eee;
   overflow: auto;
-  padding: 0 10px; }
+  margin-bottom: 10px;
+  padding: 10px 10px; }
 
 .progress-course-detail {
   margin-bottom: 15px; }
