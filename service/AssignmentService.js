@@ -78,7 +78,7 @@ AssignmentService.modifyLogAssignEdu2 = (_data, _callback) => {
 AssignmentService.create = (_connection, _data, _callback) => {
   let userIdCount = 0;
   let simpleAssignmentId = _data.simple_assignment_id;
-  const logGroupUserId = Util.publishHashByMD5(new Date());
+  const logGroupUserId = _data.groupId === undefined ? Util.publishHashByMD5(new Date()) : _data.groupId;
   let userIds = [];
 
   _connection.beginTransaction((err) => {
@@ -123,35 +123,49 @@ AssignmentService.create = (_connection, _data, _callback) => {
             }
 
             // log_bind_users 테이블에 입력
-            _connection.query(QUERY.EDU.InsertIntoLogBindUser,
-              [
-                _data.group_name,
-                _data.group_desc,
-                _data.admin_id,
-                logGroupUserId
-              ],
-              (err, result) => {
+            if (!_data.log_bind_user_id) {
+              _connection.query(QUERY.EDU.InsertIntoLogBindUser,
+                [
+                  _data.group_name,
+                  _data.group_desc,
+                  _data.admin_id,
+                  logGroupUserId
+                ],
+                (err, result) => {
+                  if (err) {
+                    console.log('----------------------------');
+                    console.log('error:InsertIntoLogBindUser');
+                    console.error(err);
+                    return _connection.rollback(() => {
+                      _callback(err, null);
+                      return;
+                    });
+                  } else {
+                    _connection.commit((err) => {
+                      if (err) {
+                        return _connection.rollback(() => {
+                          _callback(err, null);
+                          return;
+                        });
+                      } else {
+                        _callback(null, { insertId: result.insertId, employeeIds: userIds });
+                      }
+                    });
+                  }
+                }
+              );
+            } else {
+              _connection.commit((err) => {
                 if (err) {
-                  console.log('----------------------------');
-                  console.log('error:InsertIntoLogBindUser');
-                  console.error(err);
                   return _connection.rollback(() => {
                     _callback(err, null);
                     return;
                   });
                 } else {
-                  _connection.commit((err) => {
-                    if (err) {
-                      return _connection.rollback(() => {
-                        _callback(err, null);
-                        return;
-                      });
-                    } else {
-                      _callback(null, { insertId: result.insertId, employeeIds: userIds });
-                    }
-                  });
+                  _callback(null, null);
                 }
               });
+            }
           }
         );
       });
@@ -188,38 +202,52 @@ AssignmentService.create = (_connection, _data, _callback) => {
               return;
             });
           }
-          _connection.query(QUERY.EDU.InsertIntoLogBindUser,
-            [
-              _data.group_name,
-              _data.group_desc,
-              _data.admin_id,
-              logGroupUserId,
-              simpleAssignmentId
-            ],
-            (err, result) => {
+
+          if (!_data.log_bind_user_id) {
+            _connection.query(QUERY.EDU.InsertIntoLogBindUser,
+              [
+                _data.group_name,
+                _data.group_desc,
+                _data.admin_id,
+                logGroupUserId,
+                simpleAssignmentId
+              ],
+              (err, result) => {
+                if (err) {
+                  console.log('----------------------------');
+                  console.log('error:InsertIntoLogBindUser');
+                  console.error(err);
+                  return _connection.rollback(() => {
+                    _callback(err, null);
+                    return;
+                  });
+                } else {
+                  _connection.commit((err) => {
+                    if (err) {
+                      return _connection.rollback(() => {
+                        _callback(err, null);
+                        return;
+                      });
+                    } else {
+                      // console.log('commit success!');
+                      _callback(null, result);
+                    }
+                  });
+                }
+              }
+            );
+          } else {
+            _connection.commit((err) => {
               if (err) {
-                console.log('----------------------------');
-                console.log('error:InsertIntoLogBindUser');
-                console.error(err);
                 return _connection.rollback(() => {
                   _callback(err, null);
                   return;
                 });
               } else {
-                _connection.commit((err) => {
-                  if (err) {
-                    return _connection.rollback(() => {
-                      _callback(err, null);
-                      return;
-                    });
-                  } else {
-                    // console.log('commit success!');
-                    _callback(null, result);
-                  }
-                });
+                _callback(null, null);
               }
-            }
-          );
+            });
+          }
         }
       );
       break;
@@ -477,12 +505,34 @@ AssignmentService.deleteSimpleAssignment = (req, res, next) => {
 
       async.series(
         [
-          (callback) => {
+          callback => {
             connection.query(QUERY.ASSIGNMENT.DeleteSimpleAssignment,
               [req.query.id],
-              (err, rows) => {
-                callback(err, rows);
+              (err, result) => {
+                callback(err, result);
               });
+          },
+          callback => {
+            if (req.query.log_bind_user_id) {
+              connection.query(QUERY.ASSIGNMENT.DisableLogBindUserById,
+                [req.query.log_bind_user_id],
+                (err, result) => {
+                  callback(err, result);
+                });
+            } else {
+              callback(null, null);
+            }
+          },
+          callback => {
+            if (req.query.edu_id) {
+              connection.query(QUERY.EDU.DisableEduById,
+                [req.query.edu_id],
+                (err, result) => {
+                  callback(err, result);
+                });
+            } else {
+              callback(null, null);
+            }
           }
         ],
         (err, results) => {
@@ -595,6 +645,59 @@ AssignmentService.deleteAssignment = (data, _callback) => {
         }
       );
     });
+  });
+};
+AssignmentService.deleteGroupUserByGroupId = ({ groupId }, _callback) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+
+    connection.beginTransaction(err => {
+      if (err) throw err;
+
+      async.series(
+        [
+          callback => {
+            connection.query(QUERY.ASSIGNMENT.DeleteLogGroupUserByGroupId,
+              [ groupId ],
+              (err, result) => {
+                callback(err, result);
+              });
+          }
+        ],
+        (err, results) => {
+          connection.release();
+          if (err) {
+            connection.rollback(() => {
+              throw err;
+            });
+          } else {
+            connection.commit((err) => {
+              if (err) {
+                throw err;
+              } else {
+                _callback();
+              }
+            });
+          }
+        }
+      );
+    });
+  });
+};
+
+AssignmentService.getBindUser = ({ logBindUserId }, _callback) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    connection.query(QUERY.EDU.GetAssignmentDataById,
+      [ logBindUserId ],
+      (err, result) => {
+        connection.release();
+        if (err) {
+          throw new Error(err);
+        } else {
+          _callback(result);
+        }
+      });
   });
 };
 

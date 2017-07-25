@@ -771,8 +771,11 @@ QUERY.EDU = {
     ' WHERE `email` IN (?); ',
 
   InsertIntoLogGroupUser:
-    'INSERT INTO `log_group_user` (`user_id`, `group_id`) ' +
+    'INSERT IGNORE INTO `log_group_user` (`user_id`, `group_id`) ' +
     'VALUES(?,?); ',
+    // 'INSERT INTO `log_group_user` (`user_id`, `group_id`) ' +
+    // 'VALUES(?,?) ' +
+    // 'ON DUPLICATE KEY UPDATE `id` = `id`; ',
 
   InsertIntoLogBindUser:
     'INSERT INTO `log_bind_users` (`title`,`desc`,`creator_id`, `group_id`) ' +
@@ -1950,7 +1953,8 @@ QUERY.DASHBOARD = {
         '        r.`repetition` ' +
         '       ) AS point_total ' +
         '     , MAX(r.`start_dt`) AS edu_start_dt ' +
-        '     , MAX(r.`end_dt`) AS edu_end_dt ' +
+        '     , IFNULL(MAX(r.`end_dt`), \'\') AS edu_end_dt ' +
+        // '     , DATE_FORMAT(CURDATE(), \'%Y-%m-%d\') AS cur_date ' +
         '  FROM ( ' +
         '        SELECT u.`id` AS user_id ' +
         '             , u.`name` AS user_name ' +

@@ -51,6 +51,12 @@ function (Util) {
 
   // 교육과정 선택 변경
   $('#select-point-by-edu').change(function () {
+    var table = $('#table-point-by-edu').DataTable();
+
+    if ($(this).prop('selectedIndex') === 0) {
+      table.clear().draw();
+      return false;
+    }
     var eduId = $(this).val();
 
     axios.get('/dashboard/edupoint', {
@@ -60,7 +66,7 @@ function (Util) {
     })
     .then(function (response) {
       var newData = response.data.data;
-      var table = $('#table-point-by-edu').DataTable();
+      // var table = $('#table-point-by-edu').DataTable();
 
       table.clear().draw();
       table.rows.add(newData); // Add new data
@@ -85,24 +91,39 @@ function (Util) {
       $('#table_point_details > tbody ').html('');
       var list = response.data.list;
       var element = '';
+      var period;
+      var days;
+
       for (var index = 0; index < list.length; index++) {
         element = '<tr>';
         element += '<td>' + list[index].edu_name + '</td>';
-        element += '<td class="center">' + list[index].edu_start_dt + ' ~ ' + list[index].edu_end_dt + '</td>';
+
+        if (list[index].edu_start_dt === null) {
+          period = '시작전';
+        } else if (list[index].edu_end_dt === null) {
+          period = list[index].edu_start_dt + ' ~ ' + '미완료';
+        } else {
+          period = list[index].edu_start_dt + ' ~ ' + list[index].edu_end_dt;
+        }
+        days = list[index].speed.user_period === null ? 0 : list[index].speed.user_period;
+
+        element += '<td class="center">' + period + '</td>';
+        // element += '<td class="center">' + list[index].edu_start_dt + ' ~ ' + list[index].edu_end_dt + '</td>';
         element += '<td class="center">' + list[index].complete.complete_course_count + ' / ' + list[index].complete.total_course_count + '</td>';
         element += '<td class="center">' + list[index].quiz_correction.correct_count + ' / ' + list[index].quiz_correction.total_count + '</td>';
         element += '<td class="center">' + list[index].final_correction.correct_count + ' / ' + list[index].final_correction.total_count + '</td>';
         element += '<td class="center">' + list[index].reeltime.played_seconds + ' / ' + list[index].reeltime.duration + '</td>';
-        element += '<td class="center">' + list[index].speed.user_period + ' / ' + list[index].speed.edu_period + '</td>';
-        element += '<td class="center">' + (list[index].repetition.value == 1 ? '예' : '아니오') + '</td>';
+        element += '<td class="center">' + days + ' / ' + list[index].speed.edu_period + '</td>';
+        // element += '<td class="center">' + list[index].speed.user_period + ' / ' + list[index].speed.edu_period + '</td>';
+        element += '<td class="center">' + (list[index].repetition.value === 1 ? '예' : '아니오') + '</td>';
 
         var point_sum =
-                list[index].complete.value * list[index].point_complete +
-                list[index].quiz_correction.value * list[index].point_quiz +
-                list[index].final_correction.value * list[index].point_final +
-                list[index].reeltime.value * list[index].point_reeltime +
-                list[index].speed.value * list[index].point_speed +
-                list[index].repetition.value * list[index].point_repetition;
+          list[index].complete.value * list[index].point_complete +
+          list[index].quiz_correction.value * list[index].point_quiz +
+          list[index].final_correction.value * list[index].point_final +
+          list[index].reeltime.value * list[index].point_reeltime +
+          list[index].speed.value * list[index].point_speed +
+          list[index].repetition.value * list[index].point_repetition;
 
         element += '<td class="center">' + point_sum.toFixed(2) + '</td>';
         element += '</tr>';

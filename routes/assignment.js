@@ -280,7 +280,8 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
       group_name: fields.group_name,
       group_desc: fields.group_desc,
       redirect: fields.redirect ? fields.redirect : true,
-      simple_assignment_id: fields.id
+      simple_assignment_id: fields.id,
+      log_bind_user_id: fields.log_bind_user_id
     };
 
     pool.getConnection((err, connection) => {
@@ -331,15 +332,38 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
           //     callback(null, null);
           //   }
           // },
+
+          // 교육배정 그룹 코드를 조회한다.
+          callback => {
+            if (requestData.log_bind_user_id) {
+              AssignmentService.getBindUser({ logBindUserId: parseInt(requestData.log_bind_user_id) }, (result) => {
+                requestData.groupId = result[0].group_id;
+                console.log('requestData.groupId', requestData.groupId);
+                callback(null, null);
+              });
+            } else {
+              callback(null, null);
+            }
+          },
+          // 교육배정 그룹을 삭제한다.
+          callback => {
+            if (requestData.groupId) {
+              AssignmentService.deleteGroupUserByGroupId({ groupId: requestData.groupId }, (result) => {
+                callback(null, null);
+              });
+            } else {
+              callback(null, null);
+            }
+          },
           // 교육배정 그룹을 생성한다.
-          (callback) => {
+          callback => {
             AssignmentService.create(connection, requestData, (err, result) => {
-              if (result.insertId) {
+              if (result !== null && result.insertId) {
                 logBindUserId = result.insertId;
+              } else {
+                logBindUserId = requestData.log_bind_user_id;
               }
-              // if (result.employeeIds) {
-              //   employeeIds = result.employeeIds.join(',');
-              // }
+
               callback(err, result);
             });
           },

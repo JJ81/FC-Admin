@@ -278,16 +278,26 @@ router.get('/edupoint', util.isAuthenticated, (req, res) => {
               _inputs.edu_id
             ],
             (err, rows) => {
+              // console.log(rows);
               for (let index = 0; index < rows.length; index++) {
                 if (rows[index].logs !== null) {
                   let logs = JSON.parse(rows[index].logs);
-                  // console.log(logs);
-                  rows[index].period = logs.edu_start_dt + ' ~ ' + logs.edu_end_dt;
+                  let period;
+                  if (logs.edu_start_dt === null) {
+                    period = '시작전';
+                  } else if (logs.edu_end_dt === null) {
+                    period = logs.edu_start_dt + ' ~ ' + '미완료';
+                  } else {
+                    period = logs.edu_start_dt + ' ~ ' + logs.edu_end_dt;
+                  }
+                  let userPeriod = logs.speed.user_period === null ? 0 : logs.speed.user_period;
+
+                  rows[index].period = period; // eduStart + ' ~ ' + eduFinish;
                   rows[index].complete = logs.complete.complete_course_count + ' / ' + logs.complete.total_course_count;
                   rows[index].quiz_correction = logs.quiz_correction.correct_count + ' / ' + logs.quiz_correction.total_count;
                   rows[index].final_correction = logs.final_correction.correct_count + ' / ' + logs.final_correction.total_count;
                   rows[index].reeltime = logs.reeltime.played_seconds + ' / ' + logs.reeltime.duration;
-                  rows[index].speed = logs.speed.user_period + ' / ' + logs.speed.edu_period;
+                  rows[index].speed = userPeriod + ' / ' + logs.speed.edu_period;
                   rows[index].repetition = logs.repetition.value === 1 ? '예' : '아니오';
                 } else {
                   rows[index].period = '';

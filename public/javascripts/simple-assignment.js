@@ -13,10 +13,11 @@ window.requirejs([
   var allWells = $('.setup-content');
   var tableCheckAll = $('#check-all');
   var tableEmployee = Util.initDataTable($('#table_employee'), {
-    'lengthMenu': [ [5, 10, 25, 50, -1], [5, 10, 25, 50, '전체'] ],
-    'columnDefs': [
-      { orderable: false, targets: [0] }
-    ]});
+    'lengthMenu': [ [5, 10, 25, 50, -1], [5, 10, 25, 50, '전체'] ]
+    // 'columnDefs': [
+    //   { orderable: true, targets: [0] }
+    // ]
+  });
   var btnDeleteSimpleAssign = $('#js-delete-simple-assign');
   var btnSaveSimpleAssign = $('#js-save-simple-assign');
   var btnSendMessage = $('.btn-send-message');
@@ -176,6 +177,7 @@ window.requirejs([
   $('.step1 > .next > a').on('click', function (e) {
     e.preventDefault();
     if (validateStep1()) {
+      if (!window.confirm('저장하시겠습니까?')) return false;
       activateStep(2);
       saveStep1Data();
     }
@@ -187,6 +189,7 @@ window.requirejs([
   $('.step2 > .next > a').on('click', function (e) {
     e.preventDefault();
     if (validateStep2()) {
+      if (!window.confirm('저장하시겠습니까?')) return false;
       activateStep(3);
       saveStep2Data();
     }
@@ -261,6 +264,7 @@ window.requirejs([
     formData.append('group_name', '간편배정');
     formData.append('redirect', false);
     formData.append('id', assignmentId);
+    formData.append('log_bind_user_id', $('#log_bind_user_id').val());
 
     window.axios.post('/assignment/upload', formData)
       .then(function (res) {
@@ -319,7 +323,9 @@ window.requirejs([
     if (!window.confirm('정말 삭제하시겠습니까?')) return false;
 
     var params = {
-      id: assignmentId
+      id: assignmentId,
+      log_bind_user_id: $('#log_bind_user_id').val(),
+      edu_id: $('#edu_id').val()
     };
 
     window.axios.delete('/simple_assignment',
