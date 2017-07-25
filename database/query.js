@@ -1711,6 +1711,7 @@ QUERY.DASHBOARD = {
        '     , MAX(g.`edu_name`) AS edu_name ' +
        '     , MAX(g.`start_dt`) AS edu_start_dt ' +
        '     , MAX(g.`end_dt`) AS edu_end_dt ' +
+       '     , MAX(g.`training_edu_id`) AS training_edu_id ' +
        '     , IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate ' +
        '  FROM ( ' +
        '        SELECT @training_user_id:= tu.`id` AS training_user_id ' +
@@ -1731,6 +1732,7 @@ QUERY.DASHBOARD = {
       //  '             , e.`start_dt` ' +
       //  '             , e.`end_dt` ' +
        '             , u.`fc_id` ' +
+       '             , te.`id` AS training_edu_id ' +
        '          FROM `training_users` AS tu ' +
        '         INNER JOIN `users` AS u ' +
        '            ON tu.`user_id` = u.`id` ' +

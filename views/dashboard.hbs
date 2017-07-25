@@ -66,7 +66,10 @@
         <div class="box-body">
           {{#each edu_progress}}
           <div class="progress-group">
-            <span class="progress-text">{{edu_name}} <small>({{ time edu_start_dt }} ~ {{ time edu_end_dt }})</small></span>
+            <span class="progress-text">
+              <a href="/achievement/details?id={{training_edu_id}}&edu_id={{edu_id}}">{{edu_name}}</a>
+              <small>({{ time edu_start_dt }} ~ {{ time edu_end_dt }})</small>
+            </span>
             <span class="progress-number"><b>{{completed_rate}}%</b></span>
 
             <div class="progress progress-sm active">
@@ -128,7 +131,9 @@
           {{#each edu_progress}}
           <!-- course details -->
           <div class="col-md-3 course-achievement">
-            <p class="list-header header-bottom-line">{{edu_name}} <br><small>({{ time edu_start_dt }} ~ {{ time edu_end_dt }})</small></p>
+            <p class="list-header header-bottom-line"><a href="/achievement/details?id={{training_edu_id}}&edu_id={{edu_id}}">{{edu_name}}</a>
+              <br><small>({{ time edu_start_dt }} ~ {{ time edu_end_dt }})</small>
+            </p>
             <div class="container-course-list">
               {{#each course}}
               <!-- course details -->
