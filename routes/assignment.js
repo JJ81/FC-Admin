@@ -440,7 +440,7 @@ router.delete('/', util.isAuthenticated, (req, res, next) => {
           // log_bind_users 삭제
           (callback) => {
             connection.query(QUERY.ASSIGNMENT.DisableLogBindUserById,
-              [ queryParams.id ],
+              [ queryParams.log_bind_user_id ],
               function (err, data) {
                 callback(err, data);
               }

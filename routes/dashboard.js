@@ -278,7 +278,7 @@ router.get('/edupoint', util.isAuthenticated, (req, res) => {
               _inputs.edu_id
             ],
             (err, rows) => {
-              // console.log(rows);
+              if (err) throw err;
               for (let index = 0; index < rows.length; index++) {
                 if (rows[index].logs !== null) {
                   let logs = JSON.parse(rows[index].logs);
@@ -296,7 +296,10 @@ router.get('/edupoint', util.isAuthenticated, (req, res) => {
                   rows[index].complete = logs.complete.complete_course_count + ' / ' + logs.complete.total_course_count;
                   rows[index].quiz_correction = logs.quiz_correction.correct_count + ' / ' + logs.quiz_correction.total_count;
                   rows[index].final_correction = logs.final_correction.correct_count + ' / ' + logs.final_correction.total_count;
-                  rows[index].reeltime = logs.reeltime.played_seconds + ' / ' + logs.reeltime.duration;
+                  rows[index].reeltime =
+                    (logs.reeltime.video_watch_count === undefined ? '0' : logs.reeltime.video_watch_count) + ' / ' +
+                    (logs.reeltime.video_count === undefined ? '0' : logs.reeltime.video_count);
+                  // rows[index].reeltime = logs.reeltime.played_seconds + ' / ' + logs.reeltime.duration;
                   rows[index].speed = userPeriod + ' / ' + logs.speed.edu_period;
                   rows[index].repetition = logs.repetition.value === 1 ? '예' : '아니오';
                 } else {

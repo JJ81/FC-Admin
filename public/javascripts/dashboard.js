@@ -7,6 +7,7 @@ requirejs(
     'common'
   ],
 function (Util) {
+  var $ = $ || window.$;
   $(function () {
     // datatable 설정
     Util.initDataTable($('#table-point-by-edu'), {
@@ -105,27 +106,30 @@ function (Util) {
         } else {
           period = list[index].edu_start_dt + ' ~ ' + list[index].edu_end_dt;
         }
-        days = list[index].speed.user_period === null ? 0 : list[index].speed.user_period;
 
+        days = list[index].speed.user_period === null ? 0 : list[index].speed.user_period;
         element += '<td class="center">' + period + '</td>';
         // element += '<td class="center">' + list[index].edu_start_dt + ' ~ ' + list[index].edu_end_dt + '</td>';
         element += '<td class="center">' + list[index].complete.complete_course_count + ' / ' + list[index].complete.total_course_count + '</td>';
         element += '<td class="center">' + list[index].quiz_correction.correct_count + ' / ' + list[index].quiz_correction.total_count + '</td>';
         element += '<td class="center">' + list[index].final_correction.correct_count + ' / ' + list[index].final_correction.total_count + '</td>';
-        element += '<td class="center">' + list[index].reeltime.played_seconds + ' / ' + list[index].reeltime.duration + '</td>';
+        element += '<td class="center">' + (list[index].reeltime.video_watch_count === undefined ? '0' : list[index].reeltime.video_watch_count) + ' / ' +
+          (list[index].reeltime.video_count === undefined ? '0' : list[index].reeltime.video_count) + '</td>';
+        // element += '<td class="center">' + list[index].reeltime.played_seconds + ' / ' + list[index].reeltime.duration + '</td>';
         element += '<td class="center">' + days + ' / ' + list[index].speed.edu_period + '</td>';
         // element += '<td class="center">' + list[index].speed.user_period + ' / ' + list[index].speed.edu_period + '</td>';
         element += '<td class="center">' + (list[index].repetition.value === 1 ? '예' : '아니오') + '</td>';
 
-        var point_sum =
+        var pointSum =
           list[index].complete.value * list[index].point_complete +
           list[index].quiz_correction.value * list[index].point_quiz +
           list[index].final_correction.value * list[index].point_final +
-          list[index].reeltime.value * list[index].point_reeltime +
+          (list[index].reeltime.value * (list[index].point_reeltime - (list[index].reeltime.refresh_count === undefined ? 0 : list[index].reeltime.refresh_count))) +
+          // list[index].reeltime.value * list[index].point_reeltime +
           list[index].speed.value * list[index].point_speed +
           list[index].repetition.value * list[index].point_repetition;
 
-        element += '<td class="center">' + point_sum.toFixed(2) + '</td>';
+        element += '<td class="center">' + pointSum.toFixed(2) + '</td>';
         element += '</tr>';
         $('#table_point_details > tbody ').append(element);
       }

@@ -6,18 +6,16 @@
           <thead>
             <tr>
               <th class="center">배정일</th>
-              <th class="center">교육기간</th>
               <th class="center">교육과정</th>
-              <th class="center">교육대상</th>
+              <th class="center">교육기간</th>
             </tr>
           </thead>
           <tbody>
             {{#each list}}
             <tr>
               <td class="center">{{time created_dt}}</td>
-              <td class="center">{{time start_dt}} ~ {{time end_dt}}</td>
               <td class=""><a href="/achievement/details?id={{id}}&edu_id={{edu_id}}" class="btn-link">{{name}}</a></td>
-              <td class="">{{target}}</td>
+              <td class="center">{{time start_dt}} ~ {{time end_dt}}</td>
             </tr>
             {{/each}}
           </tbody>

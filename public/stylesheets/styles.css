@@ -407,5 +407,9 @@ ul.session-content > li:hover {
 .mce-widget.mce-tooltip {
   display: none !important;
 }
+
+.text-red {
+  color: red;
+}
 /*# sourceMappingURL=styles.css.map */
 

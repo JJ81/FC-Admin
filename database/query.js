@@ -1878,7 +1878,7 @@ QUERY.DASHBOARD = {
         '            , (lup.`complete` * epw.`point_complete`) AS complete ' +
         '            , (lup.`quiz_correction` * epw.`point_quiz`) AS quiz_correction ' +
         '            , (lup.`final_correction` * epw.`point_final`) AS final_correction ' +
-        '            , (lup.`reeltime` * epw.`point_reeltime`) AS reeltime ' +
+        '            , (lup.`reeltime` * (epw.`point_reeltime` - lup.`video_refresh_count`)) AS reeltime ' +
         '            , (lup.`speed` * epw.`point_speed`) AS speed ' +
         '            , (lup.`repetition` * epw.`point_repetition`) AS repetition ' +
         '          FROM `log_user_point` AS lup ' +
@@ -1967,7 +1967,8 @@ QUERY.DASHBOARD = {
         '             , (lup.`complete` * epw.`point_complete`) AS complete ' +
         '             , (lup.`quiz_correction` * epw.`point_quiz`) AS quiz_correction ' +
         '             , (lup.`final_correction` * epw.`point_final`) AS final_correction ' +
-        '             , (lup.`reeltime` * epw.`point_reeltime`) AS reeltime ' +
+        // '             , (lup.`reeltime` * epw.`point_reeltime`) AS reeltime ' +
+        '             , (lup.`reeltime` * (epw.`point_reeltime` - lup.`video_refresh_count`)) AS reeltime ' +
         '             , (lup.`speed` * epw.`point_speed`) AS speed ' +
         '             , (lup.`repetition` * epw.`point_repetition`) AS repetition ' +
         '             , lae.`start_dt` ' +
