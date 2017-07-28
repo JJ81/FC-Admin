@@ -61,6 +61,22 @@ function ($, jszip, axios, moment, pace, _, Handlebars) {
     return (a === b);
   });
 
+  $('#js--achievement-group').on('click', function () {
+    var $this = $(this);
+
+    if (!$this.hasClass('active')) {
+      window.location.href = '/achievement';
+    }
+  });
+
+  $('#js--education-group').on('click', function () {
+    var $this = $(this);
+
+    if (!$this.hasClass('active')) {
+      window.location.href = '/simple_assignment';
+    }
+  });
+
   Handlebars.registerHelper('star-rating', function (rating) {
     var _class = '';
     if (rating === 0) {

@@ -18,7 +18,7 @@
       </li>
       {{/ifCond}}
 
-      <li class="{{#if (isEquals menu_group 'achievement')}}active {{/if}}treeview">
+      <li class="{{#if (isEquals menu_group 'achievement')}}active {{/if}}treeview" id="js--achievement-group">
         <a href="#">
           <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
           <span>진척도</span>
@@ -33,7 +33,7 @@
       </li>
 
       {{#ifCond loggedIn.role '!==' 'supervisor' }}
-      <li class="{{#if (isEquals menu_group 'education')}}active {{/if}}treeview">
+      <li class="{{#if (isEquals menu_group 'education')}}active {{/if}}treeview" id="js--education-group">
         <a href="#">
           <i class="fa fa-database"></i>
           <span>교육과정 관리</span>
