@@ -7,7 +7,7 @@ window.requirejs([
 ],
 function (Util) {
   var $ = $ || window.$;
-  const selectBranchList = window.$('.select-branch-list');
+  const selectBranchList = window.$('#select-branch-list');
   let branchIdList = [];
   const btnAssignBranch = window.$('.btn-assign-branch');
   const branchContainer = window.$('#draggablePanelList');
