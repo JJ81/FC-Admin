@@ -145,7 +145,7 @@ function (Util) {
   // 추가한 강의중에 중복이 있는지 확인을 한다.
   const checkDuplicateBranchId = (id) => {
     for (let i = 0, len = branchIdList.length; i < len; i++) {
-      if (branchIdList[i][1] === id) {
+      if (branchIdList[i][1] == id) {
         return true;
       }
     }
