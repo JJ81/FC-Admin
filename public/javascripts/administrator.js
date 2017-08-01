@@ -17,7 +17,7 @@ function (Util) {
   let clickedUserId = null;
 
   // 관리자 삭제하기
-  window.$('#table_admin').on('click', '.btn-delete-admin', () => {
+  window.$('#table_administrator').on('click', '.btn-delete-admin', () => {
     if (!window.confirm('삭제 시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?')) {
       return false;
     }
