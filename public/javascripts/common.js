@@ -177,7 +177,7 @@ function ($, jszip, axios, moment, pace, _, Handlebars) {
       } else {
         _options = options;
       }
-      // _options.deferRender = false;
+      _options.deferRender = true;
       _options.responsive = true;
       // _options.language = { "url": "https://cdn.datatables.net/plug-ins/1.10.13/i18n/Korean.json" };
       _options.language = {
