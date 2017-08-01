@@ -13,14 +13,14 @@
       {{/ifCond}}
       <!-- /.box-header -->
       <div class="box-body table-responsive">
-        <table id="table_admin" class="table no-margin table-bordered table-striped" width="100%">
+        <table id="table_administrator" class="table no-margin table-bordered table-striped" width="100%">
           <thead>
             <tr>
               <th class="center">ID</th>
               <th class="center">이름</th>
               <th class="center">이메일</th>
               <th class="center">권한</th>
-              {{#if (isEquals ../loggedIn.isdemo 0)}}
+              {{#if (isEquals loggedIn.isdemo 0)}}
               <th class="center">Action</th>
               {{/if}}
             </tr>
@@ -34,14 +34,16 @@
               <td class="center">{{role}}</td>
               {{#if (isEquals ../loggedIn.isdemo 0)}}
               <td class="center">
-                {{#ifCond (isEquals ../loggedIn.role 'supervisor') '||' (isEquals ../loggedIn.role 'admin')}} - {{else}} {{#if (isEquals
-                canedit 'Y') }}
+                {{#ifCond (isEquals ../../loggedIn.role 'supervisor') '||' (isEquals ../../loggedIn.role 'admin')}}
+                -
+                {{else}}
+                {{#if (isEquals canedit 'Y') }}
                 <div class="btn-group dropup">
                   <button type="button" class="btn btn-warning btn-sm">수정</button>
                   <button type="button" class="btn btn-warning dropdown-toggle btn-sm" data-toggle="dropdown">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                          </button>
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="#" data-user-id="{{id}}" data-user-name="{{name}}" data-user-email="{{email}}" data-user-role="{{role}}"
                         class="btn-modify-admininfo" data-toggle="modal" data-target="#modifyAdmin">정보수정</a>
@@ -57,8 +59,11 @@
                     {{/if}}
                   </ul>
                 </div>
-                <button type="button" class="btn btn-danger btn-sm btn-delete-admin" data-user-id="{{id}}">삭제</button> {{else}}
-                - {{/if}} {{/ifCond}}
+                <button type="button" class="btn btn-danger btn-sm btn-delete-admin" data-user-id="{{id}}">삭제</button>
+                {{else}}
+                -
+                {{/if}}
+                {{/ifCond}}
               </td>
               {{/if}}
             </tr>

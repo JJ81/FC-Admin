@@ -12,6 +12,7 @@ window.requirejs([
   var navListItems = $('ul.setup-panel li a');
   var allWells = $('.setup-content');
   var tableCheckAll = $('#check-all');
+  var tableCourse = Util.initDataTable($('#table_course'));
   var tableEmployee = Util.initDataTable($('#table_employee'), {
     'lengthMenu': [ [5, 10, 25, 50, -1], [5, 10, 25, 50, '전체'] ]
     // 'columnDefs': [

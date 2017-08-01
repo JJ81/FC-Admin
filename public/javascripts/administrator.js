@@ -5,30 +5,9 @@
 window.requirejs([
   'common'
 ],
-(Util) => {
+function (Util) {
   // datatable 설정
-  Util.initDataTable(window.$('#table_admin'),
-    {
-      buttons:
-      [
-        {
-          text: '<i class="fa fa-copy"></i> 복사',
-          extend: 'copy',
-          className: 'btn-sm btn-default',
-          exportOptions: {
-            columns: [ 0, 1, 2, 3 ]
-          }
-        },
-        {
-          text: '<i class="fa fa-download"></i> 엑셀',
-          extend: 'excel',
-          className: 'btn-sm btn-default',
-          exportOptions: {
-            columns: [ 0, 1, 2, 3 ]
-          }
-        }
-      ]
-    });
+  Util.initDataTable($('#table_administrator'));
 
   const selectBranchList = window.$('.select-branch-list');
   let branchIdList = [];

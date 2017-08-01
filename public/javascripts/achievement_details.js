@@ -32,13 +32,15 @@ window.requirejs([ 'common' ],
       }
     })
     .then((response) => {
-      for (let i = 0; i < response.data.checklists.length; i++) {
-        window.$('#checklist_container').append(template);
-        Util.initDataTable(window.$('.checklist').last(), {
-          data: response.data.checklists[i].rows,
-          columns: response.data.checklists[i].columns
-        });
-        window.$('.checklist-title').last().html('체크리스트 : ' + '<b>' + response.data.checklists[i].checklist_title + '</b>');
+      if (response.data.checklists !== null) {
+        for (let i = 0; i < response.data.checklists.length; i++) {
+          window.$('#checklist_container').append(template);
+          Util.initDataTable(window.$('.checklist').last(), {
+            data: response.data.checklists[i].rows,
+            columns: response.data.checklists[i].columns
+          });
+          window.$('.checklist-title').last().html('체크리스트 : ' + '<b>' + response.data.checklists[i].checklist_title + '</b>');
+        }
       }
     })
     .catch((error) => {

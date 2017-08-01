@@ -82,7 +82,7 @@
       </li>
       {{/ifCond}}
 
-      {{#if (isEquals ../loggedIn.isdemo 0)}}
+      {{#if (isEquals loggedIn.isdemo 0)}}
       {{#ifCond loggedIn.role '!==' 'supervisor' }}
       <li {{#if (isEquals current_path 'Help')}}class="active" {{/if}}>
         <a href="/help">
@@ -98,7 +98,7 @@
       {{/ifCond}}
       {{/if}}
 
-      {{#if (isEquals ../loggedIn.isdemo 0)}}
+      {{#if (isEquals loggedIn.isdemo 0)}}
       <li>
         <a href="http://pf.kakao.com/_aRAPd" target="_blank">
           <i class="fa fa-phone" aria-hidden="true"></i>

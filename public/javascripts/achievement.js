@@ -6,7 +6,7 @@
 requirejs([
   'common'
 ],
-(Util) => {
+function (Util) {
   // datatable 설정
   Util.initDataTable($('#table_achievement'));
 });

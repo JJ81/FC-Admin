@@ -2,7 +2,7 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-              {{#if (isEquals ../loggedIn.isdemo 0)}}
+              {{#if (isEquals loggedIn.isdemo 0)}}
                 <div class="btn-group">
                   <button type="button" class="btn btn-default">기타기능</button>
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -39,7 +39,7 @@
                         <th class="center">이름</th>
                         <th class="center">휴대폰번호</th>
                         <th class="center">이메일</th>
-                        {{#if (isEquals ../loggedIn.isdemo 0)}}
+                        {{#if (isEquals loggedIn.isdemo 0)}}
                         <th class="center">Action</th>
                         {{/if}}
                     </tr>
@@ -54,7 +54,7 @@
                         <td class="center">{{email}}</td>
                         {{#if (isEquals ../loggedIn.isdemo 0)}}
                         <td class="center">
-                            <div class="btn-group">
+                            <div class="btn-group dropup">
                                 <button type="button" class="btn btn-warning btn-sm">수정</button>
                                 <button type="button" class="btn btn-warning dropdown-toggle btn-sm" data-toggle="dropdown">
                                     <span class="caret"></span>
