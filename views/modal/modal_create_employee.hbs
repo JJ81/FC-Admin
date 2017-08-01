@@ -1,72 +1,74 @@
 <!-- Create Employee -->
 <div class="modal fade" id="createEmployee" role="dialog">
-    <form class="modal-dialog" method="post" action="/employee/create" id="frm_create_employee">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  <form class="modal-dialog" method="post" action="/employee/create" id="frm_create_employee">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">교육생 추가</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="exampleInputFile">유의사항 <br />
-                    <small class="text-red">
-                      1. * 은 필수입력 사항입니다.<br>
-                      2. 탈퇴 회원의 휴대폰 번호는 재사용 가능하나 회원간 중복은 불가합니다.
-                    </small>
-                  </label>
-                </div>
-                <div class="form-group">
-                    <label>* 이름</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="이름" required autocomplete="off" />
-                </div>
-
-                <div class="form-group">
-                    <label>* 지점</label>
-                    <select class="form-control select2" id="select_branch" name="branch" style="width: 100%;">
-                        {{#each branch}}
-                        <option value="{{id}}">{{name}}</option>
-                        {{/each}}
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>* 직책</label>
-                    <select class="form-control" name="duty">
-                        {{#each duty}}
-                        <option value="{{id}}">{{name}}</option>
-                        {{/each}}
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>* 휴대폰번호</label>
-                    <input type="text" class="form-control" name="tel" id="tel" placeholder="10-11자리의 숫자만 입력" required autocomplete="off" />
-                </div>
-
-                <div class="form-group">
-                    <label>* 비밀번호</label>
-                    <input type="password" class="form-control pass" name="pass" id="set_password" placeholder="최소 4자리 이상 입력" required autocomplete="off" required />
-                </div>
-
-                <div class="form-group">
-                    <label>* 비밀번호 확인</label>
-                    <input type="password" class="form-control re_pass" name="re_pass" placeholder="비밀번호 재입력" required autocomplete="off" required />
-                </div>
-
-                <div class="form-group">
-                    <label>이메일</label>
-                    <input type="text" class="form-control" name="email" id="email" placeholder="이메일" autocomplete="off" />
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
-                <button type="submit" class="btn btn-primary btn-set-agent-password-submit">생성</button>
-            </div>
+        <h4 class="modal-title">교육생 추가</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="exampleInputFile">유의사항 <br />
+            <small class="text-red">
+              1. * 은 필수입력 사항입니다.<br>
+              2. 탈퇴 회원의 휴대폰 번호는 재사용 가능하나 회원간 중복은 불가합니다.
+            </small>
+          </label>
         </div>
-        <!-- /.modal-content -->
-    </form>
-    <!-- /.modal-dialog -->
+        <div class="form-group">
+          <label>* 이름</label>
+          <input type="text" class="form-control" name="name" id="name" placeholder="이름" required autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label>* 지점</label>
+          <select class="form-control select2" id="select_branch" name="branch" style="width: 100%;">
+            {{#each branch}}
+            <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>* 직책</label>
+          <select class="form-control" name="duty">
+            {{#each duty}}
+            <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>* 휴대폰번호</label>
+          <input type="text" class="form-control" name="tel" id="tel" placeholder="10-11자리의 숫자만 입력" required autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label>* 비밀번호</label>
+          <input type="password" class="form-control pass" name="pass" id="set_password" placeholder="최소 4자리 이상 입력" required autocomplete="off"
+            required />
+        </div>
+
+        <div class="form-group">
+          <label>* 비밀번호 확인</label>
+          <input type="password" class="form-control re_pass" name="re_pass" placeholder="비밀번호 재입력" required autocomplete="off" required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>이메일</label>
+          <input type="text" class="form-control" name="email" id="email" placeholder="이메일" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+        <button type="submit" class="btn btn-primary btn-set-agent-password-submit">생성</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </form>
+  <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->

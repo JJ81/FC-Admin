@@ -1,40 +1,40 @@
 <!-- Allocate Branch -->
 <div class="modal fade" id="assignBranch" role="dialog">
-    <form class="modal-dialog" method="post" action="/administrator/assign/branch" id="frm_assign_branch">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">지점 배정</h4>
-            </div>
-            <div class="modal-body">
-
-                <div class="form-group">
-                    <label>베정할 지점을 선택하세요.</label>
-                    <select name="branch_id" class="form-control select-branch-list">
-                        {{#each branches}}
-                        <option value="{{id}}">{{name}}</option>
-                        {{/each}}
-                    </select>
-                    <div style="text-align: right;margin-top: 5px;">
-                        <button type="button" class="btn btn-default btn-assign-branch">추가</button>
-                    </div>                    
-                </div>
-
-                <hr />
-
-                <h5>배정된 지점 리스트</h5>
-                <ul id="draggablePanelList" class="list-unstyled"></ul>                
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
-                <button type="submit" class="btn btn-primary btn-assign-branch-submit">저장</button>
-            </div>
+  <form class="modal-dialog" method="post" action="/administrator/assign/branch" id="frm_assign_branch">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">지점 배정</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>베정할 지점을 선택하세요.</label>
+          <select name="branch_id" id="select-branch-list" class="form-control select2" style="width: 100%;">
+            {{#each branches}}
+            <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </select>
+          <div style="text-align: right;margin-top: 5px;">
+            <button type="button" class="btn btn-default btn-assign-branch">추가</button>
+          </div>
         </div>
-        <!-- /.modal-content -->
-        <input type="hidden" name="user_id" class="user_id" />
-    </form>
-    <!-- /.modal-dialog -->
+
+        <hr />
+
+        <h5>배정된 지점 리스트</h5>
+        <ul id="draggablePanelList" class="list-unstyled"></ul>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+        <button type="submit" class="btn btn-primary btn-assign-branch-submit">저장</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+    <input type="hidden" name="user_id" class="user_id" />
+  </form>
+  <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->

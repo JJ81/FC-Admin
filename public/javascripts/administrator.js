@@ -6,15 +6,19 @@ window.requirejs([
   'common'
 ],
 function (Util) {
-  // datatable 설정
-  Util.initDataTable($('#table_administrator'));
-
+  var $ = $ || window.$;
   const selectBranchList = window.$('.select-branch-list');
   let branchIdList = [];
   const btnAssignBranch = window.$('.btn-assign-branch');
   const branchContainer = window.$('#draggablePanelList');
   const btnBranchSumit = window.$('.btn-assign-branch-submit');
   let clickedUserId = null;
+
+  $(function () {
+    $('#select-branch-list').select2();
+    // datatable 설정
+    Util.initDataTable($('#table_administrator'));
+  });
 
   // 관리자 삭제하기
   window.$('#table_administrator').on('click', '.btn-delete-admin', () => {
