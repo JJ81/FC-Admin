@@ -44,7 +44,8 @@ passport.use(new LocalStrategy({
               'role': data[0].role,
               'fc_id': data[0].fc_id,
               'fc_name': data[0].fc_name,
-              'curdate': data[0].curdate
+              'curdate': data[0].curdate,
+              'isdemo': data[0].isdemo
             });
           }
         } else {

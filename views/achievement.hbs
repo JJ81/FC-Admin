@@ -14,7 +14,13 @@
             {{#each list}}
             <tr>
               <td class="center">{{time created_dt}}</td>
-              <td class=""><a href="/achievement/details?id={{id}}&edu_id={{edu_id}}" class="btn-link">{{name}}</a></td>
+              <td class="">
+                {{#if (isEquals ../loggedIn.isdemo 1)}}
+                <a href="#" class="btn-link">{{name}}</a>
+                {{else}}
+                <a href="/achievement/details?id={{id}}&edu_id={{edu_id}}" class="btn-link">{{name}}</a>
+                {{/if}}
+              </td>
               <td class="center">{{time start_dt}} ~ {{time end_dt}}</td>
             </tr>
             {{/each}}

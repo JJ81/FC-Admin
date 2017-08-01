@@ -61,7 +61,7 @@ AssignmentService.modifyLogAssignEdu2 = (_data, _callback) => {
       [trainingStartDate, trainingEndDate, trainingEduId],
       (err, data) => {
         connection.release();
-        if (err) throw err;
+        if (err) console.log(err); // throw err;
         _callback(err, data);
       }
     );
@@ -269,6 +269,8 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
   const userData = _data.user;
   let trainingEduId = _data.training_edu_id;
 
+  console.log(_data);
+
   async.series([
     callback => {
       if (!_data.isUpdate) {
@@ -320,6 +322,7 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
         );
       } else {
         // training_edu_id 로 log_assign_edu 수정
+        // console.log('modifyLogAssignEdu2 : ', trainingStartDate, trainingEndDate);
         AssignmentService.modifyLogAssignEdu2({
           start_dt: trainingStartDate,
           end_dt: trainingEndDate,

@@ -166,7 +166,11 @@
         <!-- Tabs within a box -->
         <ul class="nav nav-tabs pull-right">
           <li>
+            {{#if (isEquals loggedIn.isdemo 1)}}
+            <a href="#" data-toggle="tab">누적</a>
+            {{else}}
             <a href="#point-stack" data-toggle="tab">누적</a>
+            {{/if}}
           </li>
           <li class="active">
             <a href="#point-edu" data-toggle="tab">{{ dateformat loggedIn.curdate 'm'}}월 교육과정</a>
@@ -181,12 +185,14 @@
             <div class="box box-solid">
               <div class="box-header with-border">
                 <div class="form-group">
+                  {{#if (isEquals loggedIn.isdemo 0)}}
                   <select id="select-point-by-edu" class="form-control select2" style="width: 100%;">
                     <option selected="selected">교육과정을 선택하세요</option>
                   {{#each edu_progress}}
                     <option value="{{edu_id}}">{{edu_name}}</option>
                   {{/each}}
                   </select>
+                  {{/if}}
                 </div>
               </div>
               <!-- /.box-header -->

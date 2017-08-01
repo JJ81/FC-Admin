@@ -156,7 +156,7 @@
           <div class="form-group">
             <label for="start_dt">시작일 :</label>
             <div class="input-group date" id="start_dt">
-              <input type="text" class="form-control" name="start_dt" />
+              <input type="text" class="form-control" name="start_dt" value="{{dateformat assignment.start_dt 'yyyy-mm-dd HH:MM'}}"/>
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
               </span>
@@ -167,7 +167,7 @@
           <div class="form-group">
             <label for="end_dt">종료일 :</label>
             <div class="input-group date" id="end_dt">
-              <input type="text" class="form-control" name="finish_dt" />
+              <input type="text" class="form-control" name="finish_dt" value="{{dateformat assignment.end_dt 'yyyy-mm-dd HH:MM'}}" />
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
               </span>

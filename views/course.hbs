@@ -3,10 +3,12 @@
     <div class="box">
       <div class="box-header">
         <div class="pull-right">
+          {{#if (isEquals loggedIn.isdemo 0)}}
           <button class="btn btn-default btn-md" data-toggle="modal" data-target="#registerCourse">
             <i class="fa fa-plus"></i> &nbsp;
             강의추가
           </button>
+          {{/if}}
         </div>
       </div>
       <!-- /.box-header -->
@@ -24,7 +26,12 @@
             {{#each list}}
             <tr>
               <td class="center">{{time created_dt}}</td>
-              <td class=""><a href="/course/details?id={{course_id}}" class="btn-link">{{name}}</a></td>
+              <td class="">
+                {{#if (isEquals ../loggedIn.isdemo 1)}}
+                <a href="#" class="btn-link">{{name}}</a></td>
+                {{else}}
+                <a href="/course/details?id={{course_id}}" class="btn-link">{{name}}</a></td>
+                {{/if}}
               <td class="center">{{teacher_name}}</td>
               <td class="center">{{creator}}</td>
             </tr>

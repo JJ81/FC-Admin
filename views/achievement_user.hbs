@@ -19,7 +19,13 @@
               <td class="center">{{addOneForIndex @key}}</td>
               <td class="center">{{branch_name}}</td>
               <td class="center">{{duty_name}}</td>
-              <td class="center"><a href="/achievement/user/details?user_id={{user_id}}" class="btn-link">{{user_name}}</a></td>
+              <td class="center">
+                {{#if (isEquals ../loggedIn.isdemo 1)}}
+                <a href="#" class="btn-link">{{user_name}}</a>
+                {{else}}
+                <a href="/achievement/user/details?user_id={{user_id}}" class="btn-link">{{user_name}}</a>
+                {{/if}}
+              </td>
               <td class="right">{{#if point}}{{point}}{{else}}-{{/if}}</td>
               <td class="right">{{#if (isEquals completed_rate 0) }}-{{else}}{{completed_rate}}{{/if}}</td>
             </tr>

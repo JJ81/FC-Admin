@@ -1,14 +1,16 @@
 <div class="row home_section">
   <div class="col-xs-12">
     <div class="box">
-      {{#if (isEquals loggedIn.role 'superadmin')}}
+      {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'systemadmin') }}
+      {{#if (isEquals ../loggedIn.isdemo 0)}}
       <div class="box-header">
-        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#registerAdmin">
-          <i class="fa fa-pencil-square-o"></i>
-          관리자 등록
+        <button class="btn btn-default pull-right" data-toggle="modal" data-target="#registerAdmin">
+          <i class="fa fa-plus"></i>
+          관리자
         </button>
       </div>
       {{/if}}
+      {{/ifCond}}
       <!-- /.box-header -->
       <div class="box-body table-responsive">
         <table id="table_admin" class="table no-margin table-bordered table-striped" width="100%">
@@ -18,7 +20,9 @@
               <th class="center">이름</th>
               <th class="center">이메일</th>
               <th class="center">권한</th>
+              {{#if (isEquals ../loggedIn.isdemo 0)}}
               <th class="center">Action</th>
+              {{/if}}
             </tr>
           </thead>
           <tbody>
@@ -28,6 +32,7 @@
               <td class="center">{{name}}</td>
               <td class="center">{{email}}</td>
               <td class="center">{{role}}</td>
+              {{#if (isEquals ../loggedIn.isdemo 0)}}
               <td class="center">
                 {{#ifCond (isEquals ../loggedIn.role 'supervisor') '||' (isEquals ../loggedIn.role 'admin')}} - {{else}} {{#if (isEquals
                 canedit 'Y') }}
@@ -55,6 +60,7 @@
                 <button type="button" class="btn btn-danger btn-sm btn-delete-admin" data-user-id="{{id}}">삭제</button> {{else}}
                 - {{/if}} {{/ifCond}}
               </td>
+              {{/if}}
             </tr>
             {{/each}}
           </tbody>

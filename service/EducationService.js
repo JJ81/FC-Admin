@@ -190,7 +190,8 @@ EducationService.create = (req, res, next) => {
               start_dt: req.body.start_dt,
               end_dt: req.body.finish_dt,
               user: req.user,
-              update: isUpdate
+              isUpdate: isUpdate,
+              training_edu_id: trainingEduId
             }, (err, data) => {
               trainingEduId = data.trainingEduId;
               callback(err, null);

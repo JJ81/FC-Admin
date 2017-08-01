@@ -60,6 +60,7 @@ QUERY.LOGIN = {
     '     , f.`name` AS fc_name ' +
     '     , f.`id` AS fc_id ' +
     '     , CURDATE() AS curdate ' +
+    '     , f.`isdemo` ' +
     '  FROM `admin` AS a ' +
     '  LEFT JOIN `fc` AS f ' +
     '    ON f.`id` = a.`fc_id` ' +
@@ -2101,8 +2102,11 @@ QUERY.ASSIGNMENT = {
     '     , epw.`point_reeltime` AS reeltime_point ' +
     '     , epw.`point_speed` AS speed_point ' +
     '     , epw.`point_repetition` AS reps_point ' +
+    '     , lae.`start_dt` ' +
+    '     , lae.`end_dt` ' +
     '  FROM `simple_assignment` AS sa ' +
     ' INNER JOIN `admin` AS a ON sa.`creator_id` = a.`id` ' +
+    ' INNER JOIN `log_assign_edu` AS lae ON lae.`training_edu_id` = sa.`training_edu_id` ' +
     '  LEFT JOIN `edu` AS e ON sa.`edu_id` = e.`id` ' +
     '  LEFT JOIN `edu_point_weight` AS epw ON e.`id` = epw.`edu_id` ' +
     ' WHERE sa.`id` = ? ' +

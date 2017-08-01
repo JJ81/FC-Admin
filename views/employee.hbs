@@ -2,18 +2,19 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
+              {{#if (isEquals ../loggedIn.isdemo 0)}}
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default">기타기능</button>
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#" data-toggle="modal" data-target="#createBranch">지점 등록</a></li>
-                        <li><a href="#" data-toggle="modal" data-target="#createDuty">직책 등록</a></li>
-                        <!--<li class="divider"></li>-->
-                        <!--<li><a href="#" data-toggle="modal" data-target="#uploadFile">직원등록(엑셀)</a></li>-->
-                    </ul>
+                  <button type="button" class="btn btn-default">기타기능</button>
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#" data-toggle="modal" data-target="#createBranch">지점 등록</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#createDuty">직책 등록</a></li>
+                    <!--<li class="divider"></li>-->
+                    <!--<li><a href="#" data-toggle="modal" data-target="#uploadFile">직원등록(엑셀)</a></li>-->
+                  </ul>
                 </div>
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#uploadFile">
                   <i class="fa fa-upload"></i>
@@ -21,11 +22,12 @@
                 </button>
 
                 <div class="pull-right">
-                    <button class="btn btn-default" data-toggle="modal" data-target="#createEmployee">
-                        <i class="fa fa-plus"></i>
-                        교육생
-                    </button>
+                  <button class="btn btn-default" data-toggle="modal" data-target="#createEmployee">
+                    <i class="fa fa-plus"></i>
+                    교육생
+                  </button>
                 </div>
+                {{/if}}
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive">
@@ -37,7 +39,9 @@
                         <th class="center">이름</th>
                         <th class="center">휴대폰번호</th>
                         <th class="center">이메일</th>
+                        {{#if (isEquals ../loggedIn.isdemo 0)}}
                         <th class="center">Action</th>
+                        {{/if}}
                     </tr>
                     </thead>
                     <tbody>
@@ -48,6 +52,7 @@
                         <td class="center">{{name}}</td>
                         <td class="center">{{phone}}</td>
                         <td class="center">{{email}}</td>
+                        {{#if (isEquals ../loggedIn.isdemo 0)}}
                         <td class="center">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-warning btn-sm">수정</button>
@@ -80,6 +85,7 @@
                             </div>
                             <button type="button" class="btn btn-danger btn-sm btn-delete-employee" data-user-id="{{id}}">삭제</button>
                         </td>
+                        {{/if}}
                     </tr>
                     {{/each}}
                     </tbody>
