@@ -269,7 +269,7 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
   const userData = _data.user;
   let trainingEduId = _data.training_edu_id;
 
-  console.log(_data);
+  // console.log(_data);
 
   async.series([
     callback => {

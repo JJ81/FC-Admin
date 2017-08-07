@@ -423,7 +423,7 @@ window.requirejs([
       }
     });
 
-    console.log('pointTotal', pointTotal, pointIsValid);
+    // console.log('pointTotal', pointTotal, pointIsValid);
     if (!pointIsValid) return false;
     if (pointTotal !== 100) {
       window.alert('포인트의 합계는 100점이 되어야 합니다.');
