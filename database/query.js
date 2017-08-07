@@ -2056,6 +2056,17 @@ QUERY.ASSIGNMENT = {
   DeleteTrainingUsersByTrainingEduId:
     'DELETE FROM `training_users` WHERE `training_edu_id` = ?; ',
 
+  DeleteTrainingUsersByTrainingEduId2:
+    'DELETE tu FROM training_users AS tu ' +
+    ' WHERE tu.`training_edu_id` = ? ' +
+    '   AND NOT EXISTS ( ' +
+    ' SELECT \'X\' ' +
+    '   FROM `log_bind_users` AS lbu ' +
+    '  INNER JOIN `log_group_user` AS lgu ON lbu.`group_id` = lgu.`group_id` ' +
+    '  WHERE lbu.`id` = ? ' +
+    '    AND lgu.`user_id` = tu.`user_id` ' +
+    ' ); ',
+
   DeleteLogAssignEduByTrainingEduId:
     'DELETE FROM `log_assign_edu` WHERE `training_edu_id` = ?; ',
 

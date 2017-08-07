@@ -264,7 +264,7 @@ AssignmentService.create = (_connection, _data, _callback) => {
 AssignmentService.allocate = (_connection, _data, _callback) => {
   console.log('AssignmentService.allocate 시작');
   const eduId = _data.edu_id;
-  const logBindUserId = _data.log_bind_user_id;
+  const logBindUserId = parseInt(_data.log_bind_user_id);
   const trainingStartDate = _data.start_dt;
   const trainingEndDate = _data.end_dt;
   const userData = _data.user;
@@ -291,11 +291,13 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
     callback => {
       if (_data.isUpdate && trainingEduId) {
         console.log('training_users 삭제');
-        _connection.query(QUERY.ASSIGNMENT.DeleteTrainingUsersByTrainingEduId,
+        let q = _connection.query(QUERY.ASSIGNMENT.DeleteTrainingUsersByTrainingEduId2,
           [
-            trainingEduId
+            trainingEduId,
+            logBindUserId
           ],
           (err, data) => {
+            console.log(q.sql);
             callback(err, data);
           }
         );

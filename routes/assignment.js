@@ -371,7 +371,7 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
           },
           callback => {
             if (fields.edu_id !== undefined) {
-              console.log('교육배정 그룹 생성');
+              console.log('교육배정');
               AssignmentService.allocate(connection, {
                 edu_id: parseInt(fields.edu_id),
                 log_bind_user_id: logBindUserId,
