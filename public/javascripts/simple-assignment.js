@@ -180,7 +180,7 @@ window.requirejs([
     e.preventDefault();
     if (validateStep1()) {
       if ($('#edu_id').val()) {
-        if (!window.confirm('배정을 취소하는 경우 해당 교육생의 학습이력이 초기화 합니다. 그래도 계속 하시겠습니까?')) return false;
+        if (!window.confirm('배정을 취소하는 경우 해당 교육생의 학습이력이 초기화 됩니다. 그래도 계속 하시겠습니까?')) return false;
       } else {
         if (!window.confirm('저장하시겠습니까?')) return false;
       }
