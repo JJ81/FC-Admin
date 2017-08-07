@@ -179,7 +179,11 @@ window.requirejs([
   $('.step1 > .next > a').on('click', function (e) {
     e.preventDefault();
     if (validateStep1()) {
-      if (!window.confirm('저장하시겠습니까?')) return false;
+      if ($('#edu_id').val()) {
+        if (!window.confirm('배정을 취소하는 경우 해당 교육생의 학습이력이 초기화 합니다. 그래도 계속 하시겠습니까?')) return false;
+      } else {
+        if (!window.confirm('저장하시겠습니까?')) return false;
+      }
       activateStep(2);
       saveStep1Data();
     }
@@ -225,21 +229,22 @@ window.requirejs([
     // updateProgress($('ul.setup-panel li.active').index() + 1);
     var step = $('ul.setup-panel li.active').index() + 1;
 
-    if (!window.confirm('저장하시겠습니까?')) return false;
-    switch (step) {
-    case 1:
-      if (validateStep1()) {
-        saveStep1Data();
-      }
-      break;
-    case 2:
-      if (validateStep2()) {
-        saveStep2Data();
-      }
-      break;
-    default:
-      break;
-    }
+    $('.step' + step + ' > .next > a').trigger('click');
+    // if (!window.confirm('저장하시겠습니까?')) return false;
+    // switch (step) {
+    // case 1:
+    //   if (validateStep1()) {
+    //     saveStep1Data();
+    //   }
+    //   break;
+    // case 2:
+    //   if (validateStep2()) {
+    //     saveStep2Data();
+    //   }
+    //   break;
+    // default:
+    //   break;
+    // }
   });
 
   function updateProgress (step) {
