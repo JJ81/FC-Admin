@@ -335,10 +335,10 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
 
           // 교육배정 그룹 코드를 조회한다.
           callback => {
+            console.log('교육배정 그룹 코드 조회');
             if (requestData.log_bind_user_id) {
               AssignmentService.getBindUser({ logBindUserId: parseInt(requestData.log_bind_user_id) }, (result) => {
                 requestData.groupId = result[0].group_id;
-                console.log('requestData.groupId', requestData.groupId);
                 callback(null, null);
               });
             } else {
@@ -347,6 +347,7 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
           },
           // 교육배정 그룹을 삭제한다.
           callback => {
+            console.log('교육배정 그룹 삭제');
             if (requestData.groupId) {
               AssignmentService.deleteGroupUserByGroupId({ groupId: requestData.groupId }, (result) => {
                 callback(null, null);
@@ -357,6 +358,7 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
           },
           // 교육배정 그룹을 생성한다.
           callback => {
+            console.log('교육배정 그룹 생성');
             AssignmentService.create(connection, requestData, (err, result) => {
               if (result !== null && result.insertId) {
                 logBindUserId = result.insertId;
@@ -367,8 +369,27 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
               callback(err, result);
             });
           },
+          callback => {
+            if (fields.edu_id !== undefined) {
+              console.log('교육배정 그룹 생성');
+              AssignmentService.allocate(connection, {
+                edu_id: parseInt(fields.edu_id),
+                log_bind_user_id: logBindUserId,
+                start_dt: fields.start_dt,
+                end_dt: fields.finish_dt,
+                user: req.user,
+                isUpdate: true,
+                training_edu_id: parseInt(fields.training_edu_id)
+              }, (err, data) => {
+                callback(err, null);
+              });
+            } else {
+              callback(null, null);
+            }
+          },
           // 간편배정내역을 수정한다.
           (callback) => {
+            console.log('간편배정내역을 수정');
             if (requestData.simple_assignment_id !== undefined && logBindUserId !== undefined) {
               AssignmentService.updateSimpleAssignment({
                 id: parseInt(requestData.simple_assignment_id),
@@ -383,6 +404,7 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
           },
           // 엑셀파일을 삭제한다.
           (callback) => {
+            console.log('엑셀파일을 삭제(옵션)');
             if (requestData.upload_type === 'excel') {
               util.deleteFile(filePath, (err, result) => {
                 if (err) {

@@ -11,7 +11,6 @@ router.param('id', AssignmentService.getSimpleAssignmentById);
 router.get('/', util.isAuthenticated, util.getLogoInfo, AssignmentService.getSimpleAssignmentList);
 
 router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
-  console.log(req.assignment);
   pool.getConnection((err, connection) => {
     if (err) throw err;
     async.series([

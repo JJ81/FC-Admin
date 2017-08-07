@@ -818,7 +818,7 @@ QUERY.EDU = {
 
   // training_users 입력
   InsertUserIdInTrainingUsers:
-    'INSERT INTO `training_users` (`user_id`, `training_edu_id`) ' +
+    'INSERT IGNORE `training_users` (`user_id`, `training_edu_id`) ' +
     'SELECT lgu.`user_id`, ? AS `training_edu_id` ' +
     '  FROM `log_bind_users` AS lbu ' +
     ' INNER JOIN `log_group_user` AS lgu ' +

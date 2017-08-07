@@ -12,7 +12,7 @@ window.requirejs([
   var navListItems = $('ul.setup-panel li a');
   var allWells = $('.setup-content');
   var tableCheckAll = $('#check-all');
-  var tableCourse = Util.initDataTable($('#table_course'));
+  // var tableCourse = Util.initDataTable($('#table_course'));
   var tableEmployee = Util.initDataTable($('#table_employee'), {
     'lengthMenu': [ [5, 10, 25, 50, -1], [5, 10, 25, 50, '전체'] ]
     // 'columnDefs': [
@@ -142,7 +142,7 @@ window.requirejs([
   }
 
   tableCheckAll.bind('click', function () {
-    $(':checkbox', tableEmployee.rows().nodes()).prop('checked', this.checked);
+    $(':checkbox', tableEmployee.rows({search: 'applied'}).nodes()).prop('checked', this.checked);
   });
 
   navListItems.click(function (e) {
@@ -269,6 +269,10 @@ window.requirejs([
     formData.append('redirect', false);
     formData.append('id', assignmentId);
     formData.append('log_bind_user_id', $('#log_bind_user_id').val());
+    formData.append('edu_id', $('#edu_id').val());
+    formData.append('start_dt', $('input[name=\'start_dt\']').val());
+    formData.append('finish_dt', $('input[name=\'finish_dt\']').val());
+    formData.append('training_edu_id', $('#training_edu_id').val());
 
     window.axios.post('/assignment/upload', formData)
       .then(function (res) {

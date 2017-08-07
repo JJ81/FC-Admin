@@ -262,6 +262,7 @@ AssignmentService.create = (_connection, _data, _callback) => {
  * 교육생그룹에 교육과정을 할당한다.
  */
 AssignmentService.allocate = (_connection, _data, _callback) => {
+  console.log('AssignmentService.allocate 시작');
   const eduId = _data.edu_id;
   const logBindUserId = _data.log_bind_user_id;
   const trainingStartDate = _data.start_dt;
@@ -288,25 +289,33 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
       }
     },
     callback => {
-      if (!_data.isUpdate) {
-        console.log('AssignmentService.allocate (1)');
-        // training_user 테이블에 입력
-        _connection.query(QUERY.EDU.InsertUserIdInTrainingUsers,
+      if (_data.isUpdate && trainingEduId) {
+        console.log('training_users 삭제');
+        _connection.query(QUERY.ASSIGNMENT.DeleteTrainingUsersByTrainingEduId,
           [
-            trainingEduId,
-            logBindUserId
+            trainingEduId
           ],
           (err, data) => {
             callback(err, data);
           }
         );
-      } else {
-        callback(null, null);
       }
     },
     callback => {
+      console.log('training_users 입력');
+      _connection.query(QUERY.EDU.InsertUserIdInTrainingUsers,
+        [
+          trainingEduId,
+          logBindUserId
+        ],
+        (err, data) => {
+          callback(err, data);
+        }
+      );
+    },
+    callback => {
+      console.log('log_assign_edu 입력/수정');
       if (!_data.isUpdate) {
-        console.log('AssignmentService.allocate (2)');
         // log_assign_edu 테이블에 입력
         _connection.query(QUERY.HISTORY.InsertIntoLogAssignEdu,
           [

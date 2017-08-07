@@ -119,8 +119,6 @@ EducationService.create = (req, res, next) => {
   let courseGroupId = util.publishHashByMD5(new Date());
   let isUpdate = req.body.edu_id !== '';
 
-  console.log(req.body);
-
   if (req.body.training_edu_id !== undefined) {
     trainingEduId = req.body.training_edu_id;
   }
