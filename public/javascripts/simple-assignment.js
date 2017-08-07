@@ -175,6 +175,7 @@ window.requirejs([
     // updateProgress(step);
   }
 
+  // 1. 교육생 설정
   $('.step1 > .next > a').on('click', function (e) {
     e.preventDefault();
     if (validateStep1()) {
@@ -187,6 +188,7 @@ window.requirejs([
     e.preventDefault();
     activateStep(1);
   });
+  // 2. 교육과정 개설
   $('.step2 > .next > a').on('click', function (e) {
     e.preventDefault();
     if (validateStep2()) {
@@ -199,6 +201,7 @@ window.requirejs([
     e.preventDefault();
     activateStep(2);
   });
+  // 3. 강의 개설
   $('.step3 > .next > a').on('click', function (e) {
     e.preventDefault();
     activateStep(4);
@@ -407,17 +410,20 @@ window.requirejs([
     var pointTotal = 0;
     $('.point-item').each(function () {
       var checked = $(this).parent().find('.input-group-addon').children('input:checkbox').prop('checked');
-      if (checked && $(this).val() === '') {
-        window.alert($(this).prop('placeholder') + ' 포인트 점수를 입력하세요.');
-        $(this).focus();
-        pointIsValid = false;
-        return false;
-      } else {
-        pointTotal += parseInt($(this).val());
+      // console.log('$(this).val()', checked, $(this).val());
+      if (checked) {
+        if ($(this).val() === '') {
+          window.alert($(this).prop('placeholder') + ' 포인트 점수를 입력하세요.');
+          $(this).focus();
+          pointIsValid = false;
+          return false;
+        } else {
+          pointTotal += parseInt($(this).val());
+        }
       }
     });
 
-    // console.log(pointTotal);
+    console.log('pointTotal', pointTotal, pointIsValid);
     if (!pointIsValid) return false;
     if (pointTotal !== 100) {
       window.alert('포인트의 합계는 100점이 되어야 합니다.');

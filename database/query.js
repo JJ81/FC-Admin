@@ -2106,7 +2106,7 @@ QUERY.ASSIGNMENT = {
     '     , lae.`end_dt` ' +
     '  FROM `simple_assignment` AS sa ' +
     ' INNER JOIN `admin` AS a ON sa.`creator_id` = a.`id` ' +
-    ' INNER JOIN `log_assign_edu` AS lae ON lae.`training_edu_id` = sa.`training_edu_id` ' +
+    '  LEFT JOIN `log_assign_edu` AS lae ON lae.`training_edu_id` = sa.`training_edu_id` ' +
     '  LEFT JOIN `edu` AS e ON sa.`edu_id` = e.`id` ' +
     '  LEFT JOIN `edu_point_weight` AS epw ON e.`id` = epw.`edu_id` ' +
     ' WHERE sa.`id` = ? ' +
