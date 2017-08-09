@@ -2121,6 +2121,7 @@ QUERY.ASSIGNMENT = {
     '  LEFT JOIN `edu` AS e ON sa.`edu_id` = e.`id` ' +
     '  LEFT JOIN `edu_point_weight` AS epw ON e.`id` = epw.`edu_id` ' +
     ' WHERE sa.`id` = ? ' +
+    '   AND sa.`active` = 1 ' +
     ' ORDER BY sa.`created_dt` DESC; ',
 
   InsertSimpleAssignment:
