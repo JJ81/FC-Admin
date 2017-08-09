@@ -2,14 +2,57 @@
  * Created by yijaejun on 30/11/2016.
  */
 'use strict';
-requirejs([
+window.requirejs([
   'common'
 ],
 function (Util) {
+  var $ = $ || window.$;
+  var btnUploadEmployeeExcel = $('#js--btn-upload-employee-excel');
+
   $(function () {
     $('#createEmployee #select_branch').select2();
     $('#modifyEmployee #select_branch').select2();
   });
+
+  btnUploadEmployeeExcel.on('click', function (e) {
+    e.preventDefault();
+
+    uploadEmployeeExcel();
+  });
+
+  /**
+   * 교육 대상자를 저장한다.
+   */
+  function uploadEmployeeExcel () {
+    if (document.getElementById('exampleInputFile').files.length === 0) {
+      $('#exampleInputFile').focus();
+      window.alert('파일을 선택하세요.');
+      return false;
+    }
+
+    if (!window.confirm('파일을 업로드하시겠습니까?')) return false;
+
+    btnUploadEmployeeExcel.prop('disabled', true);
+    var formData = new window.FormData();
+    formData.append('file', document.getElementById('exampleInputFile').files[0]);
+
+    window.axios.post('/upload/excel/create/employee', formData)
+      .then(function (res) {
+        if (res.data) {
+          btnUploadEmployeeExcel.prop('disabled', false);
+
+          if (res.data.success !== false) {
+            window.alert('업로드 완료');
+          } else {
+            window.alert('업로드에 실패하였습니다.\n핸드폰번호 또는 이메일 중복여부를 확인하세요.');
+            console.log(res.data.message);
+          }
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   // datatable 설정
   Util.initDataTable($('#table-branch'), {

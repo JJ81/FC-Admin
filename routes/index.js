@@ -174,7 +174,7 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
                 if (typeof email === 'object') {
                   email = util.replaceEmptySpace(email.text);
                 }
-                result.push({
+                let user = {
                   row: rowNumber,
                   branch: row.values[1] == undefined ? '' : util.replaceEmptySpace(row.values[1]),
                   duty: row.values[2] == undefined ? '' : util.replaceEmptySpace(row.values[2]),
@@ -183,7 +183,10 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
                   email: email == undefined ? '' : email,
                   error: false,
                   error_msg: []
-                });
+                };
+
+                // console.log(user);
+                result.push(user);
 
                 loopIndex = rowNumber - 2;
                 loopData = result[loopIndex];
@@ -360,8 +363,13 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
             })
             .then(() => {
               // 오류가 있을 경우 해당 데이터를 내보내기 한다.
+              console.log('errorRowsCount', errorRowsCount);
               if (errorRowsCount > 0) {
-                return res.download(outputExcel);
+                // return res.download(outputExcel);
+                return res.send({
+                  success: false,
+                  message: dataToExport
+                });
               }
               callback(null, null);
             });

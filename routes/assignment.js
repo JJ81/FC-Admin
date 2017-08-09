@@ -297,7 +297,7 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
         async.series(
           [
             // 엑셀 데이터를 읽어들인다.
-            (callback) => {
+            callback => {
               switch (uploadType) {
               case 'excel':
                 filePath = files['file-excel'].path;

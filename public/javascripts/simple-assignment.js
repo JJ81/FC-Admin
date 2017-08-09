@@ -180,7 +180,7 @@ window.requirejs([
     e.preventDefault();
     if (validateStep1()) {
       if ($('#edu_id').val()) {
-        if (!window.confirm('배정을 취소하는 경우 해당 교육생의 학습이력이 초기화 됩니다. 그래도 계속 하시겠습니까?')) return false;
+        if (!window.confirm('엑셀 업로드 시 이전 배정내역은 모두 취소되며,\n배정을 취소하는 경우 학습이력이 모두 초기화 됩니다.\n그래도 계속 하시겠습니까?')) return false;
       } else {
         if (!window.confirm('저장하시겠습니까?')) return false;
       }
@@ -197,8 +197,8 @@ window.requirejs([
     e.preventDefault();
     if (validateStep2()) {
       if (!window.confirm('저장하시겠습니까?')) return false;
-      activateStep(3);
       saveStep2Data();
+      activateStep(3);
     }
   });
   $('.step3 > .previous > a').on('click', function (e) {
@@ -266,6 +266,8 @@ window.requirejs([
    * 교육 대상자를 저장한다.
    */
   function saveStep1Data () {
+    btnSaveSimpleAssign.prop('disabled', true);
+
     var formData = new window.FormData();
     formData.append('upload_type', $('input[name=\'upload_type\']').val());
     formData.append('upload_employee_ids', $('input[name=\'upload_employee_ids\']').val());
@@ -282,9 +284,15 @@ window.requirejs([
     window.axios.post('/assignment/upload', formData)
       .then(function (res) {
         if (res.data) {
-          // $('input[name=\'upload_employee_ids\']').val(res.data.employeeIds);
-          $('#log_bind_user_id').val(res.data.logBindUserId);
-          window.alert('교육생을 저장하였습니다.');
+          btnSaveSimpleAssign.prop('disabled', false);
+
+          if (res.data.success !== false) {
+            $('#log_bind_user_id').val(res.data.logBindUserId);
+            window.alert('교육생을 저장하였습니다.');
+          } else {
+            window.alert('교육생을 저장하지 못하였습니다.');
+            console.log(res.data.message);
+          }
         }
       })
       .catch(function (error) {

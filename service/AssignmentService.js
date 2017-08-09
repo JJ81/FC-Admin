@@ -87,88 +87,92 @@ AssignmentService.create = (_connection, _data, _callback) => {
 
     switch (_data.upload_type) {
     case 'excel':
-      // 핸드폰 번호로 사용자를 검색한다.
-      _connection.query(QUERY.EDU.GetUserDataByPhone, [ _data.excel ], (err, data) => {
-        if (err) throw err;
-        if (data.length === 0) {
-          _callback(null, null);
-          return;
-        }
-        for (var index = 0; index < data.length; index++) {
-          userIds.push(data[index].id);
-        }
-        async.whilst(
-          () => {
-            return userIdCount < userIds.length;
-          },
-          (callback) => {
-            // log_group_user 테이블에 차례대로 입력
-            _connection.query(QUERY.EDU.InsertIntoLogGroupUser,
-              [ userIds[userIdCount], logGroupUserId ],
-              (err, data) => {
-                callback(err, null);
+      if (_data.excel.length > 0) {
+        // 핸드폰 번호로 사용자를 검색한다.
+        _connection.query(QUERY.EDU.GetUserDataByPhone, [ _data.excel ], (err, data) => {
+          if (err) throw err;
+          if (data.length === 0) {
+            _callback(null, null);
+            return;
+          }
+          for (var index = 0; index < data.length; index++) {
+            userIds.push(data[index].id);
+          }
+          async.whilst(
+            () => {
+              return userIdCount < userIds.length;
+            },
+            (callback) => {
+              // log_group_user 테이블에 차례대로 입력
+              _connection.query(QUERY.EDU.InsertIntoLogGroupUser,
+                [ userIds[userIdCount], logGroupUserId ],
+                (err, data) => {
+                  callback(err, null);
+                }
+              );
+              userIdCount++;
+            },
+            (err, data) => {
+              if (err) {
+                console.log('----------------------------');
+                console.log('error:InsertIntoLogGroupUser');
+                console.error(err);
+                return _connection.rollback(() => {
+                  _callback(err, null);
+                  return;
+                });
               }
-            );
-            userIdCount++;
-          },
-          (err, data) => {
-            if (err) {
-              console.log('----------------------------');
-              console.log('error:InsertIntoLogGroupUser');
-              console.error(err);
-              return _connection.rollback(() => {
-                _callback(err, null);
-                return;
-              });
-            }
 
-            // log_bind_users 테이블에 입력
-            if (!_data.log_bind_user_id) {
-              _connection.query(QUERY.EDU.InsertIntoLogBindUser,
-                [
-                  _data.group_name,
-                  _data.group_desc,
-                  _data.admin_id,
-                  logGroupUserId
-                ],
-                (err, result) => {
+              // log_bind_users 테이블에 입력
+              if (!_data.log_bind_user_id) {
+                _connection.query(QUERY.EDU.InsertIntoLogBindUser,
+                  [
+                    _data.group_name,
+                    _data.group_desc,
+                    _data.admin_id,
+                    logGroupUserId
+                  ],
+                  (err, result) => {
+                    if (err) {
+                      console.log('----------------------------');
+                      console.log('error:InsertIntoLogBindUser');
+                      console.error(err);
+                      return _connection.rollback(() => {
+                        _callback(err, null);
+                        return;
+                      });
+                    } else {
+                      _connection.commit((err) => {
+                        if (err) {
+                          return _connection.rollback(() => {
+                            _callback(err, null);
+                            return;
+                          });
+                        } else {
+                          _callback(null, { insertId: result.insertId, employeeIds: userIds });
+                        }
+                      });
+                    }
+                  }
+                );
+              } else {
+                _connection.commit((err) => {
                   if (err) {
-                    console.log('----------------------------');
-                    console.log('error:InsertIntoLogBindUser');
-                    console.error(err);
                     return _connection.rollback(() => {
                       _callback(err, null);
                       return;
                     });
                   } else {
-                    _connection.commit((err) => {
-                      if (err) {
-                        return _connection.rollback(() => {
-                          _callback(err, null);
-                          return;
-                        });
-                      } else {
-                        _callback(null, { insertId: result.insertId, employeeIds: userIds });
-                      }
-                    });
+                    _callback(null, null);
                   }
-                }
-              );
-            } else {
-              _connection.commit((err) => {
-                if (err) {
-                  return _connection.rollback(() => {
-                    _callback(err, null);
-                    return;
-                  });
-                } else {
-                  _callback(null, null);
-                }
-              });
+                });
+              }
             }
-          }
-        );
-      });
+          );
+        });
+      } else {
+        _callback({ err: '데이터가 존재하지 않습니다.' }, null);
+      }
       break;
 
     case 'employee':
