@@ -125,7 +125,8 @@ EducationService.create = (req, res, next) => {
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
-    connection.beginTransaction(() => {
+    connection.beginTransaction((err) => {
+      if (err) throw err;
       async.series(
         [
           // 교육과정을 수정/입력한다.
@@ -147,7 +148,7 @@ EducationService.create = (req, res, next) => {
               );
             } else {
               console.log('//// 교육과정 입력 ////');
-              connection.query(QUERY.EDU.InsertEdu,
+              let q = connection.query(QUERY.EDU.InsertEdu,
                 [
                   req.body.name,
                   req.body.desc,
@@ -156,7 +157,10 @@ EducationService.create = (req, res, next) => {
                   req.user.admin_id
                 ],
                 (err, result) => {
-                  eduId = result.insertId;
+                  console.log(q.sql);
+                  if (result.insertId !== undefined) {
+                    eduId = result.insertId;
+                  }
                   callback(err, result);
                 }
               );

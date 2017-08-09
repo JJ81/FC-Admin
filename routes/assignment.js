@@ -286,157 +286,179 @@ router.post('/upload', util.isAuthenticated, (req, res, next) => {
 
     pool.getConnection((err, connection) => {
       if (err) throw err;
-      async.series(
-        [
-          // 엑셀 데이터를 읽어들인다.
-          (callback) => {
-            switch (uploadType) {
-            case 'excel':
-              filePath = files['file-excel'].path;
 
-              const wb = new Excel.Workbook();
-              wb.xlsx.readFile(filePath)
-              .then(() => {
-                let ws = wb.getWorksheet(1);
-                let phone = [];
-                ws.eachRow({ includeEmpty: false }, (row, rowNumber) => {
-                  row.eachCell((cell, colNumber) => {
-                    if (rowNumber >= 2 && colNumber === 2) {
-                      phone.push(cell.value);
-                    }
-                    // console.log('Row ' + rowNumber + ', Cell ' + colNumber + ' = ' + cell.value);
+      connection.beginTransaction(err => {
+        if (err) {
+          return res.status(500).send({
+            success: false,
+            message: err
+          });
+        }
+        async.series(
+          [
+            // 엑셀 데이터를 읽어들인다.
+            (callback) => {
+              switch (uploadType) {
+              case 'excel':
+                filePath = files['file-excel'].path;
+
+                const wb = new Excel.Workbook();
+                wb.xlsx.readFile(filePath)
+                .then(() => {
+                  let ws = wb.getWorksheet(1);
+                  let phone = [];
+                  ws.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+                    row.eachCell((cell, colNumber) => {
+                      if (rowNumber >= 2 && colNumber === 2) {
+                        phone.push(cell.value);
+                      }
+                      // console.log('Row ' + rowNumber + ', Cell ' + colNumber + ' = ' + cell.value);
+                    });
                   });
+                  requestData.excel = phone;
+                  callback(null, requestData);
                 });
-                requestData.excel = phone;
-                callback(null, requestData);
-              });
-              break;
+                break;
 
-            case 'employee':
-              callback(null, null);
-              break;
-
-            default:
-              break;
-            }
-          },
-          // 간편배정 시 이전 교육배정 그룹을 삭제한다.
-          // (callback) => {
-          //   if (requestData.simple_assignment_id !== undefined) {
-          //     AssignmentService.deleteAssignment({
-          //       id: parseInt(requestData.simple_assignment_id)
-          //     }, function () {
-          //       callback(null, null);
-          //     });
-          //   } else {
-          //     callback(null, null);
-          //   }
-          // },
-
-          // 교육배정 그룹 코드를 조회한다.
-          callback => {
-            console.log('교육배정 그룹 코드 조회');
-            if (requestData.log_bind_user_id) {
-              AssignmentService.getBindUser({ logBindUserId: parseInt(requestData.log_bind_user_id) }, (result) => {
-                requestData.groupId = result[0].group_id;
+              case 'employee':
                 callback(null, null);
-              });
-            } else {
-              callback(null, null);
-            }
-          },
-          // 교육배정 그룹을 삭제한다.
-          callback => {
-            console.log('교육배정 그룹 삭제');
-            if (requestData.groupId) {
-              AssignmentService.deleteGroupUserByGroupId({ groupId: requestData.groupId }, (result) => {
-                callback(null, null);
-              });
-            } else {
-              callback(null, null);
-            }
-          },
-          // 교육배정 그룹을 생성한다.
-          callback => {
-            console.log('교육배정 그룹 생성');
-            AssignmentService.create(connection, requestData, (err, result) => {
-              if (result !== null && result.insertId) {
-                logBindUserId = result.insertId;
-              } else {
-                logBindUserId = requestData.log_bind_user_id;
+                break;
+
+              default:
+                break;
               }
+            },
+            // 간편배정 시 이전 교육배정 그룹을 삭제한다.
+            // (callback) => {
+            //   if (requestData.simple_assignment_id !== undefined) {
+            //     AssignmentService.deleteAssignment({
+            //       id: parseInt(requestData.simple_assignment_id)
+            //     }, function () {
+            //       callback(null, null);
+            //     });
+            //   } else {
+            //     callback(null, null);
+            //   }
+            // },
 
-              callback(err, result);
-            });
-          },
-          callback => {
-            if (fields.edu_id !== undefined) {
-              console.log('교육배정');
-              AssignmentService.allocate(connection, {
-                edu_id: parseInt(fields.edu_id),
-                log_bind_user_id: logBindUserId,
-                start_dt: fields.start_dt,
-                end_dt: fields.finish_dt,
-                user: req.user,
-                isUpdate: true,
-                training_edu_id: parseInt(fields.training_edu_id)
-              }, (err, data) => {
-                callback(err, null);
-              });
-            } else {
-              callback(null, null);
-            }
-          },
-          // 간편배정내역을 수정한다.
-          (callback) => {
-            console.log('간편배정내역을 수정');
-            if (requestData.simple_assignment_id !== undefined && logBindUserId !== undefined) {
-              AssignmentService.updateSimpleAssignment({
-                id: parseInt(requestData.simple_assignment_id),
-                logBindUserId: logBindUserId,
-                step: 2
-              }, function () {
+            // 교육배정 그룹 코드를 조회한다.
+            callback => {
+              console.log('교육배정 그룹 코드 조회');
+              if (requestData.log_bind_user_id) {
+                AssignmentService.getBindUser({ logBindUserId: parseInt(requestData.log_bind_user_id) }, (result) => {
+                  requestData.groupId = result[0].group_id;
+                  callback(null, null);
+                });
+              } else {
                 callback(null, null);
+              }
+            },
+            // 교육배정 그룹을 삭제한다.
+            callback => {
+              console.log('교육배정 그룹 삭제');
+              if (requestData.groupId) {
+                AssignmentService.deleteGroupUserByGroupId({ groupId: requestData.groupId }, (result) => {
+                  callback(null, null);
+                });
+              } else {
+                callback(null, null);
+              }
+            },
+            // 교육배정 그룹을 생성한다.
+            callback => {
+              console.log('교육배정 그룹 생성');
+              AssignmentService.create(connection, requestData, (err, result) => {
+                if (result !== null && result.insertId) {
+                  logBindUserId = result.insertId;
+                } else {
+                  logBindUserId = requestData.log_bind_user_id;
+                }
+
+                callback(err, result);
+              });
+            },
+            callback => {
+              if (fields.edu_id !== '') {
+                console.log('교육배정');
+                AssignmentService.allocate(connection, {
+                  edu_id: parseInt(fields.edu_id),
+                  log_bind_user_id: logBindUserId,
+                  start_dt: fields.start_dt,
+                  end_dt: fields.finish_dt,
+                  user: req.user,
+                  isUpdate: true,
+                  training_edu_id: parseInt(fields.training_edu_id)
+                }, (err, data) => {
+                  callback(err, null);
+                });
+              } else {
+                callback(null, null);
+              }
+            },
+            // 간편배정내역을 수정한다.
+            (callback) => {
+              console.log('간편배정내역을 수정');
+              if (requestData.simple_assignment_id !== undefined && logBindUserId !== undefined) {
+                AssignmentService.updateSimpleAssignment({
+                  id: parseInt(requestData.simple_assignment_id),
+                  logBindUserId: logBindUserId,
+                  step: 2
+                }, function () {
+                  callback(null, null);
+                });
+              } else {
+                callback(null, null);
+              }
+            },
+            // 엑셀파일을 삭제한다.
+            (callback) => {
+              console.log('엑셀파일을 삭제(옵션)');
+              if (requestData.upload_type === 'excel') {
+                util.deleteFile(filePath, (err, result) => {
+                  if (err) {
+                    console.error(err);
+                    callback(err, null);
+                  } else {
+                    callback(null, result);
+                  }
+                });
+              } else {
+                callback(null, null);
+              }
+            }
+          ],
+          (err, results) => {
+            connection.release();
+            if (err) {
+              connection.rollback(() => {
+                return res.status(500).send({
+                  success: false,
+                  message: err
+                });
               });
             } else {
-              callback(null, null);
-            }
-          },
-          // 엑셀파일을 삭제한다.
-          (callback) => {
-            console.log('엑셀파일을 삭제(옵션)');
-            if (requestData.upload_type === 'excel') {
-              util.deleteFile(filePath, (err, result) => {
+              connection.commit((err) => {
                 if (err) {
-                  console.error(err);
-                  callback(err, null);
+                  return res.status(500).send({
+                    success: false,
+                    message: err
+                  });
                 } else {
-                  callback(null, result);
+                  if (requestData.redirect === undefined) {
+                    res.redirect('/assignment');
+                  } else {
+                    res.send({
+                      success: true,
+                      // employeeIds: employeeIds,
+                      logBindUserId: logBindUserId
+                    });
+                  }
                 }
               });
-            } else {
-              callback(null, null);
             }
           }
-        ],
-        (err, results) => {
-          connection.release();
-          if (err) {
-            console.error(err);
-            throw new Error('err');
-          }
-
-          if (requestData.redirect === undefined) {
-            res.redirect('/assignment');
-          } else {
-            res.send({
-              success: true,
-              // employeeIds: employeeIds,
-              logBindUserId: logBindUserId
-            });
-          }
-        }
-      );
+        );
+      });
     });
   });
 });

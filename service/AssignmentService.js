@@ -262,7 +262,6 @@ AssignmentService.create = (_connection, _data, _callback) => {
  * 교육생그룹에 교육과정을 할당한다.
  */
 AssignmentService.allocate = (_connection, _data, _callback) => {
-  console.log('AssignmentService.allocate 시작');
   const eduId = _data.edu_id;
   const logBindUserId = parseInt(_data.log_bind_user_id);
   const trainingStartDate = _data.start_dt;
@@ -271,15 +270,24 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
   let trainingEduId = _data.training_edu_id;
 
   // console.log(_data);
+  // console.log(_connection);
 
   async.series([
+    // callback => {
+    //   _connection.query(QUERY.EDU.GetEduInfoById, [eduId], (err, data) => {
+    //     console.log(data);
+    //     callback(err, data);
+    //   });
+    // },
     callback => {
       if (!_data.isUpdate) {
+        console.log('trainining_edu 입력');
         _connection.query(QUERY.EDU.InsertTrainingEdu,
           [ eduId, userData.admin_id ],
           (err, data) => {
-            if (!err) {
+            if (data.insertId !== undefined) {
               trainingEduId = data.insertId;
+              console.log(trainingEduId);
             }
             callback(err, data);
           }
@@ -291,16 +299,17 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
     callback => {
       if (_data.isUpdate && trainingEduId) {
         console.log('training_users 삭제');
-        let q = _connection.query(QUERY.ASSIGNMENT.DeleteTrainingUsersByTrainingEduId2,
+        _connection.query(QUERY.ASSIGNMENT.DeleteTrainingUsersByTrainingEduId2,
           [
             trainingEduId,
             logBindUserId
           ],
           (err, data) => {
-            console.log(q.sql);
             callback(err, data);
           }
         );
+      } else {
+        callback(null, null);
       }
     },
     callback => {
@@ -311,6 +320,7 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
           logBindUserId
         ],
         (err, data) => {
+          if (err) throw err;
           callback(err, data);
         }
       );
