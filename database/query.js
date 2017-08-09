@@ -2100,6 +2100,7 @@ QUERY.ASSIGNMENT = {
     ' INNER JOIN `admin` AS a ' +
     '    ON sa.`creator_id` = a.`id` ' +
     '   AND a.`fc_id` = ? ' +
+    ' WHERE sa.`active` = 1 ' +
     ' ORDER BY sa.`created_dt` DESC; ',
 
   SelectSimpleAssignmentById:
