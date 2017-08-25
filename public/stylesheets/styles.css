@@ -412,5 +412,9 @@ ul.session-content > li:hover {
   color: red;
 }
 
+.mce-widget.mce-tooltip {
+    display: none !important;
+}
+
 /*# sourceMappingURL=styles.css.map */
 

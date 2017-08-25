@@ -153,9 +153,10 @@
         />
       </div>
       <div class="form-group">
+        <input type="hidden" value="{{assignment.edu_desc}}">
         <label>설명</label>
         <textarea id="input-course-desc" class="form-control course-desc editor" name="course_desc" placeholder="교육과정 소개를 입력하세요.">
-          {{assignment.edu_desc}}
+          {{{assignment.edu_desc}}}
         </textarea>
       </div>
       <div class="row">

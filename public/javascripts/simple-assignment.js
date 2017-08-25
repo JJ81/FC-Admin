@@ -337,7 +337,7 @@ window.requirejs([
   function saveStep2Data () {
     var data = {
       'name': $('input[name=\'course_name\']').val(),
-      'desc': window.tinymce.activeEditor.getContent(),
+      'desc': window.tinymce.activeEditor.getContent({format: 'raw'}),
       'complete_point': $('input[name=\'complete_point\']').val(),
       'quiz_point': $('input[name=\'quiz_point\']').val(),
       'test_point': $('input[name=\'test_point\']').val(),
