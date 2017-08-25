@@ -4,6 +4,26 @@
       {{#ifCond (isEquals loggedIn.role 'superadmin') '||' (isEquals loggedIn.role 'systemadmin') }}
       {{#if (isEquals ../loggedIn.isdemo 0)}}
       <div class="box-header">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default">
+            <i class="fa fa-cog"></i>
+            지사관리
+          </button>
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#" data-toggle="modal" data-target="#createBranch">지점등록</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#registOffice">지사등록</a></li>
+            <li class="divider"></li>
+            <li><a href="#" data-toggle="modal" data-target="#manage-office-branches">지사별 지점등록</a></li>
+          </ul>
+        </div>
+        <button class="btn btn-default" data-toggle="modal" data-target="#createDuty">
+          <i class="fa fa-plus"></i>
+          직책등록
+        </button>
         <button class="btn btn-default pull-right" data-toggle="modal" data-target="#registerAdmin">
           <i class="fa fa-plus"></i>
           관리자
@@ -45,16 +65,23 @@
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a href="#" data-user-id="{{id}}" data-user-name="{{name}}" data-user-email="{{email}}" data-user-role="{{role}}"
+                    <li>
+                      <a href="#" data-user-id="{{id}}" data-user-name="{{name}}" data-user-email="{{email}}" data-user-role="{{role}}"
                         class="btn-modify-admininfo" data-toggle="modal" data-target="#modifyAdmin">정보수정</a>
                     </li>
-                    <li><a href="#" data-user-id="{{id}}" data-user-role="{{role}}" data-toggle="modal" data-target="#setAdminRole"
+                    <li>
+                      <a href="#" data-user-id="{{id}}" data-user-role="{{role}}" data-toggle="modal" data-target="#setAdminRole"
                         class="btn-modify-role">권한수정</a></li>
-                    <li><a href="#" data-user-id="{{id}}" data-toggle="modal" data-target="#setEmployeePassword" data-url="/administrator/password/reset"
+                    <li>
+                      <a href="#" data-user-id="{{id}}" data-toggle="modal" data-target="#setEmployeePassword" data-url="/administrator/password/reset"
                         class="btn-modify-password">비밀번호변경</a>
                     </li>
                     {{#if (isEquals role 'supervisor') }}
-                    <li><a href="#" data-user-id="{{id}}" data-toggle="modal" data-target="#assignBranch" class="btn-add-branch">지점배정</a>
+                    <!--<li>
+                      <a href="#" data-user-id="{{id}}" data-toggle="modal" data-target="#assignBranch" class="btn-add-branch">지점배정</a>
+                    </li>-->
+                    <li>
+                      <a href="#" data-user-id="{{id}}" data-toggle="modal" data-target="#assignAdminOffices" class="btn-add-branch">지사배정</a>
                     </li>
                     {{/if}}
                   </ul>
@@ -75,4 +102,12 @@
   </div>
 </div>
 
-{{> modal_register_admin}} {{> modal_modify_admin}} {{> modal_change_role}} {{> modal_assign_branch}}
+{{> modal_register_admin}}
+{{> modal_modify_admin}}
+{{> modal_change_role}}
+{{> modal_assign_branch}}
+{{> modal_regist_office}}
+{{> modal_create_branch}}
+{{> modal_create_duty}}
+{{> modal_manage_office_branches}}
+{{> modal_assign_admin_offices}}

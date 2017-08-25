@@ -78,7 +78,8 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'plugins/pace/pace.min.js',
     DIR.SRC + '/vendor/' + 'lodash.min.js',
     DIR.SRC + '/vendor/' + 'handlebars/dist/handlebars.min.js',
-    DIR.SRC + '/vendor/' + 'text/text.js'
+    DIR.SRC + '/vendor/' + 'text/text.js',
+    DIR.SRC + '/vendor/' + 'dom-checkbox.js'
     // DIR.SRC + '/vendor/' + 'plugins/smoothstate/jquery.smoothstate.min.js'
   ])
   .pipe(uglify())

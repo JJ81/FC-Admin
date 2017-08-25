@@ -6,6 +6,7 @@ const util = require('../util/util');
 const async = require('async');
 const pool = require('../commons/db_conn_pool');
 const UserService = require('../service/UserService');
+const AdministratorService = require('../service/AdministratorService');
 
 /**
  * 관리자 리스트, 지점리스트를 가져온다.
@@ -24,6 +25,16 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
           connection.query(QUERY.EMPLOYEE.GetBranch, [req.user.fc_id], (err, results) => {
             callback(err, results);
           });
+        },
+        (callback) => {
+          connection.query(QUERY.EMPLOYEE.GetDuty, [req.user.fc_id], (err, duty) => {
+            callback(err, duty);
+          });
+        },
+        (callback) => {
+          connection.query(QUERY.ADMIN.GetOffices, [req.user.fc_id], (err, results) => {
+            callback(err, results);
+          });
         }
       ],
       (err, results) => {
@@ -36,7 +47,9 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
             title: '관리자',
             loggedIn: req.user,
             list: results[0],
-            branches: results[1]
+            branches: results[1],
+            duties: results[2],
+            offices: results[3]
           });
         }
       }
@@ -294,6 +307,173 @@ router.delete('/', util.isAuthenticated, (req, res, next) => {
     return res.json({
       success: true
     });
+  });
+});
+
+router.post('/regist/office', (req, res, next) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    connection.query(QUERY.ADMIN.CreateOffice,
+      [ req.body.office_name, req.body.office_desc, req.user.fc_id ],
+      (err, result) => {
+        connection.release();
+        if (err) {
+          console.error(err);
+          return next({
+            status: 500,
+            message: '중복되는 지사명입니다.'
+          });
+        } else {
+          res.redirect('/administrator');
+        }
+      }
+    );
+  });
+});
+
+router.post('/modify/office', (req, res, next) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    connection.query(QUERY.ADMIN.ModifyOffice,
+      [ req.body.office_name, req.body.office_desc, req.body.id ],
+      (err, result) => {
+        connection.release();
+        if (err) {
+          console.error(err);
+          return next({
+            status: 500,
+            message: '중복되는 지사명입니다.'
+          });
+        } else {
+          res.redirect('/administrator');
+        }
+      }
+    );
+  });
+});
+
+router.get('/offices', (req, res, next) => {
+  const { id: officeId } = req.query;
+
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    connection.query(QUERY.ADMIN.GetOfficeBranchesByOfficeId,
+      [ officeId, req.user.fc_id ],
+      (err, results) => {
+        if (err) {
+          res.json({
+            success: false,
+            msg: err
+          });
+        } else {
+          res.json({
+            success: true,
+            list: results
+          });
+        }
+      }
+    );
+  });
+});
+
+/** 지사담당자 지사목록을 조회한다. */
+router.get('/admin/offices', AdministratorService.getAdminOffices);
+
+/**
+  기존 지사별 지점을 삭제 후 전체 지점을 재등록한다.
+ */
+router.post('/office/branches', (req, res, next) => {
+  const { office_id: officeId, branch_ids: branchIds } = req.body;
+  const arrBranchIds = JSON.parse('[' + branchIds + ']');
+  let branchIdCount = 0;
+
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+
+    connection.query(QUERY.ADMIN.DeleteOfficeBranches,
+      [ officeId ],
+      (err, data) => {
+        if (!err) {
+          async.whilst(
+            () => {
+              return branchIdCount < arrBranchIds.length;
+            },
+            callback => {
+              connection.query(QUERY.ADMIN.InsertIntoOfficeBranches,
+                [ req.user.fc_id, officeId, arrBranchIds[branchIdCount] ],
+                (err, data) => {
+                  callback(err, null);
+                }
+              );
+              branchIdCount++;
+            },
+            (err, results) => {
+              connection.release();
+              if (err) {
+                console.error(err);
+                throw new Error(err);
+              } else {
+                // success
+                return res.json({
+                  success: true
+                });
+              }
+            }
+          );
+        } else {
+          throw err;
+        }
+      }
+    );
+  });
+});
+
+/**
+  기존 관리자별 지사를 삭제 후 전체 지사를 재등록한다.
+ */
+router.post('/admin/offices', (req, res, next) => {
+  const { admin_id: adminId, office_ids: officeIds } = req.body;
+  const arrOfficeIds = JSON.parse('[' + officeIds + ']');
+  let officeIdCount = 0;
+
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+
+    connection.query(QUERY.ADMIN.DeleteAdminOffices,
+      [ adminId ],
+      (err, data) => {
+        if (!err) {
+          async.whilst(
+            () => {
+              return officeIdCount < arrOfficeIds.length;
+            },
+            callback => {
+              connection.query(QUERY.ADMIN.InsertIntoAdminOffices,
+                [ adminId, arrOfficeIds[officeIdCount] ],
+                (err, data) => {
+                  callback(err, null);
+                }
+              );
+              officeIdCount++;
+            },
+            (err, results) => {
+              connection.release();
+              if (err) {
+                console.error(err);
+                throw new Error(err);
+              } else {
+                // success
+                return res.json({
+                  success: true
+                });
+              }
+            }
+          );
+        } else {
+          throw err;
+        }
+      }
+    );
   });
 });
 

@@ -414,7 +414,7 @@ AssignmentService.getSimpleAssignmentList = (req, res, next) => {
     if (err) throw err;
     async.series(
       [
-        (callback) => {
+        callback => {
           connection.query(QUERY.ASSIGNMENT.SelectSimpleAssignments,
             [ req.user.fc_id ],
             (err, rows) => {

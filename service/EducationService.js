@@ -10,6 +10,41 @@ const AssignmentService = require('../service/AssignmentService');
 var EducationService = {};
 const util = require('../util/util');
 
+EducationService.getInfoWithPointWeight = (req, res, next) => {
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+    let q = connection.query(QUERY.EDU.GetEduInfoByIdWithPointWeight,
+      [ req.query.id ],
+      (err, data) => {
+        console.log(q.sql);
+        if (err) {
+          console.log(err);
+          throw err;
+        } else {
+          res.send({
+            success: true,
+            data: data
+          });
+        }
+      });
+  });
+};
+
+EducationService.getEduList = (fcId, _callback) => {
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+    connection.query(QUERY.EDU.GetList,
+      [ fcId ],
+      (err, data) => {
+        if (err) {
+          throw err;
+        } else {
+          _callback(null, data);
+        }
+      });
+  });
+};
+
 EducationService.deactivateById = function (_id, _callback) {
   pool.getConnection(function (err, connection) {
     if (err) throw err;

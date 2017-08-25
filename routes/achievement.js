@@ -6,15 +6,11 @@ const pool = require('../commons/db_conn_pool');
 const util = require('../util/util');
 
 router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
-  let querystring;
-  const showAll = (req.user.role !== 'supervisor');
-
-  querystring = QUERY.HISTORY.GetAssignEduHistory(showAll);
   pool.getConnection((err, connection) => {
     if (err) throw err;
-    connection.query(querystring, [req.user.fc_id, req.user.admin_id], (err, rows) => {
+    connection.query(QUERY.HISTORY.GetAssignEduHistory(req.user), [], (err, rows) => {
       connection.release();
-      // console.log(rows);
+      // console.log(q.sql);
       if (err) {
         console.error(err);
         throw new Error(err);
@@ -38,19 +34,14 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
   // var trainingUserId = req.query.id;
   const eduId = req.query.edu_id;
   let pointWeight = null;
-  const showAll = (req.user.role !== 'supervisor');
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
     async.series([
       // 지점별 진척도
       (callback) => {
-        connection.query(QUERY.ACHIEVEMENT.GetBranchProgressAllByEdu(showAll), [
-          req.user.fc_id,
-          eduId,
-          eduId,
-          req.user.admin_id
-        ],
+        connection.query(QUERY.ACHIEVEMENT.GetBranchProgressAllByEdu(eduId, req.user),
+        [],
         (err, data) => {
           callback(err, data); // results[0]
         });
@@ -77,7 +68,7 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
       },
       // 교육생별 진척도
       (callback) => {
-        connection.query(QUERY.ACHIEVEMENT.GetUserProgressAllByEdu(showAll),
+        connection.query(QUERY.ACHIEVEMENT.GetUserProgressAllByEdu(eduId, req.user, pointWeight),
           [
             pointWeight.point_complete,
             pointWeight.point_quiz,
@@ -129,12 +120,10 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
  * 교육생별 진척도
  */
 router.get('/user', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
-  const showAll = (req.user.role !== 'supervisor');
-
   pool.getConnection((err, connection) => {
     if (err) throw err;
     // 슈퍼바이저일 경우 자신의 점포만 볼 수 있다.
-    connection.query(QUERY.ACHIEVEMENT.GetUserProgressAll(showAll, { fcId: req.user.fc_id, adminId: req.user.admin_id }),
+    connection.query(QUERY.ACHIEVEMENT.GetUserProgressAll(req.user),
       [],
       (err, rows) => {
         connection.release();

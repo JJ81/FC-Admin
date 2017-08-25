@@ -1,0 +1,52 @@
+<div class="modal fade" id="registOffice" role="dialog">
+  <form class="modal-dialog" method="post" action="/administrator/regist/office" id="frm-regist-office">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">지사등록</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group office-input">
+          <label>* 지사명</label>
+          <input type="hidden" name="id" />
+          <input type="text" class="form-control" name="office_name" id="office_name" placeholder="지사명" required autocomplete="off" autofocus />
+        </div>
+        <div class="form-group office-input">
+          <label>설명</label>
+          <textarea class="form-control" id="office_desc" name="office_desc" placeholder="설명을 입력하세요."></textarea>
+        </div>
+        <div class="form-group table-responsive">
+          <table id="table-office" class="table no-margin table-bordered table-striped" width="100%">
+            <thead>
+              <tr>
+                <th>지사명</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each offices}}
+              <tr>
+                <td class="office-list">
+                  <a class="office-list-item" data-id="{{id}}"
+                    data-office-name="{{office_name}}"
+                    data-office-desc="{{office_desc}}"
+                    href="#">{{office_name}}</a></li>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+        <div class="pull-right office-right-buttons">
+          <button type="button" id="clear-input" class="btn btn-default">초기화</button>
+          <button type="submit" class="btn btn-primary btn-submit">등록</button>
+          <button type="button" id="btnDisableOffice" class="btn btn-danger" disabled>삭제</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

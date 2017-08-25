@@ -23,6 +23,27 @@ QUERY.ADMIN = {
     ' WHERE b.`fc_id` = ? ' +
     '   AND b.`active` = 1; ',
 
+  GetOffices:
+    'SELECT o.`id`, o.`office_name`, o.`office_desc` ' +
+    '  FROM `office` AS o ' +
+    ' WHERE o.`fc_id` = ? ' +
+    '   AND o.`active` = 1; ',
+
+  GetOfficeBranchesByOfficeId:
+    'SELECT CASE WHEN ob.`id` THEN 1 ELSE 0 END AS active ' +
+    '     , b.`name` AS branch_name, b.`id` AS branch_id ' +
+    '  FROM `branch` AS b ' +
+    '  LEFT JOIN `office_branches` AS ob ON b.`id` = ob.`branch_id` ' +
+    '   AND ob.`office_id` = ? ' +
+    ' WHERE b.`fc_id` = ? ' +
+    ' ORDER BY b.`name` ',
+
+  CreateOffice:
+    'INSERT IGNORE `office` (`office_name`, `office_desc`, `fc_id`) VALUES (?,?,?);',
+
+  ModifyOffice:
+    'UPDATE `office` SET `office_name` = ?, `office_desc` = ? WHERE `id` = ?; ',
+
   CreateAdmin:
     'INSERT INTO `admin` (`name`, `email`, `password`, `role`, `fc_id`) ' +
     'VALUES(?,?,?,?,?); ',
@@ -47,7 +68,31 @@ QUERY.ADMIN = {
 
   // 관리자를 비활성화 한다.
   DisableAdminById:
-    'UPDATE `admin` SET `active` = 0 WHERE `id` = ?; '
+    'UPDATE `admin` SET `active` = 0 WHERE `id` = ?; ',
+
+  InsertIntoOfficeBranches:
+    'INSERT IGNORE INTO `office_branches` (`fc_id`, `office_id`, `branch_id`) ' +
+    'VALUES(?,?,?); ',
+
+  DeleteOfficeBranches:
+    'DELETE FROM `office_branches` WHERE `office_id` = ?; ',
+
+  SelectAdminOffices:
+    'SELECT o.`id` AS office_id, o.`office_name`, IFNULL(ao.`active`, 0) AS active ' +
+    '  FROM `office` AS o ' +
+    '  LEFT JOIN `admin_offices` AS ao ' +
+    '    ON o.`id` = ao.`office_id` ' +
+    '   AND ao.`active` = 1 ' +
+    '   AND ao.`admin_id` = ? ' +
+    ' WHERE o.`fc_id` = ? ' +
+    ' ORDER BY o.`office_name`; ',
+
+  DeleteAdminOffices:
+    'DELETE FROM `admin_offices` WHERE `admin_id` = ?; ',
+
+  InsertIntoAdminOffices:
+    'INSERT IGNORE INTO `admin_offices` (`admin_id`, `office_id`) ' +
+    'VALUES(?,?); '
 };
 
 QUERY.LOGIN = {
@@ -74,6 +119,32 @@ QUERY.EMPLOYEE = {
     '  FROM `branch` AS b ' +
     ' WHERE b.`fc_id` = ? ' +
     '   AND b.`active` = 1; ',
+
+  // 지점을 조회한다.
+  GetBranchesByRole: ({ role, fc_id: fcId, admin_id: adminId }) => {
+    let sql;
+
+    if (role !== 'supervisor') {
+      sql =
+        'SELECT b.`id`, b.`name` ' +
+        '  FROM `branch` AS b ' +
+        ' WHERE b.`fc_id` = ' + fcId +
+        '   AND b.`active` = 1; ';
+    } else {
+      sql =
+        'SELECT b.`id`, b.`name` ' +
+        '  FROM `admin_offices` AS ao ' +
+        ' INNER JOIN `office_branches` AS ob ' +
+        '    ON ao.`office_id` = ob.`office_id` ' +
+        ' INNER JOIN `branch` AS b ' +
+        '    ON ob.`branch_id` = b.`id` ' +
+        ' WHERE ao.`admin_id` = ' + adminId +
+        '   AND ao.`active` = 1 ' +
+        ' ORDER BY b.`name`; ';
+    }
+
+    return sql;
+  },
 
   // 지점명으로 지점을 검색한다.
   GetBranchByName:
@@ -147,6 +218,64 @@ QUERY.EMPLOYEE = {
     '   AND u.`active` = true ' +
     ' ORDER BY `branch`, d.`order`, u.`name`; ',
 
+  GetEmployeesByRole: ({ role, fc_id: fcId, admin_id: adminId }) => {
+    let sql;
+
+    if (role !== 'supervisor') {
+      sql =
+        'SELECT u.`id` AS id ' +
+        '     , u.`name` AS name ' +
+        '     , u.`phone` AS phone ' +
+        '     , u.`email` AS email ' +
+        '     , b.`name` AS branch ' +
+        '     , d.`name` AS duty ' +
+        '     , b.`id` AS branch_id ' +
+        '     , d.`id` AS duty_id ' +
+        '  FROM `users` AS u ' +
+        '  LEFT JOIN `fc` AS f ' +
+        '    ON f.`id` = u.`fc_id` ' +
+        '  LEFT JOIN `branch` AS b ' +
+        '    ON b.`id` = u.`branch_id` ' +
+        '  LEFT JOIN `duty` AS d ' +
+        '    ON d.`id` = u.`duty_id` ' +
+        ' WHERE u.`fc_id` = ' + fcId +
+        '   AND u.`active` = 1 ' +
+        ' ORDER BY `branch`, d.`order`, u.`name`; ';
+    } else {
+      sql =
+        'SELECT u.`id` AS id ' +
+        '     , u.`name` AS name ' +
+        '     , u.`phone` AS phone ' +
+        '     , u.`email` AS email ' +
+        '     , b.`name` AS branch ' +
+        '     , d.`name` AS duty ' +
+        '     , b.`id` AS branch_id ' +
+        '     , d.`id` AS duty_id ' +
+        '  FROM `users` AS u ' +
+        ' INNER JOIN `fc` AS f ' +
+        '    ON f.`id` = u.`fc_id` ' +
+        ' INNER JOIN ' +
+        '       ( ' +
+        '        SELECT b.`id`, b.`name` ' +
+        '          FROM `admin_offices` AS ao ' +
+        '         INNER JOIN `office_branches` AS ob ' +
+        '            ON ao.`office_id` = ob.`office_id` ' +
+        '         INNER JOIN `branch` AS b ' +
+        '            ON ob.`branch_id` = b.`id` ' +
+        '         WHERE ao.`admin_id` = ' + adminId +
+        '           AND ao.`active` = 1 ' +
+        '       ) AS b ' +
+        '    ON b.`id` = u.`branch_id` ' +
+        ' INNER JOIN `duty` AS d ' +
+        '    ON d.`id` = u.`duty_id` ' +
+        ' WHERE u.`fc_id` = ' + fcId +
+        '   AND u.`active` = true ' +
+        ' ORDER BY `branch`, d.`order`, u.`name`; ';
+    }
+
+    return sql;
+  },
+
   // 교육과정 배정 직원목록 조회
   GetEmployeeListByAssignUserId:
     'SELECT u.`id` AS id ' +
@@ -176,6 +305,84 @@ QUERY.EMPLOYEE = {
     ' WHERE u.`fc_id` = ? ' +
     '   AND u.`active` = true ' +
     ' ORDER BY `branch`, d.`order`, u.`name`; ',
+
+  GetEmployeeListByAssignUserIdByRole: (logBindUserId, { role, fc_id: fcId, admin_id: adminId }) => {
+    let sql;
+
+    if (role !== 'supervisor') {
+      sql =
+        'SELECT u.`id` AS id ' +
+        '     , CASE WHEN bu.`user_id` IS NOT NULL THEN \'Y\' ELSE \'N\' END AS assigned ' +
+        '     , u.`name` AS name ' +
+        '     , u.`phone` AS phone ' +
+        '     , u.`email` AS email ' +
+        '     , b.`name` AS branch ' +
+        '     , d.`name` AS duty ' +
+        '     , b.`id` AS branch_id ' +
+        '     , d.`id` AS duty_id ' +
+        '  FROM `users` AS u ' +
+        '  LEFT JOIN `fc` AS f ' +
+        '    ON f.`id` = u.`fc_id` ' +
+        '  LEFT JOIN `branch` AS b ' +
+        '    ON b.`id` = u.`branch_id` ' +
+        '  LEFT JOIN `duty` AS d ' +
+        '    ON d.`id` = u.`duty_id` ' +
+        '  LEFT JOIN ( ' +
+        '       SELECT lgu.`user_id` ' +
+        '         FROM `log_bind_users` AS lbu ' +
+        '        INNER JOIN `log_group_user` AS lgu ' +
+        '           ON lbu.`group_id` = lgu.`group_id` ' +
+        '        WHERE lbu.`id` = ' + logBindUserId +
+        '       ) AS bu ' +
+        '    ON u.`id` = bu.`user_id` ' +
+        ' WHERE u.`fc_id` = ' + fcId +
+        '   AND u.`active` = true ' +
+        ' ORDER BY `branch`, d.`order`, u.`name`; ';
+    } else {
+      sql =
+        'SELECT u.`id` AS id ' +
+        '     , CASE WHEN bu.`user_id` IS NOT NULL THEN \'Y\' ELSE \'N\' END AS assigned ' +
+        '     , u.`name` AS name ' +
+        '     , u.`phone` AS phone ' +
+        '     , u.`email` AS email ' +
+        '     , b.`name` AS branch ' +
+        '     , d.`name` AS duty ' +
+        '     , b.`id` AS branch_id ' +
+        '     , d.`id` AS duty_id ' +
+        '  FROM `users` AS u ' +
+        ' INNER JOIN `fc` AS f ' +
+        '    ON f.`id` = u.`fc_id` ' +
+        // '  LEFT JOIN `branch` AS b ' +
+        // '    ON b.`id` = u.`branch_id` ' +
+        ' INNER JOIN ' +
+        '       ( ' +
+        '        SELECT b.`id`, b.`name` ' +
+        '          FROM `admin_offices` AS ao ' +
+        '         INNER JOIN `office_branches` AS ob ' +
+        '            ON ao.`office_id` = ob.`office_id` ' +
+        '         INNER JOIN `branch` AS b ' +
+        '            ON ob.`branch_id` = b.`id` ' +
+        '         WHERE ao.`admin_id` = ' + adminId +
+        '           AND ao.`active` = 1 ' +
+        '       ) AS b ' +
+        '    ON b.`id` = u.`branch_id` ' +
+        ' INNER JOIN `duty` AS d ' +
+        '    ON d.`id` = u.`duty_id` ' +
+        '  LEFT JOIN ( ' +
+        '       SELECT lgu.`user_id` ' +
+        '         FROM `log_bind_users` AS lbu ' +
+        '        INNER JOIN `log_group_user` AS lgu ' +
+        '           ON lbu.`group_id` = lgu.`group_id` ' +
+        '        WHERE lbu.`id` = ' + logBindUserId +
+        '       ) AS bu ' +
+        '    ON u.`id` = bu.`user_id` ' +
+        ' WHERE u.`fc_id` = ' + fcId +
+        '   AND u.`active` = true ' +
+        ' ORDER BY `branch`, d.`order`, u.`name`; ';
+    }
+
+    return sql;
+  },
 
   ResetPassword:
     'UPDATE `users` SET password = ? ' +
@@ -212,10 +419,10 @@ QUERY.COURSE = {
 
   // 특정 fc 의 전체 강의목록을 조회한다.
   GetCourseList:
-    'SELECT c.`id` AS course_id, c.`name`, t.`name` AS teacher, c.`created_dt`, a.`name` AS creator ' +
+    'SELECT c.`id` AS course_id, c.`name` AS course_name, c.`teacher` AS teacher_name, c.`created_dt`, a.`name` AS creator ' +
     '  FROM `course` AS c ' +
-    '  LEFT JOIN `teacher` AS t ' +
-    '    ON c.`teacher_id` = t.`id` ' +
+    // '  LEFT JOIN `teacher` AS t ' +
+    // '    ON c.`teacher_id` = t.`id` ' +
     '  LEFT JOIN `admin` AS a ' +
     '    ON a.`id` = c.`creator_id` ' +
     ' WHERE a.`fc_id` = ? ' +
@@ -625,7 +832,30 @@ QUERY.EDU = {
     '   AND a.`fc_id` = ? ' +
     ' ORDER BY e.`created_dt` DESC, e.`id` DESC; ',
 
-    // 교육과정 정보를 조회한다.
+  GetEduListForSimpleAssignment: (fcId, eduId) => {
+    let sql;
+
+    sql =
+      'SELECT e.`id` AS education_id ' +
+      '     , e.`name` ' +
+      '     , e.`desc` ' +
+      '     , e.`created_dt` ' +
+      '     , e.`start_dt` ' +
+      '     , e.`end_dt` ' +
+      '     , a.`name` AS creator ' +
+      '     , e.`course_group_id` ' +
+      '  FROM `edu` AS e ' +
+      ' INNER JOIN `admin` AS a ' +
+      '    ON e.`creator_id` = a.`id` ' +
+      '   AND a.`fc_id` = ' + fcId +
+      ' WHERE e.`active` = 1 ' +
+      '   AND e.`id` != ' + eduId +
+      ' ORDER BY e.`created_dt` DESC, e.`id` DESC; ';
+
+    return sql;
+  },
+
+  // 교육과정 정보를 조회한다.
   GetEduInfoById:
     'SELECT e.`id` ' +
     '     , e.`name` ' +
@@ -635,6 +865,43 @@ QUERY.EDU = {
     '     , e.`course_group_id` AS course_group_key ' +
     '  FROM `edu` AS e ' +
     ' WHERE e.`id` = ?; ',
+
+  // 교육과정 정보와 포인트 정보를 함께 반환한다.
+  GetEduInfoByIdWithPointWeight: (eduId) => {
+    let sql;
+
+    sql =
+    'SELECT e.`id` ' +
+    '     , e.`name` ' +
+    '     , e.`desc` ' +
+    '     , e.`start_dt` ' +
+    '     , e.`end_dt` ' +
+    '     , e.`course_group_id` ' +
+    '     , e.`can_replay` ' +
+    '     , epw.`point_complete` ' +
+    '     , epw.`point_quiz` ' +
+    '     , epw.`point_final` ' +
+    '     , epw.`point_reeltime` ' +
+    '     , epw.`point_speed` ' +
+    '     , epw.`point_repetition` ' +
+    '  FROM `edu` AS e ' +
+    ' INNER JOIN ' +
+    '       ( ' +
+    '        SELECT `edu_id` ' +
+    '             , `point_complete` ' +
+    '             , `point_quiz` ' +
+    '             , `point_final` ' +
+    '             , `point_reeltime` ' +
+    '             , `point_speed` ' +
+    '             , `point_repetition` ' +
+    '          FROM `edu_point_weight` ' +
+    '         WHERE `edu_id` = ' + eduId +
+    '         ORDER BY `created_dt` DESC LIMIT 1 ' +
+    '       ) AS epw ' +
+    '    ON e.`id` = epw.`id`; ';
+
+    return sql;
+  },
 
     // 교육과정의 강의를 조회한다.
   GetCourseListByGroupId:
@@ -901,7 +1168,7 @@ QUERY.HISTORY = {
     'VALUES(?,?,?,?,?); ',
 
   // 교육과정 배정 정보
-  GetAssignEduHistory: (showAll) => {
+  GetAssignEduHistory: ({ role, fc_id: fcId, admin_id: adminId }) => {
     let sql =
       'SELECT e.`id` AS edu_id, te.`id`, e.`name`, te.`created_dt` ' +
       '     , lae.`start_dt` ' +
@@ -912,7 +1179,7 @@ QUERY.HISTORY = {
       '  FROM `training_edu` AS te ' +
       ' INNER JOIN `admin` AS a ' +
       '    ON a.`id` = te.`assigner` ' +
-      '   and a.`fc_id` = ? ' +
+      '   and a.`fc_id` = ' + fcId +
       ' INNER JOIN `edu` AS e ' +
       '    ON e.`id` = te.`edu_id` ' +
       '   AND e.`active` = 1 ' +
@@ -922,18 +1189,32 @@ QUERY.HISTORY = {
       '    ON lbu.`id` = lae.`target_users_id` ' +
       ' WHERE te.`active` = 1 ';
 
-    if (!showAll) {
+    if (role === 'supervisor') {
       sql +=
         ' AND te.`id` IN ( ' +
         '    SELECT DISTINCT training_edu_id ' +
         '      FROM `training_users` AS tu  ' +
         '     INNER JOIN `users` AS u ' +
         '        ON tu.`user_id` = u.`id` ' +
-        '     INNER JOIN `admin_branch` AS ab ' +
-        '        ON u.`branch_id` = ab.`branch_id` ' +
-        '       AND ab.`admin_id` = ?) ';
+        '     INNER JOIN ' +
+        '           ( ' +
+        '            SELECT b.`id`, b.`name` ' +
+        '              FROM `admin_offices` AS ao ' +
+        '             INNER JOIN `office_branches` AS ob ' +
+        '                ON ao.`office_id` = ob.`office_id` ' +
+        '             INNER JOIN `branch` AS b ' +
+        '                ON ob.`branch_id` = b.`id` ' +
+        '           WHERE ao.`admin_id` = ' + adminId +
+        '             AND ao.`active` = 1 ' +
+        '           ) AS ab ' +
+        '        ON u.`branch_id` = ab.`id` ' +
+        '     ) ';
+        // '     INNER JOIN `admin_branch` AS ab ' +
+        // '        ON u.`branch_id` = ab.`branch_id` ' +
+        // '       AND ab.`admin_id` = ?) ';
     }
     sql += ' ORDER BY te.`created_dt` DESC; ';
+
     return sql;
   },
 
@@ -1166,7 +1447,7 @@ QUERY.ACHIEVEMENT = {
     ' ORDER BY `completed_rate` DESC; ',
 
   // 지점별 이수율 (전체)
-  GetBranchProgressAllByEdu: (showAll) => {
+  GetBranchProgressAllByEdu: (eduId, { role, fc_id: fcId, admin_id: adminId }) => {
     let sql =
       'SELECT g.`branch_id` ' +
       '     , MAX(b.`name`) AS branch_name ' +
@@ -1187,25 +1468,37 @@ QUERY.ACHIEVEMENT = {
       '      FROM `training_users` AS tu ' +
       '     INNER JOIN `users` AS u ' +
       '      ON tu.`user_id` = u.`id` ' +
-      '          AND u.`fc_id` = ? ' +
+      '          AND u.`fc_id` = ' + fcId +
       '          AND u.`active` = 1 ' +
       '     INNER JOIN `training_edu` AS te ' +
       '      ON tu.`training_edu_id` = te.`id` ' +
-      '       AND te.`edu_id` = ? ' +
+      '       AND te.`edu_id` = ' + eduId +
       '     INNER JOIN ' +
       '         ( ' +
       '        SELECT e.`id` AS edu_id, cg.`course_id` ' +
       '          FROM `edu` AS e ' +
       '         INNER JOIN `course_group` AS cg ' +
       '          ON e.`course_group_id` = cg.`group_id` ' +
-      '         WHERE e.`id` = ? ' +
+      '         WHERE e.`id` = ' + eduId +
       '         ) AS e ' +
       '      ON te.`edu_id` = e.`edu_id` ';
-    if (!showAll) {
+    if (role === 'supervisor') {
       sql +=
-          '     INNER JOIN `admin_branch` AS ab ' +
-          '        ON u.`branch_id` = ab.`branch_id` ' +
-          '       AND ab.`admin_id` = ? ';
+          '     INNER JOIN ' +
+          '           ( ' +
+          '            SELECT b.`id`, b.`name` ' +
+          '              FROM `admin_offices` AS ao ' +
+          '             INNER JOIN `office_branches` AS ob ' +
+          '                ON ao.`office_id` = ob.`office_id` ' +
+          '             INNER JOIN `branch` AS b ' +
+          '                ON ob.`branch_id` = b.`id` ' +
+          '             WHERE ao.`admin_id` = ' + adminId +
+          '               AND ao.`active` = 1 ' +
+          '           ) AS ab ' +
+          '        ON u.`branch_id` = ab.`id` ';
+          // '     INNER JOIN `admin_branch` AS ab ' +
+          // '        ON u.`branch_id` = ab.`branch_id` ' +
+          // '       AND ab.`admin_id` = ? ';
     }
 
     sql +=
@@ -1218,60 +1511,72 @@ QUERY.ACHIEVEMENT = {
   },
 
     // 특정교육과정에 대한 교육생별 이수율 (전체)
-  GetUserProgressAllByEdu: (showAll) => {
+  GetUserProgressAllByEdu: (eduId, { role, fc_id: fcId, admin_id: adminId }, pointWeight) => {
     let sql =
       'SELECT MAX(g.`user_name`) AS user_name ' +
       '     , MAX(b.`name`) AS branch_name ' +
       '     , MAX(d.`name`) AS duty_name ' +
       '     , ( ' +
-      '        SELECT (`complete` * ?) + ' +
-      '               (`quiz_correction` * ?) + ' +
-      '               (`final_correction` * ?) + ' +
-      '               (`reeltime` * ?) + ' +
-      '               (`speed` * ?) + ' +
-      '               (`repetition` * ?) ' +
+      '        SELECT (`complete` * ' + pointWeight.point_complete + ') + ' +
+      '               (`quiz_correction` * ' + pointWeight.point_quiz + ') + ' +
+      '               (`final_correction` * ' + pointWeight.point_final + ') + ' +
+      '               (`reeltime` * ' + pointWeight.point_reeltime + ') + ' +
+      '               (`speed` * ' + pointWeight.point_speed + ') + ' +
+      '               (`repetition` * ' + pointWeight.point_repetition + ') ' +
       '          FROM `log_user_point` ' +
       '         WHERE `training_user_id` = g.`training_user_id` ' +
       '       ) AS point ' +
       '     , IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate ' +
       '  FROM ( ' +
       '    SELECT tu.`user_id` ' +
-      '       , u.`name` AS user_name ' +
-      '       , @training_user_id:= tu.`id` AS training_user_id ' +
-      '       , @course_id:= e.`course_id` AS course_id ' +
-      '       , ( ' +
-      '        SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) ' +
-      '          FROM `course_list` AS cl ' +
-      '          LEFT JOIN `log_session_progress` AS up ' +
-      '          ON cl.id = up.`course_list_id` ' +
-      '           AND up.`training_user_id` = @training_user_id ' +
-      '           AND up.`end_dt` IS NOT NULL ' +
-      '         WHERE cl.`course_id` = @course_id ' +
-      '        ) AS completed_rate ' +
-      '       , u.`branch_id` ' +
-      '            , u.`duty_id` ' +
+      '         , u.`name` AS user_name ' +
+      '         , @training_user_id:= tu.`id` AS training_user_id ' +
+      '         , @course_id:= e.`course_id` AS course_id ' +
+      '         , ( ' +
+      '            SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) ' +
+      '              FROM `course_list` AS cl ' +
+      '              LEFT JOIN `log_session_progress` AS up ' +
+      '                ON cl.id = up.`course_list_id` ' +
+      '               AND up.`training_user_id` = @training_user_id ' +
+      '               AND up.`end_dt` IS NOT NULL ' +
+      '             WHERE cl.`course_id` = @course_id ' +
+      '           ) AS completed_rate ' +
+      '         , u.branch_id ' +
+      '         , u.`duty_id` ' +
       '      FROM `training_users` AS tu ' +
       '     INNER JOIN `users` AS u ' +
       '      ON tu.`user_id` = u.`id` ' +
-      '          AND u.`fc_id` = ? ' +
+      '          AND u.`fc_id` = ' + fcId +
       '          AND u.`active` = 1 ' +
       '     INNER JOIN `training_edu` AS te ' +
       '      ON tu.`training_edu_id` = te.`id` ' +
-      '       AND te.`edu_id` = ? ' +
+      '       AND te.`edu_id` = ' + eduId +
       '     INNER JOIN  ' +
       '         ( ' +
       '        SELECT e.`id` AS edu_id, cg.`course_id` ' +
       '          FROM `edu` AS e ' +
       '         INNER JOIN `course_group` AS cg ' +
       '          ON e.`course_group_id` = cg.`group_id` ' +
-      '         WHERE e.`id` = ? ' +
+      '         WHERE e.`id` = ' + eduId +
       '         ) AS e ' +
       '      ON te.`edu_id` = e.`edu_id` ';
-    if (!showAll) {
+    if (role === 'supervisor') {
       sql +=
-          '     INNER JOIN `admin_branch` AS ab ' +
-          '        ON u.`branch_id` = ab.`branch_id` ' +
-          '       AND ab.`admin_id` = ? ';
+          '     INNER JOIN ' +
+          '           ( ' +
+          '            SELECT b.`id`, b.`name` ' +
+          '              FROM `admin_offices` AS ao ' +
+          '             INNER JOIN `office_branches` AS ob ' +
+          '                ON ao.`office_id` = ob.`office_id` ' +
+          '             INNER JOIN `branch` AS b ' +
+          '                ON ob.`branch_id` = b.`id` ' +
+          '             WHERE ao.`admin_id` = ' + adminId +
+          '               AND ao.`active` = 1 ' +
+          '           ) AS ab ' +
+          '        ON u.`branch_id` = ab.`id` ';
+          // '     INNER JOIN `admin_branch` AS ab ' +
+          // '        ON u.`branch_id` = ab.`branch_id` ' +
+          // '       AND ab.`admin_id` = ' + adminId;
     }
     sql +=
       '    ) AS g ' +
@@ -1286,7 +1591,7 @@ QUERY.ACHIEVEMENT = {
   },
 
   // 교육생별 전체(전 교육과정에 대한) 이수율
-  GetUserProgressAll: (showAll, { fcId, adminId }) => {
+  GetUserProgressAll: ({ role, fc_id: fcId, admin_id: adminId }) => {
     let sql =
     'SELECT x.`user_name` ' +
     '     , x.`branch_name` ' +
@@ -1307,7 +1612,7 @@ QUERY.ACHIEVEMENT = {
     '     , IFNULL(TRUNCATE(AVG(x.`completed_rate`), 2), 0) AS completed_rate ' +
     '  FROM ( ' +
     '        SELECT MAX(g.`user_name`) AS user_name ' +
-    '             , MAX(b.`name`) AS branch_name ' +
+    '             , MAX(g.`branch_name`) AS branch_name ' +
     '             , MAX(d.`name`) AS duty_name ' +
     '             , IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate ' +
     '             , MAX(g.`edu_id`) AS edu_id ' +
@@ -1327,7 +1632,8 @@ QUERY.ACHIEVEMENT = {
     '                           AND up.`end_dt` IS NOT NULL ' +
     '                         WHERE cl.`course_id` = @course_id ' +
     '                       ) AS completed_rate ' +
-    '                     , u.`branch_id` ' +
+    '                     , ab.`branch_id` ' +
+    '                     , ab.`branch_name` ' +
     '                     , u.`duty_id` ' +
     '                     , te.`edu_id` ' +
     '                  FROM `training_users` AS tu ' +
@@ -1335,11 +1641,23 @@ QUERY.ACHIEVEMENT = {
     '                    ON tu.`user_id` = u.`id` ' +
     '                   AND u.`fc_id` = ' + fcId +
     '                   AND u.`active` = 1 ';
-    if (!showAll) {
+    if (role === 'supervisor') {
       sql +=
-    '                 INNER JOIN `admin_branch` AS ab ' +
-    '                    ON u.`branch_id` = ab.`branch_id` ' +
-    '                   AND ab.`admin_id` = ' + adminId;
+    '                 INNER JOIN ' +
+    '                       ( ' +
+    '                        SELECT b.`id` AS branch_id, b.`name` AS branch_name ' +
+    '                          FROM `admin_offices` AS ao ' +
+    '                         INNER JOIN `office_branches` AS ob ' +
+    '                            ON ao.`office_id` = ob.`office_id` ' +
+    '                         INNER JOIN `branch` AS b ' +
+    '                            ON ob.`branch_id` = b.`id` ' +
+    '                         WHERE ao.`admin_id` = ' + adminId +
+    '                           AND ao.`active` = 1 ' +
+    '                       ) AS ab ' +
+    '                    ON u.`branch_id` = ab.`branch_id` ';
+    // '                 INNER JOIN `admin_branch` AS ab ' +
+    // '                    ON u.`branch_id` = ab.`branch_id` ' +
+    // '                   AND ab.`admin_id` = ' + adminId;
     }
     sql +=
     '                 INNER JOIN `training_edu` AS te ' +
@@ -1353,8 +1671,8 @@ QUERY.ACHIEVEMENT = {
     '                       ) AS e ' +
     '                    ON te.`edu_id` = e.`edu_id` ' +
     '               ) AS g ' +
-    '           LEFT JOIN `branch` AS b ' +
-    '             ON g.`branch_id` = b.`id` ' +
+    // '           LEFT JOIN `branch` AS b ' +
+    // '             ON g.`branch_id` = b.`id` ' +
     '           LEFT JOIN `duty` AS d ' +
     '             ON g.`duty_id` = d.`id` ' +
     '          GROUP BY g.`training_user_id` ' +
@@ -1603,32 +1921,104 @@ QUERY.ACHIEVEMENT = {
 };
 
 QUERY.DASHBOARD = {
-  GetUserCount:
-    'SELECT count(*) AS total_users ' +
-    '  FROM `users` ' +
-    ' WHERE `fc_id` = ? ' +
-    '   AND `active` = 1',
+  GetUserCount: ({ role, fc_id: fcId, admin_id: adminId }) => {
+    let sql;
 
-  GetBranchCount:
-    'SELECT count(*) total_branch ' +
-    '  FROM `branch` ' +
-    ' WHERE `fc_id` = ? ' +
-    '   AND `active` = 1 ',
+    if (role !== 'supervisor') {
+      sql =
+        'SELECT count(*) AS total_users ' +
+        '  FROM `users` AS u ' +
+        ' WHERE u.`fc_id` = ' + fcId +
+        '   AND u.`active` = 1; ';
+    } else {
+      sql =
+        'SELECT count(*) AS total_users ' +
+        '  FROM `users` AS u ' +
+        ' INNER JOIN ' +
+        '       ( ' +
+        '        SELECT b.`id`, b.`name` ' +
+        '          FROM `admin_offices` AS ao ' +
+        '         INNER JOIN `office_branches` AS ob ' +
+        '            ON ao.`office_id` = ob.`office_id` ' +
+        '         INNER JOIN `branch` AS b ' +
+        '            ON ob.`branch_id` = b.`id` ' +
+        '         WHERE ao.`admin_id` = ' + adminId +
+        '           AND ao.`active` = 1 ' +
+        '       ) AS ab ' +
+        '    ON u.`branch_id` = ab.`id` ' +
+        ' WHERE u.`fc_id` = ' + fcId +
+        '   AND u.`active` = 1';
+    }
+
+    return sql;
+  },
+
+  GetBranchCount: ({ role, fc_id: fcId, admin_id: adminId }) => {
+    let sql;
+
+    if (role !== 'supervisor') {
+      sql =
+        'SELECT COUNT(*) AS total_branch ' +
+        '  FROM `branch` ' +
+        ' WHERE `fc_id` = ' + fcId +
+        '   AND `active` = 1 ';
+    } else {
+      sql =
+        'SELECT COUNT(*) AS total_branch ' +
+        '  FROM `admin_offices` AS ao ' +
+        ' INNER JOIN `office_branches` AS ob ' +
+        '    ON ao.`office_id` = ob.`office_id` ' +
+        ' INNER JOIN `branch` AS b ' +
+        '    ON ob.`branch_id` = b.`id` ' +
+        ' WHERE ao.`admin_id` = ' + adminId +
+        '   AND ao.`active` = 1 ';
+    }
+
+    return sql;
+  },
 
   // 진행중인 교육과정 수
-  GetCurrentEduCount:
-    'SELECT COUNT(DISTINCT e.`id`) AS current_edu ' +
-    '  FROM `training_edu` AS te ' +
-    ' INNER JOIN `log_assign_edu` AS lae ' +
-    '    ON lae.`training_edu_id` = te.`id` ' +
-    ' INNER JOIN `edu` AS e ' +
-    '    ON e.id = te.edu_id ' +
-    '   AND e.`active` = 1 ' +
-    ' INNER JOIN `admin` AS a ' +
-    '    ON a.`id` = e.`creator_id` ' +
-    ' WHERE lae.`start_dt` <= now() ' +
-    '   AND lae.`end_dt` >= now() ' +
-    '   AND a.fc_id = ?; ',
+  GetCurrentEduCount: ({ role, fc_id: fcId, admin_id: adminId }) => {
+    let sql;
+
+    sql =
+      'SELECT COUNT(DISTINCT e.`id`) AS current_edu ' +
+      '  FROM `training_edu` AS te ' +
+      ' INNER JOIN `log_assign_edu` AS lae ' +
+      '    ON lae.`training_edu_id` = te.`id` ' +
+      ' INNER JOIN `edu` AS e ' +
+      '    ON e.id = te.edu_id ' +
+      '   AND e.`active` = 1 ' +
+      ' INNER JOIN `admin` AS a ' +
+      '    ON a.`id` = e.`creator_id` ' +
+      ' WHERE lae.`start_dt` <= now() ' +
+      '   AND lae.`end_dt` >= now() ' +
+      '   AND a.fc_id = ' + fcId;
+
+    if (role === 'supervisor') {
+      sql +=
+        ' AND te.`id` IN ( ' +
+        '    SELECT DISTINCT training_edu_id ' +
+        '      FROM `training_users` AS tu  ' +
+        '     INNER JOIN `users` AS u ' +
+        '        ON tu.`user_id` = u.`id` ' +
+        '     INNER JOIN ' +
+        '           ( ' +
+        '            SELECT b.`id`, b.`name` ' +
+        '              FROM `admin_offices` AS ao ' +
+        '             INNER JOIN `office_branches` AS ob ' +
+        '                ON ao.`office_id` = ob.`office_id` ' +
+        '             INNER JOIN `branch` AS b ' +
+        '                ON ob.`branch_id` = b.`id` ' +
+        '           WHERE ao.`admin_id` = ' + adminId +
+        '             AND ao.`active` = 1 ' +
+        '           ) AS ab ' +
+        '        ON u.`branch_id` = ab.`id` ' +
+        '     ) ';
+    }
+
+    return sql;
+  },
 
   GetCurrentEduCount_deprecated:
     'SELECT count(*) AS current_edu ' +
@@ -1662,7 +2052,10 @@ QUERY.DASHBOARD = {
     'VALUES(?,?,?,?,?,?,?);',
 
   // 이번 달 전체 교육 이수율
-  GetThisMonthProgress:
+  GetThisMonthProgress: ({ role, fc_id: fcId, admin_id: adminId }) => {
+    let sql;
+
+    sql =
     'SELECT IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate ' +
     '  FROM ( ' +
     '        SELECT @training_user_id:= tu.`id` AS training_user_id ' +
@@ -1683,8 +2076,26 @@ QUERY.DASHBOARD = {
     '          FROM `training_users` AS tu ' +
     '         INNER JOIN `users` AS u ' +
     '            ON tu.`user_id` = u.`id` ' +
-    '           AND u.`fc_id` = ? ' +
-    '           AND u.`active` = 1 ' +
+    '           AND u.`fc_id` = ' + fcId +
+    '           AND u.`active` = 1 ';
+
+    if (role === 'supervisor') {
+      sql +=
+    '         INNER JOIN ' +
+    '               ( ' +
+    '                SELECT b.`id`, b.`name` ' +
+    '                  FROM `admin_offices` AS ao ' +
+    '                 INNER JOIN `office_branches` AS ob ' +
+    '                    ON ao.`office_id` = ob.`office_id` ' +
+    '                 INNER JOIN `branch` AS b ' +
+    '                    ON ob.`branch_id` = b.`id` ' +
+    '                 WHERE ao.`admin_id` = ' + adminId +
+    '                   AND ao.`active` = 1 ' +
+    '               ) AS ab ' +
+    '            ON u.`branch_id` = ab.`id` ';
+    }
+
+    sql +=
     '         INNER JOIN `training_edu` AS te ' +
     '            ON tu.`training_edu_id` = te.`id` ' +
     '         INNER JOIN `log_assign_edu` AS lae ' +
@@ -1704,10 +2115,16 @@ QUERY.DASHBOARD = {
     // '                 WHERE DATE_FORMAT(NOW(), \'%Y-%m\') BETWEEN DATE_FORMAT(e.`start_dt`, \'%Y-%m\') AND DATE_FORMAT(e.`end_dt`, \'%Y-%m\') ' +
     '               ) AS e ' +
     '            ON te.`edu_id` = e.`edu_id` ' +
-    '       ) AS g ',
+    '       ) AS g ';
+
+    return sql;
+  },
 
   // 이번 달 교육 진척도
-  GetThisMonthProgressByEdu:
+  GetThisMonthProgressByEdu: ({ role, fc_id: fcId, admin_id: adminId }) => {
+    let sql;
+
+    sql =
        'SELECT g.`fc_id`, g.`edu_id` ' +
        '     , MAX(g.`edu_name`) AS edu_name ' +
        '     , MAX(g.`start_dt`) AS edu_start_dt ' +
@@ -1737,8 +2154,26 @@ QUERY.DASHBOARD = {
        '          FROM `training_users` AS tu ' +
        '         INNER JOIN `users` AS u ' +
        '            ON tu.`user_id` = u.`id` ' +
-       '           AND u.`fc_id` = ? ' +
-       '           AND u.`active` = 1 ' +
+       '           AND u.`fc_id` = ' + fcId +
+       '           AND u.`active` = 1 ';
+
+    if (role === 'supervisor') {
+      sql +=
+        '         INNER JOIN ' +
+        '               ( ' +
+        '                SELECT b.`id`, b.`name` ' +
+        '                  FROM `admin_offices` AS ao ' +
+        '                 INNER JOIN `office_branches` AS ob ' +
+        '                    ON ao.`office_id` = ob.`office_id` ' +
+        '                 INNER JOIN `branch` AS b ' +
+        '                    ON ob.`branch_id` = b.`id` ' +
+        '                 WHERE ao.`admin_id` = ' + adminId +
+        '                   AND ao.`active` = 1 ' +
+        '               ) AS ab ' +
+        '            ON u.`branch_id` = ab.`id` ';
+    }
+
+    sql +=
        '         INNER JOIN `training_edu` AS te ' +
        '            ON tu.`training_edu_id` = te.`id` ' +
        '         INNER JOIN `log_assign_edu` AS lae ' +
@@ -1760,11 +2195,16 @@ QUERY.DASHBOARD = {
        '            ON te.`edu_id` = e.`edu_id` ' +
        '       ) AS g ' +
        ' GROUP BY g.`fc_id`, g.`edu_id` ' +
-       ' ORDER BY `edu_start_dt` ASC, `edu_name` ASC; ',
+       ' ORDER BY `edu_start_dt` ASC, `edu_name` ASC; ';
     //    ' ORDER BY `completed_rate` DESC; '
+    return sql;
+  },
 
     // 지점별 이수율 (전체)
-  GetBranchProgressAll:
+  GetBranchProgressAll: ({ role, fc_id: fcId, admin_id: adminId }) => {
+    let sql;
+
+    sql =
         'SELECT g.`branch_id` ' +
         '     , MAX(b.`name`) AS branch_name ' +
         '     , IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate ' +
@@ -1783,9 +2223,27 @@ QUERY.DASHBOARD = {
         '       , u.`branch_id` ' +
         '      FROM `training_users` AS tu ' +
         '     INNER JOIN `users` AS u ' +
-        '      ON tu.`user_id` = u.`id` ' +
-        '          AND u.`fc_id` = ? ' +
-        '          AND u.`active` = 1 ' +
+        '        ON tu.`user_id` = u.`id` ' +
+        '       AND u.`fc_id` = ' + fcId +
+        '       AND u.`active` = 1 ';
+
+    if (role === 'supervisor') {
+      sql +=
+        '         INNER JOIN ' +
+        '               ( ' +
+        '                SELECT b.`id`, b.`name` ' +
+        '                  FROM `admin_offices` AS ao ' +
+        '                 INNER JOIN `office_branches` AS ob ' +
+        '                    ON ao.`office_id` = ob.`office_id` ' +
+        '                 INNER JOIN `branch` AS b ' +
+        '                    ON ob.`branch_id` = b.`id` ' +
+        '                 WHERE ao.`admin_id` = ' + adminId +
+        '                   AND ao.`active` = 1 ' +
+        '               ) AS ab ' +
+        '            ON u.`branch_id` = ab.`id` ';
+    }
+
+    sql +=
         '     INNER JOIN `training_edu` AS te ' +
         '      ON tu.`training_edu_id` = te.`id` ' +
         '     INNER JOIN ' +
@@ -1800,7 +2258,10 @@ QUERY.DASHBOARD = {
         ' INNER JOIN `branch` AS b ' +
         '   ON g.`branch_id` = b.`id` ' +
         ' GROUP BY g.`branch_id` ' +
-        ' ORDER BY `completed_rate` DESC; ',
+        ' ORDER BY `completed_rate` DESC; ';
+
+    return sql;
+  },
 
      // 교육과정 강의뱔 이수율
   GetCourseProgressByEduId:
@@ -1855,7 +2316,10 @@ QUERY.DASHBOARD = {
        ' ORDER BY `completed_rate` DESC; ',
 
     // 포인트 현황
-  GetUserPointList:
+  GetUserPointList: ({ role, fc_id: fcId, admin_id: adminId }) => {
+    let sql;
+
+    sql =
         'SELECT r.`user_id` ' +
         '    , MAX(r.`user_name`) AS user_name ' +
         '    , MAX(r.`branch_name`) AS branch_name ' +
@@ -1885,18 +2349,38 @@ QUERY.DASHBOARD = {
         '          FROM `log_user_point` AS lup ' +
         '         INNER JOIN `users` AS u ' +
         '            ON lup.`user_id` = u.`id` AND u.`active` = 1 ' +
-        '           AND u.`fc_id` = ? ' +
+        '           AND u.`fc_id` = ' + fcId;
+    if (role === 'supervisor') {
+      sql +=
+        '         INNER JOIN ' +
+        '               ( ' +
+        '                SELECT b.`id`, b.`name` ' +
+        '                  FROM `admin_offices` AS ao ' +
+        '                 INNER JOIN `office_branches` AS ob ' +
+        '                    ON ao.`office_id` = ob.`office_id` ' +
+        '                 INNER JOIN `branch` AS b ' +
+        '                    ON ob.`branch_id` = b.`id` ' +
+        '                 WHERE ao.`admin_id` = ' + adminId +
+        '                   AND ao.`active` = 1 ' +
+        '               ) AS ab ' +
+        '            ON u.`branch_id` = ab.`id` ';
+    }
+
+    sql +=
         '          LEFT JOIN `branch` AS b ' +
         '            ON u.`branch_id` = b.`id` ' +
         '          LEFT JOIN `duty` AS d ' +
         '            ON u.`duty_id` = d.`id` ' +
         '          LEFT JOIN `edu_point_weight` AS epw ' +
         '            ON lup.`edu_id` = epw.`edu_id` ' +
-        '           AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ? AND `edu_id` = epw.`edu_id`) ' +
+        '           AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ' + fcId + ' AND `edu_id` = epw.`edu_id`) ' +
         '        ) AS r ' +
         ' WHERE 1=1 ' +
         ' GROUP BY r.`user_id` ' +
-        ' ORDER BY `point_total` DESC ',
+        ' ORDER BY `point_total` DESC ';
+
+    return sql;
+  },
 
     // 포인트 현황(교육과정별 포인트 지정으로 사용안함)
   GetUserPointList_deprecated:
@@ -1940,7 +2424,10 @@ QUERY.DASHBOARD = {
         ' ORDER BY `point_total` DESC ',
 
     // 교육과정별 포인트 현황
-  GetUserPointListByEduId:
+  GetUserPointListByEduId: (eduId, { role, fc_id: fcId, admin_id: adminId }) => {
+    let sql;
+
+    sql =
         'SELECT r.`training_user_id` ' +
         '     , MAX(r.`logs`) AS logs ' +
         '     , MAX(r.`user_name`) AS user_name ' +
@@ -1982,23 +2469,44 @@ QUERY.DASHBOARD = {
         '            ON lae.`training_edu_id` = tu.`training_edu_id` ' +
         '          LEFT JOIN `edu_point_weight` AS epw ' +
         '            ON lup.`edu_id` = epw.`edu_id` ' +
-        '           AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ? AND `edu_id` = epw.`edu_id`) ' +
+        '           AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ' + fcId + ' AND `edu_id` = epw.`edu_id`) ' +
         '         INNER JOIN `users` AS u ' +
-        '            ON lup.`user_id` = u.`id` AND u.`active` = 1 ' +
+        '            ON lup.`user_id` = u.`id` AND u.`active` = 1 ';
+
+    if (role === 'supervisor') {
+      sql +=
+        '         INNER JOIN ' +
+        '               ( ' +
+        '                SELECT b.`id`, b.`name` ' +
+        '                  FROM `admin_offices` AS ao ' +
+        '                 INNER JOIN `office_branches` AS ob ' +
+        '                    ON ao.`office_id` = ob.`office_id` ' +
+        '                 INNER JOIN `branch` AS b ' +
+        '                    ON ob.`branch_id` = b.`id` ' +
+        '                 WHERE ao.`admin_id` = ' + adminId +
+        '                   AND ao.`active` = 1 ' +
+        '               ) AS ab ' +
+        '            ON u.`branch_id` = ab.`id` ';
+    }
+
+    sql +=
         '          LEFT JOIN `branch` AS b ' +
         '            ON u.`branch_id` = b.`id` ' +
         '          LEFT JOIN `duty` AS d ' +
         '            ON u.`duty_id` = d.`id` ' +
-        '           AND u.`fc_id` = ? ' +
+        '           AND u.`fc_id` = ' + fcId +
         '         WHERE 1=1 ' +
-        '           AND lup.`edu_id` = ? ' +
+        '           AND lup.`edu_id` = ' + eduId +
         '        ) AS r ' +
         ' WHERE 1=1 ' +
         ' GROUP BY r.`training_user_id` ' +
         ' HAVING point_total > 0 ' +
-        ' ORDER BY `point_total` DESC ',
+        ' ORDER BY `point_total` DESC ';
 
-    // 사용자 포인트 상세내역
+    return sql;
+  },
+
+  // 사용자 포인트 상세내역
   GetUserPointDetails:
         'SELECT `logs` ' +
         '     , epw.`point_complete` ' +

@@ -1,0 +1,45 @@
+<div class="modal fade" id="manage-office-branches">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">지사별 지점등록</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <select id="select-office" class="form-control">
+              <option selected="selected">지사를 선택하세요</option>
+              {{#each offices}}
+              <option value="{{id}}">{{office_name}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-xs-12 table-responsive">
+            <table id="table-office-branches"
+              class="table no-margin table-bordered table-striped"
+              width="100%"
+            >
+              <thead>
+                <tr>
+                  <!--<th></th>-->
+                  <th><input type="checkbox" id="check-all-branches"></th>
+                  <th class="center">지점</th>
+                  <th class="center">지점ID</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary" id="btn-save-office-branches">저장</button>
+      </div>
+    </div>
+  </div>
+</div>

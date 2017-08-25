@@ -53,6 +53,8 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   });
 });
 
+router.get('/pointweight', util.isAuthenticated, EducationService.getInfoWithPointWeight);
+
 router.get('/:id/courses', util.isAuthenticated, EducationService.getCourseList);
 
 /**

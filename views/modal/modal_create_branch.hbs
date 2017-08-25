@@ -1,57 +1,52 @@
 <!-- Create Employee -->
 <div class="modal fade" id="createBranch" role="dialog">
-    <form class="modal-dialog" method="post" action="/employee/create/branch" id="frm_create_branch">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">지점등록</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-group branch-input">
-                    <label>지점명</label>
-                    <input type="hidden" name="id" />
-                    <input type="text" class="form-control" name="name" id="name" placeholder="지점명" required autocomplete="off" autofocus />
-                </div>
-
-                <div class="form-group table-responsive">
-                    <!--<table id="table-branch" class="table table-hover" width="100%">-->
-                    <table id="table-branch" class="table no-margin table-bordered table-striped" width="100%">
-                        <thead>
-                            <tr>
-                                <th>지점명</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each branch}}
-                            <tr>
-                                <td class="branch-list">
-                                    <a class="branch-list-item" data-id="{{id}}" data-name="{{name}}" href="#">{{name}}</a></li>
-                                </td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
-                    <!--<ul>
+  <form class="modal-dialog" method="post" action="/employee/create/branch" id="frm_create_branch">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">지점등록</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group branch-input">
+          <label>지점명</label>
+          <input type="hidden" name="id" />
+          <input type="text" class="form-control" name="name" id="name" placeholder="지점명" required autocomplete="off" autofocus />
+        </div>
+        <div class="form-group table-responsive">
+          <table id="table-branch" class="table no-margin table-bordered table-striped" width="100%">
+            <thead>
+              <tr>
+                <th>지점명</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each branches}}
+              <tr>
+                <td class="branch-list">
+                  <a class="branch-list-item" data-id="{{id}}" data-name="{{name}}" href="#">{{name}}</a></li>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          <!--<ul>
                         {{#each branch}}
                         <li class="branch-list"><a data-id="{{id}}" data-name="{{name}}" href="#">{{name}}</a></li>
                         {{/each}}
                     </ul>-->
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
-
-                <div class="pull-right branch-right-buttons">
-                    <button type="button" id="clear-input" class="btn btn-default">초기화</button>
-                    <button type="submit" class="btn btn-primary btn-submit">등록</button>
-                    <button type="button" id="btnDisableBranch" class="btn btn-danger" disabled>삭제</button>
-                </div>
-            </div>
         </div>
-        <!-- /.modal-content -->
-    </form>
-    <!-- /.modal-dialog -->
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+        <div class="pull-right branch-right-buttons">
+          <button type="button" id="clear-input" class="btn btn-default">초기화</button>
+          <button type="submit" class="btn btn-primary btn-submit">등록</button>
+          <button type="button" id="btnDisableBranch" class="btn btn-danger" disabled>삭제</button>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
-<!-- /.modal -->

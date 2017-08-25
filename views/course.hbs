@@ -28,9 +28,9 @@
               <td class="center">{{time created_dt}}</td>
               <td class="">
                 {{#if (isEquals ../loggedIn.isdemo 1)}}
-                <a href="#" class="btn-link">{{name}}</a></td>
+                <a href="#" class="btn-link">{{course_name}}</a></td>
                 {{else}}
-                <a href="/course/details?id={{course_id}}" class="btn-link">{{name}}</a></td>
+                <a href="/course/details?id={{course_id}}" class="btn-link">{{course_name}}</a></td>
                 {{/if}}
               <td class="center">{{teacher_name}}</td>
               <td class="center">{{creator}}</td>

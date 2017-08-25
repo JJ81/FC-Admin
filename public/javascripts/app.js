@@ -38,7 +38,8 @@ window.requirejs.config({
     'pace': '/static/vendor/pace.min',
     'lodash': '/static/vendor/lodash.min',
     'handlebars': '/static/vendor/handlebars.min',
-    'text': '/static/vendor/text'
+    'text': '/static/vendor/text',
+    'dom-checkbox': '/static/vendor/dom-checkbox'
     // 'smoothstate': '/static/vendor/jquery.smoothstate.min'
   },
   shim: {
@@ -70,6 +71,9 @@ window.requirejs.config({
       deps: ['jquery']
     },
     'slimScroll': {
+      deps: ['jquery']
+    },
+    'dom-checkbox': {
       deps: ['jquery']
     }
   }

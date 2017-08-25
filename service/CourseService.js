@@ -4,6 +4,25 @@ const pool = require('../commons/db_conn_pool');
 const util = require('../util/util');
 var CourseService = {};
 
+exports.getCourseList = (fcId, _callback) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    async.series(
+      [
+        callback => {
+          connection.query(QUERY.COURSE.GetCourseList,
+            [ fcId ], (err, rows) => {
+              callback(err, rows);
+            });
+        }
+      ],
+      (err, results) => {
+        connection.release();
+        _callback(err, results);
+      });
+  });
+};
+
 /**
  * /course/:id
  */
@@ -467,6 +486,3 @@ exports.update = (req, res, next) => {
     });
   });
 };
-
-
-// module.exports = CourseService;

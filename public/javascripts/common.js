@@ -26,7 +26,8 @@ window.define(
     'select2',
     'adminLTE',
     'fastclick',
-    'es6-promise'
+    'es6-promise',
+    'dom-checkbox'
     // 'smoothstate'
   ],
 function ($, jszip, axios, moment, pace, _, Handlebars) {

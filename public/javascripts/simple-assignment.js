@@ -12,16 +12,22 @@ window.requirejs([
   var navListItems = $('ul.setup-panel li a');
   var allWells = $('.setup-content');
   var tableCheckAll = $('#check-all');
+  var tableCheckCourseAll = $('#js--formAddCourse').find('#check-all');
   // var tableCourse = Util.initDataTable($('#table_course'));
   var tableEmployee = Util.initDataTable($('#table_employee'), {
     'lengthMenu': [ [5, 10, 25, 50, -1], [5, 10, 25, 50, '전체'] ]
-    // 'columnDefs': [
-    //   { orderable: true, targets: [0] }
-    // ]
+  });
+  var tableCourses = Util.initDataTable($('#js--formAddCourse').find('#table_courses'), {
+    'lengthMenu': [ [5, 10, 25, 50, -1], [5, 10, 25, 50, '전체'] ], buttons: []
+  });
+  var tableEducations = Util.initDataTable($('#js--formAddEdu').find('#table_edu'), {
+    'lengthMenu': [ [5, 10, 25, 50, -1], [5, 10, 25, 50, '전체'] ], buttons: []
   });
   var btnDeleteSimpleAssign = $('#js-delete-simple-assign');
   var btnSaveSimpleAssign = $('#js-save-simple-assign');
   var btnSendMessage = $('.btn-send-message');
+  var btnApplyEdu = $('#btnApplyEdu');
+
   var messageInput = $('.message');
   var courseView = window.Handlebars.compile(courseTemplate);
   var sessionView = window.Handlebars.compile(sessionTemplate);
@@ -141,8 +147,37 @@ window.requirejs([
     });
   }
 
+  function getEduInfo (eduId) {
+    window.axios.get('/education/pointweight', {
+      params: {
+        id: eduId
+      }
+    })
+    .then(function (res) {
+      if (res.data) {
+        console.log(res.data);
+      }
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+  }
+
   tableCheckAll.bind('click', function () {
     $(':checkbox', tableEmployee.rows({search: 'applied'}).nodes()).prop('checked', this.checked);
+  });
+
+  tableCheckCourseAll.bind('click', function () {
+    $(':checkbox', tableCourses.rows({search: 'applied'}).nodes()).prop('checked', this.checked);
+  });
+
+  btnApplyEdu.bind('click', function () {
+    var eduId = $('input:first:checked', tableEducations.rows({search: 'applied'}).nodes()).data('id');
+    if (eduId !== undefined) {
+      getEduInfo(eduId);
+    } else {
+      window.alert('교육과정을 선택하세요.');
+    }
   });
 
   navListItems.click(function (e) {

@@ -58,7 +58,7 @@ passport.use(new LocalStrategy({
 
 router.get('/', util.isAuthenticated, (req, res) => {
   if (req.user.role === 'supervisor') {
-    res.redirect('/achievement');
+    res.redirect('/dashboard');
   } else {
     res.redirect('/dashboard');
   }
@@ -72,7 +72,7 @@ router.get('/login', util.getLogoInfo, (req, res, next) => {
     });
   } else {
     if (req.user.role === 'supervisor') {
-      res.redirect('/achievement');
+      res.redirect('/dashboard');
     } else {
       res.redirect('/dashboard');
     }
@@ -86,7 +86,7 @@ router.post('/login',
   }),
   (req, res) => {
     if (req.user.role === 'supervisor') {
-      res.redirect('/achievement');
+      res.redirect('/dashboard');
     } else {
       res.redirect('/dashboard');
     }
@@ -118,7 +118,7 @@ router.post('/admin/password/reset', util.isAuthenticated, (req, res) => {
             console.error(err);
           } else {
             if (req.user.role === 'supervisor') {
-              res.redirect('/achievement');
+              res.redirect('/dashboard');
             } else {
               res.redirect('/dashboard');
             }

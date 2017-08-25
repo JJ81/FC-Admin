@@ -4,7 +4,7 @@
   </div>
   <section class="sidebar">
     <ul class="sidebar-menu">
-      {{#ifCond loggedIn.role '!==' 'supervisor' }}
+      <!-- ifCond loggedIn.role '!==' 'supervisor' -->
       <li {{#if (isEquals current_path 'Dashboard')}}class="active" {{/if}}>
         <a href="/dashboard">
           <i class="fa fa-dashboard"></i>
@@ -16,7 +16,7 @@
           {{/if}}
         </a>
       </li>
-      {{/ifCond}}
+      <!-- ifCond -->
 
       <li class="{{#if (isEquals menu_group 'achievement')}}active {{/if}}treeview" id="js--achievement-group">
         <a href="#">
@@ -32,7 +32,7 @@
         </ul>
       </li>
 
-      {{#ifCond loggedIn.role '!==' 'supervisor' }}
+      <!-- ifCond loggedIn.role '!==' 'supervisor' -->
       <li class="{{#if (isEquals menu_group 'education')}}active {{/if}}treeview" id="js--education-group">
         <a href="#">
           <i class="fa fa-database"></i>
@@ -52,9 +52,9 @@
           </li>
         </ul>
       </li>
-      {{/ifCond}}
+      <!-- ifCond -->
 
-      {{#ifCond loggedIn.role '!==' 'supervisor' }}
+      <!-- ifCond loggedIn.role '!==' 'supervisor' -->
       <li {{#if (isEquals current_path 'Employee')}}class="active" {{/if}}>
         <a href="/employee">
           <i class="fa fa-users"></i>
@@ -66,9 +66,9 @@
           {{/if}}
         </a>
       </li>
-      {{/ifCond}}
+      <!-- ifCond -->
 
-      {{#ifCond loggedIn.role '!==' 'supervisor' }}
+      <!-- ifCond loggedIn.role '!==' 'supervisor' -->
       <li {{#if (isEquals current_path 'Administrator')}}class="active" {{/if}}>
         <a href="/administrator">
           <i class="fa fa-user" aria-hidden="true"></i>
@@ -80,10 +80,10 @@
           {{/if}}
         </a>
       </li>
-      {{/ifCond}}
+      <!-- ifCond -->
 
       {{#if (isEquals loggedIn.isdemo 0)}}
-      {{#ifCond loggedIn.role '!==' 'supervisor' }}
+      <!-- ifCond loggedIn.role '!==' 'supervisor' -->
       <li {{#if (isEquals current_path 'Help')}}class="active" {{/if}}>
         <a href="/help">
           <i class="fa fa-question"></i>
@@ -95,7 +95,7 @@
           {{/if}}
         </a>
       </li>
-      {{/ifCond}}
+      <!-- ifCond -->
       {{/if}}
 
       {{#if (isEquals loggedIn.isdemo 0)}}

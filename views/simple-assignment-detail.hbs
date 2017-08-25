@@ -139,6 +139,13 @@
 <div class="setup-content" id="step-2">
   <div class="col-xs-12 box box-body">
     <div class="setup-detail education">
+      <div class="pull-right">
+        <button class="btn btn-default btn-md" data-toggle="modal" data-target="#addEdu">
+          <i class="fa fa-folder-open"></i> &nbsp;
+          교육과정 불러오기
+        </button>
+      </div>
+      <div class="clearfix"></div><br>
       <div class="form-group">
         <label>교육과정명</label>
         <input type="text" class="form-control" name="course_name" placeholder="교육과정명" required autocomplete="off"
@@ -286,7 +293,11 @@
       </button>-->
       <button class="btn btn-default btn-md" data-toggle="modal" data-target="#registerCourse">
         <i class="fa fa-plus"></i> &nbsp;
-        강의추가
+        강의생성
+      </button>
+      <button class="btn btn-default btn-md" data-toggle="modal" data-target="#addCourse">
+        <i class="fa fa-folder-open"></i> &nbsp;
+        강의 불러오기
       </button>
     </div>
     <div class="clearfix"></div><br>
@@ -335,3 +346,5 @@
 
 {{> modal_register_course}}
 {{> modal_modify_course}}
+{{> modal_add_course}}
+{{> modal_add_edu}}

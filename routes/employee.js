@@ -11,21 +11,36 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
     async.series([
-      (callback) => {
-        connection.query(QUERY.EMPLOYEE.GetEmployeeList, [req.user.fc_id], (err, employee) => {
+      // callback => {
+      //   connection.query(QUERY.EMPLOYEE.GetEmployeeList, [req.user.fc_id], (err, employee) => {
+      //     callback(err, employee);
+      //   });
+      // },
+      // callback => {
+      //   connection.query(QUERY.EMPLOYEE.GetBranch, [req.user.fc_id], (err, branch) => {
+      //     callback(err, branch);
+      //   });
+      // },
+      callback => {
+        connection.query(QUERY.EMPLOYEE.GetEmployeesByRole(req.user), [], (err, employee) => {
           callback(err, employee);
         });
       },
-      (callback) => {
-        connection.query(QUERY.EMPLOYEE.GetBranch, [req.user.fc_id], (err, branch) => {
+      callback => {
+        connection.query(QUERY.EMPLOYEE.GetBranchesByRole(req.user), [], (err, branch) => {
           callback(err, branch);
         });
       },
-      (callback) => {
+      callback => {
         connection.query(QUERY.EMPLOYEE.GetDuty, [req.user.fc_id], (err, duty) => {
           callback(err, duty);
         });
       }
+      // callback => {
+      //   connection.query(QUERY.ADMIN.GetOffices, [req.user.fc_id], (err, results) => {
+      //     callback(err, results);
+      //   });
+      // }
     ],
     (err, results) => {
       connection.release();
@@ -37,8 +52,9 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
           title: '교육생 관리',
           loggedIn: req.user,
           list: results[0],
-          branch: results[1],
-          duty: results[2]
+          branches: results[1],
+          duties: results[2]
+          // offices: results[3]
         });
       }
     });
@@ -74,7 +90,7 @@ router.post('/create', util.isAuthenticated, (req, res, next) => {
     pool.getConnection((err, connection) => {
       if (err) throw err;
       async.series([
-        (callback) => {
+        callback => {
           connection.query(QUERY.EMPLOYEE.GetActivatedUserByPhone,
             [_data.tel],
             (err, result) => {
@@ -88,7 +104,7 @@ router.post('/create', util.isAuthenticated, (req, res, next) => {
             }
           );
         },
-        (callback) => {
+        callback => {
           connection.query(QUERY.EMPLOYEE.CreateEmployee, [
             _data.name,
             _data.pass,
@@ -142,7 +158,7 @@ router.post('/modify', util.isAuthenticated, (req, res, next) => {
     pool.getConnection((err, connection) => {
       if (err) throw err;
       async.series([
-        (callback) => {
+        callback => {
           connection.query(QUERY.EMPLOYEE.GetAnotherActivatedUserByPhone,
             [_data.user_id, _data.tel],
             (err, result) => {
@@ -156,7 +172,7 @@ router.post('/modify', util.isAuthenticated, (req, res, next) => {
             }
           );
         },
-        (callback) => {
+        callback => {
           connection.query(QUERY.EMPLOYEE.ModifyEmployee, [
             _data.name,
             _data.email,
@@ -210,7 +226,7 @@ router.post('/create/branch', (req, res, next) => {
               message: '중복되는 지점명입니다.'
             });
           } else {
-            res.redirect('/employee');
+            res.redirect('/administrator');
           }
         }
       );
@@ -245,7 +261,7 @@ router.post('/modify/branch', (req, res, next) => {
               message: '중복되는 지점명입니다.'
             });
           } else {
-            res.redirect('/employee');
+            res.redirect('/administrator');
           }
         }
       );
@@ -277,7 +293,7 @@ router.post('/create/duty', (req, res, next) => {
               message: '중복되는 직책명입니다.'
             });
           } else {
-            res.redirect('/employee');
+            res.redirect('/administrator');
           }
         }
       );
@@ -308,7 +324,7 @@ router.post('/modify/duty', (req, res, next) => {
               message: '중복되는 직책명입니다.'
             });
           } else {
-            res.redirect('/employee');
+            res.redirect('/administrator');
           }
         }
       );
