@@ -1610,7 +1610,7 @@ QUERY.ACHIEVEMENT = {
     '     , IFNULL(TRUNCATE(AVG(x.`completed_rate`), 2), 0) AS completed_rate ' +
     '  FROM ( ' +
     '        SELECT MAX(g.`user_name`) AS user_name ' +
-    '             , MAX(g.`branch_name`) AS branch_name ' +
+    '             , MAX(b.`name`) AS branch_name ' +
     '             , MAX(d.`name`) AS duty_name ' +
     '             , IFNULL(TRUNCATE(AVG(g.`completed_rate`), 2), 0) AS completed_rate ' +
     '             , MAX(g.`edu_id`) AS edu_id ' +
@@ -1630,8 +1630,7 @@ QUERY.ACHIEVEMENT = {
     '                           AND up.`end_dt` IS NOT NULL ' +
     '                         WHERE cl.`course_id` = @course_id ' +
     '                       ) AS completed_rate ' +
-    '                     , ab.`branch_id` ' +
-    '                     , ab.`branch_name` ' +
+    '                     , u.`branch_id` ' +
     '                     , u.`duty_id` ' +
     '                     , te.`edu_id` ' +
     '                  FROM `training_users` AS tu ' +
@@ -1643,7 +1642,7 @@ QUERY.ACHIEVEMENT = {
       sql +=
     '                 INNER JOIN ' +
     '                       ( ' +
-    '                        SELECT b.`id` AS branch_id, b.`name` AS branch_name ' +
+    '                        SELECT b.`id` ' +
     '                          FROM `admin_offices` AS ao ' +
     '                         INNER JOIN `office_branches` AS ob ' +
     '                            ON ao.`office_id` = ob.`office_id` ' +
@@ -1652,7 +1651,7 @@ QUERY.ACHIEVEMENT = {
     '                         WHERE ao.`admin_id` = ' + adminId +
     '                           AND ao.`active` = 1 ' +
     '                       ) AS ab ' +
-    '                    ON u.`branch_id` = ab.`branch_id` ';
+    '                    ON u.`branch_id` = ab.`id` ';
     // '                 INNER JOIN `admin_branch` AS ab ' +
     // '                    ON u.`branch_id` = ab.`branch_id` ' +
     // '                   AND ab.`admin_id` = ' + adminId;
@@ -1669,8 +1668,8 @@ QUERY.ACHIEVEMENT = {
     '                       ) AS e ' +
     '                    ON te.`edu_id` = e.`edu_id` ' +
     '               ) AS g ' +
-    // '           LEFT JOIN `branch` AS b ' +
-    // '             ON g.`branch_id` = b.`id` ' +
+    '           LEFT JOIN `branch` AS b ' +
+    '             ON g.`branch_id` = b.`id` ' +
     '           LEFT JOIN `duty` AS d ' +
     '             ON g.`duty_id` = d.`id` ' +
     '          GROUP BY g.`training_user_id` ' +
