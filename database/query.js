@@ -874,8 +874,6 @@ QUERY.EDU = {
     'SELECT e.`id` ' +
     '     , e.`name` ' +
     '     , e.`desc` ' +
-    '     , e.`start_dt` ' +
-    '     , e.`end_dt` ' +
     '     , e.`course_group_id` ' +
     '     , e.`can_replay` ' +
     '     , epw.`point_complete` ' +
@@ -898,7 +896,7 @@ QUERY.EDU = {
     '         WHERE `edu_id` = ' + eduId +
     '         ORDER BY `created_dt` DESC LIMIT 1 ' +
     '       ) AS epw ' +
-    '    ON e.`id` = epw.`id`; ';
+    '    ON e.`id` = epw.`edu_id`; ';
 
     return sql;
   },

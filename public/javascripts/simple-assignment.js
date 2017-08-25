@@ -148,11 +148,7 @@ window.requirejs([
   }
 
   function getEduInfo (eduId) {
-    window.axios.get('/education/pointweight', {
-      params: {
-        id: eduId
-      }
-    })
+    window.axios.get('/education/' + eduId + '/pointweight')
     .then(function (res) {
       if (res.data) {
         console.log(res.data);

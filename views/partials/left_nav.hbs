@@ -68,7 +68,7 @@
       </li>
       <!-- ifCond -->
 
-      <!-- ifCond loggedIn.role '!==' 'supervisor' -->
+      {{#ifCond loggedIn.role '!==' 'supervisor'}} 
       <li {{#if (isEquals current_path 'Administrator')}}class="active" {{/if}}>
         <a href="/administrator">
           <i class="fa fa-user" aria-hidden="true"></i>
@@ -80,7 +80,7 @@
           {{/if}}
         </a>
       </li>
-      <!-- ifCond -->
+       {{/ifCond}} 
 
       {{#if (isEquals loggedIn.isdemo 0)}}
       <!-- ifCond loggedIn.role '!==' 'supervisor' -->

@@ -13,8 +13,8 @@ const util = require('../util/util');
 EducationService.getInfoWithPointWeight = (req, res, next) => {
   pool.getConnection(function (err, connection) {
     if (err) throw err;
-    let q = connection.query(QUERY.EDU.GetEduInfoByIdWithPointWeight,
-      [ req.query.id ],
+    let q = connection.query(QUERY.EDU.GetEduInfoByIdWithPointWeight(req.params.id),
+      [],
       (err, data) => {
         console.log(q.sql);
         if (err) {
