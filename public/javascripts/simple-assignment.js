@@ -54,6 +54,7 @@ window.requirejs([
 
     if ($('#edu_id').val()) {
       getCourseList();
+      $('#btnGetEdu').prop('disabled', true);
     }
 
     // 교육대상자 id 조회

@@ -19,7 +19,7 @@ window.requirejs([ 'common' ],
             </div>
           </div>
           <div class="box-body table-responsive">
-            <table class="table no-margin table-bordered table-striped checklist" width="100%">
+            <table class="table display nowrap no-margin table-bordered table-striped checklist" width="100%">
             </table>
           </div>
         </div>
@@ -37,7 +37,8 @@ window.requirejs([ 'common' ],
           window.$('#checklist_container').append(template);
           Util.initDataTable(window.$('.checklist').last(), {
             data: response.data.checklists[i].rows,
-            columns: response.data.checklists[i].columns
+            columns: response.data.checklists[i].columns,
+            scrollX: true
           });
           window.$('.checklist-title').last().html('체크리스트 : ' + '<b>' + response.data.checklists[i].checklist_title + '</b>');
         }

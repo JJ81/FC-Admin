@@ -234,6 +234,7 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
           connection.query(QUERY.ACHIEVEMENT.GetChecklistQuestionByEduId,
             [ eduId ],
             (err, rows) => {
+              // console.log(rows);
               callback(err, rows);
             }
           );
@@ -242,6 +243,7 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
           connection.query(QUERY.ACHIEVEMENT.GetChecklistUserAnswers(showAll, { eduId: eduId, adminId: req.user.admin_id }),
             [],
             (err, rows) => {
+              // console.log(rows);
               callback(err, rows);
             }
           );

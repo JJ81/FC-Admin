@@ -1853,7 +1853,7 @@ QUERY.ACHIEVEMENT = {
     '    ON cg.`checklist_id` = c.`id` ' +
     ' INNER JOIN ' +
     '       ( ' +
-    '        SELECT cg.`course_id` ' +
+    '        SELECT cg.`course_id`, cg.`order` ' +
     '          FROM `edu` AS e ' +
     '         INNER JOIN `course_group` AS cg ' +
     '            ON e.`course_group_id` = cg.`group_id` ' +
@@ -1861,7 +1861,7 @@ QUERY.ACHIEVEMENT = {
     '       ) AS e ' +
     '    ON cl.`course_id` = e.`course_id` ' +
     ' WHERE cl.`type` = \'CHECKLIST\' ' +
-    ' ORDER BY cl.`order`, cg.`order`; ',
+    ' ORDER BY e.`order`, cl.`order`, cg.`order`; ',
 
   GetChecklistUserAnswers: (showAll, { eduId, adminId }) => {
     let sql =
