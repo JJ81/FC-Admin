@@ -286,6 +286,20 @@ window.requirejs([
             $('#course-list').append(getCourseView(data));
             $('.panel').last().data('metadata', data);
           });
+
+          $('#course-list').sortable({
+            connectWith: '.panel',
+            start: function (e, ui) {
+              $(this).attr('data-previndex', ui.item.index());
+            },
+            update: function (e, ui) {
+              // var newIndex = ui.item.index();
+              // var oldIndex = window.$(this).attr('data-previndex');
+              // window.console.log('newIndex : ' + newIndex + ' oldIndex : ' + oldIndex);
+              $(this).removeAttr('data-previndex');
+              changeCourseOrder();
+            }
+          }).disableSelection();
         }
       })
       .catch(function (err) {
@@ -782,6 +796,38 @@ window.requirejs([
       results.forEach(function (response) {
         console.log(response);
       });
+    });
+  }
+
+  /**
+   * DB 에서 강의 순서를 변경한다.
+   */
+  function makeCourseOrderChangeRequest (course) {
+    return window.axios({
+      method: 'put',
+      url: '/education/coursegroup',
+      data: {
+        id: course.data('group-id'), // course_group 의 id
+        order: course.index()
+      }
+    });
+  }
+
+  /**
+   * 강의순서를 변경한다.
+   */
+  function changeCourseOrder () {
+    var promises = [];
+    var items = $('#course-list > .panel');
+
+    for (var index = 0; index < items.length; index++) {
+      promises.push(makeCourseOrderChangeRequest(window.$(items[index])));
+    }
+
+    window.axios.all(promises).then(function (results) {
+      // results.forEach(function (response) {
+      //   console.log(response);
+      // });
     });
   }
 

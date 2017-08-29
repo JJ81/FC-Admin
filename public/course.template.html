@@ -1,8 +1,11 @@
-<div class="panel panel-default ui-state-default" data-id="{{course_id}}">
+<div class="panel panel-default ui-state-default" data-id="{{course_id}}" data-group-id="{{course_group_id}}">
   <div class="panel-heading" role="tab" id="headingOne">
     <h4 class="panel-title">
       <a role="button" data-toggle="collapse" data-parent="#course-list" href="#course_{{course_id}}" aria-expanded="true" aria-controls="course_{{course_id}}">
-        <i class="more-less glyphicon glyphicon-plus"></i> {{course_name}}
+        <i class="more-less glyphicon glyphicon-plus"></i>
+        <span class="handle ui-sortable-handle">
+          <i class="fa fa-ellipsis-v"></i> &nbsp; {{course_name}}
+        </span>
       </a>
     </h4>
   </div>

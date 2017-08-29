@@ -119,7 +119,7 @@ function executeCourseGroup (data, callback) {
         data.id
       ],
         function (err, data) {
-          console.log(_query.sql);
+          // console.log(_query.sql);
           callback(err, data);
         }
       );

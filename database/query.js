@@ -965,7 +965,8 @@ QUERY.EDU = {
     '   AND c.`active` = 1 ' +
     ' INNER JOIN `edu` AS e ' +
     '    ON e.`course_group_id` = cg.`group_id` ' +
-    '   AND e.`id` = ?; ',
+    '   AND e.`id` = ? ' +
+    ' ORDER BY cg.`order`; ',
 
   // 교육과정의 강의를 조회한다. (deprecated)
   GetCourseListByGroupId_bak:
