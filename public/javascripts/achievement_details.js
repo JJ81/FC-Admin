@@ -37,8 +37,7 @@ window.requirejs([ 'common' ],
           window.$('#checklist_container').append(template);
           Util.initDataTable(window.$('.checklist').last(), {
             data: response.data.checklists[i].rows,
-            columns: response.data.checklists[i].columns,
-            scrollX: true
+            columns: response.data.checklists[i].columns
           });
           window.$('.checklist-title').last().html('체크리스트 : ' + '<b>' + response.data.checklists[i].checklist_title + '</b>');
         }

@@ -8,35 +8,37 @@ window.requirejs([
 function (Util) {
   var $ = $ || window.$;
   var selectBranchList = window.$('#select-branch-list');
+  var selectOffice = $('#select-office');
+
   var branchIdList = [];
   var btnAssignBranch = window.$('.btn-assign-branch');
-  var branchContainer = window.$('#draggablePanelList');
   var btnBranchSumit = window.$('.btn-assign-branch-submit');
-  var clickedUserId = null;
-
+  var btnBranchClearInputs = $('.branch-right-buttons > #clear-input');
+  var btnBranchSave = $('.branch-right-buttons > .btn-submit');
+  var btnDeleteBranch = $('#btnDisableBranch');
+  var btnDutyClearInputs = $('.duty-right-buttons > #clear-input');
+  var btnDutySave = $('.duty-right-buttons > .btn-submit');
+  var btnDeleteDuty = $('#btnDisableDuty');
   var btnOfficeClearInputs = $('.office-right-buttons > #clear-input');
   var btnOfficeSave = $('.office-right-buttons > .btn-submit');
   var btnDeleteOffice = $('#btnDisableOffice');
-  var formOffice = $('#frm-regist-office');
-
-  var btnBranchClearInputs = $('.branch-right-buttons > #clear-input');
-  var btnBranchSave = $('.branch-right-buttons > .btn-submit');
-  var formBranch = $('#frm_create_branch');
-  var btnDeleteBranch = $('#btnDisableBranch');
-  var dutyList = $('.duty-list > a');
-  var btnDutyClearInputs = $('.duty-right-buttons > #clear-input');
-  var btnDutySave = $('.duty-right-buttons > .btn-submit');
-  var formDuty = $('#frm_create_duty');
-  var btnDeleteDuty = $('#btnDisableDuty');
-  var tableOfficeBranches;
-  var tableAdminOffices;
-  var checkAllBranches = $('#check-all-branches');
-  var checkAllAdminOffices = $('#check-all-admin-offices');
-  var selectOffice = $('#select-office');
-
   var btnSaveOfficeBranches = $('#btn-save-office-branches');
   var btnSaveAdminOffices = $('#btn-save-admin-offices');
 
+  var tableOfficeBranches;
+  var tableAdminOffices;
+
+  var formOffice = $('#frm-regist-office');
+  var formBranch = $('#frm_create_branch');
+  var formDuty = $('#frm_create_duty');
+
+  var checkAllBranches = $('#check-all-branches');
+  var checkAllAdminOffices = $('#check-all-admin-offices');
+
+  var branchContainer = window.$('#draggablePanelList');
+  var dutyList = $('.duty-list > a');
+
+  var clickedUserId = null;
   var selectedAdminId;
 
   $(function () {
@@ -73,7 +75,6 @@ function (Util) {
         // window.$('input.editor-active', row).prop('checked', data.active === 1);
       }
     });
-
     tableAdminOffices = Util.initDataTable($('#table-admin-offices'), {
       'columns': [
         {
@@ -97,7 +98,6 @@ function (Util) {
         }
       }
     });
-
     Util.initDataTable($('#table_administrator'));
     Util.initDataTable($('#table-office'), { buttons: [] });
   });

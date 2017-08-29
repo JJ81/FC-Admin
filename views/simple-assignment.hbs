@@ -18,6 +18,7 @@
           <thead>
             <tr>
               <th class="center">생성내역</th>
+              <th class="center">교육과정명</th>
               <th class="center">진행상태</th>
               <th class="center">생성자</th>
               <th class="center">생성일시</th>
@@ -33,6 +34,7 @@
                 <a href="/simple_assignment/{{id}}" class="btn-link">{{title}}</a>
                 {{/if}}
               </td>
+              <td class="">{{edu_name}}</td>
               <td class="center">{{activated_step}} / 4</td>
               <td class="center">{{created_name}}</td>
               <td class="center">{{dateformat created_dt 'yyyy-mm-dd HH:MM'}}</td>

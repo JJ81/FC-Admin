@@ -257,7 +257,8 @@ function ($, jszip, axios, moment, pace, _, Handlebars) {
     },
     initDateTimePicker: function (start, end) {
       var startDt = moment().format();
-      var endDt = moment().add(6, 'days');
+      var endDt = moment().add(7, 'days');
+
       // 시작일자
       start.datetimepicker({
         defaultDate: startDt,
@@ -272,7 +273,7 @@ function ($, jszip, axios, moment, pace, _, Handlebars) {
 
       // 종료일자
       end.datetimepicker({
-        defaultDate: endDt,
+        date: endDt,
         format: 'YYYY-MM-DD HH:mm'
         // useCurrent: false,
         // showTodayButton: true

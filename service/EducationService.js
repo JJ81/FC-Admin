@@ -16,6 +16,7 @@ EducationService.getInfoWithPointWeight = (req, res, next) => {
     let q = connection.query(QUERY.EDU.GetEduInfoByIdWithPointWeight(req.params.id),
       [],
       (err, data) => {
+        console.log(data);
         console.log(q.sql);
         if (err) {
           console.log(err);
@@ -23,7 +24,7 @@ EducationService.getInfoWithPointWeight = (req, res, next) => {
         } else {
           res.send({
             success: true,
-            data: data
+            education: data
           });
         }
       });
@@ -129,7 +130,7 @@ function executeCourseGroup (data, callback) {
         data.id
       ],
         function (err, data) {
-          console.log(_query.sql);
+          // console.log(_query.sql);
           callback(err, data);
         }
       );
@@ -150,6 +151,7 @@ function executeCourseGroup (data, callback) {
 
 EducationService.create = (req, res, next) => {
   let eduId;
+  let isExistedEdu = req.body.is_existed_edu === 'Y'; // 기존 교육과정을 불러왔는지 여부
   let trainingEduId;
   let courseGroupId = util.publishHashByMD5(new Date());
   let isUpdate = req.body.edu_id !== '';
@@ -175,6 +177,7 @@ EducationService.create = (req, res, next) => {
                   req.body.name,
                   req.body.desc,
                   req.body.can_replay,
+                  req.body.can_advance,
                   eduId
                 ],
                 (err, result) => {
@@ -183,16 +186,16 @@ EducationService.create = (req, res, next) => {
               );
             } else {
               console.log('//// 교육과정 입력 ////');
-              let q = connection.query(QUERY.EDU.InsertEdu,
+              connection.query(QUERY.EDU.InsertEdu,
                 [
                   req.body.name,
                   req.body.desc,
                   courseGroupId,
                   req.body.can_replay,
+                  req.body.can_advance,
                   req.user.admin_id
                 ],
                 (err, result) => {
-                  console.log(q.sql);
                   if (result.insertId !== undefined) {
                     eduId = result.insertId;
                   }
@@ -225,6 +228,7 @@ EducationService.create = (req, res, next) => {
             }
             AssignmentService.allocate(connection, {
               edu_id: eduId,
+              is_existed_edu: isExistedEdu,
               log_bind_user_id: parseInt(req.body.log_bind_user_id),
               start_dt: req.body.start_dt,
               end_dt: req.body.finish_dt,

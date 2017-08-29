@@ -284,14 +284,14 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
     //   });
     // },
     callback => {
-      if (!_data.isUpdate) {
+      // 신규 입력 또는 교육과정 불러오기를 통한 신규입력일 경우
+      if (!_data.isUpdate || _data.is_existed_edu) {
         console.log('trainining_edu 입력');
         _connection.query(QUERY.EDU.InsertTrainingEdu,
           [ eduId, userData.admin_id ],
           (err, data) => {
             if (data.insertId !== undefined) {
               trainingEduId = data.insertId;
-              console.log(trainingEduId);
             }
             callback(err, data);
           }
@@ -331,7 +331,8 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
     },
     callback => {
       console.log('log_assign_edu 입력/수정');
-      if (!_data.isUpdate) {
+      // 신규 입력 또는 교육과정 불러오기를 통한 신규입력일 경우
+      if (!_data.isUpdate || _data.is_existed_edu) {
         // log_assign_edu 테이블에 입력
         _connection.query(QUERY.HISTORY.InsertIntoLogAssignEdu,
           [
@@ -439,6 +440,87 @@ AssignmentService.getSimpleAssignmentList = (req, res, next) => {
             loggedIn: req.user,
             list: results[0]
           });
+        }
+      }
+    );
+  });
+};
+
+AssignmentService.getCoursesToAdd = (req, res, next) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    async.series(
+      [
+        callback => {
+          connection.query(QUERY.ASSIGNMENT.SelectCoursesToAdd,
+            [ req.user.fc_id, req.query.edu_id ],
+            (err, rows) => {
+              if (err) {
+                callback(err, null);
+              } else {
+                callback(null, rows);
+              }
+            });
+        }
+      ],
+      (err, results) => {
+        connection.release();
+        if (err) {
+          console.error(err);
+          throw new Error(err);
+        } else {
+          return res.send({
+            success: true,
+            courses: results[0]
+          });
+        }
+      }
+    );
+  });
+};
+
+AssignmentService.addCourses = (req, res, next) => {
+  const arrCourses = JSON.parse('[' + req.body.course_ids + ']');
+  let courseIdCount = 0;
+  let eduCourseGroupId;
+
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+
+    connection.query(QUERY.EDU.GetEduInfoById,
+      [ req.body.edu_id ],
+      (err, row) => {
+        if (err) throw err;
+        if (row) {
+          eduCourseGroupId = row[0].course_group_key;
+
+          // 강의를 입력한다.
+          async.whilst(
+            () => {
+              return courseIdCount < arrCourses.length;
+            },
+            callback => {
+              connection.query(QUERY.EDU.InsertCourseGroupBySelect,
+                [ eduCourseGroupId, arrCourses[courseIdCount], eduCourseGroupId ],
+                (err, data) => {
+                  callback(err, null);
+                }
+              );
+              courseIdCount++;
+            },
+            (err, results) => {
+              connection.release();
+              if (err) {
+                console.error(err);
+                throw new Error(err);
+              } else {
+                // success
+                return res.json({
+                  success: true
+                });
+              }
+            }
+          );
         }
       }
     );
@@ -675,6 +757,7 @@ AssignmentService.deleteAssignment = (data, _callback) => {
     });
   });
 };
+
 AssignmentService.deleteGroupUserByGroupId = ({ groupId }, _callback) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;

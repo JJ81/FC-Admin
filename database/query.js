@@ -423,10 +423,10 @@ QUERY.COURSE = {
     '  FROM `course` AS c ' +
     // '  LEFT JOIN `teacher` AS t ' +
     // '    ON c.`teacher_id` = t.`id` ' +
-    '  LEFT JOIN `admin` AS a ' +
+    ' INNER JOIN `admin` AS a ' +
     '    ON a.`id` = c.`creator_id` ' +
-    ' WHERE a.`fc_id` = ? ' +
-    '   AND c.`active` = 1 ' +
+    '   AND a.`fc_id` = ? ' +
+    ' WHERE c.`active` = 1 ' +
     ' ORDER BY c.`created_dt` DESC; ',
 
    // 강의정보를 조회한다.
@@ -832,7 +832,7 @@ QUERY.EDU = {
     '   AND a.`fc_id` = ? ' +
     ' ORDER BY e.`created_dt` DESC, e.`id` DESC; ',
 
-  GetEduListForSimpleAssignment: (fcId, eduId) => {
+  GetEduListForSimpleAssignment: (fcId) => {
     let sql;
 
     sql =
@@ -849,7 +849,7 @@ QUERY.EDU = {
       '    ON e.`creator_id` = a.`id` ' +
       '   AND a.`fc_id` = ' + fcId +
       ' WHERE e.`active` = 1 ' +
-      '   AND e.`id` != ' + eduId +
+      // '   AND e.`id` != ' + eduId +
       ' ORDER BY e.`created_dt` DESC, e.`id` DESC; ';
 
     return sql;
@@ -876,14 +876,15 @@ QUERY.EDU = {
     '     , e.`desc` ' +
     '     , e.`course_group_id` ' +
     '     , e.`can_replay` ' +
-    '     , epw.`point_complete` ' +
-    '     , epw.`point_quiz` ' +
-    '     , epw.`point_final` ' +
-    '     , epw.`point_reeltime` ' +
-    '     , epw.`point_speed` ' +
-    '     , epw.`point_repetition` ' +
+    '     , e.`can_advance` ' +
+    '     , IFNULL(epw.`point_complete`, 0) AS point_complete ' +
+    '     , IFNULL(epw.`point_quiz`, 0) AS point_quiz ' +
+    '     , IFNULL(epw.`point_final`, 0) AS point_final ' +
+    '     , IFNULL(epw.`point_reeltime`, 0) AS point_reeltime ' +
+    '     , IFNULL(epw.`point_speed`, 0) AS point_speed ' +
+    '     , IFNULL(epw.`point_repetition`, 0) AS point_repetition ' +
     '  FROM `edu` AS e ' +
-    ' INNER JOIN ' +
+    '  LEFT JOIN ' +
     '       ( ' +
     '        SELECT `edu_id` ' +
     '             , `point_complete` ' +
@@ -996,8 +997,8 @@ QUERY.EDU = {
 
   // 교육과정을 생성한다.
   InsertEdu:
-    'INSERT INTO `edu` (`name`, `desc`, `course_group_id`, `can_replay`, `creator_id`) ' +
-    'VALUES(?,?,?,?,?); ',
+    'INSERT INTO `edu` (`name`, `desc`, `course_group_id`, `can_replay`, `can_advance`, `creator_id`) ' +
+    'VALUES(?,?,?,?,?,?); ',
   // InsertEdu:
   //   'INSERT INTO `edu` (`name`, `desc`, `course_group_id`, `creator_id`, `start_dt`, `end_dt`) ' +
   //   'VALUES(?,?,?,?,?,?); ',
@@ -1008,6 +1009,7 @@ QUERY.EDU = {
     '       `name` = ? ' +
     '     , `desc` = ? ' +
     '     , `can_replay` = ? ' +
+    '     , `can_advance` = ? ' +
     '     , `updated_dt` = NOW() ' +
     ' WHERE `id` = ?; ',
 
@@ -1015,6 +1017,13 @@ QUERY.EDU = {
   InsertCourseGroup:
     'INSERT INTO `course_group` (`group_id`, `course_id`, `order`) ' +
     'VALUES(?,?,?); ',
+
+  // 강의그룹을 생성한다.
+  InsertCourseGroupBySelect:
+    'INSERT INTO `course_group` (`group_id`, `course_id`, `order`) ' +
+    'SELECT ? AS group_id ' +
+    '     , ? AS course_id ' +
+    '     , (SELECT IFNULL(MAX(`order`), 0) + 1 FROM `course_group` WHERE `group_id` = ?) AS `order` ',
 
   // 강의그룹 순서를 변경한다.
   UpdateCourseGroup:
@@ -2601,10 +2610,14 @@ QUERY.ASSIGNMENT = {
     'SELECT sa.`id`, sa.`title`, sa.`created_dt` ' +
     '     , IFNULL(sa.`activated_step`, 0) AS activated_step ' +
     '     , a.`name` AS created_name ' +
+    '     , e.`id` AS edu_id ' +
+    '     , e.`name` AS edu_name ' +
     '  FROM `simple_assignment` AS sa ' +
     ' INNER JOIN `admin` AS a ' +
     '    ON sa.`creator_id` = a.`id` ' +
     '   AND a.`fc_id` = ? ' +
+    '  LEFT JOIN `edu` AS e ' +
+    '    ON sa.`edu_id` = e.`id` ' +
     ' WHERE sa.`active` = 1 ' +
     ' ORDER BY sa.`created_dt` DESC; ',
 
@@ -2613,6 +2626,7 @@ QUERY.ASSIGNMENT = {
     '     , sa.`activated_step`, sa.`log_bind_user_id`, sa.`edu_id`, sa.`training_edu_id` ' +
     '     , a.`name` AS created_name ' +
     '     , e.`name` AS edu_name, e.`desc` AS edu_desc ' +
+    '     , e.`can_replay`, e.`can_advance` ' +
     '     , epw.`point_complete` AS complete_point ' +
     '     , epw.`point_quiz` AS quiz_point ' +
     '     , epw.`point_final` AS test_point ' +
@@ -2663,7 +2677,26 @@ QUERY.ASSIGNMENT = {
     ' WHERE `id` = ' + id + '; ';
 
     return sql;
-  }
+  },
+
+  // 간편배정 시 추가할 강의목록 (현재 매칭된 교육과정 외 강의목록을 불러온다.)
+  SelectCoursesToAdd:
+  'SELECT c.`id` AS course_id ' +
+  '     , c.`name` AS course_name ' +
+  '     , c.`teacher` AS teacher_name ' +
+  '  FROM `course` AS c ' +
+  ' INNER JOIN `admin` AS a ' +
+  '    ON a.`id` = c.`creator_id` ' +
+  '   AND a.`fc_id` = ? ' +
+  ' WHERE c.`active` = 1 ' +
+  '   AND c.`id` NOT IN ' +
+  '       ( ' +
+  '        SELECT cg.`course_id` ' +
+  '          FROM `edu` AS e ' +
+  '         INNER JOIN `course_group` AS cg ' +
+  '            ON e.`course_group_id` = cg.`group_id` ' +
+  '         WHERE e.`id` = ? ' +
+  '       ); '
 };
 
 QUERY.COMMON = {
