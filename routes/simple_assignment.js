@@ -43,6 +43,14 @@ router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
             callback(err, rows);
           }
         );
+      },
+      callback => {
+        connection.query(QUERY.TAG.SelectEduTags,
+          [ req.assignment.edu_id ],
+          (err, rows) => {
+            callback(err, rows);
+          }
+        );
       }
     ],
     (err, results) => {
@@ -61,7 +69,8 @@ router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
           employees: results[0],
           assignment: req.assignment,
           courses: results[1][0],
-          educations: results[2]
+          educations: results[2],
+          eduTags: results[3]
         });
       }
     });

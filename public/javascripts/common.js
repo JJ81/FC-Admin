@@ -14,7 +14,7 @@ window.define(
     'tinymce',
     'bootstrap',
     'bootstrap_datetimepicker',
-    'jquery_ui',
+    'jquery-ui',
     'datatables.net',
     'datatables.net-bs',
     // 'datatables.net-buttons',
@@ -27,7 +27,8 @@ window.define(
     'adminLTE',
     'fastclick',
     'es6-promise',
-    'dom-checkbox'
+    'dom-checkbox',
+    'tag-it'
     // 'smoothstate'
   ],
 function ($, jszip, axios, moment, pace, _, Handlebars) {
@@ -117,7 +118,7 @@ function ($, jszip, axios, moment, pace, _, Handlebars) {
       'insertdatetime media table contextmenu paste code'
     ],
     language: 'ko_KR',
-    toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+    toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table',
     // content_css: [
     //   '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
     //   '//www.tinymce.com/css/codepen.min.css'

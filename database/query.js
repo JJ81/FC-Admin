@@ -2706,4 +2706,42 @@ QUERY.COMMON = {
     'INSERT INTO `messages` (`sender_id`, `fc_id`, `send_msg`, `dest_phone`) VALUES ? '
 };
 
+QUERY.TAG = {
+  // 교육과정의 태그를 조회한다.
+  SelectEduTags:
+    'SELECT et.`name` ' +
+    '  FROM `edu_tag_map` AS etm ' +
+    ' INNER JOIN `edu_tag` AS et ' +
+    '    ON etm.`tag_id` = et.`id` ' +
+    ' WHERE etm.`edu_id` = ?; ',
+
+  // 기존에 존재하는 태그 id 를 반환한다.
+  SelectTagIdByName:
+    'SELECT `id` FROM `edu_tag` WHERE `fc_id` = ? AND `name` = ?; ',
+
+  // 교육과정의 태그를 모두 삭제한다.
+  DeleteEduTags:
+  'DELETE FROM `edu_tag_map` WHERE `edu_id` = ?;',
+
+  // 사용하지 않는 태그를 정리한다.
+  DeleteNotUsingTags:
+    'DELETE et ' +
+    '  FROM `edu_tag` AS et ' +
+    ' WHERE et.`fc_id` = ? ' +
+    '   AND NOT EXISTS ' +
+    '       ( ' +
+    '        SELECT \'X\' ' +
+    '          FROM `edu_tag_map` ' +
+    '         WHERE `tag_id` = et.`id` ' +
+    '       ); ',
+
+  // 교육과정용 태그를 입려한다.
+  InsertEduTag:
+    'INSERT IGNORE `edu_tag` (`fc_id`, `name`) VALUES (?,?); ',
+
+  // 교육과정별 태그를 입력한다.
+  InsertEduTagMap:
+    'INSERT IGNORE `edu_tag_map` (`edu_id`, `tag_id`) VALUES (?,?); '
+};
+
 module.exports = QUERY;

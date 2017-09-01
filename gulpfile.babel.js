@@ -31,6 +31,7 @@ const DEST = {
   TINYMCE: DIR.DEST + '/vendor/tinymce',
   UPLOADS: DIR.DEST + '/uploads',
   CSS: DIR.DEST + '/stylesheets',
+  CSS_IMAGES: DIR.DEST + '/stylesheets/images',
   HTML: DIR.DEST + '/',
   IMAGES: DIR.DEST + '/images',
   FONTS: DIR.DEST + '/fonts'
@@ -79,7 +80,8 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'lodash.min.js',
     DIR.SRC + '/vendor/' + 'handlebars/dist/handlebars.min.js',
     DIR.SRC + '/vendor/' + 'text/text.js',
-    DIR.SRC + '/vendor/' + 'dom-checkbox.js'
+    DIR.SRC + '/vendor/' + 'dom-checkbox.js',
+    DIR.SRC + '/vendor/' + 'plugins/tag-it/tag-it.min.js'
     // DIR.SRC + '/vendor/' + 'plugins/smoothstate/jquery.smoothstate.min.js'
   ])
   .pipe(uglify())
@@ -105,6 +107,13 @@ gulp.task('copy-font', () => {
   .pipe(gulp.dest(DEST.FONTS));
 });
 
+gulp.task('copy-css-images', () => {
+  return gulp.src([
+    DIR.SRC + '/vendor/' + 'plugins/jqueryUI/images/*.*'
+  ])
+  .pipe(gulp.dest(DEST.CSS_IMAGES));
+});
+
 gulp.task('copy-css', () => {
   return gulp.src([
     DIR.SRC + '/vendor/' + 'bootstrap/css/bootstrap.min.css',
@@ -120,7 +129,9 @@ gulp.task('copy-css', () => {
     DIR.SRC + '/vendor/' + 'plugins/datatables.net-buttons-bs/css/buttons.bootstrap.min.css',
     DIR.SRC + '/vendor/' + 'plugins/datatables.net-responsive-bs/css/responsive.bootstrap.min.css',
     DIR.SRC + '/vendor/' + 'plugins/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
-    DIR.SRC + '/vendor/' + 'plugins/pace/pace.min.css'
+    DIR.SRC + '/vendor/' + 'plugins/pace/pace.min.css',
+    DIR.SRC + '/vendor/' + 'plugins/jQueryUI/jquery-ui.min.css',
+    DIR.SRC + '/vendor/' + 'plugins/tag-it/jquery.tagit.min.css'
   ])
   .pipe(cleanCSS({compatibility: 'ie8'}))
   .pipe(gulp.dest(DIR.DEST + '/stylesheets/'));
@@ -165,6 +176,6 @@ gulp.task('watch', () => {
   }
 });
 
-gulp.task('default', ['clean', 'js', 'vendor', 'tinymce', 'uploads', 'copy-font', 'copy-css', 'css', 'html', 'images', 'watch'], () => {
+gulp.task('default', ['clean', 'js', 'vendor', 'tinymce', 'uploads', 'copy-font', 'copy-css-images', 'copy-css', 'css', 'html', 'images', 'watch'], () => {
   gutil.log('Gulp task completed.');
 });

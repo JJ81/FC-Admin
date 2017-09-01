@@ -13,21 +13,38 @@ const util = require('../util/util');
 EducationService.getInfoWithPointWeight = (req, res, next) => {
   pool.getConnection(function (err, connection) {
     if (err) throw err;
-    let q = connection.query(QUERY.EDU.GetEduInfoByIdWithPointWeight(req.params.id),
-      [],
-      (err, data) => {
-        console.log(data);
-        console.log(q.sql);
-        if (err) {
-          console.log(err);
-          throw err;
-        } else {
-          res.send({
-            success: true,
-            education: data
-          });
+
+    async.series(
+      [
+        callback => {
+          connection.query(QUERY.EDU.GetEduInfoByIdWithPointWeight(req.params.id),
+            [],
+            (err, data) => {
+              callback(err, data);
+            }
+          );
+        },
+        callback => {
+          connection.query(QUERY.TAG.SelectEduTags,
+            [ req.params.id ],
+            (err, data) => {
+              callback(err, data);
+            }
+          );
         }
-      });
+      ],
+      (err, results) => {
+        connection.release();
+
+        if (err) throw err;
+
+        res.send({
+          success: true,
+          education: results[0],
+          tags: results[1]
+        });
+      }
+    );
   });
 };
 
@@ -204,6 +221,16 @@ EducationService.create = (req, res, next) => {
               );
             }
           },
+          callback => {
+            if (req.body.edu_tags.length > 0) {
+              console.log('//// 태그 입력 ////');
+              manageTags(connection, req.user.fc_id, req.body.edu_id, req.body.edu_tags, (err, results) => {
+                callback(err, null);
+              });
+            } else {
+              callback(null, null);
+            }
+          },
           // 기존 교육생 배정내역을 삭제한다.
           // callback => {
           //   if (trainingEduId !== undefined) {
@@ -308,6 +335,78 @@ EducationService.create = (req, res, next) => {
       );
     });
   });
+};
+
+// 태그를 관리한다.(사용하지 않는 태그 삭제, 교육과정 태그 입력)
+const manageTags = (_connection, _fcId, _eduId, _tags, _callback) => {
+  if (_tags.length === 0) _callback(false, false);
+  let tagCount = 0;
+
+  _connection.query(QUERY.TAG.DeleteEduTags,
+    [_eduId],
+    (err, data) => {
+      if (err) throw err;
+
+      _connection.query(QUERY.TAG.DeleteNotUsingTags,
+        [ _fcId ],
+        (err, data) => {
+          if (err) throw err;
+
+          async.whilst(
+            () => {
+              return tagCount < _tags.length;
+            },
+            callback => {
+              _connection.query(QUERY.TAG.InsertEduTag,
+                [ _fcId, _tags[tagCount] ],
+                (err, data) => {
+                  if (err) throw err;
+
+                  if (data.insertId > 0) {
+                    _connection.query(QUERY.TAG.InsertEduTagMap,
+                      [ _eduId, data.insertId ],
+                      (err, data) => {
+                        if (err) throw err;
+                      }
+                    );
+                  } else {
+                    // 기존의 동일한 이름의 태그가 존재하면, 해당 id 를 map 테이블에 입력한다.
+                    _connection.query(QUERY.TAG.SelectTagIdByName,
+                      [ _fcId, _tags[tagCount] ],
+                      (err, data) => {
+                        if (err) throw err;
+
+                        console.log(data);
+
+                        if (data[0].id) {
+                          _connection.query(QUERY.TAG.InsertEduTagMap,
+                            [ _eduId, data[0].id ],
+                            (err, data) => {
+                              if (err) throw err;
+                            }
+                          );
+                        }
+                      }
+                    );
+                  }
+                  tagCount++;
+                  callback(err, data);
+                }
+              );
+            },
+            (err, results) => {
+              if (err) {
+                console.error(err);
+                throw new Error(err);
+              } else {
+                _callback(null, null);
+              }
+            }
+          );
+        }
+      );
+    }
+  );
 };
 
 /**

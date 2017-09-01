@@ -293,6 +293,14 @@
         <input type="checkbox" class="form-check-input" id="can-advance" {{#ifCond assignment.can_advance '===' 1}}checked{{/ifCond}}>  강의 선진행 불가
       </div>
       <hr>
+
+      <label for="eduTags">태그</label><small> ( 20 바이트 미만, 한글 기준 10글자까지만 입력 가능 )</small>
+      <ul id="eduTags">
+        {{#each eduTags}}
+        <li>{{name}}</li>
+        {{/each}}
+      </ul>
+
       <nav aria-label="...">
         <ul class="pager step2">
           <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> 이전</a></li>

@@ -16,7 +16,7 @@ window.requirejs([
 
   var tableCheckAll = $('#check-all');
   var tableCheckCourseAll = $('#js--formAddCourse').find('#check-all');
-  // var tableCourse = Util.initDataTable($('#table_course'));
+  var tableCourse = Util.initDataTable($('#table_course'));
   var tableEmployee = Util.initDataTable($('#table_employee'), {
     'lengthMenu': [
       [5, 10, 25, 50, -1],
@@ -56,6 +56,22 @@ window.requirejs([
 
   $(function () {
     allWells.hide();
+
+    // window.tinymce.setActive('input-course-desc', true);
+    // window.tinymce.execCommand('mceFocus', false, 'input-course-desc');
+
+    $('#eduTags').tagit({
+      beforeTagAdded: function (event, ui) {
+        var message = ui.tagLabel;
+        var messageBytes = Util.getBytes(message);
+        var remain = 20 - messageBytes;
+
+        if (remain < 0) {
+          console.log(remain, ui.tagLabel);
+          return false;
+        }
+      }
+    });
 
     // DateTimePicker 설정
     Util.initDateTimePicker(
@@ -136,6 +152,7 @@ window.requirejs([
     });
 
     $('#deselect-point-items').click(function () {
+      if (!window.confirm('점수를 초기화하시겠습니까?')) return false;
       $('.point-item').each(function () {
         $(this).parent().find('.input-group-addon').children('input:checkbox').prop('checked', false);
         $(this).val(0);
@@ -329,6 +346,14 @@ window.requirejs([
 
           // 포인트 합계 계산
           sumPoint();
+
+          // 태그 입력
+          if (res.data.tags) {
+            for (var key in res.data.tags) {
+              $('#eduTags').tagit('createTag', res.data.tags[key].name);
+            }
+          }
+
           // 강의 목록 조회
           getCourseList();
           // 모달창 종료
@@ -549,7 +574,7 @@ window.requirejs([
   function saveStep2Data () {
     var data = {
       'name': $('input[name=\'course_name\']').val(),
-      'desc': window.tinymce.activeEditor.getContent({
+      'desc': window.tinymce.get('input-course-desc').getContent({
         format: 'raw'
       }),
       'complete_point': $('input[name=\'complete_point\']').val(),
@@ -563,6 +588,7 @@ window.requirejs([
       'assigment_id': assignmentId,
       'upload_employee_ids': $('input[name=\'upload_employee_ids\']').val(),
       'edu_id': $('#edu_id').val(),
+      'edu_tags': $('#eduTags').tagit('assignedTags'),
       'is_existed_edu': $('#edu_id').data('existed'),
       'log_bind_user_id': $('#log_bind_user_id').val(),
       'training_edu_id': $('#training_edu_id').val(),
@@ -792,11 +818,12 @@ window.requirejs([
       promises.push(makeSessionOrderChangeRequest(window.$(items[index])));
     }
 
-    window.axios.all(promises).then(function (results) {
-      results.forEach(function (response) {
-        console.log(response);
-      });
-    });
+    window.axios.all(promises)
+    .then(window.axios.spread(function (acct, perms) {
+      if (acct.data.success) {
+        window.alert('세션순서를 변경하였습니다.');
+      }
+    }));
   }
 
   /**
@@ -824,11 +851,18 @@ window.requirejs([
       promises.push(makeCourseOrderChangeRequest(window.$(items[index])));
     }
 
-    window.axios.all(promises).then(function (results) {
-      // results.forEach(function (response) {
-      //   console.log(response);
-      // });
-    });
+    window.axios.all(promises)
+    .then(window.axios.spread(function (acct, perms) {
+      if (acct.data.success) {
+        window.alert('강의순서를 변경하였습니다.');
+      }
+    }));
+
+    // window.axios.all(promises).then(function (results) {
+    //   results.forEach(function (response) {
+    //     console.log(response);
+    //   });
+    // });
   }
 
   function toggleIcon (e) {
@@ -899,8 +933,10 @@ window.requirejs([
   }
 
   function onModifyCourseModalOpen (e) {
-    var data = $(e.relatedTarget).parents().find('.panel').data('metadata');
+    var data = $(e.relatedTarget).parents().closest('.panel').data('metadata');
     var $modal = $(this);
+
+    // console.log(data);
 
     $modal.find('input').val('').end();
     window.tinymce.activeEditor.setContent('');
@@ -1141,5 +1177,26 @@ window.requirejs([
             window.alert('알 수 없는 오류가 발생했습니다. 잠시 후에 다시 시도해주세요.');
           }
         });
+  });
+
+  messageInput.on('keyup', function (e) {
+    var message = window.$(e.currentTarget).val();
+    var messageBytes = Util.getBytes(message);
+    var remain = 90 - messageBytes;
+
+    // console.log(message);
+    // console.log(Util.getBytes(message));
+    // console.log(remain);
+
+    if (remain < 0) {
+      window.alert('90 Bytes 를 초과할 수 없습니다.');
+      // message = message.substring(0, 90);
+      message = Util.cutBytes(message, 90);
+      window.$(e.currentTarget).val(message);
+      window.$(e.currentTarget).focus();
+      messageBytes = Util.getBytes(message);
+    }
+
+    window.$('.remain-bytes').html(messageBytes + ' / 90 바이트');
   });
 });

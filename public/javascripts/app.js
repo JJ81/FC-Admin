@@ -7,7 +7,7 @@ window.requirejs.config({
       '*': { 'jquery': 'jquery-private' },
       'jquery-private': { 'jquery': 'jquery' }
     },
-    'jquery_ui': '/static/vendor/jquery-ui.min',
+    'jquery-ui': '/static/vendor/jquery-ui.min',
     'bootstrap': ['/static/vendor/bootstrap.min'],
     'jszip': '/static/vendor/jszip.min',
     'datatables.net': '/static/vendor/jquery.dataTables.min',
@@ -39,7 +39,8 @@ window.requirejs.config({
     'lodash': '/static/vendor/lodash.min',
     'handlebars': '/static/vendor/handlebars.min',
     'text': '/static/vendor/text',
-    'dom-checkbox': '/static/vendor/dom-checkbox'
+    'dom-checkbox': '/static/vendor/dom-checkbox',
+    'tag-it': '/static/vendor/tag-it.min'
     // 'smoothstate': '/static/vendor/jquery.smoothstate.min'
   },
   shim: {
@@ -58,7 +59,7 @@ window.requirejs.config({
     'adminLTE': {
       deps: ['jquery', 'bootstrap']
     },
-    'jquery_ui': {
+    'jquery-ui': {
       deps: ['jquery']
     },
     'jqueryCookie': {
@@ -75,6 +76,9 @@ window.requirejs.config({
     },
     'dom-checkbox': {
       deps: ['jquery']
+    },
+    'tag-it': {
+      deps: ['jquery', 'jquery-ui']
     }
   }
 });
