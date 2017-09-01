@@ -20,6 +20,12 @@
       required autocomplete="off"
       value="{{course_list.title}}" />
   </div>
+  <div class="form-group">
+    <label>설명</label>
+    <textarea id="desc" class="form-control editor" name="desc" placeholder="설명">
+      {{{course_list.desc}}}
+    </textarea>
+  </div>
   <input type="hidden" name="course_id" value="{{course_list.course_id}}" />
   <input type="hidden" name="course_list_id" value="{{course_list.id}}" />
   <input type="hidden" name="checklist_group_id" value="{{course_list.checklist_group_id}}" />

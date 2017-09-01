@@ -36,6 +36,12 @@ function (Util) {
         changeSessionOrder();
       }
     });
+
+    window.winpop_listener = function (data) {
+      if (data === true) {
+        window.location.reload(true);
+      }
+    };
   });
 
   // 체크리스트 보기

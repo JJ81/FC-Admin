@@ -3,11 +3,11 @@
     체크리스트 등록하기
     <div class="pull-right">
       <button type="button" id="regist-quiz" class="btn btn-primary">
-            <i class="fa fa-floppy-o"> 저장</i>
-          </button>
+        <i class="fa fa-floppy-o"> 저장</i>
+      </button>
       <button type="button" class="btn btn-default" onclick="window.close();">
-            <i class="fa fa-sign-out"> 나가기</i>
-          </button>
+        <i class="fa fa-sign-out"> 나가기</i>
+      </button>
     </div>
   </h4>
 </div>
@@ -16,6 +16,11 @@
   <label for="title">대표제목 :</label>
   <div class="form-group">
     <input type="text" class="form-control" name="title" id="title" placeholder="대표제목을 입력하세요" required autocomplete="off" value="체크리스트" />
+  </div>
+  <div class="form-group">
+    <label>설명</label>
+    <textarea id="desc" class="form-control editor" name="desc" placeholder="설명">
+    </textarea>
   </div>
   <input type="hidden" name="course_id" value="{{course_id}}" />
   <br /><br />

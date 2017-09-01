@@ -616,8 +616,8 @@ QUERY.COURSE = {
 
   // 체크리스트 세션을 생성한다.
   InsertCourseListForChecklist:
-    'INSERT IGNORE `course_list` (`course_id`, `type`, `title`, `checklist_group_id`, `order`) ' +
-    'SELECT ?,?,?,?,(SELECT IFNULL(MAX(`order`), 0) + 1 FROM `course_list` WHERE `course_id` = ?) ',
+    'INSERT IGNORE `course_list` (`course_id`, `type`, `title`, `desc`, `checklist_group_id`, `order`) ' +
+    'SELECT ?,?,?,?,?,(SELECT IFNULL(MAX(`order`), 0) + 1 FROM `course_list` WHERE `course_id` = ?) ',
 
   // 특정 세션의 아이디로 체크리스트를 조회한다.
   GetChecklistByCourseListId:
@@ -628,6 +628,7 @@ QUERY.COURSE = {
     '     , c.`sample` ' +
     '     , cg.`order` AS checklist_order ' +
     '     , cl.`title` ' +
+    '     , cl.`desc` ' +
     '  FROM `course_list` AS cl ' +
     ' INNER JOIN `checklist_group` AS cg ' +
     '    ON cl.`checklist_group_id` = cg.`group_id` ' +
@@ -769,6 +770,7 @@ QUERY.COURSE = {
   UpdateSessionTitle:
     'UPDATE `course_list` SET ' +
     '       `title` = ? ' +
+    '     , `desc` = ? ' +
     '     , `updated_dt` = NOW() ' +
     ' WHERE `id` = ?; ',
 

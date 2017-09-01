@@ -110,7 +110,7 @@ function ($, jszip, axios, moment, pace, _, Handlebars) {
   window.tinymce.init({
     mode: 'specific_textareas',
     editor_selector: 'editor',
-    height: 100,
+    height: 300,
     menubar: false,
     plugins: [
       'advlist autolink lists link image charmap print preview anchor',
@@ -118,11 +118,18 @@ function ($, jszip, axios, moment, pace, _, Handlebars) {
       'insertdatetime media table contextmenu paste code'
     ],
     language: 'ko_KR',
-    toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table',
+    toolbar: 'fontselect |  fontsizeselect | undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table',
     // content_css: [
     //   '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
     //   '//www.tinymce.com/css/codepen.min.css'
     // ],
+    fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
+    table_default_styles: {
+      'width': '100%',
+      'border-color': '#fff',
+      cellpadding: 5,
+      cellspacing: 5
+    },
     editor_deselector: 'mceOthers'
   });
 

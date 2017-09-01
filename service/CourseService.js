@@ -173,6 +173,7 @@ exports.InsertOrUpdateChecklist = (_connection, _data, _callback) => {
           _data.course_id,
           'CHECKLIST',
           _data.title,
+          _data.desc,
           checklistGroupId,
           _data.course_id
         ],
@@ -201,6 +202,7 @@ exports.InsertOrUpdateChecklist = (_connection, _data, _callback) => {
         CourseService.connection.query(QUERY.COURSE.UpdateSessionTitle,
           [
             _data.title,
+            _data.desc,
             _data.course_list_id
           ],
           (err, data) => {

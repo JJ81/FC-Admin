@@ -7,6 +7,7 @@ function (Util) {
   // var btnAddItem = window.$('.additem');
   var tableChecklist = window.$('#table_checklist');
   var btnSaveChecklist = window.$('#regist-quiz');
+  var $ = $ || window.$;
 
   window.$(function () {
     tableChecklist.find('tr:first-child').not('thead tr').find('input[name="item"]').focus();
@@ -128,6 +129,7 @@ function (Util) {
     var itemArray = [];
     var rows = tableChecklist.find('tr').not(':first');
     var $title = window.$('input[name=title]');
+    var $desc = $('#desc').val(); // window.tinymce.activeEditor.getContent();
 
     if ($title.val().trim() === '') {
       window.alert('대표제목을 입력하세요.');
@@ -187,6 +189,9 @@ function (Util) {
       course_list_id: window.$('input[name=course_list_id]').val(),
       checklist_group_id: window.$('input[name=checklist_group_id]').val(),
       title: window.$('input[name=title]').val(),
+      desc: window.tinymce.get('desc').getContent({
+        format: 'raw'
+      }),
       data: itemArray
     })
     .then((response) => {
