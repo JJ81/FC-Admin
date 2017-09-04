@@ -606,8 +606,9 @@ QUERY.COURSE = {
 
     // 비디오 세션을 생성한다.
   InsertIntoCourseListForVideo:
-    'INSERT INTO `course_list` (`course_id`, `type`, `title`, `video_id`) ' +
-    'VALUES (?,?,?,?); ',
+    'INSERT INTO `course_list` (`course_id`, `type`, `title`, `video_id`, `order`) ' +
+    // 'VALUES (?,?,?,?); ',
+    'SELECT ?,?,?,?,(SELECT IFNULL(MAX(`order`), 0) + 1 FROM `course_list` WHERE `course_id` = ?) ',
 
     // 퀴즈/파이널테스트 세션을 생생헌다.
   InsertIntoCourseListForQuiz:

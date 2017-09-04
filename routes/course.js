@@ -350,7 +350,8 @@ router.post('/create/video', util.isAuthenticated, (req, res, next) => {
                 courseId,
                 'VIDEO',
                 videoName,
-                videoId
+                videoId,
+                courseId
               ],
               (err, result) => {
                 if (err) {
@@ -997,6 +998,7 @@ router.get('/checklist', util.isAuthenticated, util.getLogoInfo, (req, res, next
           }
         }
         // 쿼리 성공
+        console.log(data[data.length - 1]);
         res.render('winpops/win_show_checklist', {
           current_path: 'winpop',
           module_type: 'show_checklist',

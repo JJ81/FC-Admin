@@ -204,9 +204,9 @@ UserService.InsertUsersWithTrainingEduId = (user_id, training_edu_id, cb) => {
  * 엑셀업로드로 직원을 생성한다.
  */
 UserService.createUserByExcel = function (_connection, _data, _callback) {
-  var _count = 0,
-    _excel_data = _data.excel_data,
-    _user = _data.user;
+  var _count = 0;
+  var _excel_data = _data.excel_data;
+  var _user = _data.user;
 
   // console.log(_data.excel_data);
   // _callback(null, null);
@@ -228,6 +228,7 @@ UserService.createUserByExcel = function (_connection, _data, _callback) {
           _count++;
           callback(null, null);
         } else {
+          // console.log(_excel_data[_count]);
           UserService.createBranchOrSelect(_connection, _excel_data[_count].branch, _user.fc_id, (err, branch_id) => {
             UserService.createDutyOrSelect(_connection, _excel_data[_count].duty, _user.fc_id, (err, duty_id) => {
               // console.log(branch_id);

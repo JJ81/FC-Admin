@@ -174,6 +174,8 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
                 if (typeof email === 'object') {
                   email = util.replaceEmptySpace(email.text);
                 }
+                console.log(row.values[1], row.values[2], row.values[3], row.values[4]);
+
                 let user = {
                   row: rowNumber,
                   branch: row.values[1] == undefined ? '' : util.replaceEmptySpace(row.values[1]),
@@ -217,6 +219,9 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
                 if (loopData.phone.toString().substring(0, 1) !== '0') {
                   loopData.phone = '0' + loopData.phone;
                 }
+
+                console.log(loopData.phone);
+
                 if (!util.isValidPhone(loopData.phone)) {
                   loopData['error'] = true;
                   loopData['error_msg'].push('잘못된 휴대폰번호 형식');
@@ -352,6 +357,9 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
                   excelRow.getCell(5).value = row.email;
                   excelRow.getCell(6).value = row.error_msg.join(',');
                   excelRow.commit();
+
+                  // 오류 메시지 출력
+                  console.log(row.name, row.error_msg.join(','));
                 }
               }
 
