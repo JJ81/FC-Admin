@@ -593,7 +593,7 @@ window.requirejs([
       'log_bind_user_id': $('#log_bind_user_id').val(),
       'training_edu_id': $('#training_edu_id').val(),
       'can_replay': $('#can-replay').prop('checked') ? 1 : 0,
-      'can_advance': $('#can-advance').prop('checked') ? 1 : 0
+      'can_advance': $('#can-advance').prop('checked') ? 0 : 1
     };
 
     // console.log(data);
