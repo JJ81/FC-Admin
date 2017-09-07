@@ -12,6 +12,7 @@ const isAuthenticated = function (req, res, next) {
 const util = require('../util/util');
 var CourseService = require('../service/CourseService');
 const MessageService = require('../service/MessageService');
+const AquaPlayerService = require('../service/AquaPlayerService');
 
 router.get('/course/group/id/create', isAuthenticated, (req, res) => {
   res.json({
@@ -123,5 +124,7 @@ router.get('/test', (req, res) => {
     });
   });
 });
+
+router.get('/player/encparam', AquaPlayerService.getEncodedParam);
 
 module.exports = router;

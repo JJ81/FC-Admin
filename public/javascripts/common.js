@@ -168,6 +168,7 @@ function ($, jszip, axios, moment, pace, _, Handlebars) {
   // });
 
   return {
+
     cutBytes: function (str, limit) {
       var len = str.length;
       while (this.getBytes(str) > limit) {
