@@ -1,5 +1,5 @@
 
-const spawn = require('child_process').spawn;
+const exec = require('child_process').exec;
 const util = require('../util/util');
 
 exports.getEncodedParam = (req, res, next) => {
@@ -60,7 +60,9 @@ exports.getEncodedParam = (req, res, next) => {
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
   param += '&NotifyInfo=' + NotifyInfo;
 
-  var encoding = spawn(`./aquaplayer_modules/ENCAQALINK_V2_x64 -t ENC "${param}")`);
+  var encoding = exec(`./aquaplayer_modules/ENCAQALINK_V2_x64 -t ENC "${param}")`, (err, stdout, stderr) => {
+    if (err) throw err;
+  });
 
   encoding.stdout.on('data', (data) => {
     console.log(data);
