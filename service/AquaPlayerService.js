@@ -61,7 +61,7 @@ exports.getEncodedParam = (req, res, next) => {
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
   param += '&NotifyInfo=' + NotifyInfo;
 
-  exec(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64') + ' -t ENC "' + param + '")', (err, stdout, stderr) => {
+  exec('./ENCAQALINK_V2_x64 -t ENC "' + param + '")', (err, stdout, stderr) => {
     if (err) throw err;
     console.log(stdout);
 
