@@ -61,7 +61,7 @@ exports.getEncodedParam = (req, res, next) => {
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
   param += '&NotifyInfo=' + NotifyInfo;
 
-  exec('./ENCAQALINK_V2_x64 -t ENC "' + param + '")', { 'shell': '/bin/bash' }, (err, stdout, stderr) => {
+  exec(path(__dirname, './ENCAQALINK_V2_x64)') + ' -t ENC "' + param + '")', { 'shell': '/bin/bash' }, (err, stdout, stderr) => {
     if (err) throw err;
     console.log(stdout);
 
