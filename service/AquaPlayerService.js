@@ -1,6 +1,6 @@
 
-const { exec } = require('child_process');
-const util = require('../util/util');
+const { execFile } = require('child_process');
+const func = require('../util/util');
 const path = require('path');
 
 exports.getEncodedParam = (req, res, next) => {
@@ -22,7 +22,7 @@ exports.getEncodedParam = (req, res, next) => {
   const AquaAuth = '1';
 
   // 웹서버 시간정보
-  const WebserverTime = util.microtime(true);
+  const WebserverTime = func.microtime(true);
 
   // 중복로그인 차단 사용 여부
   // 0: 사용안함 (default)
@@ -61,7 +61,7 @@ exports.getEncodedParam = (req, res, next) => {
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
   param += '&NotifyInfo=' + NotifyInfo;
 
-  exec(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64'),
+  execFile(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64'),
     [ '-t', 'ENC', '"' + param + '"' ],
     (err, stdout, stderr) => {
       if (err) throw err;
