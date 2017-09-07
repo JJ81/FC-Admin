@@ -60,7 +60,7 @@ exports.getEncodedParam = (req, res, next) => {
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
   param += '&NotifyInfo=' + NotifyInfo;
 
-  exec(`./aquaplayer_modules/ENCAQALINK_V2_x64 -t ENC "${param}")`, (err, stdout, stderr) => {
+  exec('./aquaplayer_modules/ENCAQALINK_V2_x64 -t ENC "' + param + '")', (err, stdout, stderr) => {
     if (err) throw err;
     // the *entire* stdout and stderr (buffered)
     console.log(`stdout: ${stdout}`);
