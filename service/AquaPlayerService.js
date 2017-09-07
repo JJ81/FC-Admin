@@ -42,7 +42,7 @@ exports.getEncodedParam = (req, res, next) => {
   const AUTH_DUP_CP_KEY = 'orangenamu';
 
   // 사용자 기기 정보 수집
-  const NotifyInfo = `http://${req.headers.host}/player/notify`;
+  const NotifyInfo = 'http://' + req.headers.host + '/player/notify';
   // $NotifyInfo = "http://~webserver~/notifyinfo/getuserinfo.php?POST:BA:data=USERID,MAC,HDD,USERIP";
 
   // 암호화 되기 전 파라미터 선언
@@ -63,9 +63,11 @@ exports.getEncodedParam = (req, res, next) => {
   exec('./aquaplayer_modules/ENCAQALINK_V2_x64 -t ENC "' + param + '")', (err, stdout, stderr) => {
     if (err) throw err;
     console.log(stdout);
-  });
 
-  res.sendStatus(200);
+    res.send({
+      encparam: stdout
+    });
+  });
 };
 
 exports.getNotifyInfo = (req, res, next) => {
