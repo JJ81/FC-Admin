@@ -62,9 +62,7 @@ exports.getEncodedParam = (req, res, next) => {
 
   exec('./aquaplayer_modules/ENCAQALINK_V2_x64 -t ENC "' + param + '")', (err, stdout, stderr) => {
     if (err) throw err;
-    // the *entire* stdout and stderr (buffered)
-    console.log(`stdout: ${stdout}`);
-    console.log(`stderr: ${stderr}`);
+    console.log(stdout);
   });
 
   res.sendStatus(200);
