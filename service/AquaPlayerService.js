@@ -1,6 +1,7 @@
 
 const { exec } = require('child_process');
 const util = require('../util/util');
+const path = process.cwd();
 
 exports.getEncodedParam = (req, res, next) => {
   // 사용자ID를 넣는 부분, 넘겨줄 ID가 없는 경우 중복로그인제한 회피를 위해 Unique 한 ID 로 랜덤처리 필요.
@@ -60,7 +61,7 @@ exports.getEncodedParam = (req, res, next) => {
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
   param += '&NotifyInfo=' + NotifyInfo;
 
-  exec('./aquaplayer_modules/ENCAQALINK_V2_x64 -t ENC "' + param + '")', (err, stdout, stderr) => {
+  exec(path + '/service/aquaplayer_modules/ENCAQALINK_V2_x64 -t ENC "' + param + '")', (err, stdout, stderr) => {
     if (err) throw err;
     console.log(stdout);
 
