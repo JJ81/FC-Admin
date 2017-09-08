@@ -10,7 +10,7 @@ window.requirejs(
   function (Util) {
     var $ = $ || window.$;
     var player;
-    var fileURL = 'http://dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
+    var fileURL = 'http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
 
     $(function () {
       $(window).resize();
