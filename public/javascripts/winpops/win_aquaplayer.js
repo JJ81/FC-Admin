@@ -15,7 +15,7 @@ window.requirejs(
     $(function () {
       $(window).resize();
 
-      window.player = new window.NPlayer('video', {
+      player = new window.NPlayer('video', {
         controlBox: 'nplayer_control.html',
         visible: false,
         mode: 'html5'
@@ -27,8 +27,9 @@ window.requirejs(
       .then(function (response) {
         var encparam = response.data.encparam;
 
+        console.log('encparam =', encparam);
+
         player.bindEvent('Ready', function () {
-          console.log('player : ', 'ready');
           window.proxy_init(function () {
             // 1. video start set
             window.setPlayerStart(true);
