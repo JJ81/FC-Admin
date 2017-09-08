@@ -81,7 +81,11 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'handlebars/dist/handlebars.min.js',
     DIR.SRC + '/vendor/' + 'text/text.js',
     DIR.SRC + '/vendor/' + 'dom-checkbox.js',
-    DIR.SRC + '/vendor/' + 'plugins/tag-it/tag-it.min.js'
+    DIR.SRC + '/vendor/' + 'plugins/tag-it/tag-it.min.js',
+    DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer.js',
+    DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer_ui.js',
+    DIR.SRC + '/vendor/' + 'aquaplayer/js/cdnproxy.js',
+    DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer_conf.js'
     // DIR.SRC + '/vendor/' + 'plugins/smoothstate/jquery.smoothstate.min.js'
   ])
   .pipe(uglify())
@@ -131,7 +135,9 @@ gulp.task('copy-css', () => {
     DIR.SRC + '/vendor/' + 'plugins/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
     DIR.SRC + '/vendor/' + 'plugins/pace/pace.min.css',
     DIR.SRC + '/vendor/' + 'plugins/jQueryUI/jquery-ui.min.css',
-    DIR.SRC + '/vendor/' + 'plugins/tag-it/jquery.tagit.min.css'
+    DIR.SRC + '/vendor/' + 'plugins/tag-it/jquery.tagit.min.css',
+    DIR.SRC + '/vendor/' + 'plugins/aquaplayer/css/nplayer.css',
+    DIR.SRC + '/vendor/' + 'plugins/aquaplayer/css/nplayer_res.css'
   ])
   .pipe(cleanCSS({compatibility: 'ie8'}))
   .pipe(gulp.dest(DIR.DEST + '/stylesheets/'));

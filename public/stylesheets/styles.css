@@ -416,5 +416,9 @@ ul.session-content > li:hover {
     display: none !important;
 }
 
+maincontent {
+  width: 100%;
+}
+
 /*# sourceMappingURL=styles.css.map */
 

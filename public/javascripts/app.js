@@ -41,14 +41,26 @@ window.requirejs.config({
     'text': '/static/vendor/text',
     'dom-checkbox': '/static/vendor/dom-checkbox',
     'tag-it': '/static/vendor/tag-it.min',
-    'jquery-1.5.2': '/static/vendor/aquaplayer/js/jquery-1.5.2.min.js',
-    'nplayer_conf': '/static/vendor/aquaplayer/js/nplayer_conf.js?20170104131',
-    'nplayer': '/static/vendor/aquaplayer/js/nplayer.js?20170104131',
-    'nplayer_ui': '/static/vendor/aquaplayer/js/nplayer_ui.js?20170104131',
-    'cdnproxy': '/static/vendor/aquaplayer/js/cdnproxy.js?20170104131'
+    // 'jquery-1.5.2': '/static/vendor/aquaplayer/js/jquery-1.5.2.min.js',
+    'nplayer_conf': '/static/vendor/nplayer_conf.js?20170104131',
+    'nplayer': '/static/vendor/nplayer.js?20170104131',
+    'nplayer_ui': '/static/vendor/nplayer_ui.js?20170104131',
+    'cdnproxy': '/static/vendor/cdnproxy.js?20170104131'
     // 'smoothstate': '/static/vendor/jquery.smoothstate.min'
   },
   shim: {
+    'nplayer_conf': {
+      'deps': ['jquery']
+    },
+    'nplayer': {
+      'deps': ['jquery']
+    },
+    'nplayer_ui': {
+      'deps': ['jquery']
+    },
+    'cdnproxy': {
+      'deps': ['nplayer_conf']
+    },
     'quiz_component': {
       'deps': ['jquery']
     },

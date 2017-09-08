@@ -78,3 +78,11 @@ exports.getNotifyInfo = (req, res, next) => {
   console.log(req.body);
   res.sendStatus(200);
 };
+
+exports.show = (req, res, next) => {
+  res.render('winpops/win_aquaplayer', {
+    current_path: 'winpop',
+    module_type: 'aquaplayer',
+    title: '아쿠아플레이어 테스트'
+  });
+};
