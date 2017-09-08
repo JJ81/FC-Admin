@@ -416,7 +416,7 @@ ul.session-content > li:hover {
     display: none !important;
 }
 
-maincontent {
+#maincontent {
   width: 100%;
 }
 
