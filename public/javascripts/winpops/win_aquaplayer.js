@@ -28,6 +28,7 @@ window.requirejs(
         var encparam = response.data.encparam;
 
         player.bindEvent('Ready', function () {
+          console.log('player : ', 'ready');
           window.proxy_init(function () {
             // 1. video start set
             window.setPlayerStart(true);
