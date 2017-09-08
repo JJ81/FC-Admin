@@ -125,7 +125,7 @@ router.get('/test', (req, res) => {
   });
 });
 
-router.get('/player/encparam', util.isAuthenticated, AquaPlayerService.getEncodedParam);
+router.get('/player/encparam', AquaPlayerService.getEncodedParam);
 router.get('/aqua', AquaPlayerService.show);
 router.get('/demo/aquaplayer', util.isAuthenticated, util.getLogoInfo, AquaPlayerService.demo);
 
