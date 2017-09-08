@@ -39,12 +39,12 @@ const DEST = {
 
 gulp.task('js', () => {
   return gulp.src(SRC.JS, { base: './public/javascripts' })
-          .pipe(sourcemaps.init())
-          .pipe(babel())
-          .pipe(uglify())
-          .pipe(sourcemaps.write('../maps'))
-          .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
-          .pipe(gulp.dest(DEST.JS));
+      .pipe(sourcemaps.init())
+      .pipe(babel())
+      .pipe(uglify({ output: { max_line_len: 0 } }))
+      .pipe(sourcemaps.write('../maps'))
+      .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
+      .pipe(gulp.dest(DEST.JS));
 });
 
 // SRC.VENDOR, { base: './public/vendor' }

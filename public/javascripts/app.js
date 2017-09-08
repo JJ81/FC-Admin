@@ -49,9 +49,6 @@ window.requirejs.config({
     // 'smoothstate': '/static/vendor/jquery.smoothstate.min'
   },
   shim: {
-    'nplayer_conf': {
-      'deps': ['jquery']
-    },
     'nplayer': {
       'deps': ['jquery']
     },

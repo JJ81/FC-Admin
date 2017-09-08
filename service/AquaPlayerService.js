@@ -79,10 +79,17 @@ exports.getNotifyInfo = (req, res, next) => {
   res.sendStatus(200);
 };
 
+exports.demo = (req, res, next) => {
+  res.render('aquaplayer', {
+    current_path: 'AquaPlayer',
+    title: '아쿠아플레이어 데모'
+  });
+};
+
 exports.show = (req, res, next) => {
   res.render('winpops/win_aquaplayer', {
     current_path: 'winpop',
-    module_type: 'aquaplayer',
+    module_type: 'AquaPlayer',
     title: '아쿠아플레이어 테스트'
   });
 };

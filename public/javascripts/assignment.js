@@ -1,7 +1,5 @@
-/**
- * Created by yijaejun on 30/11/2016.
- */
 'use strict';
+
 window.requirejs([ 'common' ],
 function (Util) {
   var $ = $ || window.$;
