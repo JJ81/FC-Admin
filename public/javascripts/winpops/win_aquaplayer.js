@@ -27,7 +27,7 @@ window.requirejs(
       .then(function (response) {
         var encparam = response.data.encparam;
 
-        console.log('encparam =', encparam);
+        // console.log('encparam =', encparam);
 
         player.bindEvent('Ready', function () {
           window.proxy_init(function () {

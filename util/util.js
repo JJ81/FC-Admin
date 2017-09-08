@@ -138,7 +138,7 @@ exports.microtime = (getAsFloat) => {
 
   // Getting microtime as a float is easy
   if (getAsFloat) {
-    return now;
+    return Math.round(now);
   }
 
     // Dirty trick to only get the integer part

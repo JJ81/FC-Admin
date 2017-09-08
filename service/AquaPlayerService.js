@@ -22,7 +22,7 @@ exports.getEncodedParam = (req, res, next) => {
   const AquaAuth = '1';
 
   // 웹서버 시간정보
-  const WebserverTime = func.microtime(false);
+  const WebserverTime = func.microtime(true);
 
   // 중복로그인 차단 사용 여부
   // 0: 사용안함 (default)
@@ -43,7 +43,7 @@ exports.getEncodedParam = (req, res, next) => {
   const AUTH_DUP_CP_KEY = 'orangenamu';
 
   // 사용자 기기 정보 수집
-  const NotifyInfo = 'http://' + req.headers.host + '/player/notify';
+  // const NotifyInfo = 'http://' + req.headers.host + '/player/notify';
   // $NotifyInfo = "http://~webserver~/notifyinfo/getuserinfo.php?POST:BA:data=USERID,MAC,HDD,USERIP";
 
   // 암호화 되기 전 파라미터 선언
