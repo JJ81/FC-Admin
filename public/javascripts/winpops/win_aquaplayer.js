@@ -15,7 +15,7 @@ window.requirejs(
     $(function () {
       $(window).resize();
 
-      player = new window.NPlayer('video', {
+      window.player = new window.NPlayer('video', {
         controlBox: 'nplayer_control.html',
         visible: false,
         mode: 'html5'
