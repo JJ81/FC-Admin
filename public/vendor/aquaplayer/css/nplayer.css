@@ -3,7 +3,7 @@
 
 
 body{margin: 0;padding: 0;border: 0;height: 100%; max-height: 100%; }
-#framecontent{position: absolute;top: 0;bottom: 0; right: 0;width: 300px;height: 100%;overflow: hidden; background:background:url(../images/bg_common.png) 0 0 no-repeat #000; *background:url(../images/bg_common.png) 0 0 repeat-x; background: #000;}
+#framecontent{position: absolute;top: 0;bottom: 0; right: 0;width: 300px;height: 100%;overflow: hidden; background:url(../images/aquaplayer/bg_common.png) 0 0 no-repeat #000; *background:url(../images/aquaplayer/bg_common.png) 0 0 repeat-x; background: #000;}
 #maincontent{position: fixed;top: 0;left: 0;right: 300px;bottom: 0;overflow: auto; background: #000; overflow:hidden}
 
 .div_sc{
@@ -41,15 +41,15 @@ A:active, A:focus { outline:0; }
 A { -moz-outline-style:none; }
 
 .NPlyaer_skin01 { min-width:660px; cursor:default;}
-.NPlyaer_skin01 .area_seek { height:18px; background:url(../images/bg_common.png) 0 0 repeat-x; *background:url(../images/bg_common.gif) 0 0 repeat-x; padding:4px 10px 0 10px;}
-.NPlyaer_skin01 .area_seek .track_back { height:12px; background:url(../images/bg_common.png) 0 -96px repeat-x;  *background:url(../images/bg_common.gif) 0 -96px repeat-x; position:relative;}
-.NPlyaer_skin01 .area_seek .track_back .track_current { height:12px; overflow:hidden;background:url(../images/bg_common.png)  0  -146px  repeat-x;*background:url(../images/bg_common.gif)  0  -146px  repeat-x;}
-.NPlyaer_skin01 .area_seek .track_back .track_range { position:absolute; overflow:hidden;top:0;height:12px; background:url(../images/bg_common.png)  0  -156px  repeat-x; *background:url(../images/bg_common.gif)  0  -156px  repeat-x; z-index:10;}
-.NPlyaer_skin01 .area_seek .track_back .track_repeat { position:absolute; overflow:hidden;top:0;height:12px; background:url(../images/bg_common.png)  0  -156px  repeat-x; *background:url(../images/bg_common.gif)  0  -156px  repeat-x; z-index:10;}
+.NPlyaer_skin01 .area_seek { height:18px; background:url(../images/aquaplayer/bg_common.png) 0 0 repeat-x; *background:url(../images/aquaplayer/bg_common.gif) 0 0 repeat-x; padding:4px 10px 0 10px;}
+.NPlyaer_skin01 .area_seek .track_back { height:12px; background:url(../images/aquaplayer/bg_common.png) 0 -96px repeat-x;  *background:url(../images/aquaplayer/bg_common.gif) 0 -96px repeat-x; position:relative;}
+.NPlyaer_skin01 .area_seek .track_back .track_current { height:12px; overflow:hidden;background:url(../images/aquaplayer/bg_common.png)  0  -146px  repeat-x;*background:url(../images/aquaplayer/bg_common.gif)  0  -146px  repeat-x;}
+.NPlyaer_skin01 .area_seek .track_back .track_range { position:absolute; overflow:hidden;top:0;height:12px; background:url(../images/aquaplayer/bg_common.png)  0  -156px  repeat-x; *background:url(../images/aquaplayer/bg_common.gif)  0  -156px  repeat-x; z-index:10;}
+.NPlyaer_skin01 .area_seek .track_back .track_repeat { position:absolute; overflow:hidden;top:0;height:12px; background:url(../images/aquaplayer/bg_common.png)  0  -156px  repeat-x; *background:url(../images/aquaplayer/bg_common.gif)  0  -156px  repeat-x; z-index:10;}
 .NPlyaer_skin01 .area_seek .track_back .track_seekBtn { position:absolute; top:-1px; margin-left:-9px; z-index:999;}
 .NPlyaer_skin01 .area_seek .track_back .track_repeatBtnA { position:absolute; top:0; height:9px;margin-left:0;  top:-5px; margin-left:-6px; z-index:200;}
 .NPlyaer_skin01 .area_seek .track_back .track_repeatBtnB { position:absolute; top:0; height:9px;margin-left:0;  top:-5px; margin-left:-6px; z-index:200;}
-.NPlyaer_skin01 .area_control { height:40px; background:url(../images/bg_common.png)  0 -50px repeat-x; padding:0 10px; }
+.NPlyaer_skin01 .area_control { height:40px; background:url(../images/aquaplayer/bg_common.png)  0 -50px repeat-x; padding:0 10px; }
 .NPlyaer_skin01 .area_control .contro_l{ height:40px; float:left;}
 .NPlyaer_skin01 .area_control .contro_l .control_play{ float:left; padding:10px 0 0 0;}
 .NPlyaer_skin01 .area_control .contro_l .control_text_status{  float:left;width:52px;height:40px; font-family:tahoma; font-size:9px; color:#49e304; text-align:center; font-weight:bold;line-height:40px;}
@@ -58,8 +58,8 @@ A { -moz-outline-style:none; }
 .NPlyaer_skin01 .area_control .contro_r{ height:40px; float:right;}
 .NPlyaer_skin01 .area_control .contro_r .control_volume{ float:right;padding:14px 0 0 15px; width:64px; cursor:pointer}
 .NPlyaer_skin01 .area_control .contro_r .control_volume .sound_btn{ float:left;}
-.NPlyaer_skin01 .area_control .contro_r .control_volume .sound_track_back{float:left;width:50px;height:6px; margin:3px 0 0 2px; overflow:hidden;background:url(../images/bg_common.png) -40px -360px repeat-x;*background:url(../images/bg_common.gif) -40px -360px repeat-x;}
-.NPlyaer_skin01 .area_control .contro_r .control_volume .sound_track_back .sound_track_cur{height:6px; background:url(../images/bg_common.png)  -100px  -360px  repeat-x; *background:url(../images/bg_common.gif)  -100px  -360px  repeat-x;}
+.NPlyaer_skin01 .area_control .contro_r .control_volume .sound_track_back{float:left;width:50px;height:6px; margin:3px 0 0 2px; overflow:hidden;background:url(../images/aquaplayer/bg_common.png) -40px -360px repeat-x;*background:url(../images/aquaplayer/bg_common.gif) -40px -360px repeat-x;}
+.NPlyaer_skin01 .area_control .contro_r .control_volume .sound_track_back .sound_track_cur{height:6px; background:url(../images/aquaplayer/bg_common.png)  -100px  -360px  repeat-x; *background:url(../images/aquaplayer/bg_common.gif)  -100px  -360px  repeat-x;}
 .NPlyaer_skin01 .area_control .contro_r .control_fullScr{ float:right;padding:13px 0 0 10px;}
 .NPlyaer_skin01 .area_control .contro_r .control_repeat{ float:right;padding:13px 0 0 10px;}
 .NPlyaer_skin01 .area_control .contro_r .control_speed{ float:right;padding:9px 0 0 0;}
@@ -70,9 +70,9 @@ A { -moz-outline-style:none; }
 .NPlyaer_skin01 .area_control .contro_r .control_seek ul li{ float:left;padding:16px 0 0 0; }
 .NPlyaer_skin01 .area_control .contro_r .control_seek ul li.inputArea{ float:left;padding:11px 0 0 0; line-height:14px;}
 .NPlyaer_skin01 .area_control .contro_r .control_seek ul li .input_setSeekTime{ width:30px; height:16px; line-height:16px; border:0; background:transparent; margin:0; font-family:tahoma; font-size:10px; color:#d9d9d9; text-align:center}
-.NPlyaer_skin01 .area_control .contro_r .control_bar{ float:right; width:2px; height:40px; background:url(../images/bg_common.png) 0 -600px no-repeat; *background:url(../images/bg_common.gif) 0 -600px no-repeat; margin:0 10px;}
+.NPlyaer_skin01 .area_control .contro_r .control_bar{ float:right; width:2px; height:40px; background:url(../images/aquaplayer/bg_common.png) 0 -600px no-repeat; *background:url(../images/aquaplayer/bg_common.gif) 0 -600px no-repeat; margin:0 10px;}
 
-.btn_common {display:block;background:url(../images/bg_common.png) no-repeat;*background:url(../images/bg_common.gif) no-repeat;cursor:pointer;}
+.btn_common {display:block;background:url(../images/aquaplayer/bg_common.png) no-repeat;*background:url(../images/aquaplayer/bg_common.gif) no-repeat;cursor:pointer;}
 a.btn_seek{ width:18px; height:18px;background-position:0 -240px;}
 a:hover.btn_seek{ background-position:-20px -240px;}
 a.btn_play{ width:17px; height:20px;background-position:0 -200px}
@@ -170,13 +170,13 @@ a:hover.btn_seekNext{ background-position:-20px -440px;}
 
 ul.playList { list-style:none; margin:0; padding:0;}
 ul.playList li { float:none; clear:both;white-space:nowrap;}
-ul.playList li.playListHeader { float:none; clear:both; background:url(../images/bg_common.png) no-repeat;*background:url(../images/bg_common.gif);background-position:0 -670px; height:61px;}
-ul.playList li a{ width:283px; overflow:hidden; display:block; background:url(../images/bg_common.png) no-repeat;*background:url(../images/bg_common.gif);background-position:0 -750px; height:48px; font:11px tahoma;  color:#cfcfcf; text-decoration:none; line-height:48px;white-space:nowrap;}
-ul.playList li a:hover{ background:url(../images/bg_common.png) no-repeat;*background:url(../images/bg_common.gif);background-position:0 -798px; height:48px; font:11px tahoma;  color:#fff; text-decoration:none;line-height:48px; }
-ul.playList li a:active, ul.playList li a.pl_current{ background:url(../images/bg_common.png) no-repeat;*background:url(../images/bg_common.gif);background-position:0 -845px; height:48px; font:11px tahoma;  color:#fff; text-decoration:none; line-height:48px;}
+ul.playList li.playListHeader { float:none; clear:both; background:url(../images/aquaplayer/bg_common.png) no-repeat;*background:url(../images/aquaplayer/bg_common.gif);background-position:0 -670px; height:61px;}
+ul.playList li a{ width:283px; overflow:hidden; display:block; background:url(../images/aquaplayer/bg_common.png) no-repeat;*background:url(../images/aquaplayer/bg_common.gif);background-position:0 -750px; height:48px; font:11px tahoma;  color:#cfcfcf; text-decoration:none; line-height:48px;white-space:nowrap;}
+ul.playList li a:hover{ background:url(../images/aquaplayer/bg_common.png) no-repeat;*background:url(../images/aquaplayer/bg_common.gif);background-position:0 -798px; height:48px; font:11px tahoma;  color:#fff; text-decoration:none;line-height:48px; }
+ul.playList li a:active, ul.playList li a.pl_current{ background:url(../images/aquaplayer/bg_common.png) no-repeat;*background:url(../images/aquaplayer/bg_common.gif);background-position:0 -845px; height:48px; font:11px tahoma;  color:#fff; text-decoration:none; line-height:48px;}
 
 
-.txtFileExten {float:left;  background:url(../images/bg_common.png) no-repeat;*background:url(../images/bg_common.gif)  no-repeat; background-position:0 -900px;  width:23px; height:16px; display:inline-block; font:10px Tahoma;color:#fff;  line-height:16px; text-align:center; margin:14px 10px 0 40px; }
+.txtFileExten {float:left;  background:url(../images/aquaplayer/bg_common.png) no-repeat;*background:url(../images/aquaplayer/bg_common.gif)  no-repeat; background-position:0 -900px;  width:23px; height:16px; display:inline-block; font:10px Tahoma;color:#fff;  line-height:16px; text-align:center; margin:14px 10px 0 40px; }
 
 .np-popup {
     position: absolute;

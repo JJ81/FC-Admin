@@ -1,15 +1,15 @@
 @charset "utf-8";
 
 #nplayer-download-image {
-	background:url(../images/download.png) no-repeat;
-	*background:url(../images/download.gif);
+	background:url(../images/aquaplayer/download.png) no-repeat;
+	*background:url(../images/aquaplayer/download.gif);
 	width:256px;
 	height:256px;
 }
 
 #nplayer-error-image {
-	background:url(../images/error.png) no-repeat;
-	*background:url(../images/error.gif) no-repeat;
+	background:url(../images/aquaplayer/error.png) no-repeat;
+	*background:url(../images/aquaplayer/error.gif) no-repeat;
 	display:inline-block;
 	vertical-align:middle;
 	width:32px;
@@ -17,8 +17,8 @@
 }
 
 #nplayer-logo-image {
-	background:url(../images/logo_nplayer.png) no-repeat;
-	*background:url(../images/logo_nplayer.gif);
+	background:url(../images/aquaplayer/logo_nplayer.png) no-repeat;
+	*background:url(../images/aquaplayer/logo_nplayer.gif);
 	width:119px;
 	height:89px;
 }

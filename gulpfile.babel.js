@@ -136,8 +136,8 @@ gulp.task('copy-css', () => {
     DIR.SRC + '/vendor/' + 'plugins/pace/pace.min.css',
     DIR.SRC + '/vendor/' + 'plugins/jQueryUI/jquery-ui.min.css',
     DIR.SRC + '/vendor/' + 'plugins/tag-it/jquery.tagit.min.css',
-    DIR.SRC + '/vendor/' + 'plugins/aquaplayer/css/nplayer.css',
-    DIR.SRC + '/vendor/' + 'plugins/aquaplayer/css/nplayer_res.css'
+    DIR.SRC + '/vendor/' + 'aquaplayer/css/nplayer.css',
+    DIR.SRC + '/vendor/' + 'aquaplayer/css/nplayer_res.css'
   ])
   .pipe(cleanCSS({compatibility: 'ie8'}))
   .pipe(gulp.dest(DIR.DEST + '/stylesheets/'));
