@@ -15,19 +15,21 @@ window.requirejs(
     $(function () {
       $(window).resize();
 
-      player = new window.NPlayer('video', {
-        controlBox: 'nplayer_control.html',
-        visible: false,
-        mode: 'html5'
-      });
-
-      window.initNPlayerUI(player);
-
       window.axios.get('/api/v1/player/encparam')
       .then(function (response) {
         var encparam = response.data.encparam;
 
         // console.log('encparam =', encparam);
+
+        player = new window.NPlayer('video', {
+          controlBox: 'nplayer_control.html',
+          visible: false,
+          mode: 'html5'
+        });
+
+        console.log(player);
+
+        window.initNPlayerUI(player);
 
         player.bindEvent('Ready', function () {
           window.proxy_init(function () {
