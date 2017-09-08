@@ -13,7 +13,7 @@ exports.getEncodedParam = (req, res, next) => {
 
   // 사용자 및 웹서버 IP 정보
   const UserIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  const ServerIP = req.connection.localAddress;
+  const ServerIP = '127.0.0.1:3001'; // req.connection.localAddress;
   const TimeOut = '300';
 
   // AquaAuth 사용 여부
@@ -22,7 +22,7 @@ exports.getEncodedParam = (req, res, next) => {
   const AquaAuth = '1';
 
   // 웹서버 시간정보
-  const WebserverTime = func.microtime(true);
+  const WebserverTime = func.microtime(false);
 
   // 중복로그인 차단 사용 여부
   // 0: 사용안함 (default)
@@ -59,10 +59,10 @@ exports.getEncodedParam = (req, res, next) => {
   param += '&dup_scope=' + AUTH_DUP_SCOPE;
   param += '&dup_cycle=' + AUTH_DUP_CYCLE;
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
-  param += '&NotifyInfo=' + NotifyInfo;
+  // param += '&NotifyInfo=' + NotifyInfo;
 
   execFile(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64'),
-    [ '-t', 'ENC', '"' + param + '"' ],
+    [ '-t', 'ENC', param ],
     (err, stdout, stderr) => {
       if (err) throw err;
       console.log(stdout);
