@@ -115,13 +115,13 @@ function starthtml5State () {
   switch (state) {
   case NPlayer.OpenState.Opened:
     {
-        statehttp = createXMLHttpRequest();
-        var url = proxy_state_host + '/mediastate?mediaKey=' + media_auth + '&current=' + getNewinCurrentPosition();
-        url += '&playbackrate=' + getNewinPlaybackRate() + '&duration=' + getNewinPlayerDuration() + '&playstate=' + newinPlayer.getPlayState() + '&openstate=' + newinPlayer.getOpenState();
-        statehttp.onreadystatechange = html5statecallback;
-        statehttp.open('GET', url, true);
-        statehttp.send(null);
-      }
+      statehttp = createXMLHttpRequest();
+      var url = proxy_state_host + '/mediastate?mediaKey=' + media_auth + '&current=' + getNewinCurrentPosition();
+      url += '&playbackrate=' + getNewinPlaybackRate() + '&duration=' + getNewinPlayerDuration() + '&playstate=' + newinPlayer.getPlayState() + '&openstate=' + newinPlayer.getOpenState();
+      statehttp.onreadystatechange = html5statecallback;
+      statehttp.open('GET', url, true);
+      statehttp.send(null);
+    }
     break;
   }
 }
@@ -677,7 +677,7 @@ function indicateRunFail () {
 function show_loading (state) {
   if (state == true) {
     var html = '<div id=\'video-loading\' style=\'display:table; width:100%;height:100%;\'><p id=\'video-loading-p\' style=\'display:table-cell; color:#7d7d7d;text-align:center;vertical-align:middle\'>';
-    html = html + '<img src=\'images/video-loading.gif\' />';
+    html = html + '<img src=\'/images/aquaplayer/video-loading.gif\' />';
     html = html + '</p></div>';
     $('#video').prepend(html);
 
