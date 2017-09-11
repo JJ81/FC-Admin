@@ -43,11 +43,13 @@ window.define([
       // window.$('#video').height(window.$(window).height() - window.$('.wrapper_foot').height());
     },
     initPlayer: function () {
-      window.player = new window.NPlayer('video', {
+      player = new window.NPlayer('video', {
         controlBox: 'nplayer_control.html',
         visible: false,
         mode: 'html5'
       });
+
+      window.player = player;
 
       window.initNPlayerUI(player);
 
