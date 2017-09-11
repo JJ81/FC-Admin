@@ -1,13 +1,22 @@
 window.requirejs([
   'common',
-  'nplayer_conf'
+  // 'nplayer_conf',
+  'aquaPlayerService'
 ],
-function (Util) {
+function (Util, AquaPlayerService) {
   var $ = $ || window.$;
   var isAccessible = null;
 
   $(function () {
+    var options = {
+      fileUrl: '',
+      userId: 'test',
+      callback: function () {
+        console.log('aqua service intialized');
+      }
+    };
 
+    AquaPlayerService = new AquaPlayerService(options);
   });
 
   $('#launch').on('click', function () {

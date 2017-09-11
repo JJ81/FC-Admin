@@ -32,6 +32,7 @@ window.requirejs(
         window.initNPlayerUI(player);
 
         player.bindEvent('Ready', function () {
+          console.log('Ready');
           window.proxy_init(function () {
             // 1. video start set
             window.setPlayerStart(true);
@@ -50,6 +51,7 @@ window.requirejs(
         });
 
         player.bindEvent('OpenStateChanged', function (state) {
+          console.log('OpenStateChanged');
           switch (state) {
           case window.NPlayer.OpenState.Opened:
             player.setVisible(true);
@@ -62,6 +64,7 @@ window.requirejs(
         });
 
         player.bindEvent('PlayStateChanged', function (state) {
+          console.log('PlayStateChanged');
           switch (state) {
           case window.NPlayer.PlayState.Playing:
             player.setVisible(true);
@@ -78,6 +81,7 @@ window.requirejs(
         });
 
         player.bindEvent('GuardCallback', function (name, desc) {
+          console.log('GuardCallback');
           console.log(name + ' : ' + desc);
         });
       })
