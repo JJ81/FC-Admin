@@ -19,7 +19,7 @@ window.define([], function () {
           var L = document.getElementById('AquaAxPlugin');
 
           console.log('L', L.object);
-          console.log('timerid', _this.timerid);
+          // console.log('timerid', _this.timerid);
           console.log('version', L.checkAquaAxVersion(window.AX_VERSION) === true);
 
           if (L.object) {
@@ -28,7 +28,7 @@ window.define([], function () {
               window.location.reload();
             }
           }
-        }, 3000);
+        }, 30000);
       }
     },
 
