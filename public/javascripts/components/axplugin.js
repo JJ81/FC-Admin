@@ -1,8 +1,8 @@
 
 'use strict';
 window.define([], function () {
-  var timerid = 0;
-  var isDup = false;
+  // var timerid = 0;
+  // var isDup = false;
 
   function getE (L) {
     return document.getElementById(L);
@@ -16,7 +16,7 @@ window.define([], function () {
 
       console.log('AquaAxPlugin', L.object);
       console.log(L.checkAquaAxVersion(window.AX_VERSION), window.AX_VERSION);
-      console.log('cleared interval : ' + timerid);
+      console.log('cleared interval : ' + this.timerid);
 
       if (L.object) {
         if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
@@ -33,9 +33,21 @@ window.define([], function () {
         console.log('plugin loaded');
         return true;
       } else {
-        this.timerid = setInterval(
-          this.chkObj.bind(this),
-        1000);
+        var _this = this;
+        _this.timerid = setInterval(function () {
+          var L = _this.getE('AquaAxPlugin');
+
+          console.log('AquaAxPlugin', L.object);
+          console.log(L.checkAquaAxVersion(window.AX_VERSION), window.AX_VERSION);
+          console.log('cleared interval : ' + this.timerid);
+
+          if (L.object) {
+            if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
+              clearInterval(_this.timerid);
+              window.location.reload();
+            }
+          }
+        }, 1000);
         console.log('plugin checking..', this.timerid);
       }
     },
