@@ -37,10 +37,6 @@ window.define([], function () {
         _this.timerid = setInterval(function () {
           var L = _this.getE('AquaAxPlugin');
 
-          console.log('AquaAxPlugin', L.object);
-          console.log(L.checkAquaAxVersion(window.AX_VERSION), window.AX_VERSION);
-          console.log('cleared interval : ' + this.timerid);
-
           if (L.object) {
             if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
               clearInterval(_this.timerid);
@@ -48,7 +44,6 @@ window.define([], function () {
             }
           }
         }, 1000);
-        console.log('plugin checking..', this.timerid);
       }
     },
 
