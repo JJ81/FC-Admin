@@ -42,6 +42,7 @@ window.define([
       // self.options.container.html(NplayerWrapperTemplate);
       // window.$('#video').height(window.$(window).height() - window.$('.wrapper_foot').height());
     },
+    // Player 초기화
     initPlayer: function () {
       player = new window.NPlayer('video', {
         controlBox: 'nplayer_control.html',
@@ -49,7 +50,7 @@ window.define([
         mode: 'html5'
       });
 
-      player.setWatermarkText('watermark');
+      // player.setWatermarkText('watermark');
 
       window.player = player;
 

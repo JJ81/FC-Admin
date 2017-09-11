@@ -10,7 +10,7 @@ function (Util, AquaPlayerService) {
   });
 
   $('#launch').on('click', function () {
-    launch('http://cdntech.cdnetworks.co.kr/public/promotion/player.asp', {left: 0, top: 0, width: 900, height: 600, title: 'AquaNPlayer', noresize: 0});
+    launch('/api/v1/aqua', {left: 0, top: 0, width: 900, height: 600, title: 'AquaNPlayer', noresize: 0});
   });
 
   $('#launch_html5').on('click', function () {
