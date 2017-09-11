@@ -1,23 +1,12 @@
 window.requirejs([
-  'common',
-  // 'nplayer_conf',
-  'aquaPlayerService'
+  'common'
 ],
 function (Util, AquaPlayerService) {
   var $ = $ || window.$;
   var isAccessible = null;
 
   $(function () {
-    var options = {
-      fileUrl: 'http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4',
-      userId: 'test',
-      container: $('.aquaplayer'),
-      callback: function () {
-        console.log('aqua service intialized');
-      }
-    };
 
-    AquaPlayerService = new AquaPlayerService(options);
   });
 
   $('#launch').on('click', function () {
