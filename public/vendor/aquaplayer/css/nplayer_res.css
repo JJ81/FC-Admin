@@ -53,7 +53,7 @@ div.nplayer-big-play-button span {
 }
 
 .wrapper_foot {
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	bottom: 0;
 }
