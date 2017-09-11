@@ -14,7 +14,8 @@ window.define([], function () {
         return true;
       } else {
         var _this = this;
-        _this.timerid = setInterval(function () {
+        // _this.timerid =
+        setTimeout(function () {
           var L = document.getElementById('AquaAxPlugin');
 
           console.log('L', L.object);
@@ -23,11 +24,11 @@ window.define([], function () {
 
           if (L.object) {
             if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
-              clearInterval(_this.timerid);
+              // clearInterval(_this.timerid);
               window.location.reload();
             }
           }
-        }, 1000);
+        }, 3000);
       }
     },
 
