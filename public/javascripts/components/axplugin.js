@@ -3,6 +3,7 @@
 window.define([], function () {
   var timerid = 0;
   var isDup = false;
+  var hello = 'hello';
 
   function getE (L) {
     return document.getElementById(L);
@@ -25,6 +26,8 @@ window.define([], function () {
   return {
 
     loadAquaAxPlugin: function () {
+      console.log(this.hello);
+
       window.$('html').append('<OBJECT CLASSID="clsid:81C08477-A103-4FDC-B7A6-953940EAD67F"  codebase="' + window.NPLAYER_SETUP_URL + '#version=' + window.AX_VERSION + '" width="0" height="0" ID="AquaAxPlugin" ></OBJECT>');
 
       if (typeof window.AquaAxPlugin.InitAuth !== 'undefined') {
