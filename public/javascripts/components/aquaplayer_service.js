@@ -10,6 +10,7 @@ window.define([
   var self = null;
   var encodedParam;
   var player;
+  var $ = $ || window.$;
 
   function AquaPlayerService (options) {
     self = this;
@@ -37,7 +38,9 @@ window.define([
     // 컴포넌트 초기화
     init: function () {
       self.getEncodedParam();
-      self.options.container.html(NplayerWrapperTemplate);
+      self.resize();
+      // self.options.container.html(NplayerWrapperTemplate);
+      // window.$('#video').height(window.$(window).height() - window.$('.wrapper_foot').height());
     },
     initPlayer: function () {
       player = new window.NPlayer('video', {
@@ -126,6 +129,15 @@ window.define([
     },
     reportError: function (err) {
       console.log('aquaservice : ' + err);
+    },
+    resize: function () {
+      $(window).resize(function () {
+        if (player && !!player.getFullscreen()) {
+          $('#video').height($(window).height());
+        } else {
+          $('#video').height($(window).height() - $('.wrapper_foot').height());
+        }
+      });
     }
   };
 
