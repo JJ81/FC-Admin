@@ -1,5 +1,5 @@
 ﻿var NPLAYER_VERSION = '2,0,329,4576';
-var NPLAYER_SETUP_URL = 'http://dist.cdnetworks.co.kr/cdndist/aquanplayer/AquaNPlayer_2.0.270.3650_1016.exe';
+var NPLAYER_SETUP_URL = 'http://dist.cdnetworks.co.kr/cdndist/aquanplayer/AquaNPlayer_2.0.329.4576_1027_proxy_1.0.0.27.exe';
 // var NPLAYER_SETUP_URL = 'http://dist2.dwa.cdnetworks.com/cdndist/aquanplayer/AquaNPlayer_2.0.329.4576_1027_proxy_1.0.0.27.exe';
 var NPLAYER_OSX_SETUP_URL = 'http://dist2.dwa.cdnetworks.com/cdndist/aquanplayer/AquaNAgent_1.0.0.36.dmg';
 var AQUAWEBAGENT_SETUP_URL = 'http://cdntech.cdnetworks.co.kr/public/bhoh/html5/setup/AquaNWebAgent_1.0.0.1.exe';
