@@ -18,8 +18,7 @@ window.define([], function () {
 
     if (L.object) {
       if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
-        console.log('cleared interval : ' + timerid);
-        clearInterval(timerid);
+        // clearInterval(timerid);
         window.location.reload();
       }
     }
@@ -35,8 +34,9 @@ window.define([], function () {
         console.log('plugin loaded');
         return true;
       } else {
-        timerid = setInterval(chkObj, 3000);
-        console.log('plugin checking..', timerid);
+        chkObj();
+        // timerid = setInterval(chkObj, 3000);
+        // console.log('plugin checking..', timerid);
       }
     },
 
