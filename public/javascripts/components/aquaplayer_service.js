@@ -5,8 +5,9 @@ window.define([
   'nplayer',
   'nplayer_ui',
   'cdnproxy',
-  'nplayer_conf'
-], function (Util, NplayerWrapperTemplate) {
+  'nplayer_conf',
+  'axplugin'
+], function (Util, NplayerWrapperTemplate, ax) {
   var self = null;
   var encodedParam;
   var player;
@@ -129,6 +130,7 @@ window.define([
         visible: false,
         mode: 'html5'
       });
+      var setAxPlugin = false;
 
       player.setWatermarkText('watermark');
 
@@ -139,7 +141,7 @@ window.define([
       player.bindEvent('Ready', function () {
         self.reportMessage('Ready');
 
-        if (window.loadAquaAxPlugin()) {
+        if (ax.loadAquaAxPlugin()) {
           player.setCDNAuthParam(encodedParam);
           player.addContextMenu('SystemInfo', 'sysinfo');
 
@@ -149,7 +151,7 @@ window.define([
               'URL': encodeURI('')
             }]
           });
-          window.setAxPlugin = window.setAquaAxPlugin(self.options.fileURL, encodedParam);
+          setAxPlugin = ax.setAquaAxPlugin(self.options.fileURL, encodedParam);
         }
       });
 
@@ -172,13 +174,13 @@ window.define([
         case window.NPlayer.PlayState.Playing:
           player.setVisible(true);
 
-          if (window.isDup === true) {
+          if (ax.isDup === true) {
             player.stop();
             window.alert(window.NPLAYER_DUP_MSG);
             break;
           }
 
-          if (window.setAxPlugin === true) {
+          if (setAxPlugin === true) {
             window.AquaAxPlugin.PlayState = window.NPlayer.PlayState.Playing;
             window.AquaAxPlugin.OpenStateChange();
           }
@@ -191,7 +193,7 @@ window.define([
         case window.NPlayer.PlayState.Paused:
           player.setVisible(true);
 
-          if (window.setAxPlugin === true) {
+          if (setAxPlugin === true) {
             window.AquaAxPlugin.PlayState = window.NPlayer.PlayState.Paused;
             window.AquaAxPlugin.OpenStateChange();
           }
@@ -200,7 +202,7 @@ window.define([
       });
 
       player.bindEvent('GuardCallback', function (name, desc) {
-        if (window.setAxPlugin === true) window.AquaAxPlugin.SendPVLog(name, desc);
+        if (setAxPlugin === true) window.AquaAxPlugin.SendPVLog(name, desc);
       });
 
       player.bindEvent('Error', function (ec) {
@@ -209,7 +211,7 @@ window.define([
 
       player.bindEvent('ContextMenu', function (val) {
         if (val === 'sysinfo') {
-          if (window.setAxPlugin === true) {
+          if (setAxPlugin === true) {
             window.AquaAxPlugin.LoadSystemInfomation();
             window.alert(
               'CPU 정보 : ' + window.AquaAxPlugin.DeviceCPU + '\n' +
@@ -226,7 +228,7 @@ window.define([
       });
 
       window.onunload = function () {
-        if (window.setAxPlugin === true) window.AquaAxPlugin.FinalizeAuth();
+        if (setAxPlugin === true) window.AquaAxPlugin.FinalizeAuth();
       };
     },
     // encparam 을 서버에서 생성하여 전달받는다.
