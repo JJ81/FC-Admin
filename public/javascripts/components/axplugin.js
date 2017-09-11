@@ -17,6 +17,7 @@ window.define([], function () {
 
     if (L.object) {
       if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
+        console.log('cleared interval : ' + timerid);
         clearInterval(timerid);
         window.location.reload();
       }
