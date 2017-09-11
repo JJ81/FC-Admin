@@ -10,6 +10,7 @@ window.define([], function () {
   }
 
   function chkObj () {
+    console.log('timerid', timerid);
     var L = getE('AquaAxPlugin');
 
     console.log('AquaAxPlugin', L.object);
@@ -18,7 +19,7 @@ window.define([], function () {
 
     if (L.object) {
       if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
-        // clearInterval(timerid);
+        clearInterval(timerid);
         window.location.reload();
       }
     }
@@ -34,9 +35,8 @@ window.define([], function () {
         console.log('plugin loaded');
         return true;
       } else {
-        chkObj();
-        // timerid = setInterval(chkObj, 3000);
-        // console.log('plugin checking..', timerid);
+        timerid = setInterval(chkObj, 3000);
+        console.log('plugin checking..', timerid);
       }
     },
 
