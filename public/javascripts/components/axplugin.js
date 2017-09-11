@@ -14,6 +14,7 @@ window.define([], function () {
 
     console.log('AquaAxPlugin', L.object);
     console.log(L.checkAquaAxVersion(window.AX_VERSION), window.AX_VERSION);
+    console.log('cleared interval : ' + timerid);
 
     if (L.object) {
       if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
@@ -34,7 +35,7 @@ window.define([], function () {
         console.log('plugin loaded');
         return true;
       } else {
-        timerid = setInterval(chkObj, 1000);
+        timerid = setInterval(chkObj, 3000);
         console.log('plugin checking..', timerid);
       }
     },
