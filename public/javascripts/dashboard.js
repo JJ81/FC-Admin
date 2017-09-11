@@ -9,6 +9,8 @@ requirejs(
 function (Util) {
   var $ = $ || window.$;
   $(function () {
+    Util.test();
+
     // datatable 설정
     Util.initDataTable($('#table-point-by-edu'), {
       'columns': [

@@ -168,6 +168,16 @@ window.define(
     // });
 
     return {
+      testSetInterval: function () {
+        console.log(this.timerid);
+        clearInterval(this.timerid);
+      },
+      test: function () {
+        this.timerid = 0;
+        this.timerid = setInterval(
+          this.testSetInterval.bind(this)
+        , 1000);
+      },
 
       cutBytes: function (str, limit) {
         var len = str.length;

@@ -8,23 +8,23 @@ window.define([], function () {
     return document.getElementById(L);
   }
 
-  function chkObj () {
-    // console.log('timerid', timerid);
-    var L = getE('AquaAxPlugin');
-
-    console.log('AquaAxPlugin', L.object);
-    console.log(L.checkAquaAxVersion(window.AX_VERSION), window.AX_VERSION);
-    console.log('cleared interval : ' + timerid);
-
-    if (L.object) {
-      if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
-        // clearInterval(timerid);
-        window.location.reload();
-      }
-    }
-  }
-
   return {
+
+    chkObj: function () {
+      console.log('timerid', this.timerid);
+      var L = getE('AquaAxPlugin');
+
+      console.log('AquaAxPlugin', L.object);
+      console.log(L.checkAquaAxVersion(window.AX_VERSION), window.AX_VERSION);
+      console.log('cleared interval : ' + timerid);
+
+      if (L.object) {
+        if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
+          clearInterval(this.timerid);
+          window.location.reload();
+        }
+      }
+    },
 
     loadAquaAxPlugin: function () {
       window.$('html').append('<OBJECT CLASSID="clsid:81C08477-A103-4FDC-B7A6-953940EAD67F"  codebase="' + window.NPLAYER_SETUP_URL + '#version=' + window.AX_VERSION + '" width="0" height="0" ID="AquaAxPlugin" ></OBJECT>');
@@ -33,9 +33,10 @@ window.define([], function () {
         console.log('plugin loaded');
         return true;
       } else {
-        chkObj();
-        // timerid = setInterval(chkObj, 3000);
-        // console.log('plugin checking..', timerid);
+        this.timerid = setInterval(
+          this.chkObj.bind(this),
+        1000);
+        console.log('plugin checking..', this.timerid);
       }
     },
 
