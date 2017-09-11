@@ -10,7 +10,7 @@ window.define([], function () {
   }
 
   function chkObj () {
-    var L = this.getE('AquaAxPlugin');
+    var L = getE('AquaAxPlugin');
 
     console.log('AquaAxPlugin', L.object);
     console.log(L.checkAquaAxVersion(window.AX_VERSION));
