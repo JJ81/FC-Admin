@@ -15,7 +15,7 @@ window.define([], function () {
       if (typeof window.AquaAxPlugin.InitAuth !== 'undefined') {
         return true;
       } else {
-        timerid = setInterval(this.chkObj(), 1000);
+        this.timerid = setInterval(this.chkObj(), 1000);
       }
     },
 
@@ -54,7 +54,7 @@ window.define([], function () {
       setTimeout(function () {
         window.alert(msg);
       }, 200);
-      isDup = true;
+      this.isDup = true;
     },
 
     getPlayerDuration: function () {
