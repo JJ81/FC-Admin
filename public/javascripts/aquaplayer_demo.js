@@ -48,10 +48,12 @@ function (Util, AquaPlayerService) {
     var href = 'nplayer://launch?' + params + 'url=' + encodeURIComponent(url);
 
     if ('ActiveXObject' in window) {
+      console.log('is ActiveX');
       // old active-x player
       var mf = window.open(url, 'AquaNPlayer', 'left=0, top=0, width=900, height=600, menubar=no, directories=no, resizable=yes, status=no, scrollbars=no');
       mf.focus();
     } else {
+      console.log('is not ActiveX');
       Util.launchUri(href, function () {}, function () {
         indicateDownload();
       }, function () {
