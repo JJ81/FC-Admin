@@ -78,7 +78,7 @@ window.requirejs(
         });
 
         player.bindEvent('GuardCallback', function (name, desc) {
-          window.alert(name + ' : ' + desc);
+          console.log(name + ' : ' + desc);
         });
       })
       .catch(function (error) {
