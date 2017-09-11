@@ -2,11 +2,11 @@
 window.define([
   'common',
   'text!../../../nplayer_wrapper.html',
+  'axplugin',
   'nplayer',
   'nplayer_ui',
   'cdnproxy',
-  'nplayer_conf',
-  'axplugin'
+  'nplayer_conf'
 ], function (Util, NplayerWrapperTemplate, ax) {
   var self = null;
   var encodedParam;
@@ -40,8 +40,6 @@ window.define([
     init: function () {
       self.getEncodedParam();
       self.resize();
-      // self.options.container.html(NplayerWrapperTemplate);
-      // window.$('#video').height(window.$(window).height() - window.$('.wrapper_foot').height());
     },
     initPlayer: function () {
       if ('ActiveXObject' in window) {
