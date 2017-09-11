@@ -4,27 +4,7 @@ window.define([], function () {
   // var timerid = 0;
   // var isDup = false;
 
-  function getE (L) {
-    return document.getElementById(L);
-  }
-
   return {
-
-    chkObj: function () {
-      console.log('timerid', this.timerid);
-      var L = getE('AquaAxPlugin');
-
-      console.log('AquaAxPlugin', L.object);
-      console.log(L.checkAquaAxVersion(window.AX_VERSION), window.AX_VERSION);
-      console.log('cleared interval : ' + this.timerid);
-
-      if (L.object) {
-        if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
-          clearInterval(this.timerid);
-          window.location.reload();
-        }
-      }
-    },
 
     loadAquaAxPlugin: function () {
       window.$('html').append('<OBJECT CLASSID="clsid:81C08477-A103-4FDC-B7A6-953940EAD67F"  codebase="' + window.NPLAYER_SETUP_URL + '#version=' + window.AX_VERSION + '" width="0" height="0" ID="AquaAxPlugin" ></OBJECT>');
@@ -35,7 +15,7 @@ window.define([], function () {
       } else {
         var _this = this;
         _this.timerid = setInterval(function () {
-          var L = _this.getE('AquaAxPlugin');
+          var L = document.getElementById('AquaAxPlugin');
 
           if (L.object) {
             if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
