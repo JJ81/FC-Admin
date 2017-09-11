@@ -49,6 +49,8 @@ window.define([
         mode: 'html5'
       });
 
+      player.setWatermarkText('watermark');
+
       window.player = player;
 
       window.initNPlayerUI(player);
