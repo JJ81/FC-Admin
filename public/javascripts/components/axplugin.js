@@ -13,7 +13,7 @@ window.define([], function () {
     var L = getE('AquaAxPlugin');
 
     console.log('AquaAxPlugin', L.object);
-    console.log(L.checkAquaAxVersion(window.AX_VERSION));
+    console.log(L.checkAquaAxVersion(window.AX_VERSION), window.AX_VERSION);
 
     if (L.object) {
       if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
@@ -63,7 +63,7 @@ window.define([], function () {
       setTimeout(function () {
         window.alert(msg);
       }, 200);
-      this.isDup = true;
+      isDup = true;
     },
 
     getPlayerDuration: function () {
