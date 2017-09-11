@@ -76,6 +76,10 @@ window.requirejs(
             break;
           }
         });
+
+        player.bindEvent('GuardCallback', function (name, desc) {
+          window.alert(name + ' : ' + desc);
+        });
       })
       .catch(function (error) {
         console.error(error);

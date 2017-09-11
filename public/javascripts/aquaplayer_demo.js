@@ -6,6 +6,10 @@ function (Util) {
   var $ = $ || window.$;
   var isAccessible = null;
 
+  $(function () {
+
+  });
+
   $('#launch').on('click', function () {
     launch('http://cdntech.cdnetworks.co.kr/public/promotion/player.asp', {left: 0, top: 0, width: 900, height: 600, title: 'AquaNPlayer', noresize: 0});
   });

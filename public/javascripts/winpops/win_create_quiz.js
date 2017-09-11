@@ -34,7 +34,7 @@ function (Util) {
     });
   }
 
-  window.$(function () {    
+  window.$(function () {
     window.axios.all([
       getRandomString(),
       getSessionCount()

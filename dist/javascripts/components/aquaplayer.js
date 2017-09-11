@@ -1,0 +1,2 @@
+"use strict";window.define(["common","nplayer","nplayer_ui","cdnproxy","nplayer_conf"],function(n){function t(n){this.extendOptions(n),this.init()}return t.prototype={options:{},extend:function(n,t){for(var i in t)t.hasOwnProperty(i)&&(n[i]=t[i]);return n},extendOptions:function(n){this.options=this.extend({},this.options),this.extend(this.options,n)},init:function(){console.log(this.options)}},t});
+//# sourceMappingURL=../../maps/components/aquaplayer.js.map
