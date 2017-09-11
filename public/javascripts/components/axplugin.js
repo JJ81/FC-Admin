@@ -10,6 +10,10 @@ window.define([], function () {
 
   function chkObj () {
     var L = this.getE('AquaAxPlugin');
+
+    console.log('AquaAxPlugin', L.object);
+    console.log(L.checkAquaAxVersion(window.AX_VERSION));
+
     if (L.object) {
       if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
         clearInterval(timerid);
@@ -27,8 +31,8 @@ window.define([], function () {
         console.log('plugin loaded');
         return true;
       } else {
-        console.log('plugin checking..');
         this.timerid = setInterval(this.chkObj, 1000);
+        console.log('plugin checking..', this.timerid);
       }
     },
 
