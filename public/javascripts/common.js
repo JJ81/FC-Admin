@@ -25,9 +25,9 @@ window.define(
     'responsive.bootstrap',
     'select2',
     'adminLTE',
-    'fastclick',
+    // 'fastclick',
     'es6-promise',
-    'dom-checkbox',
+    // 'dom-checkbox',
     'tag-it'
     // 'smoothstate'
   ],

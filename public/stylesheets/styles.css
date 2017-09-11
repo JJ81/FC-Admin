@@ -416,8 +416,10 @@ ul.session-content > li:hover {
     display: none !important;
 }
 
-#maincontent {
+.aquaplayer {
+  position: relative;
   width: 100%;
+  height: 600px;
 }
 
 /*# sourceMappingURL=styles.css.map */

@@ -1,11 +1,12 @@
 'use strict';
 window.define([
   'common',
+  'text!../../../nplayer_wrapper.html',
   'nplayer',
   'nplayer_ui',
   'cdnproxy',
   'nplayer_conf'
-], function (Util) {
+], function (Util, NplayerWrapperTemplate) {
   var self = null;
   var encodedParam;
   var player;
@@ -36,6 +37,7 @@ window.define([
     // 컴포넌트 초기화
     init: function () {
       self.getEncodedParam();
+      self.options.container.html(NplayerWrapperTemplate);
     },
     initPlayer: function () {
       player = new window.NPlayer('video', {
@@ -60,7 +62,7 @@ window.define([
 
             var url = window.getMediaURL(false);
             player.open({
-              'URL': encodeURI(url)
+              'URL': window.encodeURI(url)
             });
           }, encodedParam);
         }, window.indicateInstall, window.indicateUpdate);

@@ -9,8 +9,9 @@ function (Util, AquaPlayerService) {
 
   $(function () {
     var options = {
-      fileUrl: '',
+      fileUrl: 'http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4',
       userId: 'test',
+      container: $('.aquaplayer'),
       callback: function () {
         console.log('aqua service intialized');
       }
