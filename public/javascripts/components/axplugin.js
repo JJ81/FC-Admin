@@ -17,6 +17,9 @@ window.define([], function () {
         _this.timerid = setInterval(function () {
           var L = document.getElementById('AquaAxPlugin');
 
+          console.log('L', L);
+          console.log('timerid', _this.timerid);
+
           if (L.object) {
             if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
               clearInterval(_this.timerid);
