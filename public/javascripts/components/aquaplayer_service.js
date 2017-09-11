@@ -8,6 +8,7 @@ window.define([
 ], function (Util) {
   var self = null;
   var encodedParam;
+  var player;
 
   function AquaPlayerService (options) {
     self = this;
@@ -34,20 +35,95 @@ window.define([
     },
     // 컴포넌트 초기화
     init: function () {
-      self.options.callback();
+      self.getEncodedParam();
     },
+    initPlayer: function () {
+      player = new window.NPlayer('video', {
+        controlBox: 'nplayer_control.html',
+        visible: false,
+        mode: 'html5'
+      });
+
+      window.initNPlayerUI(player);
+
+      player.bindEvent('Ready', function () {
+        self.reportMessage('ready');
+
+        window.proxy_init(function () {
+          // 1. video start set
+          window.setPlayerStart(true);
+          // 2. nplayer instance set
+          window.setNPlayer(player);
+          // 4. media info set
+          window.mygentAuthCall(function (genkey) {
+            window.setMediaInfo(self.options.fileUrl, genkey);
+
+            var url = window.getMediaURL(false);
+            player.open({
+              'URL': encodeURI(url)
+            });
+          }, encodedParam);
+        }, window.indicateInstall, window.indicateUpdate);
+      });
+
+      player.bindEvent('OpenStateChanged', function (state) {
+        self.reportMessage('OpenStateChanged');
+
+        switch (state) {
+        case window.NPlayer.OpenState.Opened:
+          player.setVisible(true);
+          window.starthtml5State();
+          break;
+        case window.NPlayer.OpenState.Closed:
+          window.Stophtml5State(window.NPlayer.OpenState.Closed);
+          break;
+        }
+      });
+
+      player.bindEvent('PlayStateChanged', function (state) {
+        self.reportMessage('PlayStateChanged');
+
+        switch (state) {
+        case window.NPlayer.PlayState.Playing:
+          player.setVisible(true);
+          break;
+
+        case window.NPlayer.PlayState.Stopped:
+          player.setVisible(false);
+          break;
+
+        case window.NPlayer.PlayState.Paused:
+          player.setVisible(true);
+          break;
+        }
+      });
+
+      player.bindEvent('GuardCallback', function (name, desc) {
+        self.reportMessage('GuardCallback - ' + name + ' : ' + desc);
+      });
+
+      player.bindEvent('Error', function (ec) {
+        self.reportMessage('Error - ' + ec);
+      });
+    },
+    // encparam 을 서버에서 생성하여 전달받는다.
     getEncodedParam: function () {
       window.axios.get('/api/v1/player/encparam')
         .then(function (res) {
-          this.encodedParam = res.data.encparam;
+          encodedParam = res.data.encparam;
+          self.reportMessage(encodedParam);
+          self.initPlayer();
         })
         .catch(function (err) {
           self.reportError(err);
         }
       );
     },
+    reportMessage: function (msg) {
+      console.log('aquaservice : ' + msg);
+    },
     reportError: function (err) {
-      window.alert('aquaservice : ' + err);
+      console.log('aquaservice : ' + err);
     }
   };
 

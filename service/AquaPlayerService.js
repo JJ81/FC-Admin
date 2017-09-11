@@ -66,7 +66,9 @@ exports.getEncodedParam = (req, res, next) => {
   execFile(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64'),
     [ '-t', 'ENC', param ],
     (err, stdout, stderr) => {
-      if (err) throw err;
+      if (err) {
+        throw err;
+      }
       console.log(stdout);
 
       res.send({

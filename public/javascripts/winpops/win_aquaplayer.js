@@ -84,6 +84,10 @@ window.requirejs(
           console.log('GuardCallback');
           console.log(name + ' : ' + desc);
         });
+
+        player.bindEvent('Error', function (ec) {
+          console.log('Error', ec);
+        });
       })
       .catch(function (error) {
         console.error(error);
