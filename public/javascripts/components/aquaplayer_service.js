@@ -139,18 +139,11 @@ window.define([
       player.bindEvent('Ready', function () {
         self.reportMessage('Ready');
 
-        if (ax.loadAquaAxPlugin()) {
-          player.setCDNAuthParam(encodedParam);
-          player.addContextMenu('SystemInfo', 'sysinfo');
-
-          player.open({
-            'URL': encodeURI(self.options.fileURL),
-            'Subtitles': [{
-              'URL': encodeURI('')
-            }]
-          });
-          setAxPlugin = ax.setAquaAxPlugin(self.options.fileURL, encodedParam);
-        }
+        player.setCDNAuthParam(encodedParam);
+        player.addContextMenu('SystemInfo', 'sysinfo');
+        player.open({
+          'URL': encodeURI(self.options.fileURL)
+        });
       });
 
       player.bindEvent('OpenStateChanged', function (state) {

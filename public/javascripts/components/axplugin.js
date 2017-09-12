@@ -13,22 +13,19 @@ window.define([], function () {
         console.log('plugin loaded');
         return true;
       } else {
-        var _this = this;
-        // _this.timerid =
         setTimeout(function () {
           var L = document.getElementById('AquaAxPlugin');
 
           console.log('L', L.object);
-          // console.log('timerid', _this.timerid);
           console.log('version', L.checkAquaAxVersion(window.AX_VERSION) === true);
 
           if (L.object) {
             if (L.checkAquaAxVersion(window.AX_VERSION) === true) {
-              // clearInterval(_this.timerid);
+              console.log('AquaAxVersion confirmed.');
               window.location.reload();
             }
           }
-        }, 30000);
+        }, 3000);
       }
     },
 
