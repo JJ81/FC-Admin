@@ -140,18 +140,18 @@ window.define([
       player.bindEvent('Ready', function () {
         self.reportMessage('Ready');
 
-        if (ax.loadAquaAxPlugin()) {
-          player.setCDNAuthParam(encodedParam);
-          player.addContextMenu('SystemInfo', 'sysinfo');
+        // if (ax.loadAquaAxPlugin()) {
+        player.setCDNAuthParam(encodedParam);
+        player.addContextMenu('SystemInfo', 'sysinfo');
 
-          console.log(window.encodeURI(self.options.fileUrl));
+        console.log(window.encodeURI(self.options.fileUrl));
 
-          player.open({
-            'URL': window.encodeURI(self.options.fileUrl)
-          });
+        player.open({
+          'URL': window.encodeURI(self.options.fileUrl)
+        });
 
-          setAxPlugin = ax.setAquaAxPlugin(this.options.fileUrl, encodedParam);
-        }
+          // setAxPlugin = ax.setAquaAxPlugin(this.options.fileUrl, encodedParam);
+        // }
       });
 
       player.bindEvent('OpenStateChanged', function (state) {
