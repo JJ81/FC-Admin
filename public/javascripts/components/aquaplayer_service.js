@@ -47,6 +47,8 @@ window.define([
       } else if ('ActiveXObject' in window) {
         self.initPlayerWindow();
       }
+
+      $('#video').height($(window).height() - $('.wrapper_foot').height());
     },
     // Player 초기화
     initPlayerHTML: function () {
