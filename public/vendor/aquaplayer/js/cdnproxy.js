@@ -655,14 +655,14 @@ function proxy_init (runcallback, installcallback, updatecallback) {
 
 function indicateUpdate () {
   var html = '<div id=\'area_meg\' style=\'display:table; width:100%;height:100%;\'><p id=\'pmsg\' style=\'display:table-cell; color:#7d7d7d;text-align:center;vertical-align:middle\'>';
-  html = html + '<a href=\'' + setup_url + '\'><img src=\'images/download.png\' border=\'0\' /></a><br><span style=\'color:#00ff00\'>AquaNPlayer</span> 업데이트가 필요합니다.<br>동영상을 시청하려면 <span style=\'color:#ff4f4f\'>수동 설치 프로그램을 내려받아</span> 설치 후 페이지를 새로고침 해 주세요.';
+  html = html + '<a href=\'' + setup_url + '\'><img src=\'/images/aquaplayer/download.png\' border=\'0\' /></a><br><span style=\'color:#00ff00\'>AquaNPlayer</span> 업데이트가 필요합니다.<br>동영상을 시청하려면 <span style=\'color:#ff4f4f\'>수동 설치 프로그램을 내려받아</span> 설치 후 페이지를 새로고침 해 주세요.';
   html = html + '</p></div>';
   $('#video').empty().append(html);
 }
 
 function indicateInstall () {
   var html = '<div id=\'area_meg\' style=\'display:table; width:100%;height:100%;\'><p id=\'pmsg\' style=\'display:table-cell; color:#7d7d7d;text-align:center;vertical-align:middle\'>';
-  html = html + '<a href=\'' + setup_url + '\'><img src=\'images/download.png\' border=\'0\' /></a><br>동영상을 시청하려면 <span style=\'color:#00ff00\'>AquaNPlayer</span> <span style=\'color:#ff4f4f\'>수동 설치 프로그램을 내려받아</span> 설치하여 주십시오.<br>플레이어 설치 후 페이지를 새로고침 해 주세요.';
+  html = html + '<a href=\'' + setup_url + '\'><img src=\'/images/aquaplayer/download.png\' border=\'0\' /></a><br>동영상을 시청하려면 <span style=\'color:#00ff00\'>AquaNPlayer</span> <span style=\'color:#ff4f4f\'>수동 설치 프로그램을 내려받아</span> 설치하여 주십시오.<br>플레이어 설치 후 페이지를 새로고침 해 주세요.';
   html = html + '</p></div>';
   $('#video').empty().append(html);
 }
