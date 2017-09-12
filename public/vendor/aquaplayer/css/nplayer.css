@@ -279,4 +279,10 @@ ul.playList li a:active, ul.playList li a.pl_current{ background:url(../images/a
 	display: table-cell; background-color: rgba(150, 150, 150, 0.44); height: 2px;
 }
 
-
+.wrapper_video {
+  background-color:white;
+  background-image:url('./images/aquaplayer/logo_aquanplayer.png');
+  background-repeat:no-repeat;
+  background-position:center;
+  height: 304px;
+}
