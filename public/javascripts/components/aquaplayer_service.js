@@ -132,9 +132,8 @@ window.define([
       });
       var setAxPlugin = false;
 
-      player.setWatermarkText('watermark');
-
       window.player = player;
+      self.testWatermark();
 
       window.initNPlayerUI(player);
 
@@ -142,7 +141,6 @@ window.define([
         self.reportMessage('Ready');
 
         player.setCDNAuthParam(encodedParam);
-        // player.setCDNAuthParam('pwClNIt9VvCLi88GmznRuVVXxQy6cZ6CRz3Mdlccyyp4UVmt+Pznd+KrwhKL5X/jWC1jdbs2oOwpPKDRlZconDIqHNlt5vcJhEEfl7AOZ28QqYtnve5PZOGv9Zaok/37ju9VYKOfm8I8H9LhBueExOWruaBEUISJprfPCjRoIwvCA0wpyca7Y2nZ8CE4Q7QM1A4MZXdbTvtRDADEOJSSw/T6eNnFbI3hsU3po3WN6luWKg3gi3X/maxv0gd59+rr+1cCyOevi4OsRenHpQgR6MEdwJPVrCjcG+lv7yEBK+hvY2tJZD0x');
         player.addContextMenu('SystemInfo', 'sysinfo');
 
         console.log(window.encodeURI(self.options.fileUrl));
@@ -249,12 +247,49 @@ window.define([
     },
     resize: function () {
       $(window).resize(function () {
-        if (player && !!player.getFullscreen()) {
+        if (window.player && !window.player.getFullscreen()) {
           $('#video').height($(window).height());
         } else {
           $('#video').height($(window).height() - $('.wrapper_foot').height());
         }
       });
+    },
+    testWatermark () {
+      window.player.setWatermarkText('Watermark');
+      window.player.setWatermarkSize(15);
+      window.player.setWatermarkColor(255, 0, 0, 0.5);
+      window.player.setWatermarkInterval(5);
+      window.player.setWatermarkLocation(22);
+    },
+    testSubtitle: function () {
+      self.testSubtitle1();
+    },
+    testSubtitle1: function () {
+      window.setTimeout(function () {
+        window.player.setSubtitleFont('궁서', 25);
+        window.player.setSubtitleColor(255, 0, 0, 0.5);
+        window.player.setSubtitlePosition(100, 100);
+        window.player.setSubtitleText('Hello, World - 테스트 1');
+        self.testSubtitle2();
+      }, 1000);
+    },
+    testSubtitle2: function () {
+      window.setTimeout(function () {
+        window.player.setSubtitleFont('Malgun Gothic', 15);
+        window.player.setSubtitleColor(0, 255, 0, 1);
+        window.player.setSubtitlePosition(200, 50);
+        window.player.setSubtitleText('Hello, World - 테스트 2');
+        self.testSubtitle3();
+      }, 1000);
+    },
+    testSubtitle3 () {
+      window.setTimeout(function () {
+        window.player.setSubtitleFont('굴림', 35);
+        window.player.setSubtitleColor(0, 0, 255, 0.7);
+        window.player.setSubtitlePosition(50, 200);
+        window.player.setSubtitleText('Hello, World - 테스트 3');
+        self.testSubtitle1();
+      }, 1000);
     }
   };
 
