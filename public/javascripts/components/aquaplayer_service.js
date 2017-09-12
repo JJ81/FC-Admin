@@ -132,7 +132,7 @@ window.define([
       });
       var setAxPlugin = false;
 
-      // player.setWatermarkText('watermark');
+      player.setWatermarkText('watermark');
 
       window.player = player;
 
