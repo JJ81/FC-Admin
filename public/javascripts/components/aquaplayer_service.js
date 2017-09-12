@@ -123,7 +123,7 @@ window.define([
       });
     },
     initPlayerWindow: function () {
-      self.options.fileUrl = 'http://eng-media-02.cdngc.net/cdnlab/cs1/tsbox/CSS_1500k.mp4';
+      // self.options.fileUrl = 'http://eng-media-02.cdngc.net/cdnlab/cs1/tsbox/CSS_1500k.mp4';
 
       player = new window.NPlayer('video', {
         controlBox: 'nplayer_control.html',
@@ -140,8 +140,8 @@ window.define([
       player.bindEvent('Ready', function () {
         self.reportMessage('Ready');
 
-        // player.setCDNAuthParam(encodedParam);
-        player.setCDNAuthParam('pwClNIt9VvCLi88GmznRuVVXxQy6cZ6CRz3Mdlccyyp4UVmt+Pznd+KrwhKL5X/jWC1jdbs2oOwpPKDRlZconDIqHNlt5vcJhEEfl7AOZ28QqYtnve5PZOGv9Zaok/37ju9VYKOfm8I8H9LhBueExOWruaBEUISJprfPCjRoIwvCA0wpyca7Y2nZ8CE4Q7QM1A4MZXdbTvtRDADEOJSSw/T6eNnFbI3hsU3po3WN6luWKg3gi3X/maxv0gd59+rr+1cCyOevi4OsRenHpQgR6MEdwJPVrCjcG+lv7yEBK+hvY2tJZD0x');
+        player.setCDNAuthParam(encodedParam);
+        // player.setCDNAuthParam('pwClNIt9VvCLi88GmznRuVVXxQy6cZ6CRz3Mdlccyyp4UVmt+Pznd+KrwhKL5X/jWC1jdbs2oOwpPKDRlZconDIqHNlt5vcJhEEfl7AOZ28QqYtnve5PZOGv9Zaok/37ju9VYKOfm8I8H9LhBueExOWruaBEUISJprfPCjRoIwvCA0wpyca7Y2nZ8CE4Q7QM1A4MZXdbTvtRDADEOJSSw/T6eNnFbI3hsU3po3WN6luWKg3gi3X/maxv0gd59+rr+1cCyOevi4OsRenHpQgR6MEdwJPVrCjcG+lv7yEBK+hvY2tJZD0x');
         player.addContextMenu('SystemInfo', 'sysinfo');
 
         console.log(window.encodeURI(self.options.fileUrl));
