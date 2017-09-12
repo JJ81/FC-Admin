@@ -150,7 +150,7 @@ window.define([
       });
 
       player.bindEvent('OpenStateChanged', function (state) {
-        self.reportMessage('OpenStateChanged');
+        self.reportMessage('OpenStateChanged', state);
 
         switch (state) {
         case window.NPlayer.OpenState.Opened:
@@ -162,7 +162,7 @@ window.define([
       });
 
       player.bindEvent('PlayStateChanged', function (state) {
-        self.reportMessage('PlayStateChanged');
+        self.reportMessage('PlayStateChanged', state);
 
         switch (state) {
         case window.NPlayer.PlayState.Playing:
