@@ -128,9 +128,9 @@ window.define([
         visible: false,
         mode: 'html5'
       });
-      var setAxPlugin = false;
+      // var setAxPlugin = false;
 
-      player.setWatermarkText('watermark');
+      // player.setWatermarkText('watermark');
 
       window.player = player;
 
@@ -141,6 +141,8 @@ window.define([
 
         player.setCDNAuthParam(encodedParam);
         player.addContextMenu('SystemInfo', 'sysinfo');
+
+        console.log('fileURL : ' + self.options.fileURL);
         player.open({
           'URL': encodeURI(self.options.fileURL)
         });
