@@ -35,7 +35,11 @@
     {{/if}}
 </head>
 
+{{#if (isEquals module_type 'AquaPlayer')}}
+<body>
+{{else}}
 <body class="hold-transition {{theme}} sidebar-mini {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
+{{/if}}
     {{#if (isEquals current_path 'Login')}}
     {{{body}}}
     {{else if (isEquals current_path 'winpop')}}
