@@ -142,8 +142,10 @@ window.define([
         player.setCDNAuthParam(encodedParam);
         player.addContextMenu('SystemInfo', 'sysinfo');
 
+        console.log(window.encodeURI(self.options.fileUrl));
+
         player.open({
-          'URL': encodeURI(self.options.fileUrl)
+          'URL': window.encodeURI(self.options.fileUrl)
         });
       });
 
