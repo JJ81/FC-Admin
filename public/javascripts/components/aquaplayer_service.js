@@ -140,18 +140,22 @@ window.define([
       player.bindEvent('Ready', function () {
         self.reportMessage('Ready');
 
-        player.setCDNAuthParam(encodedParam);
-        player.addContextMenu('SystemInfo', 'sysinfo');
+        if (ax.loadAquaAxPlugin()) {
+          player.setCDNAuthParam(encodedParam);
+          player.addContextMenu('SystemInfo', 'sysinfo');
 
-        console.log(window.encodeURI(self.options.fileUrl));
+          console.log(window.encodeURI(self.options.fileUrl));
 
-        player.open({
-          'URL': window.encodeURI(self.options.fileUrl)
-        });
+          player.open({
+            'URL': window.encodeURI(self.options.fileUrl)
+          });
+
+          setAxPlugin = ax.setAquaAxPlugin(this.options.fileUrl, encodedParam);
+        }
       });
 
       player.bindEvent('OpenStateChanged', function (state) {
-        self.reportMessage('OpenStateChanged', state);
+        self.reportMessage('OpenStateChanged');
 
         switch (state) {
         case window.NPlayer.OpenState.Opened:
@@ -163,17 +167,17 @@ window.define([
       });
 
       player.bindEvent('PlayStateChanged', function (state) {
-        self.reportMessage('PlayStateChanged', state);
+        self.reportMessage('PlayStateChanged');
 
         switch (state) {
         case window.NPlayer.PlayState.Playing:
           player.setVisible(true);
 
-          if (ax.isDup === true) {
-            player.stop();
-            window.alert(window.NPLAYER_DUP_MSG);
-            break;
-          }
+          // if (ax.isDup === true) {
+          //   player.stop();
+          //   window.alert(window.NPLAYER_DUP_MSG);
+          //   break;
+          // }
 
           if (setAxPlugin === true) {
             window.AquaAxPlugin.PlayState = window.NPlayer.PlayState.Playing;
@@ -201,6 +205,7 @@ window.define([
       });
 
       player.bindEvent('Error', function (ec) {
+        console.log('err', ec);
         $('#video').css('background-image', 'none');
       });
 

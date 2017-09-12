@@ -5,7 +5,6 @@ window.define([], function () {
   // var isDup = false;
 
   return {
-
     loadAquaAxPlugin: function () {
       window.$('html').append('<OBJECT CLASSID="clsid:81C08477-A103-4FDC-B7A6-953940EAD67F"  codebase="' + window.NPLAYER_SETUP_URL + '#version=' + window.AX_VERSION + '" width="0" height="0" ID="AquaAxPlugin" ></OBJECT>');
 
