@@ -128,7 +128,7 @@ window.define([
         visible: false,
         mode: 'html5'
       });
-      // var setAxPlugin = false;
+      var setAxPlugin = false;
 
       // player.setWatermarkText('watermark');
 
@@ -142,7 +142,6 @@ window.define([
         player.setCDNAuthParam(encodedParam);
         player.addContextMenu('SystemInfo', 'sysinfo');
 
-        console.log(self.options.fileUrl);
         player.open({
           'URL': encodeURI(self.options.fileUrl)
         });
