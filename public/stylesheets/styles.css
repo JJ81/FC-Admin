@@ -415,5 +415,9 @@ ul.session-content > li:hover {
 .mce-widget.mce-tooltip {
     display: none !important;
 }
+
+#maincontent {
+  width: 100%;
+}
 /*# sourceMappingURL=styles.css.map */
 
