@@ -38,17 +38,16 @@ window.define([
     // 컴포넌트 초기화
     init: function () {
       self.getEncodedParam();
+      self.resize();
     },
     initPlayer: function () {
-      // self.resize();
+      $(window).resize();
 
       if (self.options.html5) {
         self.initPlayerHTML();
       } else if ('ActiveXObject' in window) {
         self.initPlayerWindow();
       }
-
-      self.resize();
     },
     // Player 초기화
     initPlayerHTML: function () {
@@ -252,13 +251,14 @@ window.define([
     },
     resize: function () {
       $(window).resize(function () {
-        if (window.player && !window.player.getFullscreen()) {
-          console.log('resized-1');
-          $('#video').height($(window).height());
-        } else {
-          console.log('resized-2');
-          $('#video').height($(window).height() - $('.wrapper_foot').height());
-        }
+        $('#video').height($(window).height() - $('.wrapper_foot').height());
+        // if (window.player && !window.player.getFullscreen()) {
+        //   console.log('resized-1');
+        //   $('#video').height($(window).height());
+        // } else {
+        //   console.log('resized-2');
+        //   $('#video').height($(window).height() - $('.wrapper_foot').height());
+        // }
       });
     },
     testWatermark () {

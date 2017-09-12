@@ -19,15 +19,5 @@ window.requirejs(
 
       AquaPlayerService = new AquaPlayerService(options);
     });
-
-    $(window).resize(function () {
-      if (window.player && !window.player.getFullscreen()) {
-        console.log('resized-1');
-        $('#video').height($(window).height());
-      } else {
-        console.log('resized-2');
-        $('#video').height($(window).height() - $('.wrapper_foot').height());
-      }
-    });
   }
 );
