@@ -1,13 +1,12 @@
 'use strict';
 window.define([
   'common',
-  'text!../../../nplayer_wrapper.html',
   'axplugin',
   'nplayer',
   'nplayer_ui',
   'cdnproxy',
   'nplayer_conf'
-], function (Util, NplayerWrapperTemplate, ax) {
+], function (Util, ax) {
   var self = null;
   var encodedParam;
   var player;
