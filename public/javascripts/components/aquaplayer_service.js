@@ -1,16 +1,16 @@
 'use strict';
 window.define([
-  'jquery',
+  'common',
   'axplugin',
   'nplayer',
   'nplayer_ui',
   'cdnproxy',
   'nplayer_conf'
-], function ($, ax) {
+], function (Util, ax) {
   var self = null;
   var encodedParam;
   var player;
-  // var $ = $ || window.$;
+  var $ = $ || window.$;
 
   function AquaPlayerService (options) {
     self = this;

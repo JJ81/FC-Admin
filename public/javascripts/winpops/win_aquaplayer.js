@@ -1,11 +1,11 @@
 'use strict';
 window.requirejs(
   [
-    'jquery',
+    'common',
     'aquaPlayerService'
   ],
-  function ($, AquaPlayerService) {
-    // var $ = $ || window.$;
+  function (Util, AquaPlayerService) {
+    var $ = $ || window.$;
 
     $(function () {
       var options = {
