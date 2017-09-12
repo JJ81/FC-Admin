@@ -127,8 +127,7 @@ window.define([
 
       player = new window.NPlayer('video', {
         controlBox: 'nplayer_control.html',
-        visible: false,
-        mode: 'html5'
+        visible: false
       });
       var setAxPlugin = false;
 
