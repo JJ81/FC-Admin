@@ -3,16 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    {{#if (isEquals module_type 'AquaPlayer')}}
-    <meta http-equiv="x-ua-compatible" content="IE=8" />
-    <link rel="stylesheet" href="/static/stylesheets/nplayer.css">
-    <!--<link rel="stylesheet" href="/static/stylesheets/nplayer_res.css">-->
-    {{else}}
+    <meta http-equiv="x-ua-compatible" content="IE=edge" />
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="/static/stylesheets/bootstrap.min.css" />
     <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css" />
     <link rel="stylesheet" href="/static/stylesheets/ionicons.min.css" />
     <link rel="stylesheet" href="/static/stylesheets/AdminLTE.css" />
+    <!--<link rel="stylesheet" href="/static/stylesheets/skin-green-light.min.css">-->
     <link rel="stylesheet" href="/static/stylesheets/_all-skins.min.css">
     <link rel="stylesheet" href="/static/stylesheets/datepicker3.css" />
     <link rel="stylesheet" href="/static/stylesheets/daterangepicker.css" />
@@ -26,7 +23,8 @@
     <link rel='stylesheet' href="/static/stylesheets/jquery.tagit.min.css" />
     <link rel='stylesheet' href="/static/stylesheets/jquery-ui.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,300italic" rel="stylesheet" type="text/css">
-    {{/if}}
+    <link rel="stylesheet" href="/static/stylesheets/nplayer.css">
+    <link rel="stylesheet" href="/static/stylesheets/nplayer_res.css">
 
     {{#if title}}
     <title>{{title}} - {{logoName}}</title>
@@ -35,11 +33,7 @@
     {{/if}}
 </head>
 
-{{#if (isEquals module_type 'AquaPlayer')}}
-<body>
-{{else}}
 <body class="hold-transition {{theme}} sidebar-mini {{#if (isEquals current_path 'Login')}}login-page{{/if}}">
-{{/if}}
     {{#if (isEquals current_path 'Login')}}
     {{{body}}}
     {{else if (isEquals current_path 'winpop')}}

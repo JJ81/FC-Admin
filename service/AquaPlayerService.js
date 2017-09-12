@@ -93,6 +93,7 @@ exports.demo = (req, res, next) => {
 exports.show = (req, res, next) => {
   // res.render('winpops/win_aquaplayer_html5', {
   res.render('winpops/win_aquaplayer_window', {
+    layout: 'layout_player.hbs',
     current_path: 'winpop',
     module_type: 'AquaPlayer',
     title: '아쿠아플레이어 테스트'
