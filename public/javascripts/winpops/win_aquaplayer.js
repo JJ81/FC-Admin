@@ -10,7 +10,7 @@ window.requirejs(
     $(function () {
       var options = {
         fileUrl: 'http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4',
-        html: false,
+        html: true,
         userId: 'test',
         container: $('.aquaplayer'),
         callback: function () {
