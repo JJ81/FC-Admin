@@ -39,13 +39,14 @@ window.define([
     // 컴포넌트 초기화
     init: function () {
       self.getEncodedParam();
-      self.resize();
     },
     initPlayer: function () {
-      if ('ActiveXObject' in window) {
-        self.initPlayerWindow();
-      } else {
+      self.resize();
+
+      if (self.options.html) {
         self.initPlayerHTML();
+      } else if ('ActiveXObject' in window) {
+        self.initPlayerWindow();
       }
     },
     // Player 초기화
