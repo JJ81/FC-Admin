@@ -48,7 +48,7 @@ window.define([
         self.initPlayerWindow();
       }
 
-      $('#video').height($(window).height() - $('.wrapper_foot').height());
+      self.resize();
     },
     // Player 초기화
     initPlayerHTML: function () {
@@ -57,8 +57,6 @@ window.define([
         visible: false,
         mode: 'html5'
       });
-
-      // player.setWatermarkText('watermark');
 
       window.player = player;
 
