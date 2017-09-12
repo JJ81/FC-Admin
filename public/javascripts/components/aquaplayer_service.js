@@ -40,7 +40,7 @@ window.define([
       self.getEncodedParam();
     },
     initPlayer: function () {
-      self.resize();
+      // self.resize();
 
       if (self.options.html5) {
         self.initPlayerHTML();
