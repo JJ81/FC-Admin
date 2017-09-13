@@ -8,7 +8,7 @@ var PROXY_WIN_VERSION = '1,0,0,27';
 var PROXY_OSX_VERSION = '1,0,0,36';
 var NPLAYER_GUARD_DB_URL = 'http://dist2.dwa.cdnetworks.com/cdndist/aquanplayer/nPlayerGuard.xml';
 var NPLAYER_USE_DSHOW = false;
-var NPLAYER_INSTALL_MSG = '<a href=\'' + NPLAYER_SETUP_URL + '\'><img src=\'images/download.png\' border=\'0\' /></a><p>동영상을 시청하려면 <span style=\'color:#00ff00\'>AquaNPlayer</span> 를 설치하여 주십시오.</p><p>설치에 문제가 있으면 <a style=\'color:#ff4f4f;text-decoration:none\' href=\'' + NPLAYER_SETUP_URL + '\'>수동 설치 프로그램을 내려받아</a> 설치하여 주십시오.</p>';
+var NPLAYER_INSTALL_MSG = '<a href=\'' + NPLAYER_SETUP_URL + '\'><img src=\'/images/aquaplayer/download.png\' border=\'0\' /></a><p>동영상을 시청하려면 <span style=\'color:#00ff00\'>AquaNPlayer</span> 를 설치하여 주십시오.</p><p>설치에 문제가 있으면 <a style=\'color:#ff4f4f;text-decoration:none\' href=\'' + NPLAYER_SETUP_URL + '\'>수동 설치 프로그램을 내려받아</a> 설치하여 주십시오.</p>';
 var NPLAYER_DUP_MSG = '동일 ID로 강의시청중에 있어 종료합니다.';
 var NPLAYER_PLAYER_STOP_REQUEST_MSG = '####강의 시청으로 인하여 현재 플레이어를 종료합니다.####';
 var PROXY_CHECK_FAIL = '웹 에이젼트가 실행되지 않았습니다. 잠시 후 다시 실행 바랍니다.';
