@@ -259,7 +259,7 @@ window.define([
       });
     },
     testWatermark () {
-      window.player.setWatermarkText(self.options.watermark);
+      window.player.setWatermarkText('Watermark');
       // window.player.setWatermarkText(self.options.watermark);
       window.player.setWatermarkSize(15);
       window.player.setWatermarkColor(255, 0, 0, 0.5);
