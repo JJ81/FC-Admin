@@ -10,6 +10,7 @@ window.requirejs(
     $(function () {
       var options = {
         fileUrl: $('#video').data('url'),
+        watermark: $('#video').data('watermark'),
         callback: function () {
           // console.log('aqua service intialized');
         }
