@@ -1,6 +1,6 @@
 'use strict';
 
-requirejs([
+window.requirejs([
   'common',
   'Vimeo'
 ],
@@ -11,11 +11,26 @@ function (Util, Vimeo) {
   var btnRegistVideo = $('#regist-video');
   var btnPlayVideo = $('#play-video');
   var _confirm = true; // 윈도우 종료 시 창을 닫을지 여부
+  var $selectVideoProvider = $('#video-provider');
+  var $setAquaPlayer = $('.aquaplayer-settings');
+  var $setVimeoPlayer = $('.vimeo-settings');
 
   window.$(function () {
     // console.log('hello!');
     // window.alert(window.parent.opener);
     // window.parent.opener.winpop_listener();
+  });
+
+  $selectVideoProvider.on('change', function () {
+    var option = $(this).val();
+
+    if (option === 'VIMEO') {
+      $setVimeoPlayer.removeClass('blind');
+      $setAquaPlayer.addClass('blind');
+    } else if (option === 'AQUA') {
+      $setAquaPlayer.removeClass('blind');
+      $setVimeoPlayer.addClass('blind');
+    }
   });
 
   /**

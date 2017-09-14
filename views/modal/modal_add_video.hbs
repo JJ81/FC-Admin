@@ -1,0 +1,36 @@
+<div class="modal fade" id="addVideo" role="dialog">
+  <form class="modal-dialog" id="js--formAddVideo">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">비디오 선택</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <table id="table_edu" class="table no-margin table-bordered table-striped" width="100%">
+            <thead>
+              <tr>
+                <th></th>
+                <th class="center">비디오</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each videos}}
+              <tr>
+                <td><input type="radio" name="table_video_radio" data-id="{{id}}"></td>
+                <td class="center">{{name}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+        <button type="submit" id="btnApplyVideo" class="btn btn-primary">적용</button>
+      </div>
+    </div>
+  </form>
+</div>

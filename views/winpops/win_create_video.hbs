@@ -23,16 +23,23 @@
         </div>
 
         <div class="form-group">
-          <label>비디오 제공수단</label>
+          <label>비디오 플레이어</label>
           <select class="form-control" id="video-provider" name="video_provider">
             <!--<option value="YOUTUBE">YOUTUBE</option>-->
-            <option value="VIMEO">VIMEO</option>
+            <option value="AQUA">아쿠아</option>
+            <option value="VIMEO">비메오</option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label for="video_title">비디오 코드</label>
+        <div class="form-group aquaplayer-settings">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addVideo">
+            <i class="fa fa-folder-open"></i> &nbsp;
+            비디오 선택
+          </button>
+        </div>
 
+        <div class="form-group vimeo-settings blind">
+          <label for="video_title">비디오 코드</label>
           <div class="input-group">
             <input type="text" name="video_code" class="form-control" id="video-code" placeholder="비디오 코드를 입력해주세요." autocomplete="off"
               required />
@@ -50,7 +57,9 @@
 
         <hr />
 
-        <div class="video-preview">비디오를 미리 볼 수 있습니다.</div>
+        <div class="video-preview">
+          <iframe src="/api/v1/aqua" frameborder="0" width="100%" height="600"></iframe>
+        </div>
         <div id="video-player"></div>
       </div>
 
@@ -58,3 +67,5 @@
     </div>
   </form>
 </div>
+
+{{> modal_add_video}}
