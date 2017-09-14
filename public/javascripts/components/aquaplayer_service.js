@@ -259,6 +259,8 @@ window.define([
       });
     },
     testWatermark () {
+      console.log(self.options.watermark);
+
       window.player.setWatermarkText(self.options.watermark);
       window.player.setWatermarkSize(15);
       window.player.setWatermarkColor(255, 0, 0, 0.5);
