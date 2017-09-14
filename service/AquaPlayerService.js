@@ -116,6 +116,7 @@ exports.show = (req, res, next) => {
         if (err) {
           console.error(err);
         } else {
+          console.log(req.user.name);
           if (os === 'Windows') {
             return res.render('winpops/win_aquaplayer_window', {
               layout: 'layout_player.hbs',
