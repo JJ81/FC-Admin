@@ -83,6 +83,7 @@ exports.getLogoInfo = (req, res, next) => {
   let themeOfTile;
   let themeOfProgressBar;
   let copyright;
+  let vodUrl;
 
   switch (req.headers.host) {
   case 'waffle.edu1004.kr':
@@ -92,7 +93,10 @@ exports.getLogoInfo = (req, res, next) => {
     themeOfTile = 'bg-red-active';
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'Waffle university coop';
+    vodUrl = 'http://pcst.waffle.edu1004.kr/orangenamu/waffle/';
+    // http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4
     break;
+
   case 'momstouch.edu1004.kr':
     logoImageName = 'momstouch.png';
     logoName = '맘스터치';
@@ -100,7 +104,9 @@ exports.getLogoInfo = (req, res, next) => {
     themeOfTile = 'bg-yellow-gradient';
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'MOM\'S TOUCH';
+    vodUrl = 'http://pcst.waffle.edu1004.kr/orangenamu/momstouch/';
     break;
+
   case 'dev.edu1004.kr':
   default:
     logoImageName = 'orangenamu.png';
@@ -109,6 +115,7 @@ exports.getLogoInfo = (req, res, next) => {
     themeOfTile = 'bg-gray';
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'Copyright © 2017 Orangenamu ALL RIGHTS RESERVED.';
+    vodUrl = 'http://pcst.waffle.edu1004.kr/orangenamu/dev/';
     break;
   }
   res.locals.logoImageName = logoImageName;
@@ -117,6 +124,7 @@ exports.getLogoInfo = (req, res, next) => {
   res.locals.themeOfTile = themeOfTile;
   res.locals.themeOfProgressBar = themeOfProgressBar;
   res.locals.copyright = copyright;
+  res.locals.vodUrl = vodUrl;
 
   return next();
 };

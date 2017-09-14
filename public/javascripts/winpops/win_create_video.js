@@ -20,7 +20,7 @@ function (Util, Vimeo) {
     // console.log('hello!');
     // window.alert(window.parent.opener);
     // window.parent.opener.winpop_listener();
-    $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName());
+    $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName() + '&video_id=148');
   });
 
   $selectVideoProvider.on('change', function () {

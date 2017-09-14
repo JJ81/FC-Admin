@@ -126,7 +126,7 @@ router.get('/test', (req, res) => {
 });
 
 router.get('/player/encparam', AquaPlayerService.getEncodedParam);
-router.get('/aqua', AquaPlayerService.show);
+router.get('/aqua', util.getLogoInfo, AquaPlayerService.show);
 router.get('/demo/aquaplayer', util.isAuthenticated, util.getLogoInfo, AquaPlayerService.demo);
 
 module.exports = router;

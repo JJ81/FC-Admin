@@ -2,6 +2,9 @@
 const { execFile } = require('child_process');
 const func = require('../util/util');
 const path = require('path');
+const QUERY = require('../database/query');
+const async = require('async');
+const pool = require('../commons/db_conn_pool');
 
 exports.getEncodedParam = (req, res, next) => {
   // 사용자ID를 넣는 부분, 넘겨줄 ID가 없는 경우 중복로그인제한 회피를 위해 Unique 한 ID 로 랜덤처리 필요.
@@ -91,20 +94,44 @@ exports.demo = (req, res, next) => {
 };
 
 exports.show = (req, res, next) => {
-  // res.render('winpops/win_aquaplayer_html5', {
-  const os = req.query.os;
+  const { os, video_id: videoId } = req.query;
 
-  if (os === 'Windows') {
-    res.render('winpops/win_aquaplayer_window', {
-      layout: 'layout_player.hbs',
-      module_type: 'AquaPlayer',
-      title: '아쿠아플레이어 Windows'
-    });
-  } else {
-    res.render('winpops/win_aquaplayer_html5', {
-      layout: 'layout_player.hbs',
-      module_type: 'AquaPlayer',
-      title: '아쿠아플레이어 HTML5'
-    });
-  }
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    async.series(
+      [
+        callback => {
+          connection.query(QUERY.COURSE.GetVideoDataById, [ videoId ], (err, rows) => {
+            if (err) {
+              console.error(err);
+              callback(err, null);
+            } else {
+              callback(null, rows);
+            }
+          });
+        }
+      ],
+      (err, results) => {
+        connection.release();
+        if (err) {
+          console.error(err);
+        } else {
+          if (os === 'Windows') {
+            return res.render('winpops/win_aquaplayer_window', {
+              layout: 'layout_player.hbs',
+              module_type: 'AquaPlayer',
+              title: '아쿠아플레이어 Windows',
+              video_url: res.locals.vodUrl + results[0][0].url
+            });
+          } else {
+            return res.render('winpops/win_aquaplayer_html5', {
+              layout: 'layout_player.hbs',
+              module_type: 'AquaPlayer',
+              title: '아쿠아플레이어 HTML5',
+              video_url: res.locals.vodUrl + results[0][0].url
+            });
+          }
+        }
+      });
+  });
 };
