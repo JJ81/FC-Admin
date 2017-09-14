@@ -43,6 +43,8 @@ window.define([
     initPlayer: function () {
       $(window).resize();
 
+      self.options.html5 = this.isHTML5();
+
       if (self.options.html5) {
         self.initPlayerHTML();
       } else if ('ActiveXObject' in window) {
@@ -138,19 +140,14 @@ window.define([
       player.bindEvent('Ready', function () {
         self.reportMessage('Ready');
 
-        // if (ax.loadAquaAxPlugin()) {
         player.setCDNAuthParam(encodedParam);
-        // player.setCDNAuthParam('pwClNIt9VvCLi88GmznRuVVXxQy6cZ6CRz3Mdlccyyp4UVmt+Pznd+KrwhKL5X/jWC1jdbs2oOwpPKDRlZconDIqHNlt5vcJhEEfl7AOZ28QqYtnve5PZOGv9Zaok/37ju9VYKOfm8I8H9LhBueExOWruaBEUISJprfPCjRoIwvCA0wpyca7Y2nZ8CE4Q7QM1A4MZXdbTvtRDADEOJSSw/T6eNnFbI3hsU3po3WN6luWKg3gi3X/maxv0gd59+rr+1cCyOevi4OsRenHpQgR6MEdwJPVrCjcG+lv7yEBK+hvY2tJZD0x');
         player.addContextMenu('SystemInfo', 'sysinfo');
 
-        console.log(window.encodeURI(self.options.fileUrl));
+        // console.log(window.encodeURI(self.options.fileUrl));
 
         player.open({
           'URL': window.encodeURI(self.options.fileUrl)
         });
-
-          // setAxPlugin = ax.setAquaAxPlugin(this.options.fileUrl, encodedParam);
-        // }
       });
 
       player.bindEvent('OpenStateChanged', function (state) {
@@ -229,6 +226,16 @@ window.define([
       window.onunload = function () {
         if (setAxPlugin === true) window.AquaAxPlugin.FinalizeAuth();
       };
+    },
+    isHTML5: function () {
+      var OSName = 'Unknown OS';
+
+      if (navigator.appVersion.indexOf('Win') !== -1) OSName = 'Windows';
+      if (navigator.appVersion.indexOf('Mac') !== -1) OSName = 'MacOS';
+      if (navigator.appVersion.indexOf('X11') !== -1) OSName = 'UNIX';
+      if (navigator.appVersion.indexOf('Linux') !== -1) OSName = 'Linux';
+
+      return (OSName !== 'Windows');
     },
     // encparam 을 서버에서 생성하여 전달받는다.
     getEncodedParam: function () {
