@@ -534,7 +534,7 @@ router.get('/help', util.isAuthenticated, util.getLogoInfo, (req, res, next) => 
   res.render('help', {
     title: '도움말',
     current_path: 'Help',
-    loggedIn: req.name
+    loggedIn: req.user.name
   });
 });
 
