@@ -130,7 +130,7 @@ exports.show = (req, res, next) => {
               module_type: 'AquaPlayer',
               title: '아쿠아플레이어 HTML5',
               video_url: res.locals.vodUrl + results[0][0].url,
-              watermark: req.user.user_id
+              watermark: req.user.name
             });
           }
         }
