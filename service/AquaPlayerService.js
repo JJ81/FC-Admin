@@ -5,7 +5,7 @@ const path = require('path');
 
 exports.getEncodedParam = (req, res, next) => {
   // 사용자ID를 넣는 부분, 넘겨줄 ID가 없는 경우 중복로그인제한 회피를 위해 Unique 한 ID 로 랜덤처리 필요.
-  const UserID = 'testid'; // req.user.user_id;
+  const UserID = req.user.user_id;
 
   // AquaAuth 파라메터 설정
   // 당사에서 정해진 고정된 값 ,5자로 제한
@@ -13,7 +13,7 @@ exports.getEncodedParam = (req, res, next) => {
 
   // 사용자 및 웹서버 IP 정보
   const UserIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  const ServerIP = '127.0.0.1:3001'; // req.connection.localAddress;
+  const ServerIP = '127.0.0.1'; // req.connection.localAddress;
   const TimeOut = '300';
 
   // AquaAuth 사용 여부
