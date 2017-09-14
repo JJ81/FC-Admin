@@ -43,7 +43,7 @@ window.define([
     initPlayer: function () {
       $(window).resize();
 
-      self.options.html5 = this.isHTML5();
+      self.options.html5 = Util.getOSName() !== 'Windows';
 
       if (self.options.html5) {
         self.initPlayerHTML();
@@ -226,16 +226,6 @@ window.define([
       window.onunload = function () {
         if (setAxPlugin === true) window.AquaAxPlugin.FinalizeAuth();
       };
-    },
-    isHTML5: function () {
-      var OSName = 'Unknown OS';
-
-      if (navigator.appVersion.indexOf('Win') !== -1) OSName = 'Windows';
-      if (navigator.appVersion.indexOf('Mac') !== -1) OSName = 'MacOS';
-      if (navigator.appVersion.indexOf('X11') !== -1) OSName = 'UNIX';
-      if (navigator.appVersion.indexOf('Linux') !== -1) OSName = 'Linux';
-
-      return (OSName !== 'Windows');
     },
     // encparam 을 서버에서 생성하여 전달받는다.
     getEncodedParam: function () {

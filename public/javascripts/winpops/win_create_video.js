@@ -14,11 +14,13 @@ function (Util, Vimeo) {
   var $selectVideoProvider = $('#video-provider');
   var $setAquaPlayer = $('.aquaplayer-settings');
   var $setVimeoPlayer = $('.vimeo-settings');
+  var $aquaPlayerFrame = $('#aquaplayer_frame');
 
   window.$(function () {
     // console.log('hello!');
     // window.alert(window.parent.opener);
     // window.parent.opener.winpop_listener();
+    $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName());
   });
 
   $selectVideoProvider.on('change', function () {
