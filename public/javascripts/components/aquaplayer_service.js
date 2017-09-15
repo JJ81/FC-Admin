@@ -64,7 +64,7 @@ window.define([
       window.initNPlayerUI(player);
 
       player.bindEvent('Ready', function () {
-        self.reportMessage('ready');
+        // self.reportMessage('ready');
 
         window.proxy_init(function () {
           // 1. video start set
@@ -84,7 +84,7 @@ window.define([
       });
 
       player.bindEvent('OpenStateChanged', function (state) {
-        self.reportMessage('OpenStateChanged');
+        // self.reportMessage('OpenStateChanged');
 
         switch (state) {
         case window.NPlayer.OpenState.Opened:
@@ -138,7 +138,7 @@ window.define([
       window.initNPlayerUI(player);
 
       player.bindEvent('Ready', function () {
-        self.reportMessage('Ready');
+        // self.reportMessage('Ready');
 
         player.setCDNAuthParam(encodedParam);
         player.addContextMenu('SystemInfo', 'sysinfo');
@@ -151,7 +151,7 @@ window.define([
       });
 
       player.bindEvent('OpenStateChanged', function (state) {
-        self.reportMessage('OpenStateChanged');
+        // self.reportMessage('OpenStateChanged');
 
         switch (state) {
         case window.NPlayer.OpenState.Opened:
@@ -163,7 +163,7 @@ window.define([
       });
 
       player.bindEvent('PlayStateChanged', function (state) {
-        self.reportMessage('PlayStateChanged');
+        // self.reportMessage('PlayStateChanged');
 
         switch (state) {
         case window.NPlayer.PlayState.Playing:
@@ -232,7 +232,7 @@ window.define([
       window.axios.get('/api/v1/player/encparam')
         .then(function (res) {
           encodedParam = res.data.encparam;
-          self.reportMessage(encodedParam);
+          // self.reportMessage(encodedParam);
           self.initPlayer();
         })
         .catch(function (err) {
