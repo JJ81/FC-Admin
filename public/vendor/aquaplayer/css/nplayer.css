@@ -282,7 +282,7 @@ ul.playList li a:active, ul.playList li a.pl_current{ background:url(../images/a
 
 .wrapper_video {
   background-color:white;
-  background-image:url('./images/aquaplayer/logo_aquanplayer.png');
+  background-image:url('./images/aquaplayer/logo_nplayer.png');
   background-repeat:no-repeat;
   background-position:center;
 }
