@@ -98,7 +98,7 @@ window.define([
       });
 
       player.bindEvent('PlayStateChanged', function (state) {
-        self.reportMessage('PlayStateChanged');
+        // self.reportMessage('PlayStateChanged');
 
         switch (state) {
         case window.NPlayer.PlayState.Playing:
