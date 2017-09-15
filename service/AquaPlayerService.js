@@ -8,7 +8,7 @@ const pool = require('../commons/db_conn_pool');
 
 exports.getEncodedParam = (req, res, next) => {
   // 사용자ID를 넣는 부분, 넘겨줄 ID가 없는 경우 중복로그인제한 회피를 위해 Unique 한 ID 로 랜덤처리 필요.
-  const UserID = req.user.user_id;
+  const UserID = 'test'; // req.user.user_id;
 
   // AquaAuth 파라메터 설정
   // 당사에서 정해진 고정된 값 ,5자로 제한
