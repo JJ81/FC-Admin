@@ -116,14 +116,13 @@ exports.show = (req, res, next) => {
         if (err) {
           console.error(err);
         } else {
-          console.log(req.user);
           if (os === 'Windows') {
             return res.render('winpops/win_aquaplayer_window', {
               layout: 'layout_player.hbs',
               module_type: 'AquaPlayer',
               title: '아쿠아플레이어 Windows',
               video_url: res.locals.vodUrl + results[0][0].url,
-              watermark: req.user.name
+              watermark: 'watermark'
             });
           } else {
             return res.render('winpops/win_aquaplayer_html5', {
@@ -131,7 +130,7 @@ exports.show = (req, res, next) => {
               module_type: 'AquaPlayer',
               title: '아쿠아플레이어 HTML5',
               video_url: res.locals.vodUrl + results[0][0].url,
-              watermark: req.user.name
+              watermark: 'watermark'
             });
           }
         }
