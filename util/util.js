@@ -106,6 +106,16 @@ exports.getLogoInfo = (req, res, next) => {
     vodUrl = 'http://pcst.aquan.momstouch.edu1004.kr/orangenamu/momstouch/';
     break;
 
+  case 'homesfood.edu1004.kr':
+    logoImageName = 'homesfood.png';
+    logoName = '홈스푸드';
+    theme = 'skin-black';
+    themeOfTile = 'bg-black';
+    themeOfProgressBar = 'progress-bar-yellow';
+    copyright = '홈스푸드';
+    vodUrl = 'http://pcst.aquan.homesfood.edu1004.kr/orangenamu/homesfood/';
+    break;
+
   case 'dev.edu1004.kr':
   default:
     logoImageName = 'orangenamu.png';
