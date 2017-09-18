@@ -110,7 +110,7 @@ exports.getLogoInfo = (req, res, next) => {
     logoImageName = 'homesfood-dark.png';
     logoName = '홈스푸드';
     theme = 'skin-black';
-    themeOfTile = 'bg-black';
+    themeOfTile = 'bg-black-gradient';
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = '홈스푸드';
     vodUrl = 'http://pcst.aquan.homesfood.edu1004.kr/orangenamu/homesfood/';
