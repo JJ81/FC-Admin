@@ -107,7 +107,7 @@ exports.getLogoInfo = (req, res, next) => {
     break;
 
   case 'homesfood.edu1004.kr':
-    logoImageName = 'homesfood.png';
+    logoImageName = 'homesfood-dark.png';
     logoName = '홈스푸드';
     theme = 'skin-black';
     themeOfTile = 'bg-black';
@@ -118,7 +118,7 @@ exports.getLogoInfo = (req, res, next) => {
 
   case 'dev.edu1004.kr':
   default:
-    logoImageName = 'orangenamu.png';
+    logoImageName = 'homesfood-dark.png';
     logoName = '오렌지나무시스템';
     theme = 'skin-yellow-light';
     themeOfTile = 'bg-gray';
