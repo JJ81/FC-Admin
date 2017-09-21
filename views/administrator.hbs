@@ -14,10 +14,10 @@
           <span class="sr-only">Toggle Dropdown</span>
           </button>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#" data-toggle="modal" data-target="#createBranch">지점등록</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#createBranch">점포등록</a></li>
             <li><a href="#" data-toggle="modal" data-target="#registOffice">지사등록</a></li>
             <li class="divider"></li>
-            <li><a href="#" data-toggle="modal" data-target="#manage-office-branches">지사별 지점등록</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#manage-office-branches">지사별 점포등록</a></li>
           </ul>
         </div>
         <button class="btn btn-default" data-toggle="modal" data-target="#createDuty">
@@ -78,7 +78,7 @@
                     </li>
                     {{#if (isEquals role 'supervisor') }}
                     <!--<li>
-                      <a href="#" data-user-id="{{id}}" data-toggle="modal" data-target="#assignBranch" class="btn-add-branch">지점배정</a>
+                      <a href="#" data-user-id="{{id}}" data-toggle="modal" data-target="#assignBranch" class="btn-add-branch">점포배정</a>
                     </li>-->
                     <li>
                       <a href="#" data-user-id="{{id}}" data-toggle="modal" data-target="#assignAdminOffices" class="btn-add-branch">지사배정</a>

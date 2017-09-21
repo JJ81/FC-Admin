@@ -6,11 +6,11 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">지점 배정</h4>
+        <h4 class="modal-title">점포 배정</h4>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label>베정할 지점을 선택하세요.</label>
+          <label>베정할 점포을 선택하세요.</label>
           <select name="branch_id" id="select-branch-list" class="form-control select2" style="width: 100%;">
             {{#each branches}}
             <option value="{{id}}">{{name}}</option>
@@ -23,7 +23,7 @@
 
         <hr />
 
-        <h5>배정된 지점 리스트</h5>
+        <h5>배정된 점포 리스트</h5>
         <ul id="draggablePanelList" class="list-unstyled"></ul>
       </div>
 

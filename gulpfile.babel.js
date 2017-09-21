@@ -86,7 +86,8 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer_ui.js',
     DIR.SRC + '/vendor/' + 'aquaplayer/js/cdnproxy.js',
     DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer_conf.js',
-    DIR.SRC + '/vendor/' + 'fine-uploader/fine-uploader/fine-uploader.js'
+    DIR.SRC + '/vendor/' + 'fine-uploader/fine-uploader/fine-uploader.min.js',
+    DIR.SRC + '/vendor/' + 'fine-uploader/fine-uploader/fine-uploader.core.\min.js'
     // DIR.SRC + '/vendor/' + 'plugins/smoothstate/jquery.smoothstate.min.js'
   ])
   .pipe(uglify())

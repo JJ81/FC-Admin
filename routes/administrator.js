@@ -9,7 +9,7 @@ const UserService = require('../service/UserService');
 const AdministratorService = require('../service/AdministratorService');
 
 /**
- * 관리자 리스트, 지점리스트를 가져온다.
+ * 관리자 리스트, 점포리스트를 가져온다.
  */
 router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   pool.getConnection((err, connection) => {
@@ -58,7 +58,7 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
 });
 
 /**
- * 슈퍼바이저의 지점리스트를 조회한다.
+ * 슈퍼바이저의 점포리스트를 조회한다.
  */
 router.get('/branch/:admin_id', util.isAuthenticated, (req, res) => {
   const { admin_id: adminId } = req.params;
@@ -224,8 +224,8 @@ router.post('/role/reset', (req, res) => {
 });
 
 /**
- * 슈퍼바이저에게 지점을 배정한다.
- * 슈퍼바이저의 지점을 모두 삭제한 후 다시 넣는다.
+ * 슈퍼바이저에게 점포을 배정한다.
+ * 슈퍼바이저의 점포을 모두 삭제한 후 다시 넣는다.
  */
 router.post('/assign/branch', (req, res) => {
   const { user_id: userId, branch_list: branchList } = req.body;
@@ -245,7 +245,7 @@ router.post('/assign/branch', (req, res) => {
         async.series(
           [
             (callback) => {
-              // 슈퍼바이저의 지점을 모두 삭제한다.
+              // 슈퍼바이저의 점포을 모두 삭제한다.
               connection.query(QUERY.ADMIN.DeleteAdminBranch,
                 [
                   userId
@@ -380,7 +380,7 @@ router.get('/offices', (req, res, next) => {
 router.get('/admin/offices', AdministratorService.getAdminOffices);
 
 /**
-  기존 지사별 지점을 삭제 후 전체 지점을 재등록한다.
+  기존 지사별 점포을 삭제 후 전체 점포을 재등록한다.
  */
 router.post('/office/branches', (req, res, next) => {
   const { office_id: officeId, branch_ids: branchIds } = req.body;

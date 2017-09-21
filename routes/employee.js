@@ -200,7 +200,7 @@ router.post('/modify', util.isAuthenticated, (req, res, next) => {
 });
 
 /**
- * 지점 생성
+ * 점포 생성
  */
 router.post('/create/branch', (req, res, next) => {
   const _name = req.body.name.trim();
@@ -212,7 +212,7 @@ router.post('/create/branch', (req, res, next) => {
       message: '필수입력값 누락'
     });
   } else {
-    // todo 동일한 fc에서의 지점이 중복인지 여부를 검사해야 한다
+    // todo 동일한 fc에서의 점포이 중복인지 여부를 검사해야 한다
     pool.getConnection((err, connection) => {
       if (err) throw err;
       connection.query(QUERY.EMPLOYEE.CreateBranch,
@@ -223,7 +223,7 @@ router.post('/create/branch', (req, res, next) => {
             console.error(err);
             return next({
               status: 500,
-              message: '중복되는 지점명입니다.'
+              message: '중복되는 점포명입니다.'
             });
           } else {
             res.redirect('/administrator');
@@ -235,7 +235,7 @@ router.post('/create/branch', (req, res, next) => {
 });
 
 /**
- * 지점 수정하기
+ * 점포 수정하기
  */
 router.post('/modify/branch', (req, res, next) => {
   const _name = req.body.name.trim();
@@ -258,7 +258,7 @@ router.post('/modify/branch', (req, res, next) => {
             console.error(err);
             return next({
               status: 500,
-              message: '중복되는 지점명입니다.'
+              message: '중복되는 점포명입니다.'
             });
           } else {
             res.redirect('/administrator');
@@ -379,7 +379,7 @@ router.delete('/', util.isAuthenticated, (req, res, next) => {
     });
 });
 
-/** 지점 비활성화 */
+/** 점포 비활성화 */
 router.delete('/branch', util.isAuthenticated, (req, res, next) => {
   UserService.deactivateBranchById(req.query.id,
     (err, data) => {

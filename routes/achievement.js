@@ -38,7 +38,7 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
   pool.getConnection((err, connection) => {
     if (err) throw err;
     async.series([
-      // 지점별 진척도
+      // 점포별 진척도
       (callback) => {
         connection.query(QUERY.ACHIEVEMENT.GetBranchProgressAllByEdu(eduId, req.user),
         [],
@@ -258,7 +258,7 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
           let checklists = [];
           let colums = [];
 
-          colums.push({ title: '지점' });
+          colums.push({ title: '점포' });
           colums.push({ title: '이름' });
           colums.push({ title: '직책' });
 
@@ -286,7 +286,7 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
                 rows: rows
               }); // todo : 중복코드이므로 리펙토링시 방법 모색해볼 것.
               colums = [];
-              colums.push({ title: '지점' });
+              colums.push({ title: '점포' });
               colums.push({ title: '이름' });
               colums.push({ title: '직책' });
             }

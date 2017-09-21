@@ -51,7 +51,8 @@ window.requirejs.config({
     'aquaPlayerService': ['/static/javascripts/components/aquaplayer_service'],
     'axplugin': ['/static/javascripts/components/axplugin'],
     // 'smoothstate': '/static/vendor/jquery.smoothstate.min'
-    'fineUploader': '/static/vendor/fine-uploader',
+    'fineUploader': '/static/vendor/fine-uploader.min',
+    'fineUploaderCore': '/static/vendor/fine-uploader.core.min',
     'fineUploaderService': ['/static/javascripts/components/fine_uploader_service']
   },
   shim: {

@@ -40,7 +40,7 @@ UserService.deactivateEmployeeById = function (_id, _callback) {
 };
 
 /**
- * 지점을 비활성화 한다.
+ * 점포을 비활성화 한다.
  * _id: branch 테이블의 id
  */
 UserService.deactivateBranchById = function (_id, _callback) {
@@ -288,7 +288,7 @@ UserService.createBranchOrSelect = function (_connection, _branch, _fc_id, _call
       if (data.insertId) {
         _callback(err, data.insertId);
       } else {
-        // 이미 존재하는 지점일 경우 기존 지점 ID 를 조회한다.
+        // 이미 존재하는 점포일 경우 기존 점포 ID 를 조회한다.
         _connection.query(QUERY.EMPLOYEE.GetBranchByName, [_fc_id, _branch],
           function (err, data) {
             _callback(err, data[0].id);

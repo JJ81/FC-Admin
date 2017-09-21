@@ -294,7 +294,7 @@ function (Util) {
     _target.find('#select_authority').val(_role);
   });
 
-  // supervisor 지점배정
+  // supervisor 점포배정
   window.$('.btn-add-branch').bind('click', (event) => {
     const _self = window.$(event.currentTarget);
     const _target = window.$('#frm_assign_branch');
@@ -321,7 +321,7 @@ function (Util) {
     });
   });
 
-  // 지점 추가
+  // 점포 추가
   btnAssignBranch.bind('click', () => {
     const _text = selectBranchList.find('option:selected').text().trim();
     const _id = selectBranchList.find('option:selected').val().trim();
@@ -333,7 +333,7 @@ function (Util) {
     }
   });
 
-  // 지점 템플릿에 데이터를 바인딩 후 반환한다.
+  // 점포 템플릿에 데이터를 바인딩 후 반환한다.
   const getItemElement = (branchId, branchName) => {
     return '<li class="list-group-item" data-branch-id="' + branchId + '">' +
       '<div class="course">' + branchName + '<a href="#" class="btn-delete-course" onclick="administrator.removeElement(this);">' +
@@ -361,7 +361,7 @@ function (Util) {
     return false;
   };
 
-  // 지점 리스트를 다시 점검한다
+  // 점포 리스트를 다시 점검한다
   const reCountBranchList = () => {
     let _tmp = [];
     window.$('.list-group-item', panelList).each((index, elem) => {
@@ -376,7 +376,7 @@ function (Util) {
 
     // Validation check
     if (branchIdList.length <= 0) {
-      window.alert('지점을 추가하세요.');
+      window.alert('점포을 추가하세요.');
       return;
     }
 
@@ -389,7 +389,7 @@ function (Util) {
       }
     }).then((res) => {
       if (res.data.success) {
-        window.alert('지점을 배정하였습니다.');
+        window.alert('점포을 배정하였습니다.');
       } else {
         console.log(res.data.msg);
         window.alert('알 수 없는 오류가 발생했습니다. 잠시 후에 다시 시도해주세요.');
@@ -445,7 +445,7 @@ function (Util) {
       });
   });
 
-  // 지점 ..등록모드에서 수정모드로 변경
+  // 점포 ..등록모드에서 수정모드로 변경
   // 2nd 페이지에서 이벤트 안먹히는 증상 (http://stackoverflow.com/questions/25414778/jquery-onclick-not-working-in-datatables-2nd-page-or-rows-past-11)
   $('#table-branch').on('click', '.branch-list-item', function (e) {
     e.preventDefault();
@@ -456,7 +456,7 @@ function (Util) {
     btnDeleteBranch.prop('disabled', false);
   });
 
-// 지점 .. 수정모드에서 등록모드로 변경
+// 점포 .. 수정모드에서 등록모드로 변경
   btnBranchClearInputs.bind('click', function () {
     $('.branch-input > input[name=\'id\']').val('');
     $('.branch-input > input[name=\'name\']').val('');
@@ -465,7 +465,7 @@ function (Util) {
     btnDeleteBranch.prop('disabled', true);
   });
 
-  // 지점 삭제하기
+  // 점포 삭제하기
   btnDeleteBranch.bind('click', function () {
     if (!confirm('삭제 시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?')) {
       return false;
@@ -481,9 +481,9 @@ function (Util) {
       })
       .then(function (response) {
         if (!response.data.success) {
-          alert('지점을 삭제하지 못했습니다.');
+          alert('점포을 삭제하지 못했습니다.');
         } else {
-          alert('지점을 삭제하였습니다.');
+          alert('점포을 삭제하였습니다.');
         }
         location.reload();
       })

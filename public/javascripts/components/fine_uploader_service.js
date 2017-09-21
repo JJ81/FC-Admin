@@ -3,7 +3,7 @@
 window.define([
   'jquery',
   'axios',
-  'fineUploader',
+  'fineUploaderCore', // fineUploader
   'text!../../fine_uploader.html'
 ], function ($, axios, qq, qqTemplate) {
   var self;
@@ -51,8 +51,9 @@ window.define([
       });
     },
     setFineUploader: function () {
-      $('#uploader-template').append(qqTemplate);
-      uploader = new qq.FineUploader({
+      // $('#uploader-template').append(qqTemplate);
+      uploader = new qq.FineUploaderBasic({
+      // uploader = new qq.FineUploader({
         element: document.getElementById(self.options.el),
         autoUpload: false,
         multiple: self.options.mutiple,

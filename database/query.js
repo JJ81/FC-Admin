@@ -113,14 +113,14 @@ QUERY.LOGIN = {
 };
 
 QUERY.EMPLOYEE = {
-  // 지점을 조회한다.
+  // 점포을 조회한다.
   GetBranch:
     'SELECT b.`id`, b.`name` ' +
     '  FROM `branch` AS b ' +
     ' WHERE b.`fc_id` = ? ' +
     '   AND b.`active` = 1; ',
 
-  // 지점을 조회한다.
+  // 점포을 조회한다.
   GetBranchesByRole: ({ role, fc_id: fcId, admin_id: adminId }) => {
     let sql;
 
@@ -146,7 +146,7 @@ QUERY.EMPLOYEE = {
     return sql;
   },
 
-  // 지점명으로 지점을 검색한다.
+  // 점포명으로 점포을 검색한다.
   GetBranchByName:
     'SELECT b.`id`, b.`name` ' +
     '  FROM `branch` AS b ' +
@@ -154,11 +154,11 @@ QUERY.EMPLOYEE = {
     '   AND b.`active` = true ' +
     '   AND b.`name` = ?; ',
 
-  // 지점을 비활성화 한다.
+  // 점포을 비활성화 한다.
   DisableEmployeeById:
     'UPDATE `users` SET `active` = 0 WHERE `id` = ?; ',
 
-  // 지점을 비활성화 한다.
+  // 점포을 비활성화 한다.
   DisableBranchById:
     'UPDATE `branch` SET `active` = 0 WHERE `id` = ?; ',
 
@@ -1353,7 +1353,7 @@ QUERY.ACHIEVEMENT = {
     'SELECT `name` FROM `edu` ' +
     'WHERE `id` = ?;',
 
-    // 지점별 이수율
+    // 점포별 이수율
   GetBranchProgress:
     'SELECT g.`branch_id` ' +
     '     , MAX(b.`name`) AS branch_name ' +
@@ -1457,7 +1457,7 @@ QUERY.ACHIEVEMENT = {
     ' GROUP BY g.`user_id` ' +
     ' ORDER BY `completed_rate` DESC; ',
 
-  // 지점별 이수율 (전체)
+  // 점포별 이수율 (전체)
   GetBranchProgressAllByEdu: (eduId, { role, fc_id: fcId, admin_id: adminId }) => {
     let sql =
       'SELECT g.`branch_id` ' +
@@ -2210,7 +2210,7 @@ QUERY.DASHBOARD = {
     return sql;
   },
 
-    // 지점별 이수율 (전체)
+    // 점포별 이수율 (전체)
   GetBranchProgressAll: ({ role, fc_id: fcId, admin_id: adminId }) => {
     let sql;
 

@@ -27,7 +27,7 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
               }
             });
         },
-        // 총 지점 수
+        // 총 점포 수
         // result[1]
         (callback) => {
           connection.query(QUERY.DASHBOARD.GetBranchCount(req.user),
@@ -95,7 +95,7 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
             }
           );
         },
-        // 교육 이수율 랭킹 (지점)
+        // 교육 이수율 랭킹 (점포)
         // result[5]
         (callback) => {
           connection.query(QUERY.DASHBOARD.GetBranchProgressAll(req.user),
