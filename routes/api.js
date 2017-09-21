@@ -13,6 +13,9 @@ const util = require('../util/util');
 var CourseService = require('../service/CourseService');
 const MessageService = require('../service/MessageService');
 const AquaPlayerService = require('../service/AquaPlayerService');
+const formidable = require('formidable');
+const path = require('path');
+const unirest = require('unirest');
 
 router.get('/course/group/id/create', isAuthenticated, (req, res) => {
   res.json({
@@ -128,5 +131,36 @@ router.get('/test', (req, res) => {
 router.get('/player/encparam', AquaPlayerService.getEncodedParam);
 router.get('/aqua', util.getLogoInfo, AquaPlayerService.show);
 router.get('/demo/aquaplayer', util.isAuthenticated, util.getLogoInfo, AquaPlayerService.demo);
+
+router.get('/fineuploader/token', (req, res, next) => {
+  const apiKey = 'dfdd93a2a66608bed75697abffb5aaeb';
+  unirest.get(`http://api.wecandeo.com/web/v4/uploadToken.json?key=${apiKey}`)
+  .end(function (response) {
+    console.log(response.body);
+    return res.send(response.body);
+  });
+});
+
+router.post('/fineuploader', (req, res, next) => {
+  let filePath = null;
+  let incomingForm = new formidable.IncomingForm({
+    encoding: 'utf-8',
+    keepExtensions: true,
+    multiples: false,
+    uploadDir: path.join(__dirname, '/../public/uploads')
+  });
+
+  incomingForm.parse(req, (err, fields, files) => {
+    if (err) throw err;
+
+    console.log(fields);
+    filePath = files.videofile.path;
+    // console.log(filePath);
+
+    return res.send({
+      success: true
+    });
+  });
+});
 
 module.exports = router;

@@ -21,6 +21,7 @@
     "express": "~4.13.1",
     "express-csv": "^0.6.0",
     "express-formidable": "^1.0.0",
+    "fine-uploader": "^5.15.0",
     "formidable": "^1.1.1",
     "handlebar": "^1.0.0",
     "hbs": "~3.1.0",

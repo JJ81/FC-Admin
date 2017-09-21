@@ -2,13 +2,15 @@
 
 window.requirejs([
   'common',
-  'Vimeo'
+  'Vimeo',
+  'fineUploaderService'
 ],
-function (Util, Vimeo) {
+function (Util, Vimeo, FineUploaderService) {
   var $ = $ || window.$;
   var player = null;
   // var playerContainer = $('#videoplayer');
   var btnRegistVideo = $('#regist-video');
+  var btnUploadVideo = $('#uploadVideo');
   var btnPlayVideo = $('#play-video');
   var _confirm = true; // 윈도우 종료 시 창을 닫을지 여부
   var $selectVideoProvider = $('#video-provider');
@@ -20,7 +22,8 @@ function (Util, Vimeo) {
     // console.log('hello!');
     // window.alert(window.parent.opener);
     // window.parent.opener.winpop_listener();
-    $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName() + '&video_id=148');
+
+    // $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName() + '&video_id=148');
   });
 
   $selectVideoProvider.on('change', function () {
@@ -29,10 +32,21 @@ function (Util, Vimeo) {
     if (option === 'VIMEO') {
       $setVimeoPlayer.removeClass('blind');
       $setAquaPlayer.addClass('blind');
+      $('.video-preview').addClass('blind');
     } else if (option === 'AQUA') {
       $setAquaPlayer.removeClass('blind');
       $setVimeoPlayer.addClass('blind');
+      $('.video-preview').removeClass('blind');
     }
+  });
+
+  btnUploadVideo.on('click', function () {
+    var options = {
+      el: 'my-uploader',
+      multiple: false
+    };
+
+    FineUploaderService = new FineUploaderService(options);
   });
 
   /**
@@ -150,6 +164,6 @@ function (Util, Vimeo) {
      *
      */
   window.onbeforeunload = function (event) {
-    if (_confirm) { return confirm('진행중인 작업이 모두 사라집니다. 계속하시겠습니까?'); }
+    // if (_confirm) { return confirm('진행중인 작업이 모두 사라집니다. 계속하시겠습니까?'); }
   };
 });

@@ -85,7 +85,8 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer.js',
     DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer_ui.js',
     DIR.SRC + '/vendor/' + 'aquaplayer/js/cdnproxy.js',
-    DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer_conf.js'
+    DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer_conf.js',
+    DIR.SRC + '/vendor/' + 'fine-uploader/fine-uploader/fine-uploader.js'
     // DIR.SRC + '/vendor/' + 'plugins/smoothstate/jquery.smoothstate.min.js'
   ])
   .pipe(uglify())
@@ -113,7 +114,8 @@ gulp.task('copy-font', () => {
 
 gulp.task('copy-css-images', () => {
   return gulp.src([
-    DIR.SRC + '/vendor/' + 'plugins/jqueryUI/images/*.*'
+    DIR.SRC + '/vendor/' + 'plugins/jqueryUI/images/*.*',
+    DIR.SRC + '/vendor/' + 'fine-uploader/fine-uploader/*.gif'
   ])
   .pipe(gulp.dest(DEST.CSS_IMAGES));
 });
@@ -137,7 +139,8 @@ gulp.task('copy-css', () => {
     DIR.SRC + '/vendor/' + 'plugins/jQueryUI/jquery-ui.min.css',
     DIR.SRC + '/vendor/' + 'plugins/tag-it/jquery.tagit.min.css',
     DIR.SRC + '/vendor/' + 'aquaplayer/css/nplayer.css',
-    DIR.SRC + '/vendor/' + 'aquaplayer/css/nplayer_res.css'
+    DIR.SRC + '/vendor/' + 'aquaplayer/css/nplayer_res.css',
+    DIR.SRC + '/vendor/' + 'fine-uploader/fine-uploader/fine-uploader-new.css'
   ])
   .pipe(cleanCSS({compatibility: 'ie8'}))
   .pipe(gulp.dest(DIR.DEST + '/stylesheets/'));

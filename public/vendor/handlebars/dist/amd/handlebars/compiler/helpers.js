@@ -1,10 +1,10 @@
 define(
-  ["../exception","exports"],
-  function(__dependency1__, __exports__) {
-    "use strict";
-    var Exception = __dependency1__["default"];
+  ['../exception', 'exports'],
+  function (__dependency1__, __exports__) {
+    'use strict';
+    var Exception = __dependency1__['default'];
 
-    function SourceLocation(source, locInfo) {
+    function SourceLocation (source, locInfo) {
       this.source = source;
       this.start = {
         line: locInfo.first_line,
@@ -16,28 +16,28 @@ define(
       };
     }
 
-    __exports__.SourceLocation = SourceLocation;function stripFlags(open, close) {
+    __exports__.SourceLocation = SourceLocation; function stripFlags (open, close) {
       return {
         open: open.charAt(2) === '~',
-        close: close.charAt(close.length-3) === '~'
+        close: close.charAt(close.length - 3) === '~'
       };
     }
 
-    __exports__.stripFlags = stripFlags;function stripComment(comment) {
+    __exports__.stripFlags = stripFlags; function stripComment (comment) {
       return comment.replace(/^\{\{~?\!-?-?/, '')
                     .replace(/-?-?~?\}\}$/, '');
     }
 
-    __exports__.stripComment = stripComment;function preparePath(data, parts, locInfo) {
-      /*jshint -W040 */
+    __exports__.stripComment = stripComment; function preparePath (data, parts, locInfo) {
+      /* jshint -W040 */
       locInfo = this.locInfo(locInfo);
 
       var original = data ? '@' : '',
-          dig = [],
-          depth = 0,
-          depthString = '';
+        dig = [],
+        depth = 0,
+        depthString = '';
 
-      for(var i=0,l=parts.length; i<l; i++) {
+      for (var i = 0, l = parts.length; i < l; i++) {
         var part = parts[i].part;
         original += (parts[i].separator || '') + part;
 
@@ -56,21 +56,21 @@ define(
       return new this.PathExpression(data, depth, dig, original, locInfo);
     }
 
-    __exports__.preparePath = preparePath;function prepareMustache(path, params, hash, open, strip, locInfo) {
-      /*jshint -W040 */
+    __exports__.preparePath = preparePath; function prepareMustache (path, params, hash, open, strip, locInfo) {
+      /* jshint -W040 */
       // Must use charAt to support IE pre-10
       var escapeFlag = open.charAt(3) || open.charAt(2),
-          escaped = escapeFlag !== '{' && escapeFlag !== '&';
+        escaped = escapeFlag !== '{' && escapeFlag !== '&';
 
       return new this.MustacheStatement(path, params, hash, escaped, strip, this.locInfo(locInfo));
     }
 
-    __exports__.prepareMustache = prepareMustache;function prepareRawBlock(openRawBlock, content, close, locInfo) {
-      /*jshint -W040 */
+    __exports__.prepareMustache = prepareMustache; function prepareRawBlock (openRawBlock, content, close, locInfo) {
+      /* jshint -W040 */
       if (openRawBlock.path.original !== close) {
         var errorNode = {loc: openRawBlock.path.loc};
 
-        throw new Exception(openRawBlock.path.original + " doesn't match " + close, errorNode);
+        throw new Exception(openRawBlock.path.original + ' doesn\'t match ' + close, errorNode);
       }
 
       locInfo = this.locInfo(locInfo);
@@ -83,8 +83,8 @@ define(
           locInfo);
     }
 
-    __exports__.prepareRawBlock = prepareRawBlock;function prepareBlock(openBlock, program, inverseAndProgram, close, inverted, locInfo) {
-      /*jshint -W040 */
+    __exports__.prepareRawBlock = prepareRawBlock; function prepareBlock (openBlock, program, inverseAndProgram, close, inverted, locInfo) {
+      /* jshint -W040 */
       // When we are chaining inverse calls, we will not have a close path
       if (close && close.path && openBlock.path.original !== close.path.original) {
         var errorNode = {loc: openBlock.path.loc};
@@ -95,7 +95,7 @@ define(
       program.blockParams = openBlock.blockParams;
 
       var inverse,
-          inverseStrip;
+        inverseStrip;
 
       if (inverseAndProgram) {
         if (inverseAndProgram.chain) {

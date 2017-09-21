@@ -49,8 +49,10 @@ window.requirejs.config({
     'cdnproxy': '/static/vendor/cdnproxy',
     // 'cdnproxy': '/static/vendor/cdnproxy.js?20170104131',
     'aquaPlayerService': ['/static/javascripts/components/aquaplayer_service'],
-    'axplugin': ['/static/javascripts/components/axplugin']
+    'axplugin': ['/static/javascripts/components/axplugin'],
     // 'smoothstate': '/static/vendor/jquery.smoothstate.min'
+    'fineUploader': '/static/vendor/fine-uploader',
+    'fineUploaderService': ['/static/javascripts/components/fine_uploader_service']
   },
   shim: {
     'nplayer': {
