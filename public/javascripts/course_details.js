@@ -4,6 +4,7 @@ window.requirejs(
     'common'
   ],
 function (Util) {
+  var $ = $ || window.$;
   var windowOption = 'scrollbars=yes, toolbar=no, location=no, status=no, menubar=no, ' +
       'resizable=yes, width=1040, height=760, left=0, top=0';
   var btnWatch = window.$('.btn-watch-video');
@@ -20,22 +21,34 @@ function (Util) {
 
   window.$(function () {
       // jQuery UI sortable 초기화
-    window.$('.course-session').sortable({
-      placeholder: 'sort-highlight',
-      handle: '.handle',
-      forcePlaceholderSize: true,
-      zIndex: 999999,
+    $('.list-group').sortable({
+      connectWith: '.list-group-item',
       start: function (e, ui) {
-        window.$(this).attr('data-previndex', ui.item.index());
+        $(this).attr('data-previndex', ui.item.index());
       },
       update: function (e, ui) {
         // var newIndex = ui.item.index();
         // var oldIndex = window.$(this).attr('data-previndex');
         // window.console.log('newIndex : ' + newIndex + ' oldIndex : ' + oldIndex);
-        window.$(this).removeAttr('data-previndex');
+        $(this).removeAttr('data-previndex');
         changeSessionOrder();
       }
     });
+    // window.$('.course-session').sortable({
+    //   placeholder: 'sort-highlight',
+    //   handle: '.handle',
+    //   forcePlaceholderSize: true,
+    //   zIndex: 999999,
+    //   start: function (e, ui) {
+    //     window.$(this).attr('data-previndex', ui.item.index());
+    //   },
+    //   update: function (e, ui) {
+    //     // var newIndex = ui.item.index();
+    //     // var oldIndex = window.$(this).attr('data-previndex');
+    //     // window.console.log('newIndex : ' + newIndex + ' oldIndex : ' + oldIndex);
+    //     window.$(this).removeAttr('data-previndex');
+    //     changeSessionOrder();
+    //   }
 
     window.winpop_listener = function (data) {
       if (data === true) {
@@ -43,6 +56,40 @@ function (Util) {
       }
     };
   });
+
+  /**
+   * DB 에서 세션 순서를 변경한다.
+   */
+  function makeSessionOrderChangeRequest (session) {
+    return window.axios({
+      method: 'put',
+      url: '/course/courselist',
+      data: {
+        title: session.children('a').data('title'),
+        course_list_id: session.children('a').data('id'),
+        course_list_order: session.index()
+      }
+    });
+  }
+
+  /**
+   * 세션순서를 변경한다.
+   */
+  function changeSessionOrder () {
+    var promises = [];
+    var items = window.$('.session-content > .list-group-item');
+
+    for (var index = 0; index < items.length; index++) {
+      promises.push(makeSessionOrderChangeRequest(window.$(items[index])));
+    }
+
+    window.axios.all(promises)
+    .then(window.axios.spread(function (acct, perms) {
+      if (acct.data.success) {
+        window.alert('세션순서를 변경하였습니다.');
+      }
+    }));
+  }
 
   // 체크리스트 보기
   btnPreviewChecklist.bind('click', function (e) {
@@ -218,32 +265,32 @@ function (Util) {
   /**
    * DB 에서 세션 순서를 변경한다.
    */
-  function makeSessionOrderChangeRequest (session) {
-    return window.axios({
-      method: 'put',
-      url: '/course/courselist',
-      data: {
-        title: session.children().children('a').data('title'),
-        course_list_id: session.children().children('a').data('id'),
-        course_list_order: session.index()
-      }
-    });
-  }
+  // function makeSessionOrderChangeRequest (session) {
+  //   return window.axios({
+  //     method: 'put',
+  //     url: '/course/courselist',
+  //     data: {
+  //       title: session.children().children('a').data('title'),
+  //       course_list_id: session.children().children('a').data('id'),
+  //       course_list_order: session.index()
+  //     }
+  //   });
+  // }
 
-  /**
-   * 세션순서를 변경한다.
-   */
-  function changeSessionOrder () {
-    var promises = [];
-    var items = window.$('.session-list');
+  // /**
+  //  * 세션순서를 변경한다.
+  //  */
+  // function changeSessionOrder () {
+  //   var promises = [];
+  //   var items = window.$('.session-list');
 
-    for (var index = 0; index < items.length; index++) {
-      promises.push(makeSessionOrderChangeRequest(window.$(items[index])));
-    }
+  //   for (var index = 0; index < items.length; index++) {
+  //     promises.push(makeSessionOrderChangeRequest(window.$(items[index])));
+  //   }
 
-    window.axios.all(promises).then(function (results) {
-      results.forEach(function (response) {
-      });
-    });
-  }
+  //   window.axios.all(promises).then(function (results) {
+  //     results.forEach(function (response) {
+  //     });
+  //   });
+  // }
 });

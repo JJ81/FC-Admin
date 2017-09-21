@@ -1182,7 +1182,7 @@ router.delete('/checklist', util.isAuthenticated, (req, res, next) => {
  */
 router.put('/courselist', util.isAuthenticated, (req, res, next) => {
   const inputs = req.body;
-  // console.log(inputs);
+  console.log(inputs);
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
