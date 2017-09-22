@@ -40,7 +40,7 @@ function (Util, Vimeo, FineUploaderService) {
       if (window.confirm('적용하시겠습니까?')) {
         // 모달창 종료
         $('#addVideo').modal('hide');
-        $('#aqua-video-name').val(videoInfo.url);
+        $('#aqua-video-code').val(videoInfo.url);
         $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName() + '&video_id=' + videoInfo.id);
       }
     } else {
@@ -75,7 +75,7 @@ function (Util, Vimeo, FineUploaderService) {
    * Player 를 초기화 한다.
    */
   function initPlayer () {
-    var videoUrl = $('#video-code').val();
+    var videoUrl = $('#vimeo-video-code').val();
     var options = {
       url: videoUrl,
       loop: false
@@ -99,7 +99,7 @@ function (Util, Vimeo, FineUploaderService) {
     }
   }
 
-  $('#video-code').bind('keypress', function (e) {
+  $('#vimeo-video-code').bind('keypress', function (e) {
     var key = e.which || e.keyCode;
     if (key === 13) { displayVideo(); }
             // initPlayer();
@@ -114,42 +114,75 @@ function (Util, Vimeo, FineUploaderService) {
     e.preventDefault();
 
     if (!validateForm()) { return false; }
-
     if (!window.confirm('저장하시겠습니까?')) { return false; }
 
-    var params = $('form').serialize();
-    $.ajax({
-      url: $('form').attr('action'),
-      type: 'POST',
-      data: params,
-      contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-      dataType: 'html',
-      success: function (response) {
-        window.alert('비디오를 저장하였습니다.');
-        // window.parent.opener.location.reload(); // 부모폼을 reload 한다.
-        window.parent.opener.winpop_listener(true);
+    var videoProvider = $('#video-provider').val();
+    var videoCode;
 
-        _confirm = false;
+    if (videoProvider === 'VIMEO') {
+      videoCode = $('input[name=\'vimeo-video-code\']').val();
+    } else if (videoProvider === 'AQUA') {
+      videoCode = $('input[name=\'aqua_video_code\']').val();
+    }
+
+    window.axios.post('/course/create/video', {
+      course_id: $('input[name=\'course_id\']').val(),
+      video_name: $('input[name=\'video_name\']').val(),
+      video_provider: videoProvider,
+      video_code: videoCode
+    })
+      .then(function (response) {
+        window.alert('비디오를 저장하였습니다.');
+        window.parent.opener.winpop_listener(true);
         window.close();
-      }
-    });
+      })
+      .catch(function (error) {
+        console.log(error);
+        return false;
+      });
+
+    // var params = $('form').serialize();
+    // $.ajax({
+    //   url: $('form').attr('action'),
+    //   type: 'POST',
+    //   data: params,
+    //   contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+    //   dataType: 'html',
+    //   success: function (response) {
+    //     window.alert('비디오를 저장하였습니다.');
+    //     // window.parent.opener.location.reload(); // 부모폼을 reload 한다.
+    //     window.parent.opener.winpop_listener(true);
+
+    //     // _confirm = false;
+    //     window.close();
+    //   }
+    // });
   });
 
     /**
      * 폼 validate
      */
   function validateForm () {
-    var video_title = $('#video-title');
-    var video_code = $('#video-code');
+    var videoTitle = $('#video-title');
 
-    if (!video_title.val()) {
-      alert('비디오 강좌명을 입력하세요.');
-      video_title.focus();
+    if (!videoTitle.val()) {
+      window.alert('비디오 강좌명을 입력하세요.');
+      videoTitle.focus();
       return false;
     }
-    if (!video_code.val()) {
-      alert('비디오 코드를 입력하세요.');
-      video_code.focus();
+
+    var videoProvider = $('#video-provider').val();
+    var $videoCode;
+
+    if (videoProvider === 'VIMEO') {
+      $videoCode = $('#vimeo-video-code');
+    } else if (videoProvider === 'AQUA') {
+      $videoCode = $('#aqua-video-code');
+    }
+
+    if (!$videoCode.val()) {
+      window.alert('비디오 코드를 입력하세요.');
+      $videoCode.focus();
       return false;
     }
 
@@ -160,7 +193,7 @@ function (Util, Vimeo, FineUploaderService) {
      * 비디오를 표시한다.
      */
   function displayVideo () {
-    var video_code = $('#video-code').val();
+    var video_code = $('#vimeo-video-code').val();
     var video_provider = $('#video-provider').val();
     var video_player = $('#video-player');
 

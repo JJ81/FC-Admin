@@ -327,6 +327,7 @@ router.get('/create/video', util.isAuthenticated, util.getLogoInfo, (req, res, n
  * 비디오 등록하기
  */
 router.post('/create/video', util.isAuthenticated, (req, res, next) => {
+  console.log(req.body);
   const {
     course_id: courseId,
     video_name: videoName,
