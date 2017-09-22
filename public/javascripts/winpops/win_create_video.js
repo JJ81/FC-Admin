@@ -120,7 +120,7 @@ function (Util, Vimeo, FineUploaderService) {
     var videoCode;
 
     if (videoProvider === 'VIMEO') {
-      videoCode = $('input[name=\'vimeo-video-code\']').val();
+      videoCode = $('input[name=\'vimeo_video_code\']').val();
     } else if (videoProvider === 'AQUA') {
       videoCode = $('input[name=\'aqua_video_code\']').val();
     }
