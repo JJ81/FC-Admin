@@ -299,12 +299,27 @@ router.get('/video', util.isAuthenticated, util.getLogoInfo, (req, res, next) =>
  */
 router.get('/create/video', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   const { course_id: courseId } = req.query;
-  res.render('winpops/win_create_video', {
-    current_path: 'winpop',
-    module_type: 'create_video',
-    title: '비디오 등록',
-    loggedIn: req.user,
-    course_id: courseId
+
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    connection.query(QUERY.VIDEO.SelectVideos,
+      [ req.user.fc_id ],
+      (err, rows) => {
+        connection.release();
+        if (err) {
+          console.error(err);
+        } else {
+          return res.render('winpops/win_create_video', {
+            current_path: 'winpop',
+            module_type: 'create_video',
+            title: '비디오 등록',
+            loggedIn: req.user,
+            course_id: courseId,
+            videos: rows
+          });
+        }
+      }
+    );
   });
 });
 

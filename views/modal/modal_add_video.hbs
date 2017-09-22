@@ -8,7 +8,7 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <table id="table_edu" class="table no-margin table-bordered table-striped" width="100%">
+          <table id="table_add_video" class="table no-margin table-bordered table-striped" width="100%">
             <thead>
               <tr>
                 <th></th>
@@ -18,7 +18,14 @@
             <tbody>
               {{#each videos}}
               <tr>
-                <td><input type="radio" name="table_video_radio" data-id="{{id}}"></td>
+                <td>
+                  <input type="radio"
+                    name="table_video_radio"
+                    data-id="{{id}}"
+                    data-url="{{url}}"
+                    data-name="{{name}}"
+                  >
+                </td>
                 <td class="center">{{name}}</td>
               </tr>
               {{/each}}

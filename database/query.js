@@ -2747,4 +2747,18 @@ QUERY.TAG = {
     'INSERT IGNORE `edu_tag_map` (`edu_id`, `tag_id`) VALUES (?,?); '
 };
 
+QUERY.VIDEO = {
+  SelectVideos:
+    'SELECT v.`id` ' +
+    '     , v.`name` ' +
+    '     , v.`url` ' +
+    '  FROM `video` AS v ' +
+    ' INNER JOIN `admin` AS a ' +
+    '    ON v.`creator_id` = a.`id` ' +
+    // '   AND a.`fc_id` = ? ' +
+    '   AND v.`type` = \'AQUA\' ' +
+    '   AND v.`active` = 1 ' +
+    ' ORDER BY v.`name`; '
+};
+
 module.exports = QUERY;
