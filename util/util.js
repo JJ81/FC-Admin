@@ -84,6 +84,7 @@ exports.getLogoInfo = (req, res, next) => {
   let themeOfProgressBar;
   let copyright;
   let vodUrl;
+  let uploadFolder;
 
   switch (req.headers.host) {
   case 'waffle.edu1004.kr':
@@ -94,6 +95,7 @@ exports.getLogoInfo = (req, res, next) => {
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'Waffle university coop';
     vodUrl = 'http://pcst.aquan.waffle.edu1004.kr/orangenamu/waffle/';
+    uploadFolder = '/waffle';
     break;
 
   case 'momstouch.edu1004.kr':
@@ -104,6 +106,7 @@ exports.getLogoInfo = (req, res, next) => {
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'MOM\'S TOUCH';
     vodUrl = 'http://pcst.aquan.momstouch.edu1004.kr/orangenamu/momstouch/';
+    uploadFolder = '/momstouch';
     break;
 
   case 'homesfood.edu1004.kr':
@@ -114,6 +117,7 @@ exports.getLogoInfo = (req, res, next) => {
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = '홈스푸드';
     vodUrl = 'http://pcst.aquan.homesfood.edu1004.kr/orangenamu/homesfood/';
+    uploadFolder = '/homesfood';
     break;
 
   case 'dev.edu1004.kr':
@@ -125,6 +129,7 @@ exports.getLogoInfo = (req, res, next) => {
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'Copyright © 2017 Orangenamu ALL RIGHTS RESERVED.';
     vodUrl = 'http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/';
+    uploadFolder = '/dev';
     break;
   }
   res.locals.logoImageName = logoImageName;
@@ -134,6 +139,7 @@ exports.getLogoInfo = (req, res, next) => {
   res.locals.themeOfProgressBar = themeOfProgressBar;
   res.locals.copyright = copyright;
   res.locals.vodUrl = vodUrl;
+  res.locals.uploadFolder = uploadFolder;
 
   return next();
 };

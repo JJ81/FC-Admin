@@ -66,12 +66,11 @@ window.define([
           stopOnFirstInvalidFile: true
         },
         request: {
-          endpoint: self.options.uploadUrl,
+          endpoint: self.options.uploadUrl + '?token=' + self.options.token,
           inputName: 'videofile',
-          paramsInBody: false,
+          paramsInBody: true,
           params: {
             token: self.options.token,
-            folder: '/dev',
             target_path: '/dev'
           }
         },
@@ -108,7 +107,6 @@ window.define([
           paramsInBody: false,
           params: {
             token: self.options.token,
-            folder: '/dev',
             target_path: '/dev'
           }
         },

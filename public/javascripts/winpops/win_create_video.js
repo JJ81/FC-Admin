@@ -3,9 +3,9 @@
 window.requirejs([
   'common',
   'Vimeo',
-  'fineUploaderService'
+  'jqueryUploaderService'
 ],
-function (Util, Vimeo, FineUploaderService) {
+function (Util, Vimeo, JqueryFileUploaderService) {
   var $ = $ || window.$;
   var player = null;
   // var playerContainer = $('#videoplayer');
@@ -63,12 +63,20 @@ function (Util, Vimeo, FineUploaderService) {
   });
 
   btnUploadVideo.on('click', function () {
-    var options = {
-      el: 'my-uploader',
-      multiple: false
-    };
+    // var options = {
+      // el: 'my-uploader',
+      // multiple: false
+    // };
 
-    FineUploaderService = new FineUploaderService(options);
+    // FineUploaderService = new FineUploaderService(options);
+
+    var options = {
+      uploadFolder: $('#upload_folder').val(),
+      callback: function (data) {
+        // $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName() + '&video_id=' + data.id);
+      }
+    };
+    JqueryFileUploaderService = new JqueryFileUploaderService(options);
   });
 
   /**

@@ -53,7 +53,11 @@ window.requirejs.config({
     // 'smoothstate': '/static/vendor/jquery.smoothstate.min'
     'fineUploader': '/static/vendor/fine-uploader.min',
     'fineUploaderCore': '/static/vendor/fine-uploader.core.min',
-    'fineUploaderService': ['/static/javascripts/components/fine_uploader_service']
+    'fineUploaderService': ['/static/javascripts/components/fine_uploader_service'],
+    'jqueryUploaderService': ['/static/javascripts/components/jquery_uploader_service'],
+    'jquery.fileupload': ['/static/vendor/jquery.fileupload'],
+    'jquery.iframe-transport': ['/static/vendor/jquery.iframe-transport'],
+    'jquery-ui/ui/widget': ['/static/vendor/jquery.ui.widget']
   },
   shim: {
     'nplayer': {
@@ -100,6 +104,15 @@ window.requirejs.config({
     },
     'tag-it': {
       deps: ['jquery', 'jquery-ui']
+    },
+    // 'jquery.iframe-transport': {
+    //   'deps': ['jquery']
+    // },
+    // 'jquery.ui.widget': {
+    //   'deps': ['jquery']
+    // },
+    'jquery.fileupload': {
+      'deps': ['jquery', 'jquery-ui/ui/widget', 'jquery.iframe-transport']
     }
   }
 });
