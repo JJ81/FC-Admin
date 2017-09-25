@@ -1,0 +1,22 @@
+<div class="modal fade" id="fineUploader">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">파일 업로드</h4>
+      </div>
+      <div class="modal-body">
+        <input id="fileupload" type="file" name="videofile" data-url="">
+        <label id="progress-value"></label>
+        <div id="progress">
+          <div class="jquery-file-progress-bar" style="width: 0%;"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+        <button type="button" id="cancel-button" class="btn btn-warning">취소</button>
+        <button type="button" id="upload-button" class="btn btn-primary">업로드</button>
+      </div>
+    </div>
+  </div>
+</div>
