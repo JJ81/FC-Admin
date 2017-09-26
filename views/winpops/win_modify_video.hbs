@@ -1,59 +1,97 @@
 <div class="winpop_video" id="watchVideo">
-    <form action="/course/modify/video" method="post">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">
-                    비디오 강좌 수정하기
-                    <div class="pull-right">
-                        <button type="button" id="modify-video" class="btn btn-primary" data-video-id="{{video.id}}" data-course-list-id="{{course_list_id}}">
-                            <i class="fa fa-floppy-o"> 저장</i>
-                        </button>
-                        <button type="button" class="btn btn-default" onclick="window.close();">
-                            <i class="fa fa-sign-out"> 나가기</i>
-                        </button>
-                    </div>
-                </h4>
-            </div>
+  <form action="/course/modify/video" method="post">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">
+          비디오 강좌 수정하기
+          <div class="pull-right">
+            <button type="button" id="modify-video" class="btn btn-primary"
+              data-video-id="{{video.id}}"
+              data-course-list-id="{{course_list_id}}">
+              <i class="fa fa-floppy-o"> 저장</i>
+            </button>
+            <button type="button" class="btn btn-default" onclick="window.close();">
+              <i class="fa fa-sign-out"> 나가기</i>
+            </button>
+          </div>
+        </h4>
+      </div>
 
-            <div class="modal-body">
-
-                <div class="form-group">
-                    <label for="video_title">비디오 강좌명</label>
-                    <input type="text" name="video_name" class="form-control" id="video-title" placeholder="비디오 강좌명" autocomplete="off" required autofocus value="{{video.name}}" />
-                </div>
-
-                <div class="form-group">
-                    <label>비디오 제공수단</label>
-                    <select class="form-control" id="video-provider" name="video_provider">
-                        <!--<option value="YOUTUBE" {{#if (isEquals video.type 'YOUTUBE')}} selected {{/if}}>YOUTUBE</option>-->
-                        <option value="VIMEO" {{#if (isEquals video.type 'VIMEO')}} selected {{/if}}>VIMEO</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="video_title">비디오 코드</label>
-
-                    <div class="input-group">
-                        <input type="text" name="video_code" class="form-control" id="video-code" placeholder="비디오 코드를 입력해주세요." autocomplete="off" required value="{{video.url}}" />
-                        <span class="input-group-btn">
-                            <button type="button" id="play-video" class="btn btn-default btn-flat">
-                                <i class="fa fa-arrow-circle-right"></i>
-                                재생
-                            </button>
-                        </span>
-                    </div>
-                    <small class="text-red">* Domain을 제외한 영상의 고유 코드를 입력해주세요. (ex. 189789781 or A_jTJ3CM8YU1)</small>
-                </div>
-
-                <input type="hidden" name="course_id" value="{{course_id}}" />
-
-                <hr />
-
-                <div class="video-preview">비디오를 미리 볼 수 있습니다.</div>
-                <div id="video-player"></div>
-            </div>
-
-            <div class="modal-footer"></div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="video_title">비디오 강좌명</label>
+          <input type="text" name="video_name" class="form-control" id="video-title" placeholder="비디오 강좌명" autocomplete="off" required
+            autofocus value="{{video.name}}" />
         </div>
-    </form>
+
+        <div class="form-group">
+          <label>비디오 플레이어</label>
+          <select class="form-control" id="video-provider" name="video_provider">
+            <option value="AQUA" {{#if (isEquals video.type 'AQUA')}} selected {{/if}}>보안 플레이어</option>
+            <option value="VIMEO" {{#if (isEquals video.type 'VIMEO')}} selected {{/if}}>기본 플레이어</option>
+          </select>
+        </div>
+
+        <div class="aquaplayer-settings">
+          <div class="form-group">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addVideo">
+              <i class="fa fa-folder-open"></i> &nbsp;
+              비디오 선택
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" id="uploadVideo" data-toggle="modal" href='#fineUploader'>
+              <i class="fa fa-upload"></i> &nbsp;
+              비디오 업로드
+            </button>
+          </div>
+          <div class="form-group">
+            <input type="text" name="aqua_video_code"
+              class="form-control"
+              id="aqua-video-code"
+              placeholder="파일명"
+              autocomplete="off" disabled value="{{video.url}}" />
+          </div>
+        </div>
+
+        <div class="vimeo-settings blind">
+          <div class="form-group">
+            <label for="video_title">비디오 코드</label>
+            <div class="input-group">
+              <input type="text" name="vimeo_video_code" class="form-control" id="vimeo-video-code" placeholder="비디오 코드를 입력해주세요." autocomplete="off"
+                required value="{{video.url}}" />
+              <span class="input-group-btn">
+                <button type="button" id="play-video" class="btn btn-default btn-flat">
+                  <i class="fa fa-arrow-circle-right"></i>
+                  재생
+                </button>
+              </span>
+            </div>
+            <small class="text-red">* Domain을 제외한 영상의 고유 코드를 입력해주세요. (ex. 189789781 or A_jTJ3CM8YU1)</small>
+          </div>
+        </div>
+
+        <input type="hidden" name="course_id" value="{{course_id}}" />
+        <input type="hidden" id="upload_folder" value="{{uploadFolder}}">
+
+        <hr />
+
+        <div class="video-preview">
+          <iframe src=""
+            id="aquaplayer_frame"
+            frameborder="0"
+            allowTransparency="true"
+            scrolling="yes"
+            width="100%"
+            height="700px"
+            allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"
+            >
+          </iframe>
+        </div>
+        <div id="video-player"></div>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </form>
 </div>
+
+{{> modal_add_video}}
+{{> modal_jquery_uploader}}

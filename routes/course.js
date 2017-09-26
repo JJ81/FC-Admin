@@ -412,7 +412,8 @@ router.get('/modify/video', util.isAuthenticated, util.getLogoInfo, (req, res, n
     connection.query(QUERY.COURSE.GetVideoDataById,
       [ _params.video_id ],
       (err, data) => {
-        // console.log(data[0]);
+        console.log(data[0]);
+
         if (err) {
           console.error(err);
         } else {

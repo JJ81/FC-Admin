@@ -25,7 +25,6 @@
         <div class="form-group">
           <label>비디오 플레이어</label>
           <select class="form-control" id="video-provider" name="video_provider">
-            <!--<option value="YOUTUBE">YOUTUBE</option>-->
             <option value="AQUA">보안 플레이어</option>
             <option value="VIMEO">기본 플레이어</option>
           </select>
@@ -47,19 +46,21 @@
           </div>
         </div>
 
-        <div class="form-group vimeo-settings blind">
-          <label for="video_title">비디오 코드</label>
-          <div class="input-group">
-            <input type="text" name="vimeo_video_code" class="form-control" id="vimeo-video-code" placeholder="비디오 코드를 입력해주세요." autocomplete="off"
-              required />
-            <span class="input-group-btn">
-              <button type="button" id="play-video" class="btn btn-default btn-flat">
-                <i class="fa fa-arrow-circle-right"></i>
-                재생
-              </button>
-            </span>
+        <div class="vimeo-settings blind">
+          <div class="form-group">
+            <label for="video_title">비디오 코드</label>
+            <div class="input-group">
+              <input type="text" name="vimeo_video_code" class="form-control" id="vimeo-video-code" placeholder="비디오 코드를 입력해주세요." autocomplete="off"
+                required />
+              <span class="input-group-btn">
+                <button type="button" id="play-video" class="btn btn-default btn-flat">
+                  <i class="fa fa-arrow-circle-right"></i>
+                  재생
+                </button>
+              </span>
+            </div>
+            <small class="text-red">* Domain을 제외한 영상의 고유 코드를 입력해주세요. (ex. 189789781 or A_jTJ3CM8YU1)</small>
           </div>
-          <small class="text-red">* Domain을 제외한 영상의 고유 코드를 입력해주세요. (ex. 189789781 or A_jTJ3CM8YU1)</small>
         </div>
 
         <input type="hidden" name="course_id" value="{{course_id}}" />
