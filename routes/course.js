@@ -277,16 +277,17 @@ router.get('/video', util.isAuthenticated, util.getLogoInfo, (req, res, next) =>
     if (err) throw err;
     connection.query(QUERY.COURSE.GetVideoDataById,
       [ videoId ],
-      (err, rows) => {
+      (err, results) => {
         connection.release();
         if (err) {
           console.error(err);
         } else {
           res.render('winpops/win_show_video', {
             current_path: 'winpop',
+            module_type: 'show_video',
             title: '비디오 미리보기',
             loggedIn: req.user,
-            video: rows
+            video: results[0]
           });
         }
       }
@@ -405,26 +406,45 @@ router.post('/create/video', util.isAuthenticated, (req, res, next) => {
  * 강의/강사등록 상세페이지 > 비디오 수정 팝업
  */
 router.get('/modify/video', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
-  const _params = req.query;
+  const queryParams = req.query;
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
-    connection.query(QUERY.COURSE.GetVideoDataById,
-      [ _params.video_id ],
-      (err, data) => {
-        console.log(data[0]);
 
+    async.series(
+      [
+        callback => {
+          connection.query(QUERY.COURSE.GetVideoDataById,
+            [ queryParams.video_id ],
+            (err, data) => {
+              callback(err, data);
+            }
+          );
+        },
+        callback => {
+          connection.query(QUERY.VIDEO.SelectVideos,
+            [ req.user.fc_id ],
+            (err, data) => {
+              callback(err, data);
+            }
+        );
+        }
+      ],
+      (err, results) => {
+        connection.release();
         if (err) {
           console.error(err);
+          throw new Error(err);
         } else {
-          res.render('winpops/win_modify_video', {
+          return res.render('winpops/win_modify_video', {
             current_path: 'winpop',
             module_type: 'modify_video',
             title: '비디오 수정',
             loggedIn: req.user,
-            video: data[0],
-            course_id: _params.course_id,
-            course_list_id: _params.course_list_id
+            current_video: results[0][0],
+            videos: results[1],
+            course_id: queryParams.course_id,
+            course_list_id: queryParams.course_list_id
           });
         }
       }

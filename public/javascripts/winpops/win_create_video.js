@@ -9,9 +9,9 @@ function (Util, Vimeo, JqueryFileUploaderService) {
   var $ = $ || window.$;
   var player = null;
   // var playerContainer = $('#videoplayer');
-  var btnRegistVideo = $('#regist-video');
-  var btnUploadVideo = $('#uploadVideo');
-  var btnPlayVideo = $('#play-video');
+  var $btnRegistVideo = $('#regist-video');
+  var $btnUploadVideo = $('#uploadVideo');
+  var $btnPlayVideo = $('#play-video');
   // var _confirm = true; // 윈도우 종료 시 창을 닫을지 여부
   var $selectVideoProvider = $('#video-provider');
   var $setAquaPlayer = $('.aquaplayer-settings');
@@ -19,7 +19,7 @@ function (Util, Vimeo, JqueryFileUploaderService) {
   var $aquaPlayerFrame = $('#aquaplayer_frame');
   // datatable 설정
   var tableVideos = Util.initDataTable($('#table_add_video'), { buttons: [] });
-  var btnApplyVideo = $('#btnApplyVideo');
+  var $btnChangeVideo = $('#btnApplyVideo');
 
   window.$(function () {
     // console.log('hello!');
@@ -29,7 +29,7 @@ function (Util, Vimeo, JqueryFileUploaderService) {
     // $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName() + '&video_id=148');
   });
 
-  btnApplyVideo.bind('click', function (e) {
+  $btnChangeVideo.bind('click', function (e) {
     e.preventDefault();
 
     var videoInfo = $('input:first:checked', tableVideos.rows({
@@ -62,7 +62,7 @@ function (Util, Vimeo, JqueryFileUploaderService) {
     }
   });
 
-  btnUploadVideo.on('click', function () {
+  $btnUploadVideo.on('click', function () {
     // var options = {
       // el: 'my-uploader',
       // multiple: false
@@ -113,12 +113,12 @@ function (Util, Vimeo, JqueryFileUploaderService) {
             // initPlayer();
   });
 
-  btnPlayVideo.bind('click', function (e) {
+  $btnPlayVideo.bind('click', function (e) {
     displayVideo();
         // initPlayer();
   });
 
-  btnRegistVideo.bind('click', function (e) {
+  $btnRegistVideo.bind('click', function (e) {
     e.preventDefault();
 
     if (!validateForm()) { return false; }
