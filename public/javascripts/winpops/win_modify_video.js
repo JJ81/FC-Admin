@@ -18,6 +18,7 @@ requirejs([
   var $btnChangeVideo = $('#btnApplyVideo');
 
   $(function () {
+    setVideoOptions();
     displayVideo();
   });
 
@@ -41,9 +42,13 @@ requirejs([
   });
 
   $selectVideoProvider.on('change', function () {
-    var option = $(this).val();
+    setVideoOptions();
+  });
 
-    if (option === 'VIMEO') {
+  function setVideoOptions () {
+    var option = $selectVideoProvider.val();
+
+    if (option === 'VIMEO' || option === 'YOUTUBE') {
       $setVimeoPlayer.removeClass('blind');
       $setAquaPlayer.addClass('blind');
       $('.video-preview').addClass('blind');
@@ -52,7 +57,7 @@ requirejs([
       $setVimeoPlayer.addClass('blind');
       $('.video-preview').removeClass('blind');
     }
-  });
+  }
 
   $btnUploadVideo.on('click', function () {
     // var options = {
@@ -91,7 +96,7 @@ requirejs([
     var videoProvider = $('#video-provider').val();
     var videoCode;
 
-    if (videoProvider === 'VIMEO') {
+    if (videoProvider === 'VIMEO' || videoProvider === 'YOUTUBE') {
       videoCode = $('input[name=\'vimeo_video_code\']').val();
     } else if (videoProvider === 'AQUA') {
       videoCode = $('input[name=\'aqua_video_code\']').val();
@@ -179,17 +184,17 @@ requirejs([
 
     switch (videoProvider) {
     case 'YOUTUBE':
-      videoCode = $('#video-code').val();
+      videoCode = $('#vimeo-video-code').val();
       $videoPlayer = $('#video-player');
 
       if (!videoCode) return false;
 
-      $videoPlayer.html('<iframe width="100%" height="600" src="https://www.youtube.com/embed/' + videoCode + '"' +
-          'frameborder="0" allowfullscreen></iframe>');
+      $videoPlayer.html('<iframe width="100%" height="600" src="/api/v1/youtube?id=' + videoCode + '"' +
+                    'frameborder="0" allowfullscreen></iframe>');
       break;
 
     case 'VIMEO':
-      videoCode = $('#video-code').val();
+      videoCode = $('#vimeo-video-code').val();
       $videoPlayer = $('#video-player');
 
       if (!videoCode) return false;

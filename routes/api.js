@@ -163,4 +163,13 @@ router.post('/fineuploader', (req, res, next) => {
   });
 });
 
+router.get('/youtube', (req, res, next) => {
+  console.log(req.query.id);
+  return res.render('winpops/win_youtube_player', {
+    layout: 'layout_youtube_player.hbs',
+    title: '유투브',
+    video_id: req.query.id
+  });
+});
+
 module.exports = router;

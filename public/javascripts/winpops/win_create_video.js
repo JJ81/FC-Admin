@@ -51,7 +51,7 @@ function (Util, Vimeo, JqueryFileUploaderService) {
   $selectVideoProvider.on('change', function () {
     var option = $(this).val();
 
-    if (option === 'VIMEO') {
+    if (option === 'VIMEO' || option === 'YOUTUBE') {
       $setVimeoPlayer.removeClass('blind');
       $setAquaPlayer.addClass('blind');
       $('.video-preview').addClass('blind');
@@ -79,34 +79,6 @@ function (Util, Vimeo, JqueryFileUploaderService) {
     JqueryFileUploaderService = new JqueryFileUploaderService(options);
   });
 
-  /**
-   * Player 를 초기화 한다.
-   */
-  function initPlayer () {
-    var videoUrl = $('#vimeo-video-code').val();
-    var options = {
-      url: videoUrl,
-      loop: false
-    };
-
-    if (player) {
-      player.unload().then(function () {
-        console.info(player);
-        player.loadVideo('157991194');
-      }).catch(function (error) {
-        console.log('비메오 오류발생!');
-        console.error(error);
-      });
-    } else {
-      player = new Vimeo('videoplayer', options);
-      player.setVolume(0.5);
-      player.on('error', function (data) {
-        console.log('비메오 오류발생!');
-        console.error(data);
-      });
-    }
-  }
-
   $('#vimeo-video-code').bind('keypress', function (e) {
     var key = e.which || e.keyCode;
     if (key === 13) { displayVideo(); }
@@ -127,7 +99,7 @@ function (Util, Vimeo, JqueryFileUploaderService) {
     var videoProvider = $('#video-provider').val();
     var videoCode;
 
-    if (videoProvider === 'VIMEO') {
+    if (videoProvider === 'VIMEO' || videoProvider === 'YOUTUBE') {
       videoCode = $('input[name=\'vimeo_video_code\']').val();
     } else if (videoProvider === 'AQUA') {
       videoCode = $('input[name=\'aqua_video_code\']').val();
@@ -182,7 +154,7 @@ function (Util, Vimeo, JqueryFileUploaderService) {
     var videoProvider = $('#video-provider').val();
     var $videoCode;
 
-    if (videoProvider === 'VIMEO') {
+    if (videoProvider === 'VIMEO' || videoProvider === 'YOUTUBE') {
       $videoCode = $('#vimeo-video-code');
     } else if (videoProvider === 'AQUA') {
       $videoCode = $('#aqua-video-code');
@@ -201,19 +173,19 @@ function (Util, Vimeo, JqueryFileUploaderService) {
      * 비디오를 표시한다.
      */
   function displayVideo () {
-    var video_code = $('#vimeo-video-code').val();
-    var video_provider = $('#video-provider').val();
-    var video_player = $('#video-player');
+    var videoCode = $('#vimeo-video-code').val();
+    var videoProvider = $('#video-provider').val();
+    var videoPlayer = $('#video-player');
 
-    if (!video_code) { return false; }
+    if (!videoCode) { return false; }
 
-    switch (video_provider) {
+    switch (videoProvider) {
     case 'YOUTUBE':
-      video_player.html('<iframe width="100%" height="600" src="https://www.youtube.com/embed/' + video_code + '"' +
+      videoPlayer.html('<iframe width="100%" height="600" src="/api/v1/youtube?id=' + videoCode + '"' +
                     'frameborder="0" allowfullscreen></iframe>');
       break;
     case 'VIMEO':
-      video_player.html('<iframe src="https://player.vimeo.com/video/' + video_code + '"?title=0&byline=0&portrait=0" ' +
+      videoPlayer.html('<iframe src="https://player.vimeo.com/video/' + videoCode + '"?title=0&byline=0&portrait=0" ' +
                     'width="100%" height="600" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
       break;
 
