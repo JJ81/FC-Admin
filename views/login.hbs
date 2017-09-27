@@ -22,6 +22,15 @@
           <!--<a href="#" class="pull-right need-help">도움이 필요하세요?</a><span class="clearfix"></span>-->
         </form>
       </div>
+
+      {{#if message}}
+      <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4><i class="icon fa fa-ban"></i> 알림</h4>
+        {{message}}
+        <A href="mailto:lucas@orangenamu.kr"> 관리자에게 문의하기</a>
+      </div>
+      {{/if}}
       <!--<a href="#" class="text-center new-account">회원가입</a>-->
     </div>
   </div>

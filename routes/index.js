@@ -25,10 +25,10 @@ passport.use(new LocalStrategy({
   usernameField: 'email',
   passwordField: 'password',
   passReqToCallback: true
-}, (req, agent, password, done) => {
+}, (req, email, password, done) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
-    connection.query(QUERY.LOGIN.login, [agent], (err, data) => {
+    connection.query(QUERY.LOGIN.login, [email], (err, data) => {
       connection.release();
       if (err) {
         return done(null, false);
@@ -36,22 +36,22 @@ passport.use(new LocalStrategy({
         if (data.length === 1) {
           if (!bcrypt.compareSync(password, data[0].password)) {
             return done(null, false);
-          } else {
-            if (data[0].active === 0) {
-              return done(null, false, { message: '접속할 수 없는 계정입니다.' });
-            }
-
-            return done(null, {
-              'admin_id': data[0].admin_id,
-              'name': data[0].name,
-              'email': data[0].email,
-              'role': data[0].role,
-              'fc_id': data[0].fc_id,
-              'fc_name': data[0].fc_name,
-              'curdate': data[0].curdate,
-              'isdemo': data[0].isdemo
-            });
           }
+
+          if (data[0].active === 0) {
+            return done(null, false, { message: '접속할 수 없는 계정입니다.' });
+          }
+
+          return done(null, {
+            'admin_id': data[0].admin_id,
+            'name': data[0].name,
+            'email': data[0].email,
+            'role': data[0].role,
+            'fc_id': data[0].fc_id,
+            'fc_name': data[0].fc_name,
+            'curdate': data[0].curdate,
+            'isdemo': data[0].isdemo
+          });
         } else {
           return done(null, false);
         }
@@ -72,7 +72,8 @@ router.get('/login', util.getLogoInfo, (req, res, next) => {
   if (req.user == null) {
     res.render('login', {
       title: '로그인',
-      current_path: 'Login'
+      current_path: 'Login',
+      message: req.flash('error')[0]
     });
   } else {
     if (req.user.role === 'supervisor') {
