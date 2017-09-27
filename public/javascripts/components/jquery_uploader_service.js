@@ -1,14 +1,15 @@
 'use strict';
 
 window.define([
-  'jquery',
-  'axios',
+  'common',
   'jquery.iframe-transport',
   'jquery-ui/ui/widget',
   'jquery.fileupload'
-], function ($, axios) {
+], function (Util) {
   var self;
-  var uploader;
+  var $ = $ || window.$;
+  var axios = axios || window.axios;
+  var jqXHR;
 
   function JqueryFileUploaderService (options) {
     self = this;
@@ -60,14 +61,13 @@ window.define([
         window.alert('업로드 취소');
         $('#upload-button').attr('disabled', false);
         $('#cancel-button').attr('disabled', true);
+        self.getUploadInfo();
       })
       .catch(function (error) {
         console.log(error);
       });
     },
     setJqueryFileUploader: function () {
-      var jqXHR;
-
       $('#fileupload').attr('data-url', self.options.uploadUrl + '?token=' + self.options.token);
 
       $('#fileupload').fileupload({
@@ -86,6 +86,7 @@ window.define([
           $('#upload-button').off('click').on('click', function () {
             $('#upload-button').attr('disabled', true);
             $('#cancel-button').attr('disabled', false);
+
             jqXHR = data.submit();
           });
         },

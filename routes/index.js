@@ -37,6 +37,10 @@ passport.use(new LocalStrategy({
           if (!bcrypt.compareSync(password, data[0].password)) {
             return done(null, false);
           } else {
+            if (data[0].active === 0) {
+              return done(null, false, { message: '접속할 수 없는 계정입니다.' });
+            }
+
             return done(null, {
               'admin_id': data[0].admin_id,
               'name': data[0].name,

@@ -106,6 +106,7 @@ QUERY.LOGIN = {
     '     , f.`id` AS fc_id ' +
     '     , CURDATE() AS curdate ' +
     '     , f.`isdemo` ' +
+    '     , f.`active` ' +
     '  FROM `admin` AS a ' +
     '  LEFT JOIN `fc` AS f ' +
     '    ON f.`id` = a.`fc_id` ' +
