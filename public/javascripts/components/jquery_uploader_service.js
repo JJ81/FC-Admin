@@ -48,6 +48,8 @@ window.define([
           self.options.uploadCancelUrl = data.uploadCancelUrl;
           self.options.token = data.token;
 
+          console.log(data);
+
           self.setJqueryFileUploader();
         }
       });
@@ -59,15 +61,21 @@ window.define([
       })
       .then(function (response) {
         window.alert('업로드 취소');
-        $('#upload-button').attr('disabled', false);
-        $('#cancel-button').attr('disabled', true);
-        self.getUploadInfo();
+        window.location.reload();
+        // $('#upload-button').attr('disabled', false);
+        // $('#cancel-button').attr('disabled', true);
+
+        // $('#fileupload').fileupload('destroy');
+        // $('#fileupload').val('');
+
+        // self.getUploadInfo();
       })
       .catch(function (error) {
         console.log(error);
       });
     },
     setJqueryFileUploader: function () {
+      console.log(self.options);
       $('#fileupload').attr('data-url', self.options.uploadUrl + '?token=' + self.options.token);
 
       $('#fileupload').fileupload({
