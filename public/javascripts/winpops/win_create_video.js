@@ -21,8 +21,14 @@ function (Util, Vimeo, JqueryFormUploaderService) {
   // datatable 설정
   var tableVideos = Util.initDataTable($('#table_add_video'), { buttons: [] });
   var $btnChangeVideo = $('#btnApplyVideo');
+  var $encodingProgress = $('.encoding-progress');
 
   window.$(function () {
+    // $btnRegistVideo.button('loading');
+    // setTimeout(function () {
+    //   $btnRegistVideo.button('reset');
+    // }, 3000);
+
     // console.log('hello!');
     // window.alert(window.parent.opener);
     // window.parent.opener.winpop_listener();
@@ -34,7 +40,34 @@ function (Util, Vimeo, JqueryFormUploaderService) {
       uploadFolder: $('#upload_folder').val(),
       callback: function (data) {
         if (data.success) {
-          $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName() + '&video_name=' + data.videoName);
+          // $encodingProgress.removeClass('blind');
+
+          // var EncodingChecker;
+
+          // // 인코딩 상태를 체크한다.
+          // (function checkEncodingStatus () {
+          //   window.axios.get('http://api.wecandeo.com/web/encoding/status.json?' +
+          //     'key=' + data.token +
+          //     '&access_key=' + data.access_key +
+          //     '&pkg=' + data.pkg
+          //   )
+          //   .then(function (response) {
+          //     var data = response.data;
+
+          //     if (data.encodingStatus.errorInfo.erroCode === 'None') {
+          //       EncodingChecker = setTimeout(checkEncodingStatus, 3000);
+          //     } else {
+          //       console.log(data);
+          //       window.alert(data.encodingStatus.errorInfo.errorMessage);
+
+          //       clearTimeout(EncodingChecker);
+          //     }
+          //   })
+          //   .catch(function (error) {
+          //     console.log(error);
+          //   });
+          // }());
+          // $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName() + '&video_name=' + data.videoName);
         }
       }
     };

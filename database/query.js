@@ -2756,7 +2756,7 @@ QUERY.VIDEO = {
     '  FROM `video` AS v ' +
     ' INNER JOIN `admin` AS a ' +
     '    ON v.`creator_id` = a.`id` ' +
-    // '   AND a.`fc_id` = ? ' +
+    '   AND a.`fc_id` = ? ' +
     '   AND v.`type` = \'AQUA\' ' +
     '   AND v.`active` = 1 ' +
     ' ORDER BY v.`name`; '

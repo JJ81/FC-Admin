@@ -37,11 +37,19 @@
               <i class="fa fa-folder-open"></i> &nbsp;
               비디오 선택
             </button>
-            <button type="button" class="btn btn-primary btn-sm" id="uploadVideo" data-toggle="modal" href='#fineUploader'>
+            <button type="button" class="btn btn-primary btn-sm" id="uploadVideo" data-toggle="modal"
+              href="#fineUploader"
+            >
               <i class="fa fa-upload"></i> &nbsp;
               비디오 업로드
             </button>
           </div>
+
+          <div class="form-group fileuploader-progress encoding-progress blind">
+            <div class="fileuploader-bar"></div>
+            <div class="fileuploader-percent">0%</div>
+          </div>
+
           <div class="form-group">
             <input type="text" name="aqua_video_code" class="form-control" id="aqua-video-code" placeholder="파일명" autocomplete="off" disabled />
           </div>

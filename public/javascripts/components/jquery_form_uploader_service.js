@@ -105,7 +105,8 @@ window.define([
     send: function () {
       var formData = new window.FormData();
       var fileToUpload = $('#fileupload').get(0).files[0];
-      uploadedFileName = Util.makeid() + '.' + Util.getExtension(fileToUpload.name);
+      uploadedFileName = Util.makeid() + '.mp4';
+      // uploadedFileName = Util.makeid() + '.' + Util.getExtension(fileToUpload.name);
 
       formData.append('token', self.options.token);
       formData.append('folder', 2004661);
@@ -157,7 +158,10 @@ window.define([
 
             self.options.callback({
               success: true,
-              videoName: uploadedFileName
+              videoName: uploadedFileName,
+              pkg: 1006241,
+              access_key: data.uploadInfo.uploadDetail.access_key,
+              token: self.options.token
             });
           } else {
             window.alert(data.uploadInfo.errorInfo.errorMessage);

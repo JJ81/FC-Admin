@@ -19,12 +19,12 @@ requirejs([
   var $btnChangeVideo = $('#btnApplyVideo');
 
   $(function () {
-    // 영상 업로더 초기화
+    // 보안플레이어 영상 업로더 초기화
     var options = {
       uploadFolder: $('#upload_folder').val(),
       callback: function (data) {
         if (data.success) {
-          displayVideo();
+          // displayVideo();
         }
       }
     };
@@ -153,18 +153,30 @@ requirejs([
   /**
    * 폼 validate
    */
+    /**
+     * 폼 validate
+     */
   function validateForm () {
     var videoTitle = $('#video-title');
-    var videoCode = $('#video-code');
 
     if (!videoTitle.val()) {
       window.alert('비디오 강좌명을 입력하세요.');
       videoTitle.focus();
       return false;
     }
-    if (!videoCode.val()) {
+
+    var videoProvider = $('#video-provider').val();
+    var $videoCode;
+
+    if (videoProvider === 'VIMEO' || videoProvider === 'YOUTUBE') {
+      $videoCode = $('#vimeo-video-code');
+    } else if (videoProvider === 'AQUA') {
+      $videoCode = $('#aqua-video-code');
+    }
+
+    if (!$videoCode.val()) {
       window.alert('비디오 코드를 입력하세요.');
-      videoCode.focus();
+      $videoCode.focus();
       return false;
     }
 
