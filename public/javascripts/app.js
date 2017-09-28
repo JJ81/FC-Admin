@@ -56,9 +56,11 @@ window.requirejs.config({
     'fineUploaderCore': '/static/vendor/fine-uploader.core.min',
     'fineUploaderService': ['/static/javascripts/components/fine_uploader_service'],
     'jqueryUploaderService': ['/static/javascripts/components/jquery_uploader_service'],
+    'jqueryFormUploaderService': ['/static/javascripts/components/jquery_form_uploader_service'],
     'jquery.fileupload': ['/static/vendor/jquery.fileupload'],
     'jquery.iframe-transport': ['/static/vendor/jquery.iframe-transport'],
-    'jquery-ui/ui/widget': ['/static/vendor/jquery.ui.widget']
+    'jquery-ui/ui/widget': ['/static/vendor/jquery.ui.widget'],
+    'jquery-form': ['/static/vendor/jquery.form.min']
   },
   shim: {
     'nplayer': {
@@ -114,6 +116,9 @@ window.requirejs.config({
     // },
     'jquery.fileupload': {
       'deps': ['jquery', 'jquery-ui/ui/widget', 'jquery.iframe-transport']
+    },
+    'jquery-form': {
+      deps: ['jquery']
     }
   }
 });

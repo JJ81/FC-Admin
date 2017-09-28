@@ -90,7 +90,8 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'fine-uploader/fine-uploader/fine-uploader.core.min.js',
     DIR.SRC + '/vendor/' + 'jquery-file-uploader/jquery.fileupload.js',
     DIR.SRC + '/vendor/' + 'jquery-file-uploader/jquery.iframe-transport.js',
-    DIR.SRC + '/vendor/' + 'jquery-file-uploader/jquery.ui.widget.js'
+    DIR.SRC + '/vendor/' + 'jquery-file-uploader/jquery.ui.widget.js',
+    DIR.SRC + '/vendor/' + 'jquery.form.min.js'
     // DIR.SRC + '/vendor/' + 'plugins/smoothstate/jquery.smoothstate.min.js'
   ])
   .pipe(uglify())

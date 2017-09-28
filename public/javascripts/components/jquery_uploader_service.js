@@ -48,7 +48,7 @@ window.define([
           self.options.uploadCancelUrl = data.uploadCancelUrl;
           self.options.token = data.token;
 
-          console.log(data);
+          // console.log(data);
 
           self.setJqueryFileUploader();
         }
@@ -75,26 +75,29 @@ window.define([
       });
     },
     setJqueryFileUploader: function () {
-      console.log(self.options);
+      // console.log(self.options);
       $('#fileupload').attr('data-url', self.options.uploadUrl + '?token=' + self.options.token);
+
+      var formData = new window.FormData();
+      formData.append('token', self.options.token);
+      formData.append('folder', 2004661);
+      formData.append('pkg', 1006241);
+      formData.append('target_path', self.options.uploadFolder);
+      // formData.append('videofile', $('#fileupload').get(0).files[0], '123.mp4');
 
       $('#fileupload').fileupload({
         dataType: 'json',
         singleFileUploads: true,
         autoUpload: false,
         acceptFileTypes: /(\.|\/)(mp4|avi)$/i,
-        formData: {
-          token: self.options.token,
-          folder: 2004661,
-          pkg: 1006241,
-          target_path: self.options.uploadFolder
-        },
+        formData: formData,
         replaceFileInput: false,
         add: function (e, data) {
           $('#upload-button').off('click').on('click', function () {
             $('#upload-button').attr('disabled', true);
             $('#cancel-button').attr('disabled', false);
 
+            console.log(data);
             jqXHR = data.submit();
           });
         },
@@ -136,6 +139,20 @@ window.define([
         if (data.errorThrown === 'abort') {
           self.cancelUpload();
         }
+      });
+
+      $('#fileupload').bind('fileuploadsubmit', function (e, data) {
+        // var formData = [
+        //   { name: 'token', value: self.options.token },
+        //   { name: 'folder', value: 2004661 },
+        //   { name: 'pkg', value: 1006241 },
+        //   { name: 'target_path', value: self.options.uploadFolder },
+        //   { name: 'videofile', value: $('#fileupload').get(0).files[0], filename: '123.mp4' }
+        // ];
+
+        // data.formData = formData;
+        console.log(data.formData);
+        // data.formData.set('videofile', $('#fileupload').get(0).files[0], '123.mp4');
       });
     }
   };

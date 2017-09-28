@@ -94,21 +94,23 @@ exports.demo = (req, res, next) => {
 };
 
 exports.show = (req, res, next) => {
-  const { os, video_id: videoId } = req.query;
+  const { os, video_id: videoId, video_name: videoName } = req.query;
+  let videoUrl;
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
     async.series(
       [
         callback => {
-          connection.query(QUERY.COURSE.GetVideoDataById, [ videoId ], (err, rows) => {
-            if (err) {
-              console.error(err);
-              callback(err, null);
-            } else {
-              callback(null, rows);
-            }
-          });
+          if (videoId !== undefined) {
+            connection.query(QUERY.COURSE.GetVideoDataById, [ videoId ], (err, data) => {
+              videoUrl = data[0].url;
+              callback(err, data);
+            });
+          } else {
+            videoUrl = videoName;
+            callback(null, null);
+          }
         }
       ],
       (err, results) => {
@@ -121,7 +123,7 @@ exports.show = (req, res, next) => {
               layout: 'layout_player.hbs',
               module_type: 'AquaPlayer',
               title: '아쿠아플레이어 Windows',
-              video_url: res.locals.vodUrl + results[0][0].url,
+              video_url: res.locals.vodUrl + videoUrl,
               watermark: 'watermark'
             });
           } else {
@@ -129,7 +131,7 @@ exports.show = (req, res, next) => {
               layout: 'layout_player.hbs',
               module_type: 'AquaPlayer',
               title: '아쿠아플레이어 HTML5',
-              video_url: res.locals.vodUrl + results[0][0].url,
+              video_url: res.locals.vodUrl + videoUrl,
               watermark: 'watermark'
             });
           }

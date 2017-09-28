@@ -425,5 +425,26 @@ ul.session-content > li:hover {
     background: green;
 }
 
+.fileuploader-progress {
+  position:relative;
+  width:100%;
+  border: 1px solid #ddd;
+  padding: 1px;
+  border-radius: 3px;
+}
+
+.fileuploader-bar {
+  background-color: #B4F5B4;
+  width:0%;
+  height:20px;
+  border-radius: 3px;
+}
+
+.fileuploader-percent {
+  position:absolute;
+  display:inline-block;
+  top: 1px;
+  left: 48%;
+}
 /*# sourceMappingURL=styles.css.map */
 

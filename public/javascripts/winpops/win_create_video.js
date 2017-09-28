@@ -3,11 +3,12 @@
 window.requirejs([
   'common',
   'Vimeo',
-  'jqueryUploaderService'
+  // 'jqueryUploaderService',
+  'jqueryFormUploaderService'
 ],
-function (Util, Vimeo, JqueryFileUploaderService) {
+function (Util, Vimeo, JqueryFormUploaderService) {
   var $ = $ || window.$;
-  var player = null;
+  // var player = null;
   // var playerContainer = $('#videoplayer');
   var $btnRegistVideo = $('#regist-video');
   var $btnUploadVideo = $('#uploadVideo');
@@ -27,6 +28,18 @@ function (Util, Vimeo, JqueryFileUploaderService) {
     // window.parent.opener.winpop_listener();
 
     // $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName() + '&video_id=148');
+
+    // 영상 업로더 초기화
+    var options = {
+      uploadFolder: $('#upload_folder').val(),
+      callback: function (data) {
+        if (data.success) {
+          $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName() + '&video_name=' + data.videoName);
+        }
+      }
+    };
+
+    JqueryFormUploaderService = new JqueryFormUploaderService(options);
   });
 
   $btnChangeVideo.bind('click', function (e) {
@@ -70,13 +83,13 @@ function (Util, Vimeo, JqueryFileUploaderService) {
 
     // FineUploaderService = new FineUploaderService(options);
 
-    var options = {
-      uploadFolder: $('#upload_folder').val(),
-      callback: function (data) {
-        // $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName() + '&video_id=' + data.id);
-      }
-    };
-    JqueryFileUploaderService = new JqueryFileUploaderService(options);
+    // var options = {
+    //   uploadFolder: $('#upload_folder').val(),
+    //   callback: function (data) {
+    //   }
+    // };
+
+    // JqueryFormUploaderService = new JqueryFormUploaderService(options);
   });
 
   $('#vimeo-video-code').bind('keypress', function (e) {

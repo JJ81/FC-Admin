@@ -317,11 +317,14 @@ window.define(
 
         return OSName;
       },
+      getExtension: function (filename) {
+        return filename.split('.').pop();
+      },
       makeid: function () {
         var text = '';
         var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 13; i++) {
           text += possible.charAt(Math.floor(Math.random() * possible.length));
         }
 

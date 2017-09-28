@@ -3,8 +3,9 @@
 requirejs([
   'common',
   'Vimeo',
-  'jqueryUploaderService'
-], function (Util, Vimeo, JqueryFileUploaderService) {
+  // 'jqueryUploaderService'
+  'jqueryFormUploaderService'
+], function (Util, Vimeo, JqueryFormUploaderService) {
   var $ = $ || window.$;
   var $btnModifyVideo = $('#modify-video');
   var $btnUploadVideo = $('#uploadVideo');
@@ -18,6 +19,18 @@ requirejs([
   var $btnChangeVideo = $('#btnApplyVideo');
 
   $(function () {
+    // 영상 업로더 초기화
+    var options = {
+      uploadFolder: $('#upload_folder').val(),
+      callback: function (data) {
+        if (data.success) {
+          displayVideo();
+        }
+      }
+    };
+
+    JqueryFormUploaderService = new JqueryFormUploaderService(options);
+
     setVideoOptions();
     displayVideo();
   });
@@ -60,20 +73,6 @@ requirejs([
   }
 
   $btnUploadVideo.on('click', function () {
-    // var options = {
-      // el: 'my-uploader',
-      // multiple: false
-    // };
-
-    // FineUploaderService = new FineUploaderService(options);
-
-    var options = {
-      uploadFolder: $('#upload_folder').val(),
-      callback: function (data) {
-        // $aquaPlayerFrame.attr('src', '/api/v1/aqua?os=' + Util.getOSName() + '&video_id=' + data.id);
-      }
-    };
-    JqueryFileUploaderService = new JqueryFileUploaderService(options);
   });
 
   $('#video-code').bind('keypress', function (e) {
