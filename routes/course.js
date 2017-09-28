@@ -128,7 +128,7 @@ router.post('/register', util.isAuthenticated, (req, res, next) => {
   const {
     course_name: courseName,
     course_desc: courseDescription,
-    teacher_id: teacherId
+    teacher_name: teacherName
   } = req.body;
   const adminId = req.user.admin_id;
 
@@ -137,7 +137,7 @@ router.post('/register', util.isAuthenticated, (req, res, next) => {
     connection.query(QUERY.COURSE.CreateCourse,
       [
         courseName,
-        teacherId,
+        teacherName,
         courseDescription,
         adminId
       ],

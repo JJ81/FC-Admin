@@ -532,7 +532,7 @@ QUERY.COURSE = {
 
   // 강의를 생성한다.
   CreateCourse:
-    'INSERT INTO `course` (`name`, `teacher_id`, `desc`, `creator_id`) ' +
+    'INSERT INTO `course` (`name`, `teacher`, `desc`, `creator_id`) ' +
     'VALUES (?,?,?,?); ',
   // 강의를 생성한다.
   CreateCourse2:
