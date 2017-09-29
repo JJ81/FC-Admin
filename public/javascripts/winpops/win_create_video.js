@@ -22,6 +22,7 @@ function (Util, Vimeo, JqueryFormUploaderService) {
   var tableVideos = Util.initDataTable($('#table_add_video'), { buttons: [] });
   var $btnChangeVideo = $('#btnApplyVideo');
   var $encodingProgress = $('.encoding-progress');
+  var $fileUpload = $('#fileupload');
 
   window.$(function () {
     // $btnRegistVideo.button('loading');
@@ -73,6 +74,11 @@ function (Util, Vimeo, JqueryFormUploaderService) {
     };
 
     JqueryFormUploaderService = new JqueryFormUploaderService(options);
+  });
+
+  // 보안 플레이어에서 파일 선택 시 파일명이 세션명으로 자동 등록된다.
+  $fileUpload.change(function () {
+    $('#video-title').val($('#fileupload').get(0).files[0].name);
   });
 
   $btnChangeVideo.bind('click', function (e) {
