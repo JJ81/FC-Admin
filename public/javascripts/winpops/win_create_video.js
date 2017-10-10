@@ -78,7 +78,8 @@ function (Util, Vimeo, JqueryFormUploaderService) {
 
   // 보안 플레이어에서 파일 선택 시 파일명이 세션명으로 자동 등록된다.
   $fileUpload.change(function () {
-    $('#video-title').val($('#fileupload').get(0).files[0].name);
+    var fileName = $('#fileupload').get(0).files[0].name;
+    $('#video-title').val(fileName.replace(/.[^.]+$/, ''));
   });
 
   $btnChangeVideo.bind('click', function (e) {

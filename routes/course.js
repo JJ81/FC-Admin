@@ -455,7 +455,7 @@ router.get('/modify/video', util.isAuthenticated, util.getLogoInfo, (req, res, n
 /**
  * 강의/강사등록 상세페이지 > 비디오 수정
  */
-router.put('/modify/video', util.isAuthenticated, (req, res, next) => {
+router.post('/modify/video', util.isAuthenticated, (req, res, next) => {
   const _inputs = req.body;
   let _query = null;
 

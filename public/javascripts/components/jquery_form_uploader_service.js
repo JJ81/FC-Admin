@@ -60,6 +60,8 @@ window.define([
       .then(function (response) {
         var data = response.data.uploadInfo;
         if (data) {
+          console.log(data);
+
           self.options.uploadUrl = data.uploadUrl.replace('v4', 'cdnovp');
           self.options.uploadCancelUrl = data.uploadCancelUrl;
           self.options.token = data.token;

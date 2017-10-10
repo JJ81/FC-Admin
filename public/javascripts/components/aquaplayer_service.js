@@ -259,9 +259,8 @@ window.define([
       });
     },
     testWatermark () {
-      // console.log(self.options.watermark);
-
-      window.player.setWatermarkText('hahaha');
+      console.log(self.options.watermark);
+      // window.player.setWatermarkText('hahaha');
       window.player.setWatermarkSize(15);
       window.player.setWatermarkColor(255, 0, 0, 0.5);
       window.player.setWatermarkInterval(5);

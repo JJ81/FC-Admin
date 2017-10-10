@@ -17,6 +17,7 @@ requirejs([
   // datatable 설정
   var tableVideos = Util.initDataTable($('#table_add_video'), { buttons: [] });
   var $btnChangeVideo = $('#btnApplyVideo');
+  var $fileUpload = $('#fileupload');
 
   $(function () {
     // 보안플레이어 영상 업로더 초기화
@@ -33,6 +34,12 @@ requirejs([
 
     setVideoOptions();
     displayVideo();
+  });
+
+  // 보안 플레이어에서 파일 선택 시 파일명이 세션명으로 자동 등록된다.
+  $fileUpload.change(function () {
+    var fileName = $('#fileupload').get(0).files[0].name;
+    $('#video-title').val(fileName.replace(/.[^.]+$/, ''));
   });
 
   $btnChangeVideo.bind('click', function (e) {
