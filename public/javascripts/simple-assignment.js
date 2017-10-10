@@ -657,7 +657,7 @@ window.requirejs([
         return $(this).data('id');
       }).get().join(', ');
 
-      console.log('employee_ids:', data);
+      // console.log('employee_ids:', data);
 
       if (!data) {
         window.alert('직원을 선택하세요.');
