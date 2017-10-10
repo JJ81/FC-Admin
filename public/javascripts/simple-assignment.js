@@ -863,6 +863,8 @@ window.requirejs([
 
     window.axios.all(promises)
     .then(window.axios.spread(function (acct, perms) {
+      // console.log(acct);
+      // console.log(perms);
       if (acct.data.success) {
         window.alert('강의순서를 변경하였습니다.');
       }
