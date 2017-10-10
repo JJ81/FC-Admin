@@ -268,12 +268,13 @@ router.put('/coursegroup', util.isAuthenticated, (req, res, next) => {
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
-    connection.query(QUERY.EDU.UpdateCourseGroup,
+    let q = connection.query(QUERY.EDU.UpdateCourseGroup,
       [
         _inputs.order,
         _inputs.id
       ],
       (err, data) => {
+        console.log(q.sql);
         if (err) {
           return res.json({
             success: false,

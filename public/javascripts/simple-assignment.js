@@ -16,7 +16,7 @@ window.requirejs([
 
   var tableCheckAll = $('#check-all');
   var tableCheckCourseAll = $('#js--formAddCourse').find('#check-all');
-  var tableCourse = Util.initDataTable($('#table_course'));
+  // var tableCourse = Util.initDataTable($('#table_course'));
   var tableEmployee = Util.initDataTable($('#table_employee'), {
     'lengthMenu': [
       [5, 10, 25, 50, -1],
@@ -649,11 +649,15 @@ window.requirejs([
 
     switch (currentTabId) {
     case 'employee': // 등록된 직원
-      data = $(':checkbox:checked', tableEmployee.rows({
-        filter: 'applied'
-      }).nodes()).map(function () {
+      data = $(':checkbox:checked', tableEmployee.rows(
+        // {
+        //   filter: 'applied'
+        // }
+      ).nodes()).map(function () {
         return $(this).data('id');
       }).get().join(', ');
+
+      console.log('employee_ids:', data);
 
       if (!data) {
         window.alert('직원을 선택하세요.');
