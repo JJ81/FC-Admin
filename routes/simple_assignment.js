@@ -13,6 +13,7 @@ router.param('id', AssignmentService.getSimpleAssignmentById);
 router.get('/', util.isAuthenticated, util.getLogoInfo, AssignmentService.getSimpleAssignmentList);
 router.get('/courses', util.isAuthenticated, util.getLogoInfo, AssignmentService.getCoursesToAdd);
 router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
+  // router.param('id', AssignmentService.getSimpleAssignmentById); 이 먼저 호출된다.
   pool.getConnection((err, connection) => {
     if (err) throw err;
     async.series([
@@ -56,7 +57,7 @@ router.get('/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
     (err, results) => {
       connection.release();
 
-      console.log(req.assignment);
+      // console.log(req.assignment);
 
       if (err) {
         console.error(err);

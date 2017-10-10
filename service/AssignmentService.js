@@ -57,9 +57,10 @@ AssignmentService.modifyLogAssignEdu2 = (_data, _callback) => {
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
-    connection.query(QUERY.ASSIGNMENT.UpdateLogAssignEduByTrainingEduId,
+    let q = connection.query(QUERY.ASSIGNMENT.UpdateLogAssignEduByTrainingEduId,
       [trainingStartDate, trainingEndDate, trainingEduId],
       (err, data) => {
+        console.log(q.sql);
         connection.release();
         if (err) console.log(err); // throw err;
         _callback(err, data);

@@ -177,7 +177,7 @@ EducationService.create = (req, res, next) => {
     trainingEduId = req.body.training_edu_id;
   }
 
-  console.log('can_advance', req.body.can_advance);
+  // console.log('can_advance', req.body.can_advance);
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
