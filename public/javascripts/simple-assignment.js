@@ -85,7 +85,11 @@ window.requirejs([
 
     btnAttachCourses.on('click', function () {
       var checkedCourses =
-        $(':checkbox:checked', tableCourses.rows({filter: 'applied'}).nodes()).map(
+        $(':checkbox:checked', tableCourses.rows(
+          // {
+          //   filter: 'applied'
+          // }
+        ).nodes()).map(
           function () {
             return tableCourses.row(window.$(this).parents('tr')).data()['course_id'];
           }
@@ -221,9 +225,11 @@ window.requirejs([
 
   // 교육대상자 id 조회
   function setEmployeeIds () {
-    var employeeIds = $(':checkbox:checked', tableEmployee.rows({
-      filter: 'applied'
-    }).nodes()).map(function () {
+    var employeeIds = $(':checkbox:checked', tableEmployee.rows(
+      // {
+      //   filter: 'applied'
+      // }
+    ).nodes()).map(function () {
       return $(this).data('id');
     }).get().join(', ');
     $('input[name=\'upload_employee_ids\']').val(employeeIds);
@@ -1129,9 +1135,11 @@ window.requirejs([
     switch (currentTabId) {
     case 'employee':
       checkedEmployeeIds = window.$(':checkbox:checked',
-          tableEmployee.rows({
-            filter: 'applied'
-          }).nodes()).map(
+          tableEmployee.rows(
+            // {
+            //   filter: 'applied'
+            // }
+          ).nodes()).map(
           function () {
             return tableEmployee.row(window.$(this).parents('tr')).data()[4];
           }
