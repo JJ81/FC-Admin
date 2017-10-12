@@ -1,0 +1,46 @@
+<div class="row home_section">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <div class="pull-left">
+          <select id="select-board-type" class="form-control" style="width: 100%;">
+            <option selected="selected" value="notice">공지사항</option>
+          </select>
+        </div>
+        <div class="pull-right">
+          <button class="btn btn-default" data-toggle="modal" data-target="#addBoard">
+            <i class="fa fa-pencil-square-o"></i> &nbsp;
+              글쓰기
+            </button>
+        </div>
+      </div>
+      <div class="box-body table-responsive">
+        <table id="table-board" class="table no-margin table-bordered table-striped" width="100%">
+          <thead>
+            <tr>
+              <th class="center">번호</th>
+              <th class="center">제목</th>
+              <th class="center">작성자</th>
+              <th class="center">날짜</th>
+              <th class="center">조회수</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {{#each list}}
+            <tr>
+              <td class="center">{{id}}</td>
+              <td class=""><a href="/board?id={{id}}">{{title}}</a></td>
+              <td class="center">{{creator}}</td>
+              <td class="center">{{time created_dt}}</td>
+              <td class="center">{{view_count}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{> modal_add_board}} 
