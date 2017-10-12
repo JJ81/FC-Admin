@@ -18,6 +18,7 @@ const course = require('./routes/course');
 const achievement = require('./routes/achievement');
 const administrator = require('./routes/administrator');
 const api = require('./routes/api');
+const board = require('./routes/board');
 
 /* routes */
 const app = express();
@@ -77,6 +78,7 @@ app.use('/course', course);
 app.use('/achievement', achievement);
 app.use('/administrator', administrator);
 app.use('/api/v1', api);
+app.use('/board', board);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

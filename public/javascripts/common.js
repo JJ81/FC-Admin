@@ -131,6 +131,11 @@ window.define(
         cellspacing: 5
       },
       editor_deselector: 'mceOthers'
+      // init_instance_callback: function (editor) {
+      //   editor.on('click', function (e) {
+      //     console.log('Element clicked:', e.target.nodeName);
+      //   });
+      // }
     });
 
     // window.tinymce.init({

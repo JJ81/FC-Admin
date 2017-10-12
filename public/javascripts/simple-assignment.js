@@ -54,6 +54,7 @@ window.requirejs([
   var sessionView = window.Handlebars.compile(sessionTemplate);
   var windowOption = 'scrollbars=yes, toolbar=no, location=no, status=no, menubar=no, resizable=yes, width=1040, height=760, left=0, top=0';
 
+  // Initialize
   $(function () {
     allWells.hide();
 
@@ -482,8 +483,8 @@ window.requirejs([
   // 3. 강의 개설
   $('.step3 > .next > a').on('click', function (e) {
     e.preventDefault();
-    activateStep(4);
-    // updateProgress(3);
+    // activateStep(4);
+    updateProgress(4);
   });
   $('.step4 > .previous > a').on('click', function (e) {
     e.preventDefault();
@@ -522,18 +523,23 @@ window.requirejs([
   });
 
   function updateProgress (step) {
+    if (activatedStep === 4 && step === 4) {
+      activateStep(step);
+      return false;
+    }
+
     window.axios.post('/simple_assignment/progress', {
       step: step,
       id: assignmentId
     })
-      .then(function (response) {
-        activatedStep(step);
-        return true;
-      })
-      .catch(function (error) {
-        console.log(error);
-        return false;
-      });
+    .then(function (response) {
+      activateStep(step);
+      return true;
+    })
+    .catch(function (error) {
+      console.log(error);
+      return false;
+    });
   }
 
   /**
@@ -1196,21 +1202,21 @@ window.requirejs([
   messageInput.on('keyup', function (e) {
     var message = window.$(e.currentTarget).val();
     var messageBytes = Util.getBytes(message);
-    var remain = 90 - messageBytes;
+    var remain = 2000 - messageBytes;
 
     // console.log(message);
     // console.log(Util.getBytes(message));
     // console.log(remain);
 
     if (remain < 0) {
-      window.alert('90 Bytes 를 초과할 수 없습니다.');
+      window.alert('2000 Bytes 를 초과할 수 없습니다.');
       // message = message.substring(0, 90);
-      message = Util.cutBytes(message, 90);
+      message = Util.cutBytes(message, 2000);
       window.$(e.currentTarget).val(message);
       window.$(e.currentTarget).focus();
       messageBytes = Util.getBytes(message);
     }
 
-    window.$('.remain-bytes').html(messageBytes + ' / 90 바이트');
+    window.$('.remain-bytes').html(messageBytes + ' / 2000 바이트');
   });
 });

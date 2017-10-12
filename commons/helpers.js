@@ -96,12 +96,12 @@ hbs.registerHelper('star-rating', function (rating) {
   } else if (rating >= 2.5 && rating < 3) {
     _class = 'twohalf';
   } else if (rating >= 3 && rating < 3.5) {
-  _class = 'three';
-} else if (rating >= 3.5 && rating < 4) {
-  _class = 'threehalf';
-} else if (rating >= 4 && rating < 4.5) {
-  _class = 'four';
-} else if (rating >= 4.5 && rating < 5) {
+    _class = 'three';
+  } else if (rating >= 3.5 && rating < 4) {
+    _class = 'threehalf';
+  } else if (rating >= 4 && rating < 4.5) {
+    _class = 'four';
+  } else if (rating >= 4.5 && rating < 5) {
   _class = 'fourhalf';
 } else {
   _class = ''; // full

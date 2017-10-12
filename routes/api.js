@@ -77,7 +77,7 @@ router.post('/sms/send', util.isAuthenticated, (req, res, next) => {
   if (phones === undefined || msg === undefined) {
     return res.status(500).send('잘못된 파라미터가 입력되었습니다.');
   }
-  MessageService.sendMessage(phones, msg, (response) => {
+  MessageService.sendMessage(req.user.fc_name, phones, msg, (response) => {
     console.log(response.body);
 
     pool.getConnection((err, connection) => {

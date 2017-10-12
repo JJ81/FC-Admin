@@ -1,6 +1,6 @@
 const unirest = require('unirest');
 
-exports.sendMessage = (phones, msg, callback) => {
+exports.sendMessage = (subject, phones, msg, callback) => {
   unirest.post('http://api.apistore.co.kr/ppurio/1/message/sms/udt4455')
     .header({
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -9,6 +9,7 @@ exports.sendMessage = (phones, msg, callback) => {
     .send({
       'send_phone': '07088450500',
       'dest_phone': phones,
+      'subject': subject,
       'msg_body': msg
     })
     .end((response) => {

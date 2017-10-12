@@ -68,7 +68,19 @@
       </li>
       <!-- ifCond -->
 
-      {{#ifCond loggedIn.role '!==' 'supervisor'}} 
+      <li {{#if (isEquals current_path 'Board')}}class="active" {{/if}}>
+        <a href="/board">
+          <i class="fa fa-commenting"></i>
+          <span>게시판 관리</span>
+          {{#if (isEquals current_path 'Board')}}
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right text-green"></i>
+          </span>
+          {{/if}}
+        </a>
+      </li>
+
+      {{#ifCond loggedIn.role '!==' 'supervisor'}}
       <li {{#if (isEquals current_path 'Administrator')}}class="active" {{/if}}>
         <a href="/administrator">
           <i class="fa fa-user" aria-hidden="true"></i>
@@ -80,7 +92,7 @@
           {{/if}}
         </a>
       </li>
-       {{/ifCond}} 
+       {{/ifCond}}
 
       {{#if (isEquals loggedIn.isdemo 0)}}
       <!-- ifCond loggedIn.role '!==' 'supervisor' -->

@@ -447,5 +447,9 @@ ul.session-content > li:hover {
   top: 1px;
   left: 48%;
 }
+
+.ui-widget.ui-tooltip {
+    display: none !important;
+}
 /*# sourceMappingURL=styles.css.map */
 
