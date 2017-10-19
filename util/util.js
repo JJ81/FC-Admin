@@ -86,7 +86,7 @@ exports.getLogoInfo = (req, res, next) => {
   let vodUrl;
   let uploadFolder;
 
-  console.log('host: ' + req.headers.host);
+  // console.log('host: ' + req.headers.host);
 
   switch (req.headers.host) {
   case 'waffle.edu1004.kr':
