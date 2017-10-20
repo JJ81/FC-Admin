@@ -65,6 +65,7 @@ window.define([
 
       player.bindEvent('Ready', function () {
         // self.reportMessage('ready');
+        window.setSecurePage(true);
 
         window.proxy_init(function () {
           // 1. video start set
