@@ -58,13 +58,14 @@ window.define([
     getUploadInfo: function () {
       axios.get('/api/v1/fineuploader/token')
       .then(function (response) {
-        var data = response.data.uploadInfo;
+        var data = response.data;
         if (data) {
-          console.log(data);
-
-          self.options.uploadUrl = data.uploadUrl.replace('v4', 'cdnovp');
-          self.options.uploadCancelUrl = data.uploadCancelUrl;
-          self.options.token = data.token;
+          // console.log(data);
+          self.options.uploadUrl = data.uploadInfo.uploadUrl.replace('v4', 'cdnovp');
+          self.options.uploadCancelUrl = data.uploadInfo.uploadCancelUrl;
+          self.options.token = data.uploadInfo.token;
+          self.options.deploy_package_id = data.deploy_package_id;
+          self.options.folder_id = data.folder_id;
 
           // 업로드 한다.
           self.send();
@@ -111,8 +112,8 @@ window.define([
       // uploadedFileName = Util.makeid() + '.' + Util.getExtension(fileToUpload.name);
 
       formData.append('token', self.options.token);
-      formData.append('folder', 2004661);
-      formData.append('pkg', 1006241);
+      formData.append('folder', self.options.folder_id);
+      formData.append('pkg', self.options.deploy_package_id);
       formData.append('target_path', self.options.uploadFolder);
       formData.append('videofile', fileToUpload, uploadedFileName);
 
@@ -144,7 +145,7 @@ window.define([
         success: function (responseText) {
           var data = JSON.parse(responseText);
 
-          console.log(data);
+          // console.log(data);
 
           if (data.uploadInfo.errorInfo.errorCode === 'None') {
             percentVal = '100%';

@@ -42,11 +42,13 @@ window.define([
     getUploadInfo: function () {
       axios.get('/api/v1/fineuploader/token')
       .then(function (response) {
-        var data = response.data.uploadInfo;
+        var data = response.data;
         if (data) {
-          self.options.uploadUrl = data.uploadUrl.replace('v4', 'cdnovp');
-          self.options.uploadCancelUrl = data.uploadCancelUrl;
-          self.options.token = data.token;
+          self.options.uploadUrl = data.uploadInfo.uploadUrl.replace('v4', 'cdnovp');
+          self.options.uploadCancelUrl = data.uploadInfo.uploadCancelUrl;
+          self.options.token = data.uploadInfo.token;
+          self.options.deploy_package_id = data.deploy_package_id;
+          self.options.folder_id = data.folder_id;
 
           // console.log(data);
 
@@ -75,13 +77,16 @@ window.define([
       });
     },
     setJqueryFileUploader: function () {
-      // console.log(self.options);
+      console.log(self.options);
+
       $('#fileupload').attr('data-url', self.options.uploadUrl + '?token=' + self.options.token);
 
       var formData = new window.FormData();
       formData.append('token', self.options.token);
-      formData.append('folder', 2004661);
-      formData.append('pkg', 1006241);
+      formData.append('folder', self.options.folder_id);
+      formData.append('pkg', self.options.deploy_package_id);
+      // formData.append('folder', 2004661);
+      // formData.append('pkg', 1006241);
       formData.append('target_path', self.options.uploadFolder);
       // formData.append('videofile', $('#fileupload').get(0).files[0], '123.mp4');
 
@@ -151,7 +156,7 @@ window.define([
         // ];
 
         // data.formData = formData;
-        console.log(data.formData);
+        // console.log(data.formData);
         // data.formData.set('videofile', $('#fileupload').get(0).files[0], '123.mp4');
       });
     }

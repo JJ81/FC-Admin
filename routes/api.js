@@ -133,11 +133,16 @@ router.get('/aqua', util.isAuthenticated, util.getLogoInfo, AquaPlayerService.sh
 router.get('/demo/aquaplayer', util.isAuthenticated, util.getLogoInfo, AquaPlayerService.demo);
 
 router.get('/fineuploader/token', (req, res, next) => {
-  const apiKey = 'dfdd93a2a66608bed75697abffb5aaeb';
+  const apiKey = '6ecfb7edbba488edaef8beb983c4dd9b';
+  // const apiKey = 'dfdd93a2a66608bed75697abffb5aaeb';
   unirest.get(`http://api.wecandeo.com/web/v4/uploadToken.json?key=${apiKey}`)
   .end(function (response) {
     console.log(response.body);
-    return res.send(response.body);
+    return res.send({
+      uploadInfo: response.body.uploadInfo,
+      deploy_package_id: 1006393,
+      folder_id: 2004903
+    });
   });
 });
 

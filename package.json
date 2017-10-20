@@ -1,11 +1,11 @@
 {
-  "name": "ams-holdemclub",
+  "name": "FC-backoffice",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "dev": "nodemon ./bin/www nodemon",
     "client": "nodemon ./bin/www nodemon -e hbs",
-    "test": "DEBUG=ams-holdemclub:* npm start"
+    "test": "DEBUG=FC-backoffice:* npm start"
   },
   "dependencies": {
     "async": "^2.1.4",
