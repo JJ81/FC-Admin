@@ -6,6 +6,8 @@ const DashboardService = require('../service/DashboardService');
 const pool = require('../commons/db_conn_pool');
 const util = require('../util/util');
 
+let startTime, endTime;
+
 router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   let eduProgress = null;
 
@@ -16,6 +18,7 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
         // 총 교육생 수
         // result[0]
         (callback) => {
+          startTime = new Date();
           connection.query(QUERY.DASHBOARD.GetUserCount(req.user),
             [],
             (err, rows) => {
@@ -23,6 +26,9 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
                 console.error(err);
                 callback(err, null);
               } else {
+                endTime = new Date() - startTime;
+                console.info('GetUserCount time: %dms', endTime);
+
                 callback(null, rows);
               }
             });
@@ -30,6 +36,8 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
         // 총 점포 수
         // result[1]
         (callback) => {
+          startTime = new Date();
+
           connection.query(QUERY.DASHBOARD.GetBranchCount(req.user),
             [],
             (err, rows) => {
@@ -37,6 +45,9 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
                 console.error(err);
                 callback(err, null);
               } else {
+                endTime = new Date() - startTime;
+                console.info('GetBranchCount time: %dms', endTime);
+
                 callback(null, rows);
               }
             });
@@ -44,6 +55,8 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
         // 총 진행중인 교육과정
         // result[2]
         (callback) => {
+          startTime = new Date();
+
           connection.query(QUERY.DASHBOARD.GetCurrentEduCount(req.user),
             [],
             (err, rows) => {
@@ -51,6 +64,9 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
                 console.error(err);
                 callback(err, null);
               } else {
+                endTime = new Date() - startTime;
+                console.info('GetCurrentEduCount time: %dms', endTime);
+
                 callback(null, rows);
               }
             });
@@ -77,9 +93,15 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
         // 이번 달 교육과정 이수율
         // result[3]
         (callback) => {
-          connection.query(QUERY.DASHBOARD.GetThisMonthProgress(req.user),
+          startTime = new Date();
+
+          let q = connection.query(QUERY.DASHBOARD.GetThisMonthProgress(req.user),
             [],
             (err, rows) => {
+              // console.log(q.sql);
+              endTime = new Date() - startTime;
+              console.info('GetThisMonthProgress time: %dms', endTime);
+
               callback(err, rows);
             }
           );
@@ -87,9 +109,14 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
         // 이번 달 교육과정별 이수율
         // result[4]
         (callback) => {
+          startTime = new Date();
+
           connection.query(QUERY.DASHBOARD.GetThisMonthProgressByEdu(req.user),
             [],
             (err, rows) => {
+              endTime = new Date() - startTime;
+              console.info('GetThisMonthProgressByEdu time: %dms', endTime);
+
               eduProgress = rows;
               callback(err, rows);
             }
@@ -108,9 +135,14 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
         // 포인트 현황
         // result[6]
         (callback) => {
+          startTime = new Date();
+
           connection.query(QUERY.DASHBOARD.GetUserPointList(req.user),
             [],
             (err, rows) => {
+              endTime = new Date() - startTime;
+              console.info('GetUserPointList time: %dms', endTime);
+
               callback(err, rows);
             }
           );
@@ -127,7 +159,11 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
             });
 
           // 이번 달 교육 진척도에 강의별 이수율 추가한다.
+          startTime = new Date();
           DashboardService.getCourseProgress(connection, eduProgress, (err, rows) => {
+            endTime = new Date() - startTime;
+            console.info('getCourseProgress time: %dms', endTime);
+
             connection.release();
             if (err) {
               console.error(err);
