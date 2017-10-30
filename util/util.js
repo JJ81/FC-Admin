@@ -124,7 +124,7 @@ exports.getLogoInfo = (req, res, next) => {
 
   case 'artandheart.edu1004.kr':
     logoImageName = 'artandheart.png';
-    logoName = '홈스푸드';
+    logoName = '아트앤하트';
     theme = 'skin-black';
     themeOfTile = 'bg-black-gradient';
     themeOfProgressBar = 'progress-bar-yellow';
