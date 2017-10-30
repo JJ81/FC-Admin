@@ -125,10 +125,10 @@ exports.getLogoInfo = (req, res, next) => {
   case 'artandheart.edu1004.kr':
     logoImageName = 'artandheart.png';
     logoName = '아트앤하트';
-    theme = 'skin-black';
-    themeOfTile = 'bg-black-gradient';
+    theme = 'skin-blue-light';
+    themeOfTile = 'bg-light-blue-gradient';
     themeOfProgressBar = 'progress-bar-yellow';
-    copyright = '홈스푸드';
+    copyright = '아트앤하트';
     vodUrl = 'http://pcst.aquan.artandheart.edu1004.kr/orangenamu/artandheart/';
     uploadFolder = '/artandheart';
     break;
