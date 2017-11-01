@@ -68,7 +68,7 @@
       </li>
       <!-- ifCond -->
 
-      <li {{#if (isEquals current_path 'Board')}}class="active" {{/if}}>
+      <!--<li {{#if (isEquals current_path 'Board')}}class="active" {{/if}}>
         <a href="/board">
           <i class="fa fa-commenting"></i>
           <span>게시판 관리</span>
@@ -78,7 +78,7 @@
           </span>
           {{/if}}
         </a>
-      </li>
+      </li>-->
 
       {{#ifCond loggedIn.role '!==' 'supervisor'}}
       <li {{#if (isEquals current_path 'Administrator')}}class="active" {{/if}}>
