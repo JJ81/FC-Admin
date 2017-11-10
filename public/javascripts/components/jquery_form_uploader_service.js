@@ -62,7 +62,7 @@ window.define([
         if (data) {
           // console.log(data);
           self.options.uploadUrl = data.uploadInfo.uploadUrl.replace('v4', 'cdnovp').replace('http', 'https');
-          self.options.uploadCancelUrl = data.uploadInfo.uploadCancelUrl;
+          self.options.uploadCancelUrl = data.uploadInfo.uploadCancelUrl.replace('http', 'https');
           self.options.token = data.uploadInfo.token;
           self.options.deploy_package_id = data.deploy_package_id;
           self.options.folder_id = data.folder_id;
