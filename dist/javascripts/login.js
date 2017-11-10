@@ -1,0 +1,2 @@
+"use strict";window.requirejs(["jquery","jqueryCookie"],function(i){function e(i){n.cookie("email",i)}function o(){k.val(n.cookie("email"))}function c(){window.confirm("저장된 아이디를 삭제하시겠습니까?")&&n.removeCookie("email")}var n=i,r=n("#remember"),k=n("#email"),l=n(".btn-login");!function(){void 0===n.cookie("email")?r.prop("checked",!1):(r.prop("checked",!0),o())}(),l.bind("click",function(){void 0===n.cookie("email")&&r.prop("checked")&&e(k.val())}),r.change("click",function(){n(this).prop("checked")||void 0!==n.cookie("email")&&c()})});
+//# sourceMappingURL=../maps/login.js.map
