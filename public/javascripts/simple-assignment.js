@@ -77,7 +77,7 @@ window.requirejs([
     // DateTimePicker 설정
     Util.initDateTimePicker(
       $('.date#start_dt'),
-      $('.date#end_dt')
+      $('.date#finish_dt')
     );
 
     modalAddCourses.on('show.bs.modal', function (e) {
@@ -737,7 +737,22 @@ window.requirejs([
       return false;
     }
 
-    return true;
+    var start_dt = $('input[name=\'start_dt\']').val();
+    var finish_dt = $('input[name=\'finish_dt\']').val();
+
+    if (!start_dt) {
+      window.alert('시작일자를 선택하세요.');
+      $('input[name=\'start_dt\']').focus();
+      return false;
+    }
+
+    if (!finish_dt) {
+      window.alert('종료일자를 선택하세요.');
+      $('input[name=\'finish_dt\']').focus();
+      return false;
+    }
+
+    return false;
   }
 
   $('.input-group-addon').children('input:checkbox').on('change', function () {

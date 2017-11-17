@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon ./bin/www nodemon",
+    "dev": "nodemon ./bin/www --delay 1",
     "client": "nodemon ./bin/www nodemon -e hbs",
     "test": "DEBUG=FC-backoffice:* npm start"
   },
