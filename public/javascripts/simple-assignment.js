@@ -752,7 +752,7 @@ window.requirejs([
       return false;
     }
 
-    return false;
+    return true;
   }
 
   $('.input-group-addon').children('input:checkbox').on('change', function () {
