@@ -69,9 +69,13 @@
                       <a href="#" data-user-id="{{id}}" data-user-name="{{name}}" data-user-email="{{email}}" data-user-role="{{role}}"
                         class="btn-modify-admininfo" data-toggle="modal" data-target="#modifyAdmin">정보수정</a>
                     </li>
+                    {{#ifCond (isEquals role 'supervisor') '||' (isEquals role 'role') }}
                     <li>
                       <a href="#" data-user-id="{{id}}" data-user-role="{{role}}" data-toggle="modal" data-target="#setAdminRole"
-                        class="btn-modify-role">권한수정</a></li>
+                        class="btn-modify-role">권한수정
+                      </a>
+                    </li>
+                    {{/ifCond}}
                     <li>
                       <a href="#" data-user-id="{{id}}" data-toggle="modal" data-target="#setEmployeePassword" data-url="/administrator/password/reset"
                         class="btn-modify-password">비밀번호변경</a>
