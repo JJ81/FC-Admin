@@ -298,7 +298,7 @@ window.define(
 
         // 종료일자
         end.datetimepicker({
-          date: endDt,
+          defaultDate: endDt,
           format: 'YYYY-MM-DD HH:mm'
           // useCurrent: false,
           // showTodayButton: true
