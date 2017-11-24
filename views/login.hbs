@@ -1,13 +1,8 @@
 
-<div class="container" style="max-width: 400px;">
-      {{!-- <div class="login-logo" style="margin-top: 45px">
-        <a href="#"><b>{{logoName}}</b></a>
-    </div> --}}
-  <div class="row">
+<div class="container parent">
+  <div class="row child">
     <div class="col-xs-12">
-      {{!-- <h1 class="text-center login-title">로그인 하세요</h1> --}}
       <div class="account-wall">
-        <!--<img src="/static/images/login-avatar.png" alt="" class="profile-img">-->
         <img src="/static/images/logo/{{logoImageName}}" alt="{{logo}}" class="profile-img"/>
         <form class="form-signin" method="post" action="/login">
           <input type="text" name="email" id="email" class="form-control" placeholder="이메일" required autofocus>
