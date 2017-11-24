@@ -137,7 +137,7 @@ exports.getLogoInfo = (req, res, next) => {
   default:
     logoImageName = 'orangenamu.png';
     logoName = '오렌지나무시스템';
-    theme = 'skin-yellow-light';
+    theme = 'skin-yellow';
     themeOfTile = 'bg-gray';
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'Copyright © 2017 Orangenamu ALL RIGHTS RESERVED.';
