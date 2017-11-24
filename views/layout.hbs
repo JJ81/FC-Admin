@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="/static/stylesheets/nplayer.css">
     <link rel="stylesheet" href="/static/stylesheets/nplayer_res.css">
     <link rel="stylesheet" href="/static/stylesheets/fine-uploader-new.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css">
 
     {{#if title}}
     <title>{{title}} - {{logoName}}</title>
@@ -48,7 +49,7 @@
     {{else if (isEquals current_path 'winpop')}}
     {{{body}}}
     {{else}}
-    <div class="wrapper" id="wrapper">
+    <div class="wrapper animated fadeIn" id="wrapper">
         {{> header}}
         {{> left_nav}}
         <div class="content-wrapper">
