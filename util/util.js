@@ -93,7 +93,7 @@ exports.getLogoInfo = (req, res, next) => {
     logoImageName = 'waffle.kosc.png';
     logoName = '와플대학';
     theme = 'skin-yellow-light';
-    themeOfTile = 'bg-red-active';
+    themeOfTile = 'bg-blue-gradient';
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'Waffle university coop';
     vodUrl = 'http://pcst.aquan.waffle.edu1004.kr/orangenamu/waffle/';
@@ -138,7 +138,7 @@ exports.getLogoInfo = (req, res, next) => {
     logoImageName = 'orangenamu.png';
     logoName = '오렌지나무시스템';
     theme = 'skin-yellow-light';
-    themeOfTile = 'bg-blue-gradient';
+    themeOfTile = 'bg-gray';
     themeOfProgressBar = 'progress-bar-yellow';
     copyright = 'Copyright © 2017 Orangenamu ALL RIGHTS RESERVED.';
     vodUrl = 'http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/';
