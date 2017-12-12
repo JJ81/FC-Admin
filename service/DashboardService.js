@@ -20,7 +20,7 @@ exports.getCourseProgress = (connection, data, callback) => {
 const getEduCourseProgress = (data, callback) => {
   this.connection.query(QUERY.DASHBOARD.GetCourseProgressByEduId,
     [
-      data.fc_id, data.edu_id, data.edu_id
+      data.fc_id, data.fc_id, data.edu_id
     ],
     (err, result) => {
       data.course = result;

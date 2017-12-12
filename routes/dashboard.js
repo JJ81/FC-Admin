@@ -95,10 +95,9 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
         (callback) => {
           startTime = new Date();
 
-          let q = connection.query(QUERY.DASHBOARD.GetThisMonthProgress(req.user),
+          connection.query(QUERY.DASHBOARD.GetThisMonthProgress(req.user),
             [],
             (err, rows) => {
-              // console.log(q.sql);
               endTime = new Date() - startTime;
               console.info('GetThisMonthProgress time: %dms', endTime);
 

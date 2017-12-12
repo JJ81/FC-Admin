@@ -2078,7 +2078,8 @@ QUERY.DASHBOARD = {
     '                    ON cl.id = up.`course_list_id` ' +
     '                   AND up.`training_user_id` = @training_user_id ' +
     '                   AND up.`end_dt` IS NOT NULL ' +
-    '                 WHERE cl.`course_id` = @course_id ' +
+    '                 WHERE up.`user_id` = u.`id` ' +
+    '                   AND cl.`course_id` = @course_id ' +
     '               ) AS completed_rate ' +
     '             , te.`edu_id` ' +
     '             , e.`edu_name` ' +
@@ -2120,6 +2121,9 @@ QUERY.DASHBOARD = {
     '                     , e.`start_dt` ' +
     '                     , e.`end_dt` ' +
     '                  FROM `edu` AS e ' +
+    '                 INNER JOIN `admin` AS u ' +
+    '                    ON e.`creator_id` = u.`id` ' +
+    '                   AND u.`fc_id` = ' + fcId +
     '                 INNER JOIN `course_group` AS cg ' +
     '                    ON e.`course_group_id` = cg.`group_id` ' +
     '                 WHERE e.`active` = 1 ' +
@@ -2152,7 +2156,8 @@ QUERY.DASHBOARD = {
        '                    ON cl.id = up.`course_list_id` ' +
        '                   AND up.`training_user_id` = @training_user_id ' +
        '                   AND up.`end_dt` IS NOT NULL ' +
-       '                 WHERE cl.`course_id` = @course_id ' +
+       '                 WHERE up.`user_id` = u.`id` ' +
+       '                   AND cl.`course_id` = @course_id ' +
        '               ) AS completed_rate ' +
        '             , te.`edu_id` ' +
        '             , e.`edu_name` ' +
@@ -2198,6 +2203,9 @@ QUERY.DASHBOARD = {
        '                     , e.`start_dt` ' +
        '                     , e.`end_dt` ' +
        '                  FROM `edu` AS e ' +
+       '                 INNER JOIN `admin` AS u ' +
+       '                    ON e.`creator_id` = u.`id` ' +
+       '                   AND u.`fc_id` = ' + fcId +
        '                 INNER JOIN `course_group` AS cg ' +
        '                    ON e.`course_group_id` = cg.`group_id` ' +
        '                 WHERE e.`active` = 1' +
@@ -2223,13 +2231,14 @@ QUERY.DASHBOARD = {
         '    SELECT @training_user_id:= tu.`id` AS training_user_id ' +
         '       , @course_id:= e.`course_id` AS course_id ' +
         '       , ( ' +
-        '        SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) ' +
-        '          FROM `course_list` AS cl ' +
-        '          LEFT JOIN `log_session_progress` AS up ' +
-        '          ON cl.id = up.`course_list_id` ' +
-        '           AND up.`training_user_id` = @training_user_id ' +
-        '           AND up.`end_dt` IS NOT NULL ' +
-        '         WHERE cl.`course_id` = @course_id ' +
+        '          SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) ' +
+        '            FROM `course_list` AS cl ' +
+        '            LEFT JOIN `log_session_progress` AS up ' +
+        '              ON cl.id = up.`course_list_id` ' +
+        '             AND up.`training_user_id` = @training_user_id ' +
+        '             AND up.`end_dt` IS NOT NULL ' +
+        '           WHERE up.`user_id` = u.`id` ' +
+        '             AND cl.`course_id` = @course_id ' +
         '        ) AS completed_rate ' +
         '       , u.`branch_id` ' +
         '      FROM `training_users` AS tu ' +
@@ -2258,13 +2267,16 @@ QUERY.DASHBOARD = {
         '     INNER JOIN `training_edu` AS te ' +
         '      ON tu.`training_edu_id` = te.`id` ' +
         '     INNER JOIN ' +
-        '         ( ' +
-        '        SELECT e.`id` AS edu_id, cg.`course_id` ' +
-        '          FROM `edu` AS e ' +
-        '         INNER JOIN `course_group` AS cg ' +
-        '          ON e.`course_group_id` = cg.`group_id` ' +
-        '         ) AS e ' +
-        '      ON te.`edu_id` = e.`edu_id` ' +
+        '           ( ' +
+        '            SELECT e.`id` AS edu_id, cg.`course_id` ' +
+        '              FROM `edu` AS e ' +
+        '             INNER JOIN `admin` AS u ' +
+        '                ON e.`creator_id` = u.`id` ' +
+        '               AND u.`fc_id` = ' + fcId +
+        '             INNER JOIN `course_group` AS cg ' +
+        '                ON e.`course_group_id` = cg.`group_id` ' +
+        '            ) AS e ' +
+        '        ON te.`edu_id` = e.`edu_id` ' +
         '    ) AS g ' +
         ' INNER JOIN `branch` AS b ' +
         '   ON g.`branch_id` = b.`id` ' +
@@ -2299,7 +2311,8 @@ QUERY.DASHBOARD = {
        '                    ON cl.id = up.`course_list_id` ' +
        '                   AND up.`training_user_id` = @training_user_id ' +
        '                   AND up.`end_dt` IS NOT NULL ' +
-       '                 WHERE cl.`course_id` = @course_id ' +
+       '                 WHERE up.`user_id` = u.`id` ' +
+       '                   AND cl.`course_id` = @course_id ' +
        '               ) AS completed_rate ' +
        '             , e.`course_name` ' +
        '          FROM `training_users` AS tu ' +
@@ -2315,6 +2328,9 @@ QUERY.DASHBOARD = {
        '                     , cg.`course_id` ' +
        '                     , c.`name` AS course_name ' +
        '                  FROM `edu` AS e ' +
+       '                 INNER JOIN `admin` AS u ' +
+       '                    ON e.`creator_id` = u.`id` ' +
+       '                   AND u.`fc_id` = ? ' +
        '                 INNER JOIN `course_group` AS cg ' +
        '                    ON e.`course_group_id` = cg.`group_id` ' +
        '                 INNER JOIN `course` AS c ' +
