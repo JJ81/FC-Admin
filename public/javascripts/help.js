@@ -19,10 +19,10 @@ function (Util) {
   });
 
   function displayAdminVideo () {
-    $video.attr('src', '/api/v1/aqua-direct?os=' + Util.getOSName() + '&url=onm_오렌지러닝_관리자.mp4');
+    $video.attr('src', '/api/v1/aqua-direct?os=' + Util.getOSName() + '&url=onm_orange_admin.mp4');
   }
 
   function displayUserVideo () {
-    $video.attr('src', '/api/v1/aqua-direct?os=' + Util.getOSName() + '&url=onm_오렌지러닝_교육생.mp4');
+    $video.attr('src', '/api/v1/aqua-direct?os=' + Util.getOSName() + '&url=onm_orange_user.mp4');
   }
 });
