@@ -3,7 +3,12 @@
 
 window.requirejs([ 'common' ],
 (Util) => {
+  const $ = $ || window.$;
+
   window.$(() => {
+    Util.initDataTable($('#table-shop-rank'), {
+      'order': [[ 0, 'asc' ]]
+    });
     Util.initDataTable(window.$('#table-personal-point-rank'), {
       'order': [[ 0, 'asc' ]]
     });

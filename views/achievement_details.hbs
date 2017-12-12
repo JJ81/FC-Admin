@@ -11,9 +11,40 @@
         <div class="page-header">
           <h3><small>교육과정명</small><br />{{edu_name}}</h3>
         </div>
+        <div class="row">
+          <!-- 교육과정별 강의 이수율 -->
+          <div class="col-lg-12">
+            <div class="box">
+              <div class="box-header with-border">
+                <h3 class="box-title">교육과정 강의별 이수율</h3>
+              </div>
+
+              <div class="box-body">
+                <div class="overflow-scroll">
+                  {{#each course_progress}}
+                  <!-- course details -->
+                  <div class="progress-course-detail">
+                    <h4 class="course-name">{{course_name}}</h4>
+                    <div class="progress progress-sm active">
+                      <div class="progress-bar {{../themeOfProgressBar}} progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="{{completed_rate}}"
+                        aria-valuemin="0" aria-valuemax="100" style="width: {{completed_rate}}%"></div>
+                    </div>
+                    <div class="star-rating">
+                      <span class="ratings {{star-rating course_rate}}"></span> ( {{course_rate}}점, {{vote_count}}명 평가 )
+                    </div>
+                  </div>
+                  <!-- // course details -->
+                  {{/each}}
+                </div>
+              </div>
+              <!-- // course details list -->
+            </div>
+          </div>
+        </div>
+
         <div class="col-lg-12">
           <h4>점포별 순위 및 이수율</h4>
-          <table id="xltest" class="table table-bordered table-striped">
+          <table id="table-shop-rank" class="table table-bordered table-striped">
             <thead>
               <tr>
                 <th class="center">순위</th>

@@ -38,16 +38,26 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
   pool.getConnection((err, connection) => {
     if (err) throw err;
     async.series([
+      // 강의별 진척도
+      callback => {
+        connection.query(QUERY.DASHBOARD.GetCourseProgressByEduId,
+          [
+            req.user.fc_id, req.user.fc_id, eduId
+          ],
+          (err, result) => {
+            callback(err, result);
+          });
+      },
       // 점포별 진척도
-      (callback) => {
+      callback => {
         connection.query(QUERY.ACHIEVEMENT.GetBranchProgressAllByEdu(eduId, req.user),
         [],
         (err, data) => {
-          callback(err, data); // results[0]
+          callback(err, data); // results[1]
         });
       },
       // 포인트 설정값 조회
-      (callback) => {
+      callback => {
         connection.query(QUERY.EDU.GetRecentPointWeight,
           [ req.user.fc_id, eduId ],
           (err, data) => {
@@ -63,11 +73,11 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
                 point_repetition: 0
               };
             }
-            callback(err, data); // results[1]
+            callback(err, data); // results[2]
           });
       },
       // 교육생별 진척도
-      (callback) => {
+      callback => {
         connection.query(QUERY.ACHIEVEMENT.GetUserProgressAllByEdu(eduId, req.user, pointWeight),
           [
             pointWeight.point_complete,
@@ -82,16 +92,16 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
             req.user.admin_id
           ],
           (err, data) => {
-            callback(err, data); // results[2]
+            callback(err, data); // results[3]
           });
       },
       // 교육정보 조회
-      (callback) => {
+      callback => {
         connection.query(QUERY.ACHIEVEMENT.GetEduInfoById, [
           eduId
         ],
         (err, data) => {
-          callback(err, data); // results[3]
+          callback(err, data); // results[4]
         });
       }
     ],
@@ -106,9 +116,10 @@ router.get('/details', util.isAuthenticated, util.getLogoInfo, (req, res, next) 
           current_path: 'AchievementDetails',
           title: '교육과정별 진척도 상세',
           loggedIn: req.user,
-          branch_progress: results[0],
-          user_progress: results[2],
-          edu_name: results[3][0].name,
+          course_progress: results[0],
+          branch_progress: results[1],
+          user_progress: results[3],
+          edu_name: results[4][0].name,
           edu_id: eduId
         });
       }
@@ -230,7 +241,7 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
     if (err) throw err;
     async.series(
       [
-        (callback) => {
+        callback => {
           connection.query(QUERY.ACHIEVEMENT.GetChecklistQuestionByEduId,
             [ eduId ],
             (err, rows) => {
@@ -239,7 +250,7 @@ router.get('/checklist', util.isAuthenticated, (req, res, next) => {
             }
           );
         },
-        (callback) => {
+        callback => {
           connection.query(QUERY.ACHIEVEMENT.GetChecklistUserAnswers(showAll, { eduId: eduId, adminId: req.user.admin_id }),
             [],
             (err, rows) => {

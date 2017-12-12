@@ -466,5 +466,10 @@ ul.session-content > li:hover {
   text-align:center;
 }
 
+.overflow-scroll {
+  position:relative;
+  height:300px;
+  overflow-y:scroll;
+}
 /*# sourceMappingURL=styles.css.map */
 

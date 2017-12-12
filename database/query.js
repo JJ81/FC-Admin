@@ -1471,10 +1471,11 @@ QUERY.ACHIEVEMENT = {
       '        SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) ' +
       '          FROM `course_list` AS cl ' +
       '          LEFT JOIN `log_session_progress` AS up ' +
-      '          ON cl.id = up.`course_list_id` ' +
+      '            ON cl.id = up.`course_list_id` ' +
       '           AND up.`training_user_id` = @training_user_id ' +
       '           AND up.`end_dt` IS NOT NULL ' +
-      '         WHERE cl.`course_id` = @course_id ' +
+      '         WHERE up.`user_id` = u.`id` ' +
+      '           AND cl.`course_id` = @course_id ' +
       '        ) AS completed_rate ' +
       '       , u.`branch_id` ' +
       '      FROM `training_users` AS tu ' +
@@ -1489,8 +1490,11 @@ QUERY.ACHIEVEMENT = {
       '         ( ' +
       '        SELECT e.`id` AS edu_id, cg.`course_id` ' +
       '          FROM `edu` AS e ' +
+      '         INNER JOIN `admin` AS u ' +
+      '            ON e.`creator_id` = u.`id` ' +
+      '           AND u.`fc_id` = ' + fcId +
       '         INNER JOIN `course_group` AS cg ' +
-      '          ON e.`course_group_id` = cg.`group_id` ' +
+      '            ON e.`course_group_id` = cg.`group_id` ' +
       '         WHERE e.`id` = ' + eduId +
       '         ) AS e ' +
       '      ON te.`edu_id` = e.`edu_id` ';
@@ -1551,7 +1555,8 @@ QUERY.ACHIEVEMENT = {
       '                ON cl.id = up.`course_list_id` ' +
       '               AND up.`training_user_id` = @training_user_id ' +
       '               AND up.`end_dt` IS NOT NULL ' +
-      '             WHERE cl.`course_id` = @course_id ' +
+      '             WHERE up.`user_id` = u.`id` ' +
+      '               AND cl.`course_id` = @course_id ' +
       '           ) AS completed_rate ' +
       '         , u.branch_id ' +
       '         , u.`duty_id` ' +
@@ -1565,11 +1570,14 @@ QUERY.ACHIEVEMENT = {
       '       AND te.`edu_id` = ' + eduId +
       '     INNER JOIN  ' +
       '         ( ' +
-      '        SELECT e.`id` AS edu_id, cg.`course_id` ' +
-      '          FROM `edu` AS e ' +
-      '         INNER JOIN `course_group` AS cg ' +
-      '          ON e.`course_group_id` = cg.`group_id` ' +
-      '         WHERE e.`id` = ' + eduId +
+      '          SELECT e.`id` AS edu_id, cg.`course_id` ' +
+      '            FROM `edu` AS e ' +
+      '           INNER JOIN `admin` AS u ' +
+      '              ON e.`creator_id` = u.`id` ' +
+      '             AND u.`fc_id` = ' + fcId +
+      '           INNER JOIN `course_group` AS cg ' +
+      '              ON e.`course_group_id` = cg.`group_id` ' +
+      '           WHERE e.`id` = ' + eduId +
       '         ) AS e ' +
       '      ON te.`edu_id` = e.`edu_id` ';
     if (role === 'supervisor') {

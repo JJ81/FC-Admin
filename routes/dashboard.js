@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const QUERY = require('../database/query');
 const async = require('async');
-const DashboardService = require('../service/DashboardService');
+// const DashboardService = require('../service/DashboardService');
 const pool = require('../commons/db_conn_pool');
 const util = require('../util/util');
 
 let startTime, endTime;
 
 router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
-  let eduProgress = null;
+  // let eduProgress = null;
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -116,12 +116,12 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
               endTime = new Date() - startTime;
               console.info('GetThisMonthProgressByEdu time: %dms', endTime);
 
-              eduProgress = rows;
+              // eduProgress = rows;
               callback(err, rows);
             }
           );
         },
-        // 교육 이수율 랭킹 (점포)
+        // 점포 이수율 랭킹 (점포)
         // result[5]
         (callback) => {
           connection.query(QUERY.DASHBOARD.GetBranchProgressAll(req.user),
@@ -148,6 +148,8 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
         }
       ],
       (err, result) => {
+        connection.release();
+
         if (err) {
           console.error(err);
           throw new Error(err);
@@ -157,34 +159,48 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
               return a.completed_rate - b.completed_rate;
             });
 
-          // 이번 달 교육 진척도에 강의별 이수율 추가한다.
-          startTime = new Date();
-          DashboardService.getCourseProgress(connection, eduProgress, (err, rows) => {
-            endTime = new Date() - startTime;
-            console.info('getCourseProgress time: %dms', endTime);
-
-            connection.release();
-            if (err) {
-              console.error(err);
-              throw new Error(err);
-            }
-
-            res.render('dashboard', {
-              current_path: 'Dashboard',
-              title: '대시보드',
-              loggedIn: req.user,
-              total_users: result[0],
-              total_branch: result[1],
-              current_edu: result[2],
-              // total_edu: result[3],
-              // point_weight: result[4],
-              total_edu_progress: result[3][0],
-              edu_progress: result[4],
-              branch_progress_top_most: result[5],
-              branch_progress_bottom_most: branchBottomMost,
-              point_rank: result[6]
-            });
+          res.render('dashboard', {
+            current_path: 'Dashboard',
+            title: '대시보드',
+            loggedIn: req.user,
+            total_users: result[0],
+            total_branch: result[1],
+            current_edu: result[2],
+            total_edu_progress: result[3][0],
+            edu_progress: result[4],
+            branch_progress_top_most: result[5],
+            branch_progress_bottom_most: branchBottomMost,
+            point_rank: result[6]
           });
+
+          // 이번 달 교육 진척도에 강의별 이수율 추가한다.
+          // startTime = new Date();
+          // DashboardService.getCourseProgress(connection, eduProgress, (err, rows) => {
+          //   endTime = new Date() - startTime;
+          //   console.info('getCourseProgress time: %dms', endTime);
+
+          //   connection.release();
+          //   if (err) {
+          //     console.error(err);
+          //     throw new Error(err);
+          //   }
+
+          //   res.render('dashboard', {
+          //     current_path: 'Dashboard',
+          //     title: '대시보드',
+          //     loggedIn: req.user,
+          //     total_users: result[0],
+          //     total_branch: result[1],
+          //     current_edu: result[2],
+          //     // total_edu: result[3],
+          //     // point_weight: result[4],
+          //     total_edu_progress: result[3][0],
+          //     edu_progress: result[4],
+          //     branch_progress_top_most: result[5],
+          //     branch_progress_bottom_most: branchBottomMost,
+          //     point_rank: result[6]
+          //   });
+          // });
         }
       });
   });
@@ -303,15 +319,18 @@ router.get('/edupoint', util.isAuthenticated, (req, res) => {
         // 교육과정별 포인트 현황
         (callback) => {
           // if (pointWeight != null) {
-          let q = connection.query(QUERY.DASHBOARD.GetUserPointListByEduId(_inputs.edu_id, req.user),
+          connection.query(QUERY.DASHBOARD.GetUserPointListByEduId(_inputs.edu_id, req.user),
             [],
             (err, rows) => {
-              console.log(q.sql);
+              // console.log(q.sql);
               if (err) throw err;
+
               for (let index = 0; index < rows.length; index++) {
                 if (rows[index].logs !== null) {
+                  // console.log(rows[index].logs);
                   let logs = JSON.parse(rows[index].logs);
                   let period;
+
                   if (logs.edu_start_dt === null) {
                     period = '시작전';
                   } else if (logs.edu_end_dt === null) {
@@ -319,6 +338,7 @@ router.get('/edupoint', util.isAuthenticated, (req, res) => {
                   } else {
                     period = logs.edu_start_dt + ' ~ ' + logs.edu_end_dt;
                   }
+
                   let userPeriod = logs.speed.user_period === null ? 0 : logs.speed.user_period;
 
                   rows[index].period = period; // eduStart + ' ~ ' + eduFinish;
