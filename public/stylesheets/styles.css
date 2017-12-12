@@ -467,7 +467,7 @@ ul.session-content > li:hover {
 }
 
 .wrapper_video {
-  height: 438px;
+  max-height: 297px;
 }
 /*# sourceMappingURL=styles.css.map */
 
