@@ -1650,7 +1650,8 @@ QUERY.ACHIEVEMENT = {
     '                            ON cl.id = up.`course_list_id` ' +
     '                           AND up.`training_user_id` = @training_user_id ' +
     '                           AND up.`end_dt` IS NOT NULL ' +
-    '                         WHERE cl.`course_id` = @course_id ' +
+    '                         WHERE up.`user_id` = u.`id` ' +
+    '                           AND cl.`course_id` = @course_id ' +
     '                       ) AS completed_rate ' +
     '                     , u.`branch_id` ' +
     '                     , u.`duty_id` ' +
@@ -1685,6 +1686,9 @@ QUERY.ACHIEVEMENT = {
     '                       ( ' +
     '                        SELECT e.`id` AS edu_id, cg.`course_id` ' +
     '                          FROM `edu` AS e ' +
+    '                         INNER JOIN `admin` AS u ' +
+    '                            ON e.`creator_id` = u.`id` ' +
+    '                           AND u.`fc_id` = ' + fcId +
     '                         INNER JOIN `course_group` AS cg ' +
     '                            ON e.`course_group_id` = cg.`group_id` ' +
     '                       ) AS e ' +
