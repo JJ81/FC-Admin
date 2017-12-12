@@ -104,7 +104,6 @@ window.define([
         switch (state) {
         case window.NPlayer.PlayState.Playing:
           player.setVisible(true);
-          player.pause();
           break;
 
         case window.NPlayer.PlayState.Stopped:
