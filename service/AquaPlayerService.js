@@ -140,3 +140,25 @@ exports.show = (req, res, next) => {
       });
   });
 };
+
+exports.showDirect = (req, res, next) => {
+  const { os, url } = req.query;
+
+  if (os === 'windows') {
+    return res.render('winpops/win_aquaplayer_window', {
+      layout: 'layout_player.hbs',
+      module_type: 'AquaPlayer',
+      title: '아쿠아플레이어 Windows',
+      video_url: 'http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/' + url,
+      watermark: req.user.admin_id
+    });
+  } else {
+    return res.render('winpops/win_aquaplayer_html5', {
+      layout: 'layout_player.hbs',
+      module_type: 'AquaPlayer',
+      title: '아쿠아플레이어 HTML5',
+      video_url: 'http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/' + url,
+      watermark: req.user.admin_id
+    });
+  }
+};

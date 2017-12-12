@@ -130,6 +130,7 @@ router.get('/test', (req, res) => {
 
 router.get('/player/encparam', AquaPlayerService.getEncodedParam);
 router.get('/aqua', util.isAuthenticated, util.getLogoInfo, AquaPlayerService.show);
+router.get('/aqua-direct', util.isAuthenticated, util.getLogoInfo, AquaPlayerService.showDirect);
 router.get('/demo/aquaplayer', util.isAuthenticated, util.getLogoInfo, AquaPlayerService.demo);
 
 router.get('/fineuploader/token', (req, res, next) => {

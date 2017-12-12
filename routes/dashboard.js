@@ -304,9 +304,10 @@ router.get('/edupoint', util.isAuthenticated, (req, res) => {
         // 교육과정별 포인트 현황
         (callback) => {
           // if (pointWeight != null) {
-          connection.query(QUERY.DASHBOARD.GetUserPointListByEduId(_inputs.edu_id, req.user),
+          let q = connection.query(QUERY.DASHBOARD.GetUserPointListByEduId(_inputs.edu_id, req.user),
             [],
             (err, rows) => {
+              console.log(q.sql);
               if (err) throw err;
               for (let index = 0; index < rows.length; index++) {
                 if (rows[index].logs !== null) {
