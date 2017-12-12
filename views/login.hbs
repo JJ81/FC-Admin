@@ -1,18 +1,48 @@
-
+<div class="login-box">
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <img src="/static/images/logo/{{logoImageName}}" alt="{{logo}}" class="profile-img" />
+    <form role="form" id="form-agent-login" method="post" action="/login">
+      <div class="form-group has-feedback">
+        <input type="text" class="form-control" name="email" id="agent" placeholder="이메일" autocomplete="off" required />
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" class="form-control" name="password" id="password" placeholder="암호" autocomplete="off" required />
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbok">
+            <label>
+              <input type="checkbox" id="remember"> 이메일 기억</label>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat" id="btn-agent-login">로그인</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+    <!--<a href="#">I forgot my password</a><br />-->
+  </div>
+  <!-- /.login-box-body -->
+</div>
+{{!--
 <div class="container parent">
   <div class="row child">
     <div class="col-xs-12">
-      <div class="account-wall">
-        <img src="/static/images/logo/{{logoImageName}}" alt="{{logo}}" class="profile-img"/>
+      <div>
+        <img src="/static/images/logo/{{logoImageName}}" alt="{{logo}}" class="profile-img" />
         <form class="form-signin" method="post" action="/login">
           <input type="text" name="email" id="email" class="form-control" placeholder="이메일" required autofocus>
           <input type="password" name="password" class="form-control" placeholder="암호" required>
           <button class="btn btn-lg btn-warning btn-block btn-login" type="submit">로그인</button>
           <div class="checkbox pull-left">
-          <label>
-            <input type="checkbox" value="remember-me" id="remember">
-            이메일 기억
-          </label>
+            <label>
+              <input type="checkbox" value="remember-me" id="remember"> 이메일 기억
+            </label>
           </div>
           <!--<a href="#" class="pull-right need-help">도움이 필요하세요?</a><span class="clearfix"></span>-->
         </form>
@@ -20,10 +50,9 @@
 
       {{#if message}}
       <div class="alert alert-danger alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"
-          onclick="this.parentElement.style.display='none';"
-        >×</button>
-        <h4><i class="icon fa fa-ban"></i> 알림</h4>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true" onclick="this.parentElement.style.display='none';">×</button>
+        <h4>
+          <i class="icon fa fa-ban"></i> 알림</h4>
         {{message}}
         <a href="mailto:lucas@orangenamu.kr"> 관리자에게 문의하기</a>
       </div>
@@ -31,4 +60,4 @@
       <!--<a href="#" class="text-center new-account">회원가입</a>-->
     </div>
   </div>
-</div>
+</div> --}}
