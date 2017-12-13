@@ -175,19 +175,30 @@ router.post('/upload/excel/create/employee', util.isAuthenticated, (req, res, ne
               if (rowNumber >= 2) {
                 // email 이 hyperlink 일 경우
                 // { text: 'hyoungia67@naver.com', hyperlink: 'mailto:hyoungia67@naver.com' } 이와 같이 넘어온다.
-                let email = row.values[5];
-                if (typeof email === 'object') {
-                  email = util.replaceEmptySpace(email.text);
-                }
-                console.log(row.values[1], row.values[2], row.values[3], row.values[4]);
+                // let email = row.values[5];
+                // if (typeof email === 'object') {
+                //   email = util.replaceEmptySpace(email.text);
+                // }
+                // console.log(row.values[1], row.values[2], row.values[3], row.values[4]);
+
+                // let user = {
+                //   row: rowNumber,
+                //   branch: row.values[1] == undefined ? '' : util.replaceEmptySpace(row.values[1]),
+                //   duty: row.values[2] == undefined ? '' : util.replaceEmptySpace(row.values[2]),
+                //   name: row.values[3] == undefined ? '' : util.replaceEmptySpace(row.values[3]),
+                //   phone: util.getDigitOnly(row.values[4] == undefined ? '' : util.replaceEmptySpace(row.values[4])),
+                //   email: email == undefined ? '' : email,
+                //   error: false,
+                //   error_msg: []
+                // };
 
                 let user = {
                   row: rowNumber,
-                  branch: row.values[1] == undefined ? '' : util.replaceEmptySpace(row.values[1]),
-                  duty: row.values[2] == undefined ? '' : util.replaceEmptySpace(row.values[2]),
-                  name: row.values[3] == undefined ? '' : util.replaceEmptySpace(row.values[3]),
-                  phone: util.getDigitOnly(row.values[4] == undefined ? '' : util.replaceEmptySpace(row.values[4])),
-                  email: email == undefined ? '' : email,
+                  branch: util.convertRichText(row.values[1]),
+                  duty: util.convertRichText(row.values[2]),
+                  name: util.convertRichText(row.values[3]),
+                  phone: util.getDigitOnly(util.convertRichText(row.values[4])),
+                  email: util.convertRichText(row.values[5]),
                   error: false,
                   error_msg: []
                 };

@@ -76,6 +76,24 @@ exports.replaceEmptySpace = (str) => {
   return str.toString().replace(/ /g, '').trim();
 };
 
+exports.convertRichText = (obj) => {
+  let ret;
+
+  if (typeof obj === 'object') {
+    if (obj.richText) {
+      ret = obj.richText.map(x => x.text).join('');
+    } else {
+      ret = obj.text;
+    }
+  } else {
+    ret = obj === undefined ? '' : obj;
+  }
+
+  console.log('ret', ret);
+
+  return this.replaceEmptySpace(ret);
+};
+
 exports.getLogoInfo = (req, res, next) => {
   let logoImageName;
   let logoName;
