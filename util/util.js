@@ -89,7 +89,7 @@ exports.convertRichText = (obj) => {
     ret = obj === undefined ? '' : obj;
   }
 
-  console.log('ret', ret);
+  // console.log('ret', ret);
 
   return this.replaceEmptySpace(ret);
 };
