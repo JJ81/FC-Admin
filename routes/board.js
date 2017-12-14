@@ -21,7 +21,8 @@ router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
         res.render('board', {
           current_path: 'Board',
           title: '게시판 관리',
-          list: result
+          list: result,
+          loggedIn: req.user
         });
       }
     });

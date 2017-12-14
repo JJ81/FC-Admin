@@ -13,8 +13,6 @@ const AdministratorService = require('../service/AdministratorService');
  */
 router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   pool.getConnection((err, connection) => {
-    connection.release();
-
     if (err) throw err;
     async.series(
       [
@@ -66,10 +64,10 @@ router.get('/branch/:admin_id', util.isAuthenticated, (req, res) => {
   const { admin_id: adminId } = req.params;
 
   pool.getConnection((err, connection) => {
-    connection.release();
-
     if (err) throw err;
     connection.query(QUERY.ADMIN.GetAdminBranch, [adminId, req.user.fc_id], (err, results) => {
+      connection.release();
+
       if (err) {
         res.json({
           success: false,
@@ -192,6 +190,8 @@ router.post('/password/reset', (req, res) => {
       connection.query(QUERY.ADMIN.ResetPassword,
         [bcrypt.hashSync(password, 10), userId],
         (err, result) => {
+          connection.release();
+
           if (err) {
             console.error(err);
           } else {
@@ -217,6 +217,8 @@ router.post('/role/reset', (req, res) => {
       connection.query(QUERY.ADMIN.ResetRole,
         [role, userId],
         (err, result) => {
+          connection.release();
+
           if (err) {
             console.error(err);
           } else {
@@ -271,6 +273,8 @@ router.post('/assign/branch', (req, res) => {
             }
           ],
           (err, results) => {
+            connection.release();
+
             if (err) {
               return connection.rollback(() => {
                 res.json({
@@ -288,7 +292,7 @@ router.post('/assign/branch', (req, res) => {
                     });
                   });
                 }
-                connection.release();
+
                 res.json({
                   success: true
                 });
@@ -322,6 +326,7 @@ router.post('/regist/office', (req, res, next) => {
       [ req.body.office_name, req.body.office_desc, req.user.fc_id ],
       (err, result) => {
         connection.release();
+
         if (err) {
           console.error(err);
           return next({
@@ -343,6 +348,7 @@ router.post('/modify/office', (req, res, next) => {
       [ req.body.office_name, req.body.office_desc, req.body.id ],
       (err, result) => {
         connection.release();
+
         if (err) {
           console.error(err);
           return next({
@@ -365,6 +371,8 @@ router.get('/offices', (req, res, next) => {
     connection.query(QUERY.ADMIN.GetOfficeBranchesByOfficeId,
       [ officeId, req.user.fc_id ],
       (err, results) => {
+        connection.release();
+
         if (err) {
           res.json({
             success: false,
@@ -414,6 +422,7 @@ router.post('/office/branches', (req, res, next) => {
             },
             (err, results) => {
               connection.release();
+
               if (err) {
                 console.error(err);
                 throw new Error(err);
@@ -463,6 +472,7 @@ router.post('/admin/offices', (req, res, next) => {
             },
             (err, results) => {
               connection.release();
+
               if (err) {
                 console.error(err);
                 throw new Error(err);

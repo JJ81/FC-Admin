@@ -35,6 +35,18 @@ function (Util, AquaPlayerService) {
     $modal.find('#board_id').val(id);
   });
 
+  // 정보 보기
+  $('.show-board > a').bind('click', (event) => {
+    const $self = $(event.currentTarget);
+    const $modal = window.$('#modal-show-board');
+
+    const title = $self.attr('data-title');
+    const contents = $self.attr('data-contents');
+
+    $modal.find('.modal-title').html(title);
+    $modal.find('.modal-body').html(contents);
+  });
+
   // 정보 삭제
   $('.btn-delete').bind('click', (event) => {
     if (!window.confirm('삭제 시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?')) {
