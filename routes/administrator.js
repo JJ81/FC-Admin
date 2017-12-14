@@ -13,6 +13,8 @@ const AdministratorService = require('../service/AdministratorService');
  */
 router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   pool.getConnection((err, connection) => {
+    connection.release();
+
     if (err) throw err;
     async.series(
       [
@@ -64,6 +66,8 @@ router.get('/branch/:admin_id', util.isAuthenticated, (req, res) => {
   const { admin_id: adminId } = req.params;
 
   pool.getConnection((err, connection) => {
+    connection.release();
+
     if (err) throw err;
     connection.query(QUERY.ADMIN.GetAdminBranch, [adminId, req.user.fc_id], (err, results) => {
       if (err) {
@@ -119,6 +123,7 @@ router.post('/register', util.isAuthenticated, (req, res, next) => {
         ],
         (err, result) => {
           connection.release();
+
           if (err) {
             return next({
               status: 500,

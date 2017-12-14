@@ -23,6 +23,7 @@
               <th class="center">작성자</th>
               <th class="center">날짜</th>
               <th class="center">조회수</th>
+              <th class="center">Action</th>
             </tr>
           </thead>
 
@@ -31,9 +32,24 @@
             <tr>
               <td class="center">{{id}}</td>
               <td class=""><a href="/board?id={{id}}">{{title}}</a></td>
-              <td class="center">{{creator}}</td>
+              <td class="center">{{creator_name}}</td>
               <td class="center">{{time created_dt}}</td>
-              <td class="center">{{view_count}}</td>
+              <td class="center">{{hits}}</td>
+              <td class="center">
+                <button type="button"
+                  class="btn btn-warning btn-sm btn-modify"
+                  data-toggle="modal" data-target="#updateBoard"
+                  data-id="{{id}}"
+                  data-title="{{title}}"
+                  data-contents="{{contents}}"
+                >
+                  수정
+                </button>
+                <button type="button"
+                  class="btn btn-danger btn-sm btn-delete"
+                  data-id="{{id}}">삭제
+                </button>
+              </td>
             </tr>
             {{/each}}
           </tbody>
@@ -43,4 +59,5 @@
   </div>
 </div>
 
-{{> modal_add_board}} 
+{{> modal_add_board}}
+{{> modal_update_board}}

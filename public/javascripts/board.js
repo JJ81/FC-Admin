@@ -18,4 +18,43 @@ function (Util, AquaPlayerService) {
       $(this).val('');
     }
   });
+
+  // 정보 수정
+  $('.btn-modify').bind('click', (event) => {
+    const $self = $(event.currentTarget);
+    const $modal = window.$('#updateBoard');
+
+    const id = $self.attr('data-id');
+    const title = $self.attr('data-title');
+    const contents = $self.attr('data-contents');
+
+    $modal.find('#title').val(title);
+    // modal.find('#contents').val(contents);
+    window.tinymce.activeEditor.setContent('');
+    window.tinymce.get('contents').setContent(contents);
+    $modal.find('#board_id').val(id);
+  });
+
+  // 정보 삭제
+  $('.btn-delete').bind('click', (event) => {
+    if (!window.confirm('삭제 시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?')) {
+      return false;
+    }
+
+    const $self = $(event.currentTarget);
+    const id = $self.attr('data-id');
+
+    window.axios.delete(`/board/${id}`)
+      .then(function (response) {
+        if (!response.data.success) {
+          window.alert('삭제하지 못했습니다.');
+        } else {
+          window.alert('삭제하였습니다.');
+        }
+        window.location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  });
 });

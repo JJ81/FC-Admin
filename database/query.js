@@ -2790,4 +2790,46 @@ QUERY.VIDEO = {
     ' ORDER BY v.`name`; '
 };
 
+QUERY.BOARD = {
+  Select: `
+    SELECT b.id
+         , b.parent_id
+         , b.title
+         , b.contents
+         , b.hits
+         , b.creator_id
+         , b.creator_name
+         , b.created_date
+      FROM board AS b
+     WHERE b.fc_id = ?
+     ORDER BY b.created_date DESC;
+  `,
+
+  Insert: `
+    INSERT INTO board (
+      title,
+      contents,
+      creator_id,
+      creator_name,
+      fc_id,
+      file_name
+    ) VALUES (
+      ?,?,?,?,?,?
+    )
+  `,
+
+  Update: `
+    UPDATE board SET
+      title = ?,
+      contents = ?,
+      file_name = ?
+     WHERE id = ?
+  `,
+
+  Delete: `
+    DELETE FROM board
+     WHERE id = ?
+  `
+};
+
 module.exports = QUERY;
