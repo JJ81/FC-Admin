@@ -3,14 +3,14 @@ window.requirejs([
 ],
 function (Util, AquaPlayerService) {
   var $ = $ || window.$;
-  var $fileUpload = $('#file');
+  var $fileUpload = $('.file');
 
   $(function () {
     // datatable 설정
     Util.initDataTable($('#table-board'));
   });
 
-  $fileUpload.change(function () {
+  $fileUpload.on('change', function () {
     var fileSize = $(this).get(0).files[0].size;
     console.log(fileSize);
     if (fileSize >= 2 * 1024 * 1024) {
@@ -27,12 +27,18 @@ function (Util, AquaPlayerService) {
     const id = $self.attr('data-id');
     const title = $self.attr('data-title');
     const contents = $self.attr('data-contents');
+    const filename = $self.attr('data-filename');
 
     $modal.find('#title').val(title);
     // modal.find('#contents').val(contents);
     window.tinymce.activeEditor.setContent('');
     window.tinymce.get('contents').setContent(contents);
     $modal.find('#board_id').val(id);
+
+    if (filename) {
+      $modal.find('#filename').attr('href', `/api/v1/download?url=${filename}`);
+      $modal.find('#filename').text(filename.substring(filename.lastIndexOf('/') + 1));
+    }
   });
 
   // 정보 보기

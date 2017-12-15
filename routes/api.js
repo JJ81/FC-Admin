@@ -16,6 +16,7 @@ const AquaPlayerService = require('../service/AquaPlayerService');
 const formidable = require('formidable');
 const path = require('path');
 const unirest = require('unirest');
+const request = require('request');
 
 router.get('/course/group/id/create', isAuthenticated, (req, res) => {
   res.json({
@@ -176,6 +177,31 @@ router.get('/youtube', (req, res, next) => {
     title: '유투브',
     video_id: req.query.id
   });
+});
+
+router.get('/download', (req, res, next) => {
+  const { url } = req.query;
+
+  if (!url) {
+    return res.sendStatus(500);
+  } else {
+    const downloadUrl = (url, output) => {
+      output.attachment(url.substring(url.lastIndexOf('/') + 1));
+
+      let stream = request.get(url);
+
+      stream.pipe(output);
+
+      stream.on('error', (err) => {
+        console.log('Stream error:', err);
+      })
+      .on('end', () => {
+        console.log('Stream finished');
+      });
+    };
+
+    downloadUrl(url, res);
+  }
 });
 
 module.exports = router;

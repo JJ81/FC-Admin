@@ -1,5 +1,10 @@
 <div class="modal fade" id="updateBoard" role="dialog">
-  <form class="modal-dialog" method="post" action="/board/update" id="form-board-update">
+  <form class="modal-dialog"
+    method="post"
+    action="/board/update"
+    enctype="multipart/form-data"
+    id="form-board-update"
+  >
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -19,7 +24,8 @@
 
         <div class="form-group">
           <label>첨부파일</label>
-          <input type="file" class="form-control" id="file" name="file" />
+          <input type="file" class="form-control file" name="file" /><br>
+          <a id="filename" href=""></a>
         </div>
 
       </div>

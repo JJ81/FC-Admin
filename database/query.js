@@ -2800,6 +2800,7 @@ QUERY.BOARD = {
          , b.creator_id
          , b.creator_name
          , b.created_date
+         , b.file_name
       FROM board AS b
      WHERE b.fc_id = ?
      ORDER BY b.created_date DESC;
