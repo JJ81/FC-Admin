@@ -18,6 +18,9 @@ const path = require('path');
 const unirest = require('unirest');
 const request = require('request');
 
+const aws = require('aws-sdk');
+aws.config.loadFromPath('./secret/aws-config.json');
+
 router.get('/course/group/id/create', isAuthenticated, (req, res) => {
   res.json({
     id: util.publishHashByMD5(new Date())
@@ -186,6 +189,9 @@ router.get('/download', (req, res, next) => {
     return res.sendStatus(500);
   } else {
     const downloadUrl = (url, output) => {
+      // const urlEncoded = encodeURIComponent(url);
+      // console.log(url, urlEncoded);
+
       output.attachment(url.substring(url.lastIndexOf('/') + 1));
 
       let stream = request.get(url);
@@ -194,6 +200,10 @@ router.get('/download', (req, res, next) => {
 
       stream.on('error', (err) => {
         console.log('Stream error:', err);
+        return next({
+          status: 500,
+          message: err
+        });
       })
       .on('end', () => {
         console.log('Stream finished');
@@ -202,6 +212,19 @@ router.get('/download', (req, res, next) => {
 
     downloadUrl(url, res);
   }
+});
+
+router.get('/s3-download', (req, res, next) => {
+  const { key } = req.query;
+  const params = {
+    Bucket: 'orange-learning',
+    Key: key
+  };
+  const s3 = new aws.S3();
+
+  res.attachment(key);
+  var fileStream = s3.getObject(params).createReadStream();
+  fileStream.pipe(res);
 });
 
 module.exports = router;

@@ -134,7 +134,7 @@ router.post('/update', util.isAuthenticated, upload.array('file'), (req, res, ne
               console.log(event);
             })
             .send((err, data) => {
-              callback(err, data ? data.Location : null);
+              callback(err, data ? data.Key : null);
             });
         });
       }

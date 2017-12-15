@@ -35,8 +35,10 @@ function (Util, AquaPlayerService) {
     $modal.find('#board_id').val(id);
 
     if (filename) {
-      $modal.find('#filename').attr('href', `/api/v1/download?url=${filename}`);
-      $modal.find('#filename').text(filename.substring(filename.lastIndexOf('/') + 1));
+      const key = filename.substring(filename.lastIndexOf('/') + 1);
+
+      $modal.find('#filename').attr('href', `/api/v1/s3-download?key=${key}`);
+      $modal.find('#filename').text(key);
     }
   });
 
