@@ -53,7 +53,7 @@ router.post('/', util.isAuthenticated, upload.array('file'), (req, res, next) =>
       } else {
         req.files.forEach((fileObj, index) => {
           const params = {
-            Bucket: 'orange-learning',
+            Bucket: 'orange-checklist',
             Key: fileObj.originalname,
             ACL: 'public-read',
             ContentType: fileObj.mimetype
