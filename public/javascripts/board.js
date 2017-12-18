@@ -49,9 +49,21 @@ function (Util, AquaPlayerService) {
 
     const title = $self.attr('data-title');
     const contents = $self.attr('data-contents');
+    const filename = $self.attr('data-filename');
 
     $modal.find('.modal-title').html(title);
-    $modal.find('.modal-body').html(contents);
+
+    if (filename) {
+      const key = filename.substring(filename.lastIndexOf('/') + 1);
+
+      $modal.find('.modal-body').html('<br><a id="filename" href=""></a>');
+      $modal.find('.modal-body').prepend(contents);
+
+      $modal.find('#filename').attr('href', `/api/v1/s3-download?key=${key}`);
+      $modal.find('#filename').text(key);
+    } else {
+      $modal.find('.modal-body').html(contents);
+    }
   });
 
   // 정보 삭제
