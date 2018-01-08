@@ -1,6 +1,9 @@
 
 'use strict';
 
+/**
+ * 교육과정별 성취도 상세페이지입니다.
+ */
 window.requirejs([ 'common' ],
 (Util) => {
   const $ = $ || window.$;

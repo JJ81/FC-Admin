@@ -15,11 +15,11 @@ aws.config.loadFromPath('./secret/aws-config.json');
 
 router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   pool.getConnection((err, connection) => {
-    connection.release();
-
     if (err) throw err;
 
     connection.query(QUERY.BOARD.Select, [ req.user.fc_id ], (err, result) => {
+      connection.release();
+
       if (err) {
         console.log(err);
         res.json({
@@ -48,7 +48,7 @@ router.post('/', util.isAuthenticated, upload.array('file'), (req, res, next) =>
     if (err) throw err;
 
     const s3upload = callback => {
-      if (!req.files) {
+      if (!req.files || req.files.length === 0) {
         callback(null, null);
       } else {
         req.files.forEach((fileObj, index) => {

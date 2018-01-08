@@ -6,6 +6,13 @@ const QUERY = require('../database/query');
 const async = require('async');
 const pool = require('../commons/db_conn_pool');
 
+/**
+ * CDNETWORKS 동영상을 요청하기 위한 인코딩 문자열을 생성한다.
+ * @name AquaPlayerService.getEncodedParam
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 exports.getEncodedParam = (req, res, next) => {
   // 사용자ID를 넣는 부분, 넘겨줄 ID가 없는 경우 중복로그인제한 회피를 위해 Unique 한 ID 로 랜덤처리 필요.
   const UserID = req.user.user_id;
@@ -64,8 +71,6 @@ exports.getEncodedParam = (req, res, next) => {
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
   // param += '&NotifyInfo=' + NotifyInfo;
 
-  console.log(param);
-
   execFile(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64'),
     [ '-t', 'ENC', param ],
     (err, stdout, stderr) => {
@@ -81,18 +86,13 @@ exports.getEncodedParam = (req, res, next) => {
   );
 };
 
-exports.getNotifyInfo = (req, res, next) => {
-  console.log(req.body);
-  res.sendStatus(200);
-};
-
-exports.demo = (req, res, next) => {
-  res.render('aquaplayer', {
-    current_path: 'AquaPlayer',
-    title: '아쿠아플레이어 데모'
-  });
-};
-
+/**
+ * 특정 강의에 등록된 도영상 파일의 아쿠아플레이어 페이지(Windows/HTML5)를 생성한다.
+ * @name AquaPlayerService.show
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 exports.show = (req, res, next) => {
   const { os, video_id: videoId, video_name: videoName } = req.query;
   let videoUrl;
@@ -141,6 +141,13 @@ exports.show = (req, res, next) => {
   });
 };
 
+/**
+ * query 파라미터로 전달된 파일명을 아쿠아플레이어 페이지(Windows/HTML5)를 생성한다.
+ * @name AquaPlayerService.showDirect
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 exports.showDirect = (req, res, next) => {
   const { os, url } = req.query;
 

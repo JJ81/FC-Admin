@@ -7,7 +7,9 @@ const pool = require('../commons/db_conn_pool');
 
 /**
  * 관리자를 비활성화 한다.
- * _id: users 테이블의 id
+ * @name AssignmentService.deactivateEduAssignmentById
+ * @param {*} _id 관리자 아이디
+ * @param {*} _callback 콜백
  */
 AssignmentService.deactivateEduAssignmentById = (_id, _callback) => {
   pool.getConnection((err, connection) => {
@@ -20,6 +22,13 @@ AssignmentService.deactivateEduAssignmentById = (_id, _callback) => {
   });
 };
 
+/**
+ * 간편배정 진행상태를 저장하는 API를 호출한다.
+ * @name AssignmentService.updateProgress
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 AssignmentService.updateProgress = (req, res, next) => {
   AssignmentService.updateSimpleAssignment(req.body, () => {
     return res.sendStatus(200);
@@ -27,7 +36,10 @@ AssignmentService.updateProgress = (req, res, next) => {
 };
 
 /**
- * log_assign_edu 의 start_dt, end_dt 를 수정한다.
+ * 교육과정 배정일자를 수정한다. (log_assign_edu id 를 통해)
+ * @name AssignmentService.modifyLogAssignEdu
+ * @param {*} _data 전달할 데이터
+ * @param {*} _callback 콜백
  */
 AssignmentService.modifyLogAssignEdu = (_data, _callback) => {
   const logAssignEduId = _data.log_assign_edu_id;
@@ -47,8 +59,12 @@ AssignmentService.modifyLogAssignEdu = (_data, _callback) => {
     );
   });
 };
+
 /**
- * log_assign_edu 의 start_dt, end_dt 를 수정한다.
+ * 교육과정 배정일자를 수정한다. (training_edu_id 를 통해)
+ * @name AssignmentService.modifyLogAssignEdu2
+ * @param {*} _data 전달할 데이터
+ * @param {*} _callback 콜백
  */
 AssignmentService.modifyLogAssignEdu2 = (_data, _callback) => {
   const trainingEduId = _data.training_edu_id;
@@ -70,11 +86,15 @@ AssignmentService.modifyLogAssignEdu2 = (_data, _callback) => {
 };
 
 /**
- * _data.upload_type 이 'excel' 일 경우
+ * 교육과정 간편배정내역을 생성한다.
+ * _data.upload_type 이 'excel' 일 경우,
  * user 를 먼저 생성한다음 user_id를 취득한 후 아래 단계를 진행한다.
- *
  * 1. log_group_user 생성
  * 2. log_bind_users 생성
+ * @name AssignmentService.create
+ * @param {Object} _connection 전달할 mysql connection
+ * @param {Object} _data 전달할 데이터 Object
+ * @param {Function} _callback 전달할 콜백
  */
 AssignmentService.create = (_connection, _data, _callback) => {
   let userIdCount = 0;
@@ -265,6 +285,11 @@ AssignmentService.create = (_connection, _data, _callback) => {
 
 /**
  * 교육생그룹에 교육과정을 할당한다.
+ * @name AssignmentService.allocate
+ * @param {Object} _connection 전달할 mysql connection
+ * @param {Object} _data 전달할 데이터 Object
+ * @param {Function} _callback 전달할 콜백
+ * @deprecated 교육생그룹에 배정하는 기능에서만 사용됨
  */
 AssignmentService.allocate = (_connection, _data, _callback) => {
   const eduId = _data.edu_id;
@@ -369,6 +394,13 @@ AssignmentService.allocate = (_connection, _data, _callback) => {
   });
 };
 
+/**
+ * 배정을 취소한다.
+ * @name AssignmentService.deleteAllocation
+ * @param {Object} _connection 전달할 mysql connection
+ * @param {Object} 전달할 데이터 Object (trainingEduId, assignmentId)
+ * @param {Function} _callback 전달할 콜백
+ */
 AssignmentService.deleteAllocation = (_connection, { trainingEduId, assignmentId }, _callback) => {
   async.series(
     [
@@ -411,6 +443,13 @@ AssignmentService.deleteAllocation = (_connection, { trainingEduId, assignmentId
   );
 };
 
+/**
+ * 간편배정내역을 리턴한다.
+ * @name AssignmentService.getSimpleAssignmentList
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 AssignmentService.getSimpleAssignmentList = (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -447,6 +486,13 @@ AssignmentService.getSimpleAssignmentList = (req, res, next) => {
   });
 };
 
+/**
+ * 간편배정내역에 추가할 강의목록을 반환한다. (이미 추가된 강의는 제외)
+ * @name AssignmentService.getCoursesToAdd
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 AssignmentService.getCoursesToAdd = (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -480,6 +526,13 @@ AssignmentService.getCoursesToAdd = (req, res, next) => {
   });
 };
 
+/**
+ * 간편배정내역에 강의를 추가한다.
+ * @name AssignmentService.addCourses
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 AssignmentService.addCourses = (req, res, next) => {
   const arrCourses = JSON.parse('[' + req.body.course_ids + ']');
   let courseIdCount = 0;
@@ -528,6 +581,13 @@ AssignmentService.addCourses = (req, res, next) => {
   });
 };
 
+/**
+ * 간편배정내역을 아이디를 통해 조회하여 반환.
+ * @name AssignmentService.getSimpleAssignmentById
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 AssignmentService.getSimpleAssignmentById = (req, res, next, id) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -547,6 +607,13 @@ AssignmentService.getSimpleAssignmentById = (req, res, next, id) => {
   });
 };
 
+/**
+ * 간편배정내역을 생성한다.
+ * @name AssignmentService.createSimpleAssignment
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 AssignmentService.createSimpleAssignment = (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -601,7 +668,13 @@ AssignmentService.createSimpleAssignment = (req, res, next) => {
   });
 };
 
-// 간편배정 내역을 삭제한다.
+/**
+ * 간편배정내역을 삭제한다.
+ * @name AssignmentService.deleteSimpleAssignment
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 AssignmentService.deleteSimpleAssignment = (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -675,7 +748,13 @@ AssignmentService.deleteSimpleAssignment = (req, res, next) => {
   });
 };
 
-// 간편배정 진행상태를 저장한다.
+/**
+ * 간편배정 진행상태를 저장한다.
+ * @name AssignmentService.updateSimpleAssignment
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 AssignmentService.updateSimpleAssignment = (data, _callback) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -714,6 +793,14 @@ AssignmentService.updateSimpleAssignment = (data, _callback) => {
   });
 };
 
+/**
+ * 배정내역을 삭제한다.
+ * @name AssignmentService.deleteAssignment
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @deprecated 교육생그룹 교육과정 배정시 사용
+ */
 AssignmentService.deleteAssignment = (data, _callback) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -759,6 +846,14 @@ AssignmentService.deleteAssignment = (data, _callback) => {
   });
 };
 
+/**
+ * 배정내역을 교육생그룹아이디를 통해 삭제한다.
+ * @name AssignmentService.deleteGroupUserByGroupId
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @deprecated 교육생그룹 교육과정 배정시 사용
+ */
 AssignmentService.deleteGroupUserByGroupId = ({ groupId }, _callback) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -797,6 +892,13 @@ AssignmentService.deleteGroupUserByGroupId = ({ groupId }, _callback) => {
   });
 };
 
+/**
+ * 배정된 교육생그룹을 반환한다.
+ * @name AssignmentService.getBindUser
+ * @param {Object} logBindUserId
+ * @param {*} _callback
+ * @deprecated 교육생그룹 교육과정 배정시 사용
+ */
 AssignmentService.getBindUser = ({ logBindUserId }, _callback) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
