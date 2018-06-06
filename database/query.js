@@ -2833,4 +2833,34 @@ QUERY.BOARD = {
   `
 };
 
+QUERY.ANALYTICS = {
+  Select: `
+  SELECT a.fc_id, a.fc_name, a.yearmonth, a.user_cnt, b.message_count
+  FROM (
+    SELECT LEFT(lup.play_dt, 7) AS yearmonth
+             , MAX(f.NAME) AS fc_name
+             , u.fc_id, COUNT(DISTINCT u.id) AS user_cnt
+      FROM log_user_video AS lup
+     INNER join users AS u
+      ON lup.user_id = u.id
+     INNER JOIN fc AS f
+      ON u.fc_id = f.id
+     WHERE YEAR(lup.play_dt) = LEFT(CURRENT_DATE, 4)
+     GROUP BY u.fc_id, yearmonth
+     ORDER BY u.fc_id, yearmonth
+     ) AS a
+   LEFT JOIN
+     (
+    SELECT m.fc_id, DATE_FORMAT(created_dt, '%Y-%m') AS yearmonth
+       , count(*) AS message_count
+      FROM messages AS m
+         GROUP BY m.fc_id, yearmonth
+     ) as b
+     ON a.fc_id = b.fc_id
+  AND a.yearmonth = b.yearmonth
+ WHERE a.fc_id NOT IN (1, 12)
+ ORDER BY a.fc_id, a.yearmonth
+`
+};
+
 module.exports = QUERY;
